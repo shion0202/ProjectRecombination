@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c37ce250a285b064a8200e169768313b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 276762
+  packageName: FREE Shirtless Zombie
+  packageVersion: 1.0
+  assetPath: Assets/NewPunch/ShirtlessZombieFree/Materials/HDRP/ZombieBB_Body_HDRP.mat
+  uploadId: 659931

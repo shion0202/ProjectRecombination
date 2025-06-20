@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 098dc9138f67a1748a71f4fa7e57cc14
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 305932
+  packageName: Brawler Animations - Free
+  packageVersion: 1.0.1
+  assetPath: Assets/Brawler Animations Sample/DisplayAnimation.cs
+  uploadId: 744451
