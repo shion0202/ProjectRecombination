@@ -20,14 +20,24 @@ public class Player : MonoBehaviour
     private float curShootCooltime = 0.0f;
     Vector3 targetPosition = Vector3.zero;
 
+    [Header("Camera Settings")]
+    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private Camera _zoomCamera;
+    [SerializeField] private float _transitionSpeed = 5.0f;
+    private Vector3 _cameraVelocity = Vector3.zero;
+    private bool _isAiming = false;
+
     private CharacterController _characterController;
     private Vector3 _moveDirection;
     private Vector3 _gravityVelocity;
     private bool _isGrounded;
+
+    private Animator _animator;
     
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -40,6 +50,7 @@ public class Player : MonoBehaviour
         HandleGravity();
 
         InputMouseButtonLeft();
+        InputMouseButtonRight();
 
         //var mouse = Input.GetAxis("Mouse X");
         //transform.Rotate(new Vector3(0.0f, mouse * sensitivity, 0.0f));
@@ -65,18 +76,53 @@ public class Player : MonoBehaviour
         if (!Input.GetMouseButton(0)) return;
         if (curShootCooltime < shootCooltime) return;
 
-        var bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-        bullet.GetComponent<Bullet>().SetBulletDirection(targetPosition - bulletSpawnPoint.position);
+        if (_isAiming)
+        {
+            var bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+            bullet.GetComponent<Bullet>().SetBulletDirection(targetPosition - bulletSpawnPoint.position);
+            _animator.SetTrigger("ShootTrigger");
+            curShootCooltime = 0.0f;
+        }
+        else
+        {
+            // Melee attack
+        }
+    }
 
-        curShootCooltime = 0.0f;
+    private void InputMouseButtonRight()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            _isAiming = true;
+            _animator.SetBool("IsAiming", true);
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            _isAiming = false;
+            _animator.SetBool("IsAiming", false);
+        }
+
+        Transform target = _isAiming ? _zoomCamera.transform : _mainCamera.transform;
+        float targetFOV = _isAiming ? _zoomCamera.fieldOfView : _mainCamera.fieldOfView;
+        Transform current = Camera.main.transform;
+
+        current.position = Vector3.SmoothDamp(current.position, target.position, ref _cameraVelocity, _transitionSpeed * Time.deltaTime);
+        current.rotation = Quaternion.Slerp(current.rotation, target.rotation, _transitionSpeed * Time.deltaTime);
+        Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, targetFOV, _transitionSpeed * Time.deltaTime);
     }
 
     private void HandleMovement()
     {
         var input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-        if (input == Vector3.zero) return;
+        if (input == Vector3.zero)
+        {
+            _animator.SetBool("IsMoving", false);
+            return;
+        }
+
         _moveDirection = transform.TransformDirection(input) * speed;
         _characterController.Move(_moveDirection * Time.deltaTime);
+        _animator.SetBool("IsMoving", true);
     }
 
     private void HandleRotation()
