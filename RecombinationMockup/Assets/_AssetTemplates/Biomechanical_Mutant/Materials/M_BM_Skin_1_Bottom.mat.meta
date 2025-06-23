@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: dc30d0f173c2c674091d33a2f0b74d1f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 166330
+  packageName: Free.Biomechanical Mutant
+  packageVersion: 1.0
+  assetPath: Assets/Biomechanical_Mutant/Materials/M_BM_Skin_1_Bottom.mat
+  uploadId: 361815
