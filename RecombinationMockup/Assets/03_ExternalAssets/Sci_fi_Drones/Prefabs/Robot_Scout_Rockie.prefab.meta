@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: beb24022f1709b04e81298f9a1fbeca6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 90326
+  packageName: Sci fi Drones
+  packageVersion: 1.0
+  assetPath: Assets/Sci_fi_Drones/Prefabs/Robot_Scout_Rockie.prefab
+  uploadId: 325392

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2623fcc4ae72bed4681324fdc889e468
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 90326
+  packageName: Sci fi Drones
+  packageVersion: 1.0
+  assetPath: Assets/Sci_fi_Drones/Prefabs/Robot_Scout_HyperX.prefab
+  uploadId: 325392

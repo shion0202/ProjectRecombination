@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: baf16853953e0cf43b0bde889520a604
+timeCreated: 1494510913
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 90326
+  packageName: Sci fi Drones
+  packageVersion: 1.0
+  assetPath: Assets/Sci_fi_Drones/Prefabs/Robot_Invader.prefab
+  uploadId: 325392

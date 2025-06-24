@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 59f83957d2224534cb0494e4137cc3af
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 284531
+  packageName: Flame Eye Shader
+  packageVersion: 1.0
+  assetPath: Assets/FlameEyeShader/FlameEye.mat
+  uploadId: 666194

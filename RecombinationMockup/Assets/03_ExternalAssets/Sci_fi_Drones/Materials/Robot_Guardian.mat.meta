@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4cca2e086693e5c4fb4b4619ee94883b
+timeCreated: 1494501822
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 90326
+  packageName: Sci fi Drones
+  packageVersion: 1.0
+  assetPath: Assets/Sci_fi_Drones/Materials/Robot_Guardian.mat
+  uploadId: 325392

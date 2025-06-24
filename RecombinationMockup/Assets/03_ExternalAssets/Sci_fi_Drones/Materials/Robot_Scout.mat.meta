@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: fea0a0511c5302644b2d9d8ec0cb8ef9
+timeCreated: 1494503784
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 90326
+  packageName: Sci fi Drones
+  packageVersion: 1.0
+  assetPath: Assets/Sci_fi_Drones/Materials/Robot_Scout.mat
+  uploadId: 325392
