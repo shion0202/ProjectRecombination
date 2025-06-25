@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: abbd383e1de4abf4e8f71d6191cd45f8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 90326
+  packageName: Sci fi Drones
+  packageVersion: 1.0
+  assetPath: Assets/Sci_fi_Drones/Prefabs/Robot_Scout_HyperX_Red.prefab
+  uploadId: 325392

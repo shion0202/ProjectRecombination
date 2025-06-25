@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,6 +11,13 @@ public class Player : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float groundCheckDistance = 0.1f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private GameObject _weapon;
+    [SerializeField] private GameObject _secondWeapon;
+    [SerializeField] private Transform _weaponSocketPos;
+    private GameObject _curWeapon = null;
+    private int _weaponIndex = 0;
+    private Coroutine _weaponCoroutine = null;
+    private bool _isWeaponChanging = false;
 
     [Header("Bullet Settings")]
     [SerializeField] private GameObject bulletPrefab;
@@ -24,8 +32,10 @@ public class Player : MonoBehaviour
     [SerializeField] private Camera _mainCamera;
     [SerializeField] private Camera _zoomCamera;
     [SerializeField] private float _transitionSpeed = 5.0f;
+    [SerializeField] private GameObject _aimUI;
     private Vector3 _cameraVelocity = Vector3.zero;
     private bool _isAiming = false;
+    private bool _isZooming = false;
 
     private CharacterController _characterController;
     private Vector3 _moveDirection;
@@ -40,6 +50,14 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
+    private void Start()
+    {
+        _curWeapon = Instantiate(_weapon);
+        _curWeapon.transform.SetParent(_weaponSocketPos.transform, false);
+        _curWeapon.transform.localPosition = Vector3.zero;
+        _weaponIndex = 0;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -52,10 +70,62 @@ public class Player : MonoBehaviour
         InputMouseButtonLeft();
         InputMouseButtonRight();
 
+        ChangeWeapon();
+
         //var mouse = Input.GetAxis("Mouse X");
         //transform.Rotate(new Vector3(0.0f, mouse * sensitivity, 0.0f));
 
         curShootCooltime += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
+    public void OnWeaponChange()
+    {
+        Destroy(_curWeapon);
+        _curWeapon = Instantiate(_weaponIndex == 0 ? _weapon : _secondWeapon);
+        _curWeapon.transform.SetParent(_weaponSocketPos.transform, false);
+        _curWeapon.transform.localPosition = Vector3.zero;
+    }
+
+    private void ChangeWeapon()
+    {
+        if (_isAiming) return;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (_weaponIndex == 0) return;
+
+            _weaponIndex = _weaponIndex == 0 ? 1 : 0;
+            _isWeaponChanging = true;
+
+            if (_weaponCoroutine != null)
+            {
+                StopCoroutine(_weaponCoroutine);
+                _animator.SetBool("IsWeaponChange", false);
+            }
+
+            _weaponCoroutine = StartCoroutine(CoChangeWeapon());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (_weaponIndex == 1) return;
+
+            _weaponIndex = _weaponIndex == 0 ? 1 : 0;
+            _isWeaponChanging = true;
+
+            if (_weaponCoroutine != null)
+            {
+                StopCoroutine(_weaponCoroutine);
+                _animator.SetBool("IsWeaponChange", false);
+            }
+
+            _weaponCoroutine = StartCoroutine(CoChangeWeapon());
+        }
     }
 
     private void HandleGravity()
@@ -91,24 +161,40 @@ public class Player : MonoBehaviour
 
     private void InputMouseButtonRight()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && !_isWeaponChanging)
         {
             _isAiming = true;
             _animator.SetBool("IsAiming", true);
+            _aimUI.SetActive(true);
+            _isZooming = true;
         }
-        else if (Input.GetMouseButtonUp(1))
+        else if (Input.GetMouseButtonUp(1) && !_isWeaponChanging)
         {
             _isAiming = false;
             _animator.SetBool("IsAiming", false);
+            _aimUI.SetActive(false);
+            _isZooming = true;
         }
+
+        if (!_isZooming)
+            return;
 
         Transform target = _isAiming ? _zoomCamera.transform : _mainCamera.transform;
         float targetFOV = _isAiming ? _zoomCamera.fieldOfView : _mainCamera.fieldOfView;
-        Transform current = Camera.main.transform;
+        Camera current = Camera.main;
 
-        current.position = Vector3.SmoothDamp(current.position, target.position, ref _cameraVelocity, _transitionSpeed * Time.deltaTime);
-        current.rotation = Quaternion.Slerp(current.rotation, target.rotation, _transitionSpeed * Time.deltaTime);
-        Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, targetFOV, _transitionSpeed * Time.deltaTime);
+        current.transform.position = Vector3.Lerp(current.transform.position, target.position, _transitionSpeed * Time.deltaTime);
+        current.transform.rotation = Quaternion.Slerp(current.transform.rotation, target.rotation, _transitionSpeed * Time.deltaTime);
+        current.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, targetFOV, _transitionSpeed * Time.deltaTime);
+
+        if (Vector3.Distance(current.transform.position, target.position) < 0.01f && Quaternion.Angle(current.transform.rotation, target.rotation) < 0.1f)
+        {
+            Debug.Log("Zoom transition complete.");
+            current.transform.position = target.position;
+            current.transform.rotation = target.rotation;
+            current.fieldOfView = targetFOV;
+            _isZooming = false;
+        }
     }
 
     private void HandleMovement()
@@ -143,6 +229,23 @@ public class Player : MonoBehaviour
         {
             targetPosition = cameraTransform.position + cameraTransform.forward * debugLineLength;
         }
+    }
+
+    IEnumerator CoChangeWeapon()
+    {
+        yield return new WaitForSeconds(0.03f);
+
+        _animator.SetBool("IsWeaponChange", true);
+
+        yield return new WaitForSeconds(0.9f);
+
+        OnWeaponChange();
+
+        yield return new WaitForSeconds(0.1f);
+
+        _animator.SetBool("IsWeaponChange", false);
+        _isWeaponChanging = false;
+        _weaponCoroutine = null;
     }
 
     #region MyRegion

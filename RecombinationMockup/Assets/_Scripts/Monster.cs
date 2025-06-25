@@ -1,7 +1,5 @@
 using System.Collections;
 using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.XR;
@@ -36,7 +34,9 @@ public class Monster : MonoBehaviour
         Idle,
         Patrol,
         Chase,
-        Attack
+        Attack,
+        Hitting,
+        Die
     }
     
     #region Unity Methods
@@ -58,6 +58,11 @@ public class Monster : MonoBehaviour
 
     private void Update()
     {
+        if (_state == State.Die)
+        {
+            return;
+        }
+
         if (_state == State.Chase && _target is not null)
         {
             var distanceToTarget = Vector3.Distance(transform.position, _target.position);
@@ -72,7 +77,7 @@ public class Monster : MonoBehaviour
         {
             // 공격 로직을 여기에 추가
             // Debug.Log("Attacking the target!");
-            
+
             if (!isAttacking)
             {
                 StartCoroutine(Attack());
@@ -90,6 +95,10 @@ public class Monster : MonoBehaviour
             // 예: _agent.SetDestination(GetNextPatrolPoint());
             AnimaStateChange(true, false);
         }
+        else if (_state == State.Hitting)
+        {
+            return;
+        }
     }
 
     // private void FixedUpdate()
@@ -104,6 +113,9 @@ public class Monster : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (_state == State.Die)
+            return;
+
         // Debug.Log(other.gameObject.name);
         if (!other.CompareTag("Player")) return;
         _target = other.transform;
@@ -114,6 +126,9 @@ public class Monster : MonoBehaviour
     
     private void OnTriggerExit(Collider other)
     {
+        if (_state == State.Die)
+            return;
+
         // Debug.Log(other.gameObject.name);
         if (!other.CompareTag("Player")) return;
         _state = State.Idle;
@@ -143,7 +158,9 @@ public class Monster : MonoBehaviour
     {
         Debug.Log("Monster died!");
         // 죽음 애니메이션이나 효과를 여기에 추가
-        Destroy(gameObject);
+        _state = State.Die;
+        _animator.SetBool("isDie", true);
+        // Destroy(gameObject, 5.0f);
     }
 
     private void AnimaStateChange(bool isWalking, bool isAttack)
@@ -159,14 +176,17 @@ public class Monster : MonoBehaviour
     
     private IEnumerator Attack()
     {
-        isAttacking = true;
-        AnimaStateChange(false, true); // 공격 애니메이션 시작
-        Debug.Log($"Player took {attackDamage} damage!");
-        _target.GetComponent<Player>().TakeDamage(attackDamage);
-        yield return new WaitForSeconds(attackCooldown);
-        _state = State.Chase; // 공격 후 다시 추적 상태로 전환
-        AnimaStateChange(true, false); // 공격 애니메이션 시작
-        isAttacking = false;
+        if (_state != State.Die)
+        {
+            isAttacking = true;
+            AnimaStateChange(false, true); // 공격 애니메이션 시작
+            Debug.Log($"Player took {attackDamage} damage!");
+            _target.GetComponent<Player>().TakeDamage(attackDamage);
+            yield return new WaitForSeconds(attackCooldown);
+            _state = State.Chase; // 공격 후 다시 추적 상태로 전환
+            AnimaStateChange(true, false); // 공격 애니메이션 시작
+            isAttacking = false;
+        }
     }
     
     #endregion
@@ -175,6 +195,9 @@ public class Monster : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (_state == State.Die)
+            return;
+
         hp -= damage;
         Debug.Log($"Monster took {damage} damage! Remaining HP: {hp}");
         if (_animator is not null)
