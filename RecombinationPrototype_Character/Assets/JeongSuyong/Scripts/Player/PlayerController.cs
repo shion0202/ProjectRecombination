@@ -1,6 +1,7 @@
 using Cinemachine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,7 +32,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private bool _canDash = true;
     private Vector3 _dashStartPos = Vector3.zero;
     private Vector3 _dashDirection = Vector3.zero;
-    private float _dashElapsed = 0.0f;
     private Coroutine _dashCoroutine = null;
 
     [Header("Attack")]
@@ -41,7 +41,22 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private float shootCooldown = 0.5f;
     [SerializeField] private float bulletSpread = 0.2f;
     private bool _isShooting = false;
+    private bool _isRotating = false;
     private float _lastShootTime = -Mathf.Infinity;
+
+    [Header("Transform")]
+    [SerializeField] List<SkinnedMeshRenderer> renderers = new List<SkinnedMeshRenderer>();
+    [SerializeField] List<Material> normalMaterials = new List<Material>();
+    [SerializeField] List<Material> transformedMaterials = new List<Material>();
+    [SerializeField] private float rushDistance = 5.0f;
+    [SerializeField] private float rushDuration = 0.1f;
+    [SerializeField] private float rushCooldown = 1.0f;
+    private bool _isTransformed = false;
+    private bool _isRushing = false;
+    private bool _canRush = true;
+    private Vector3 _rushStartPos = Vector3.zero;
+    private Vector3 _rushDirection = Vector3.zero;
+    private Coroutine _rushCoroutine = null;
 
     [Header("Camera")]
     [SerializeField] private Transform cameraTrasnform;
@@ -53,6 +68,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private float zoomSpeed = 10.0f;
     [SerializeField] private float cameraRotationSpeed = 20.0f;
     private bool _isZoomed = false;
+
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
     #endregion
 
     #region Unity Events
@@ -73,22 +91,27 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     private void LateUpdate()
     {
         HandleGravity();
         HandleZoom();
-        Shoot();
 
-        if (_isDashing)
+        HandleMove();
+        DashMove();
+
+        if (_isTransformed)
         {
-            DashMove();
+            MeleeAttack();
         }
         else
         {
-            HandleMove();
+            Shoot();
         }
 
         _characterController.Move(_totalDirection * Time.deltaTime);
@@ -114,6 +137,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             _moveInput = Vector2.zero;
             _moveDirection = Vector3.zero;
+            animator.SetFloat("moveX", 0.0f);
+            animator.SetFloat("moveY", 0.0f);
+            animator.SetFloat("moveMagnitude", 0.0f);
             return;
         }
 
@@ -121,6 +147,18 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (_moveInput != null && _moveInput != Vector2.zero)
         {
             _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
+
+            if (_isZoomed)
+            {
+                animator.SetFloat("moveX", _moveDirection.x);
+                animator.SetFloat("moveY", _moveDirection.z);
+                animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
+            }
+            else
+            {
+                animator.SetFloat("moveY", 1.0f);
+                animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
+            }
         }
     }
 
@@ -145,15 +183,33 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         if (context.performed)
         {
+            if (_isTransformed) return;
+
             _isZoomed = !_isZoomed;
         }
     }
 
     void PlayerActions.IPlayerActionMapActions.OnAttack(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.started)
         {
-            _isShooting = !_isShooting;
+            if (_isTransformed && _canRush)
+            {
+                if (_rushCoroutine != null)
+                {
+                    StopCoroutine(_rushCoroutine);
+                    _rushCoroutine = null;
+                }
+                _rushCoroutine = StartCoroutine(CoHandleMeleeAttack());
+            }
+            else
+            {
+                _isShooting = true;
+            }
+        }
+        else if (context.canceled)
+        {
+            _isShooting = false;
         }
     }
 
@@ -161,7 +217,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         if (context.started)
         {
-            Debug.Log("Transformation started");
+            _isTransformed = !_isTransformed;
+            _isZoomed = false;
+            if (_isTransformed)
+                animator.SetBool("isTransformed", true);
+            else
+                animator.SetBool("isTransformed", false);
+
+            ChangeMaterial();
         }
     }
     #endregion
@@ -170,6 +233,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void HandleMove()
     {
         if (_moveInput == null || _moveInput == Vector2.zero) return;
+        if (_isDashing || _isRushing) return;
 
         // move to looking direction
         Vector3 camForward = cameraTrasnform.forward;
@@ -192,6 +256,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void DashMove()
     {
+        if (!_isDashing) return;
+
         float dashSpeed = dashDistance / dashDuration;
         // _characterController.Move(_dashDirection * dashSpeed * Time.deltaTime);
         _totalDirection += _dashDirection * dashSpeed;
@@ -221,6 +287,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void HandleZoom()
     {
+        animator.SetBool("isAim", _isZoomed);
+
         float targetFOV = _isZoomed ? zoomFOV : normalFOV;
         CinemachineVirtualCamera vcam = cameraTrasnform.GetComponent<CinemachineVirtualCamera>();
         vcam.m_Lens.FieldOfView = Mathf.Lerp(vcam.m_Lens.FieldOfView, targetFOV, zoomSpeed * Time.deltaTime);
@@ -233,15 +301,20 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         framingTransposer.m_ScreenX = Mathf.Lerp(framingTransposer.m_ScreenX, targetOffset.x, zoomSpeed * Time.deltaTime);
         framingTransposer.m_ScreenY = Mathf.Lerp(framingTransposer.m_ScreenY, targetOffset.y, zoomSpeed * Time.deltaTime);
 
-        if (_isZoomed)
-        {
-            Vector3 lookDirection = vcam.transform.forward;
-            lookDirection.y = 0;
+        RotateCharacter();
+    }
 
-            // transform.forward = lookDirection;
-            if (lookDirection.sqrMagnitude > 0.01f)
-                transform.forward = Vector3.Lerp(transform.forward, lookDirection, cameraRotationSpeed * Time.deltaTime);
-        }
+    private void RotateCharacter()
+    {
+        if (!_isZoomed) return;
+
+        CinemachineVirtualCamera vcam = cameraTrasnform.GetComponent<CinemachineVirtualCamera>();
+        Vector3 lookDirection = vcam.transform.forward;
+        lookDirection.y = 0;
+
+        // transform.forward = lookDirection;
+        if (lookDirection.sqrMagnitude > 0.01f)
+            transform.forward = Vector3.Lerp(transform.forward, lookDirection, cameraRotationSpeed * Time.deltaTime);
     }
 
     private void Shoot()
@@ -268,6 +341,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
         Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
 
+        if (!_isZoomed)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(camShootDirection, Vector3.up);
+            targetRotation.x = 0.0f;
+            targetRotation.z = 0.0f;
+            transform.rotation = targetRotation;
+        }
+
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
@@ -278,10 +359,35 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _lastShootTime = Time.time;
     }
 
+    private void MeleeAttack()
+    {
+        if (!_isRushing) return;
+
+        // dash to front, and attack
+        float rushSpeed = rushDistance / rushDuration;
+        _totalDirection += _rushDirection * rushSpeed;
+    }
+
+    private void ChangeMaterial()
+    {
+        for (int i = 0; i < renderers.Count; ++i)
+        {
+            Renderer renderer = renderers[i];
+
+            if (_isTransformed)
+            {
+                renderer.material = transformedMaterials[i];
+            }
+            else
+            {
+                renderer.material = normalMaterials[i];
+            }
+        }
+    }
+
     IEnumerator CoHandleDash()
     {
         _dashStartPos = cameraTarget.position;
-        _dashElapsed = 0.0f;
         _isDashing = true;
         _canDash = false;
 
@@ -295,11 +401,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (_moveInput == null || _moveInput == Vector2.zero)
         {
-            _dashDirection = camForward;
+            _dashDirection = camForward.normalized;
         }
         else
         {
-            _dashDirection = camDashDirection;
+            _dashDirection = camDashDirection.normalized;
         }
 
         CinemachineVirtualCamera vcam = cameraTrasnform.GetComponent<CinemachineVirtualCamera>();
@@ -313,6 +419,34 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         vcam.OnTargetObjectWarped(cameraTarget, cameraTarget.position - _dashStartPos);
         _canDash = true;
+    }
+
+    IEnumerator CoHandleMeleeAttack()
+    {
+        _rushStartPos = cameraTarget.position;
+        _isRushing = true;
+        _canRush = false;
+
+        Vector3 camForward = cameraTrasnform.forward;
+        camForward.y = 0.0f;
+        camForward.Normalize();
+        _rushDirection = camForward;
+
+        Quaternion targetRotation = Quaternion.LookRotation(_rushDirection, Vector3.up);
+        targetRotation.x = 0.0f;
+        targetRotation.z = 0.0f;
+        transform.rotation = targetRotation;
+
+        animator.SetBool("isAttack", true);
+
+        yield return new WaitForSeconds(rushDuration);
+        
+        _isRushing = false;
+        animator.SetBool("isAttack", false);
+
+        yield return new WaitForSeconds(rushCooldown);
+
+        _canRush = true;
     }
     #endregion
 }

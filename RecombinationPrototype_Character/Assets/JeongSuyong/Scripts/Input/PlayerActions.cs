@@ -120,7 +120,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Attack"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""233ae484-8c17-415b-83ae-96159fe85900"",
                     ""expectedControlType"": """",
                     ""processors"": """",
