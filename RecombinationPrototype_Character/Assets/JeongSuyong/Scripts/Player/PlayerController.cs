@@ -20,8 +20,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [Header("Gravity")]
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Vector3 boxSize;
+    [SerializeField] private float gravityScale = 2.0f;
     private bool _isGrounded = false;
-    private Vector3 _gravityMovement;
     private Vector3 _velocity;
 
     [Header("Dash")]
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnDash(InputAction.CallbackContext context)
     {
-        if (context.performed && _canDash)
+        if (context.performed && _canDash && !_isZoomed)
         {
             // If press the button, dash to pressed direction.
             // Need distance and time(or speed).
@@ -183,15 +183,16 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         if (context.performed)
         {
-            if (_isTransformed) return;
+            if (_isTransformed || _isDashing) return;
 
+            // [!] Devide started and canceled state.
             _isZoomed = !_isZoomed;
         }
     }
 
     void PlayerActions.IPlayerActionMapActions.OnAttack(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && !_isDashing)
         {
             if (_isTransformed && _canRush)
             {
@@ -277,7 +278,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
         else
         {
-            _velocity.y += -9.8f * Time.deltaTime;
+            _velocity.y += -9.8f * Time.deltaTime * gravityScale;
         }
 
         // _gravityMovement.y = _velocity.y * Time.deltaTime;
@@ -306,15 +307,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void RotateCharacter()
     {
-        if (!_isZoomed) return;
+        if (_moveDirection.magnitude <= 0.1f) return;
 
         CinemachineVirtualCamera vcam = cameraTrasnform.GetComponent<CinemachineVirtualCamera>();
         Vector3 lookDirection = vcam.transform.forward;
         lookDirection.y = 0;
 
-        // transform.forward = lookDirection;
         if (lookDirection.sqrMagnitude > 0.01f)
-            transform.forward = Vector3.Lerp(transform.forward, lookDirection, cameraRotationSpeed * Time.deltaTime);
+        {
+            transform.forward = Vector3.Slerp(transform.forward, lookDirection, cameraRotationSpeed * Time.deltaTime);
+            //transform.forward = Vector3.Lerp(transform.forward, lookDirection, cameraRotationSpeed * Time.deltaTime);
+        }
     }
 
     private void Shoot()
@@ -390,6 +393,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _dashStartPos = cameraTarget.position;
         _isDashing = true;
         _canDash = false;
+        _isShooting = false;
 
         Vector3 camForward = cameraTrasnform.forward;
         Vector3 camRight = cameraTrasnform.right;
