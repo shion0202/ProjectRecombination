@@ -7,14 +7,17 @@ using static UnityEditor.SceneView;
 [CustomEditor(typeof(FollowCameraController))]
 public class CubeGenerateButton : Editor
 {
-    private string _savePath = "Assets/";
-    FollowCameraController controller;
+    private const string _savePathKey = "FollowCameraController_SavePath";
+    private string _savePath;
+
+    private void OnEnable()
+    {
+        _savePath = EditorPrefs.GetString(_savePathKey, "Assets/");
+    }
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-
-        controller = (FollowCameraController)target;
 
         EditorGUILayout.BeginHorizontal();
         _savePath = EditorGUILayout.TextField("저장 경로", _savePath);
@@ -27,6 +30,10 @@ public class CubeGenerateButton : Editor
                 {
                     // Need to save path
                     _savePath = "Assets" + selectedPath.Substring(Application.dataPath.Length);
+                    if (_savePath != EditorPrefs.GetString(_savePathKey))
+                    {
+                        EditorPrefs.SetString(_savePathKey, _savePath);
+                    }
                 }
                 else
                 {
@@ -44,6 +51,7 @@ public class CubeGenerateButton : Editor
 
     private void SaveCameraSetting()
     {
+        FollowCameraController controller = (FollowCameraController)target;
         string stateName = controller.CameraState.ToString();
         string assetPath = Path.Combine(_savePath, $"FollowCameraData_{stateName}.asset");
 
