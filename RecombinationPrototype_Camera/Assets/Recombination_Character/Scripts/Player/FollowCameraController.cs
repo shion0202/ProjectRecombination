@@ -1,9 +1,7 @@
 using Cinemachine;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public enum ECameraState
 {
@@ -63,8 +61,6 @@ public class FollowCameraController : MonoBehaviour
         {
             _cameraSettings.Add((ECameraState)i, Resources.Load<FollowCameraData>($"Camera/FollowCameraData_{(ECameraState)i}"));
         }
-
-        ApplyCameraSettings();
     }
 
     public void SetFollowCamera(PlayerController owner)
@@ -93,7 +89,9 @@ public class FollowCameraController : MonoBehaviour
         _cameraAim.m_HorizontalAxis.m_MinValue = _cameraSettings[currentCameraState].minAimRangeX;
         _cameraAim.m_VerticalAxis.m_MaxValue = _cameraSettings[currentCameraState].maxAimRangeY;
         _cameraAim.m_VerticalAxis.m_MinValue = _cameraSettings[currentCameraState].minAimRangeY;
+        _cameraAim.m_HorizontalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
         _cameraAim.m_HorizontalAxis.m_MaxSpeed = _cameraSettings[currentCameraState].sensitivityX;
+        _cameraAim.m_VerticalAxis.m_SpeedMode = AxisState.SpeedMode.InputValueGain;
         _cameraAim.m_VerticalAxis.m_MaxSpeed = _cameraSettings[currentCameraState].sensitivityY;
     }
 
