@@ -40,15 +40,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Transformation",
-                    "type": "Button",
-                    "id": "f9458895-8cac-46b9-a751-5385042598bf",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -137,17 +128,6 @@
                     "processors": "",
                     "groups": ";PC_Keyboard",
                     "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "00d2ece3-3fdf-4426-9c83-f255dbc003ea",
-                    "path": "<Keyboard>/t",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";PC_Keyboard",
-                    "action": "Transformation",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -18,16 +18,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Vector3 _totalDirection = Vector3.zero;
     private Dictionary<ECameraState, float> _moveSpeeds = new Dictionary<ECameraState, float>();
 
-    [Header("Gravity")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private Vector3 boxSize;
-    [SerializeField] private float gravityScale = 2.0f;
-    private bool _isGrounded = false;
-    private Vector3 _velocity;
-
     [Header("Dash")]
     [SerializeField, Tooltip("대시에 필요한 수치 (X: 대시 거리, Y: 대시 유지 시간, Z: 대시 쿨타임)")]
-    private Vector3 dashValues = new Vector3(4.0f, 0.1f, 5.0f);
+    private Vector3 dashValues = new Vector3(5.0f, 0.1f, 5.0f);
     private bool _isDashing = false;
     private bool _canDash = true;
     private Vector3 _dashDirection = Vector3.zero;
@@ -38,28 +31,21 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private float bulletSpeed = 20.0f;
     [SerializeField] private float shootCooldown = 0.5f;
-    [SerializeField] private float bulletSpread = 0.2f;
+    [SerializeField] private float bulletSpreadRange = 0.2f;
     private bool _isShooting = false;
     private bool _isRotating = false;
     private float _lastShootTime = -Mathf.Infinity;
 
-    [Header("Transformation")]
-    [SerializeField] List<SkinnedMeshRenderer> renderers = new List<SkinnedMeshRenderer>();
-    [SerializeField] List<Material> normalMaterials = new List<Material>();
-    [SerializeField] List<Material> transformedMaterials = new List<Material>();
-    [SerializeField] private float rushDistance = 5.0f;
-    [SerializeField] private float rushDuration = 0.1f;
-    [SerializeField] private float rushCooldown = 1.0f;
-    private bool _isTransformed = false;
-    private bool _isRushing = false;
-    private bool _canRush = true;
-    private Vector3 _rushStartPos = Vector3.zero;
-    private Vector3 _rushDirection = Vector3.zero;
-    private Coroutine _rushCoroutine = null;
+    [Header("Gravity")]
+    [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
+    [SerializeField] private float gravityScale = 2.0f;
+    private Transform _groundCheck;
+    private bool _isGrounded = false;
+    private Vector3 _fallVelocity;
 
     [Header("Camera")]
     [SerializeField] private GameObject followCameraPrefab;
-    [SerializeField] private float rotationSpeedByCamera = 20.0f;
+    [SerializeField] private float rotationSpeedByCamera = 40.0f;
     private FollowCameraController _followCamera;
 
     [Header("Animation")]
@@ -70,7 +56,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _groundCheck = GetComponentInChildren<GroundCheck>().transform;
         _animator = GetComponentInChildren<Animator>();
+
+        _moveSpeeds.Add(ECameraState.Normal, moveSpeed);
+        _moveSpeeds.Add(ECameraState.Zoom, zoomedMoveSpeed);
 
         _playerActions = new PlayerActions();
         _playerActions.PlayerActionMap.SetCallbacks(this);
@@ -83,9 +73,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
         _followCamera.SetFollowCamera(this);
-
-        _moveSpeeds.Add(ECameraState.Normal, moveSpeed);
-        _moveSpeeds.Add(ECameraState.Zoom, zoomedMoveSpeed);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -128,7 +115,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void OnDrawGizmos()
     {
         Gizmos.color = _isGrounded ? Color.red : Color.green;
-        Gizmos.DrawWireCube(groundCheck.position, boxSize);
+        // Gizmos.DrawWireCube(_groundCheck.position, boxSize);
     }
     #endregion
 
@@ -177,7 +164,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnZoom(InputAction.CallbackContext context)
     {
-        if (_isTransformed || _isDashing) return;
+        if (_isDashing) return;
 
         // Devide started and canceled state.
         if (context.started)
@@ -194,39 +181,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         if (context.started && !_isDashing)
         {
-            //if (_isTransformed && _canRush)
-            //{
-            //    if (_rushCoroutine != null)
-            //    {
-            //        StopCoroutine(_rushCoroutine);
-            //        _rushCoroutine = null;
-            //    }
-            //    _rushCoroutine = StartCoroutine(CoHandleMeleeAttack());
-            //}
-            //else
-            //{
-                _isShooting = true;
-            //}
+            _isShooting = true;
         }
         else if (context.canceled)
         {
             _isShooting = false;
         }
-    }
-
-    void PlayerActions.IPlayerActionMapActions.OnTransformation(InputAction.CallbackContext context)
-    {
-        //if (context.started)
-        //{
-        //    _isTransformed = !_isTransformed;
-        //    _followCamera.IsZoomed = false;
-        //    if (_isTransformed)
-        //        _animator.SetBool("isTransformed", true);
-        //    else
-        //        _animator.SetBool("isTransformed", false);
-
-        //    ChangeMaterial();
-        //}
     }
     #endregion
 
@@ -234,7 +194,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void HandleMove()
     {
         if (_moveInput == null || _moveInput == Vector2.zero) return;
-        if (_isDashing || _isRushing) return;
+        if (_isDashing) return;
 
         // move to looking direction
         Vector3 camForward = _followCamera.transform.forward;
@@ -262,22 +222,22 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void HandleGravity()
     {
-        // Fall by gravity
+        // Fall by gravity.
         // Check the floor.
         // Calculate y velocity by gravity.
-        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity);
-        if (_isGrounded && _velocity.y < 0.0f)
+        _isGrounded = Physics.CheckBox(_groundCheck.position, boxSize, Quaternion.identity);
+        if (_isGrounded && _fallVelocity.y < 0.0f)
         {
-            _velocity.y = 0.0f;
+            _fallVelocity.y = 0.0f;
         }
         else
         {
-            _velocity.y += -9.8f * Time.deltaTime * gravityScale;
+            _fallVelocity.y += -9.8f * Time.deltaTime * gravityScale;
         }
 
         // _gravityMovement.y = _velocity.y * Time.deltaTime;
         // _characterController.Move(_gravityMovement);
-        _totalDirection += _velocity;
+        _totalDirection += _fallVelocity;
     }
 
     private void RotateCharacter()
@@ -324,7 +284,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             targetPoint = hit.point;
             if (!_followCamera.IsZoomed)
             {
-                Vector3 spreadValue = new Vector3(UnityEngine.Random.Range(bulletSpread * -1.0f, bulletSpread), UnityEngine.Random.Range(bulletSpread * -1.0f, bulletSpread), 0.0f);
+                Vector3 spreadValue = new Vector3(UnityEngine.Random.Range(bulletSpreadRange * -1.0f, bulletSpreadRange), UnityEngine.Random.Range(bulletSpreadRange * -1.0f, bulletSpreadRange), 0.0f);
                 targetPoint += spreadValue;
             }
         }
@@ -350,32 +310,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
         Destroy(bullet, 3.0f);
         _lastShootTime = Time.time;
-    }
-
-    private void MeleeAttack()
-    {
-        if (!_isRushing) return;
-
-        // dash to front, and attack
-        float rushSpeed = rushDistance / rushDuration;
-        _totalDirection += _rushDirection * rushSpeed;
-    }
-
-    private void ChangeMaterial()
-    {
-        for (int i = 0; i < renderers.Count; ++i)
-        {
-            Renderer renderer = renderers[i];
-
-            if (_isTransformed)
-            {
-                renderer.material = transformedMaterials[i];
-            }
-            else
-            {
-                renderer.material = normalMaterials[i];
-            }
-        }
     }
 
     IEnumerator CoHandleDash()
@@ -413,33 +347,5 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         vcam.OnTargetObjectWarped(_followCamera.CameraTarget, _followCamera.CameraTarget.position - _dashStartPos);
         _canDash = true;
     }
-
-    //    IEnumerator CoHandleMeleeAttack()
-    //    {
-    //        _rushStartPos = _followCamera.CameraTarget.position;
-    //        _isRushing = true;
-    //        _canRush = false;
-
-    //        Vector3 camForward = _followCamera.transform.forward;
-    //        camForward.y = 0.0f;
-    //        camForward.Normalize();
-    //        _rushDirection = camForward;
-
-    //        Quaternion targetRotation = Quaternion.LookRotation(_rushDirection, Vector3.up);
-    //        targetRotation.x = 0.0f;
-    //        targetRotation.z = 0.0f;
-    //        transform.rotation = targetRotation;
-
-    //        _animator.SetBool("isAttack", true);
-
-    //        yield return new WaitForSeconds(rushDuration);
-
-    //        _isRushing = false;
-    //        _animator.SetBool("isAttack", false);
-
-    //        yield return new WaitForSeconds(rushCooldown);
-
-    //        _canRush = true;
-    //    }
     #endregion
 }

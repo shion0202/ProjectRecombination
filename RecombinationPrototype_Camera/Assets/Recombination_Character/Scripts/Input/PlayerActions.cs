@@ -126,15 +126,6 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Transformation"",
-                    ""type"": ""Button"",
-                    ""id"": ""f9458895-8cac-46b9-a751-5385042598bf"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -225,17 +216,6 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""00d2ece3-3fdf-4426-9c83-f255dbc003ea"",
-                    ""path"": ""<Keyboard>/t"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";PC_Keyboard"",
-                    ""action"": ""Transformation"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -276,7 +256,6 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_PlayerActionMap_Dash = m_PlayerActionMap.FindAction("Dash", throwIfNotFound: true);
         m_PlayerActionMap_Zoom = m_PlayerActionMap.FindAction("Zoom", throwIfNotFound: true);
         m_PlayerActionMap_Attack = m_PlayerActionMap.FindAction("Attack", throwIfNotFound: true);
-        m_PlayerActionMap_Transformation = m_PlayerActionMap.FindAction("Transformation", throwIfNotFound: true);
     }
 
     ~@PlayerActions()
@@ -361,7 +340,6 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_Dash;
     private readonly InputAction m_PlayerActionMap_Zoom;
     private readonly InputAction m_PlayerActionMap_Attack;
-    private readonly InputAction m_PlayerActionMap_Transformation;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerActionMap".
     /// </summary>
@@ -389,10 +367,6 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActionMap/Attack".
         /// </summary>
         public InputAction @Attack => m_Wrapper.m_PlayerActionMap_Attack;
-        /// <summary>
-        /// Provides access to the underlying input action "PlayerActionMap/Transformation".
-        /// </summary>
-        public InputAction @Transformation => m_Wrapper.m_PlayerActionMap_Transformation;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -431,9 +405,6 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
-            @Transformation.started += instance.OnTransformation;
-            @Transformation.performed += instance.OnTransformation;
-            @Transformation.canceled += instance.OnTransformation;
         }
 
         /// <summary>
@@ -457,9 +428,6 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
-            @Transformation.started -= instance.OnTransformation;
-            @Transformation.performed -= instance.OnTransformation;
-            @Transformation.canceled -= instance.OnTransformation;
         }
 
         /// <summary>
@@ -554,12 +522,5 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAttack(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Transformation" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTransformation(InputAction.CallbackContext context);
     }
 }
