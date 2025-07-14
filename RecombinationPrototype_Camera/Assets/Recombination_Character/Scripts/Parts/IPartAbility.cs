@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoonRoot : MonoBehaviour
+public interface IPartAbility
 {
-    
+    void UseAbility(PlayerController owner);
 }

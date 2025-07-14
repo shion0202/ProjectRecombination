@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Processors;
 
 public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapActions
 {
@@ -42,6 +43,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Transform _groundCheck;
     private bool _isGrounded = false;
     private Vector3 _fallVelocity;
+
+    public Vector3 FallVelocity
+    {
+        get { return _fallVelocity; }
+    }
 
     [Header("Camera")]
     [SerializeField] private GameObject followCameraPrefab;
@@ -85,6 +91,16 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Inventory inven = GetComponent<Inventory>();
+            IPartAbility ability = inven.EquippedItems[EEquipmentType.Legs].GetComponent<IPartAbility>();
+            if (ability != null)
+            {
+                ability.UseAbility(this);
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
@@ -191,6 +207,30 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     #endregion
 
     #region Functions
+    public void PartDash()
+    {
+        if (!_canDash || _followCamera.IsZoomed) return;
+
+        if (_dashCoroutine != null)
+        {
+            StopCoroutine(_dashCoroutine);
+            _dashCoroutine = null;
+        }
+        _dashCoroutine = StartCoroutine(CoHandleDash());
+    }
+
+    public void PartJump(float jumpVelocity)
+    {
+        if (!_isGrounded) return;
+
+        if (_isGrounded)
+        {
+            _fallVelocity.y = jumpVelocity;
+        }
+
+        _totalDirection += _fallVelocity;
+    }
+
     private void HandleMove()
     {
         if (_moveInput == null || _moveInput == Vector2.zero) return;

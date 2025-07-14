@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EquipmentType
+public enum EEquipmentType
 {
     Body,
     LeftArm,
@@ -11,11 +11,17 @@ public enum EquipmentType
     Legs
 }
 
+public enum EPartType
+{
+    Skinned,
+    Static
+}
+
 [System.Serializable]
 public class ItemData
 {
     public int id;
     public string itemName;
-    public EquipmentType equipType;
-    public GameObject equipPrefab;
+    public EEquipmentType equipmentType;
+    public EPartType partType;
 }

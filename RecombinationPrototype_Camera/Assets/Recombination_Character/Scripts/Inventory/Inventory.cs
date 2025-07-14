@@ -1,115 +1,110 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 public class Inventory : MonoBehaviour
 {
-    private List<ItemData> _items = new List<ItemData>();
-    private Dictionary<EquipmentType, ItemData> _equippedItems = new Dictionary<EquipmentType, ItemData>();
+    private Dictionary<EEquipmentType, List<ItemData>> _items = new Dictionary<EEquipmentType, List<ItemData>>();
+    private Dictionary<EEquipmentType, GameObject> _equippedItems = new Dictionary<EEquipmentType, GameObject>();
 
-    private MeshRenderer _meshRoot;
-    private BoonRoot _boonRoot;
+    [SerializeField] private Transform meshRoot;
+    [SerializeField] private Transform boneRoot;
+    private List<string> _boneList = new List<string>();
     private Dictionary<string, Transform> _boneMap = new Dictionary<string, Transform>();
-    private List<Transform> _boneList = new List<Transform>();
+    private Dictionary<EEquipmentType, string> _rootBones = new Dictionary<EEquipmentType, string>();
+    private Dictionary<string, GameObject> _partMap = new Dictionary<string, GameObject>();
 
-    public Transform rootBone;
-
-    public List<ItemData> Items
+    public Dictionary<EEquipmentType, List<ItemData>> Items
     {
         get { return _items; }
     }
 
-    public Dictionary<EquipmentType, ItemData> EquippedItems
+    public Dictionary<EEquipmentType, GameObject> EquippedItems
     {
         get { return _equippedItems; }
     }
 
     private void Awake()
     {
-        _meshRoot = GetComponentInChildren<MeshRenderer>();
-        _boonRoot = GetComponentInChildren<BoonRoot>();
-
-        foreach (Transform bone in _boonRoot.GetComponentsInChildren<Transform>())
+        for (int i = 0; i < Enum.GetNames(typeof(EEquipmentType)).Length; ++i)
         {
-            _boneMap[bone.name] = bone;
-            _boneList.Add(bone);
+            _items.Add((EEquipmentType)i, new List<ItemData>());
         }
 
-        ItemData item1 = new ItemData { id = 1, itemName = "BaseLegs", equipType = EquipmentType.Legs, equipPrefab = null };
-        // item1.equipPrefab = Resources.Load<GameObject>("Prefabs/Equipment/BaseLegs");
-        ItemData item2 = new ItemData { id = 2, itemName = "NewLegs", equipType = EquipmentType.Legs, equipPrefab = null };
-        // item2.equipPrefab = Resources.Load<GameObject>("Prefabs/Equipment/NewLegs");
+        foreach (Transform child in meshRoot)
+        {
+            TargetMeshBone target = child.GetComponent<TargetMeshBone>();
+            if (target != null)
+            {
+                _partMap[child.name] = child.gameObject;
+            }
+        }
 
-        _items.Add(item1);
-        _items.Add(item2);
-        EquipItem(item1);
+        _boneList = Resources.Load<CharacterBoneData>($"Bone/PlayerBoneData").boneNames;
+
+        foreach (Transform bone in boneRoot.GetComponentsInChildren<Transform>())
+        {
+            if (_boneList.Contains(bone.name))
+            {
+                _boneMap.Add(bone.name, bone);
+            }
+        }
+
+        ItemData BaseLegs = new ItemData { id = 1, itemName = "BaseLegs", equipmentType = EEquipmentType.Legs, partType = EPartType.Skinned };
+        ItemData BallLegs = new ItemData { id = 2, itemName = "BallLegs", equipmentType = EEquipmentType.Legs, partType = EPartType.Static };
+        _items[BaseLegs.equipmentType].Add(BaseLegs);
+        _items[BallLegs.equipmentType].Add(BallLegs);
+        EquipItem(BaseLegs);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            EquipItem(_items[0]);
+            EquipItem(_items[EEquipmentType.Legs][0]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            EquipItem(_items[1]);
+            EquipItem(_items[EEquipmentType.Legs][1]);
         }
     }
 
     public void GetItem(ItemData newItem)
     {
-        if (!_items.Contains(newItem))
+        if (!_items[newItem.equipmentType].Contains(newItem))
         {
-            _items.Add(newItem);
+            _items[newItem.equipmentType].Add(newItem);
         }
     }
 
     public void RemoveItem(ItemData removeItem)
     {
-        if (_items.Contains(removeItem))
+        if (_items[removeItem.equipmentType].Contains(removeItem))
         {
-            _items.Remove(removeItem);
+            _items[removeItem.equipmentType].Remove(removeItem);
         }
     }
 
     public void EquipItem(ItemData equipItem)
     {
-        if (!_items.Contains(equipItem)) return;
+        if (!_items[equipItem.equipmentType].Contains(equipItem)) return;
         // RemoveItem(equipItem);
 
-        string postItemName = "";
-        if (!_equippedItems.ContainsKey(equipItem.equipType))
+        GameObject postEquipment = null;
+        GameObject currentEquipment = _partMap[equipItem.itemName];
+        if (!_equippedItems.ContainsKey(equipItem.equipmentType))
         {
-            _equippedItems.Add(equipItem.equipType, equipItem);
+            _equippedItems.Add(equipItem.equipmentType, currentEquipment);
         }
         else
         {
-            postItemName = _equippedItems[equipItem.equipType].itemName;
-            _equippedItems[equipItem.equipType] = equipItem;
-        }
-
-        // Need to refactoring
-        GameObject currentEquipment = null;
-        GameObject postEquipment = null;
-        foreach (Transform child in _meshRoot.transform)
-        {
-            if (child.name == postItemName)
-            {
-                postEquipment = child.gameObject;
-            }
-
-            if (child.name == equipItem.itemName)
-            {
-                currentEquipment = child.gameObject;
-            }
-
-            if (currentEquipment != null && postEquipment != null)
-            {
-                break;
-            }
+            postEquipment = _equippedItems[equipItem.equipmentType];
+            _equippedItems[equipItem.equipmentType] = currentEquipment;
         }
 
         if (postEquipment != null)
@@ -118,10 +113,24 @@ public class Inventory : MonoBehaviour
         }
         currentEquipment.SetActive(true);
 
-        SkinnedMeshRenderer smr = currentEquipment.GetComponent<SkinnedMeshRenderer>();
-        smr.bones = _boneList.ToArray();
-        //Transform[] newBones = smr.bones.Select(b => b != null ? _boneMap[b.name] : null).ToArray();
-        //smr.bones = newBones;
-        //smr.rootBone = rootBone;
+        if (equipItem.partType == EPartType.Skinned)
+        {
+            SkinnedMeshRenderer smr = currentEquipment.GetComponent<SkinnedMeshRenderer>();
+            List<Transform> meshTransforms = new List<Transform>();
+            for (int i = 0; i < smr.bones.Length; ++i)
+            {
+                meshTransforms.Add(_boneMap[_boneList[i]]);
+            }
+            smr.bones = meshTransforms.ToArray();
+            //smr.rootBone = rootBone;
+        }
+        else
+        {
+            currentEquipment.transform.SetParent(_boneMap[_boneList[0]]);
+
+            // 위치 및 회전 초기화
+            currentEquipment.transform.localPosition = new Vector3(0.0f, -0.9f, 0.0f);
+            currentEquipment.transform.localRotation = Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f));
+        }
     }
 }
