@@ -44,7 +44,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        _boneList = Resources.Load<CharacterBoneData>($"Bone/PlayerBoneData").boneNames;
+        _boneList = Resources.Load<CharacterBoneData>($"Bone/LupaBoneData").boneNames;
 
         foreach (Transform bone in boneRoot.GetComponentsInChildren<Transform>())
         {
@@ -113,6 +113,8 @@ public class Inventory : MonoBehaviour
         }
         currentEquipment.SetActive(true);
 
+        // Don't need to set bone now
+        // For example, can set bone when init inventory or character
         if (equipItem.partType == EPartType.Skinned)
         {
             SkinnedMeshRenderer smr = currentEquipment.GetComponent<SkinnedMeshRenderer>();
@@ -123,12 +125,21 @@ public class Inventory : MonoBehaviour
             }
             smr.bones = meshTransforms.ToArray();
             //smr.rootBone = rootBone;
+
+            foreach (SkinnedMeshRenderer child in currentEquipment.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                meshTransforms.Clear();
+                for (int i = 0; i < smr.bones.Length; ++i)
+                {
+                    meshTransforms.Add(_boneMap[_boneList[i]]);
+                }
+                child.bones = meshTransforms.ToArray();
+            }
         }
         else
         {
             currentEquipment.transform.SetParent(_boneMap[_boneList[0]]);
 
-            // ��ġ �� ȸ�� �ʱ�ȭ
             currentEquipment.transform.localPosition = new Vector3(0.0f, -0.9f, -0.05f);
             currentEquipment.transform.localRotation = Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f));
         }

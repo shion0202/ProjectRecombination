@@ -207,6 +207,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     #endregion
 
     #region Functions
+    public void TakeDamage(int takeDamage)
+    {
+        Debug.Log($"{takeDamage}만큼의 피해를 입었습니다.");
+    }
+
     public void PartDash()
     {
         if (!_canDash || _followCamera.IsZoomed) return;
@@ -322,11 +327,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (Physics.Raycast(ray, out hit, 100.0f))
         {
             targetPoint = hit.point;
-            if (!_followCamera.IsZoomed)
-            {
-                Vector3 spreadValue = new Vector3(UnityEngine.Random.Range(bulletSpreadRange * -1.0f, bulletSpreadRange), UnityEngine.Random.Range(bulletSpreadRange * -1.0f, bulletSpreadRange), 0.0f);
-                targetPoint += spreadValue;
-            }
         }
         else
         {
@@ -341,6 +341,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             targetRotation.z = 0.0f;
             transform.rotation = targetRotation;
         }
+
+        _followCamera.ApplyRecoil();
 
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();

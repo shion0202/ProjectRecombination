@@ -1,6 +1,7 @@
 using Cinemachine;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting.InputSystem;
 using UnityEngine;
 
 public enum ECameraState
@@ -14,6 +15,7 @@ public class FollowCameraController : MonoBehaviour
     private CinemachineVirtualCamera _vcam;
     private CinemachineFramingTransposer _cameraBody;
     private CinemachinePOV _cameraAim;
+    private CinemachineImpulseSource _impulseSource;
 
     private PlayerController _owner;
     private Dictionary<ECameraState, FollowCameraData> _cameraSettings = new Dictionary<ECameraState, FollowCameraData>();
@@ -53,6 +55,13 @@ public class FollowCameraController : MonoBehaviour
 
     [SerializeField] private float zoomSpeed = 10.0f;
 
+    [SerializeField] private float recoilAmountX = 2.0f;
+    [SerializeField] private float recoilAmountY = 4.0f;
+    [SerializeField] private float recoilRecoverySpeed = 20.0f;
+    [SerializeField] private Vector3 shakeAmount = Vector3.zero;
+    private float _currentRecoilX = 0.0f;
+    private float _currentRecoilY = 0.0f;
+
     private void Awake()
     {
         _vcam = GetComponent<CinemachineVirtualCamera>();
@@ -75,11 +84,34 @@ public class FollowCameraController : MonoBehaviour
 
         _cameraBody = _vcam.GetCinemachineComponent<CinemachineFramingTransposer>();
         _cameraAim = _vcam.GetCinemachineComponent<CinemachinePOV>();
+        _impulseSource = _owner.gameObject.GetComponent<CinemachineImpulseSource>();
 
         GetComponent<CinemachineVirtualCamera>().m_LookAt = owner.gameObject.GetComponentInChildren<CameraTarget>().transform;
         GetComponent<CinemachineVirtualCamera>().m_Follow = owner.gameObject.GetComponentInChildren<CameraTarget>().transform;
 
         ApplyCameraSettings();
+    }
+
+    public void UpdateFollowCamera()
+    {
+        HandleZoom();
+        HandleRecoil();
+    }
+
+    public void ApplyRecoil()
+    {
+        _currentRecoilX += recoilAmountX * (UnityEngine.Random.value > 0.5f ? 1 : -1);
+        _currentRecoilY += recoilAmountY;
+        ApplyShake();
+    }
+
+    public void ApplyShake()
+    {
+        shakeAmount.x = shakeAmount.x * (UnityEngine.Random.value > 0.5f ? 1 : -1);
+        shakeAmount.y = shakeAmount.y * (UnityEngine.Random.value > 0.5f ? 1 : -1);
+        _impulseSource.m_DefaultVelocity = shakeAmount;
+
+        _impulseSource.GenerateImpulse();
     }
 
     private void ApplyCameraSettings()
@@ -95,16 +127,24 @@ public class FollowCameraController : MonoBehaviour
         _cameraAim.m_VerticalAxis.m_MaxSpeed = _cameraSettings[currentCameraState].sensitivityY;
     }
 
-    public void UpdateFollowCamera()
-    {
-        HandleZoom();
-    }
-
     private void HandleZoom()
     {
         _vcam.m_Lens.FieldOfView = Mathf.Lerp(_vcam.m_Lens.FieldOfView, _cameraSettings[currentCameraState].FOV, zoomSpeed * Time.deltaTime);
         _cameraBody.m_ScreenX = Mathf.Lerp(_cameraBody.m_ScreenX, _cameraSettings[currentCameraState].screenX, zoomSpeed * Time.deltaTime);
         _cameraBody.m_ScreenY = Mathf.Lerp(_cameraBody.m_ScreenY, _cameraSettings[currentCameraState].screenY, zoomSpeed * Time.deltaTime);
         _cameraBody.m_CameraDistance = Mathf.Lerp(_cameraBody.m_CameraDistance, _cameraSettings[currentCameraState].cameraDistance, zoomSpeed * Time.deltaTime);
+    }
+
+    private void HandleRecoil()
+    {
+        if (_currentRecoilX != 0 || _currentRecoilY > 0)
+        {
+            _cameraAim.m_HorizontalAxis.Value += _currentRecoilX * Time.deltaTime;
+            _cameraAim.m_VerticalAxis.Value -= _currentRecoilY * Time.deltaTime;
+
+            float recoveryStep = recoilRecoverySpeed * Time.deltaTime;
+            _currentRecoilX = Mathf.MoveTowards(_currentRecoilX, 0, recoveryStep);
+            _currentRecoilY = Mathf.Max(0, _currentRecoilY - recoveryStep);
+        }
     }
 }
