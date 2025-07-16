@@ -42,13 +42,13 @@ public class BallLegs : MonoBehaviour, IPartAbility
 
         if (isJumping)
         {
-            ValueB += Time.deltaTime * 300.0f;
-            float yValue = Time.deltaTime * 2.0f;
+            ValueB += Time.deltaTime * 250.0f;
+            float yValue = Time.deltaTime * 1.6f;
             if (ValueB >= 50.0f)
             {
                 ValueB = 50.0f;
             }
-            if (modelPos.localPosition.y - yValue >= 0.3f)
+            if (modelPos.localPosition.y - yValue >= 0.25f)
             {
                 yValue = 0.0f;
             }

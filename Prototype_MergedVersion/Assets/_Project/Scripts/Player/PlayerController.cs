@@ -164,21 +164,21 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnDash(InputAction.CallbackContext context)
     {
-        if (!_canDash || _followCamera.IsZoomed) return;
+        //if (!_canDash || _followCamera.IsZoomed) return;
 
-        if (context.started)
-        {
-            // If press the button, dash to pressed direction.
-            // Need distance and time(or speed).
-            // Can't move, and has cooldown
+        //if (context.started)
+        //{
+        //    // If press the button, dash to pressed direction.
+        //    // Need distance and time(or speed).
+        //    // Can't move, and has cooldown
 
-            if (_dashCoroutine != null)
-            {
-                StopCoroutine(_dashCoroutine);
-                _dashCoroutine = null;
-            }
-            _dashCoroutine = StartCoroutine(CoHandleDash());
-        }
+        //    if (_dashCoroutine != null)
+        //    {
+        //        StopCoroutine(_dashCoroutine);
+        //        _dashCoroutine = null;
+        //    }
+        //    _dashCoroutine = StartCoroutine(CoHandleDash());
+        //}
     }
 
     void PlayerActions.IPlayerActionMapActions.OnZoom(InputAction.CallbackContext context)
@@ -215,6 +215,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     public void TakeDamage(int takeDamage)
     {
         Debug.Log($"{takeDamage}만큼의 피해를 입었습니다.");
+    }
+
+    public void SetMovable(bool canMove)
+    {
+        _canMove = canMove;
+        _animator.enabled = canMove;
     }
 
     public void PartDash()

@@ -227,6 +227,86 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1020853731}
   m_LocalEulerAnglesHint: {x: -30, y: 0, z: 0}
+--- !u!1001 &53301316
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 891612316142066627}
+    m_Modifications:
+    - target: {fileID: 5238538877814813142, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_Name
+      value: 'Basic Hit '
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 47096eff328e11a418ace7db2d72aa97, type: 3}
+--- !u!198 &53301317 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 970440554703164915, guid: 47096eff328e11a418ace7db2d72aa97,
+    type: 3}
+  m_PrefabInstance: {fileID: 53301316}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &53301318 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6818008445769152434, guid: 47096eff328e11a418ace7db2d72aa97,
+    type: 3}
+  m_PrefabInstance: {fileID: 53301316}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &74866528
 GameObject:
   m_ObjectHideFlags: 0
@@ -3494,6 +3574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRoot: {fileID: 3932981195792316148}
   boneRoot: {fileID: 5385236650748090296}
+  changeEffect: {fileID: 53301317}
 --- !u!4 &843439357819879243
 Transform:
   m_ObjectHideFlags: 0
@@ -3609,7 +3690,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.01, y: 0.01, z: 0}
+  m_DefaultVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &880458185239774768
 GameObject:
   m_ObjectHideFlags: 0
@@ -3644,6 +3725,7 @@ Transform:
   - {fileID: 3801625168846837577}
   - {fileID: 2500914813439450277}
   - {fileID: 1044091993}
+  - {fileID: 53301318}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &896548041081543063
@@ -5729,7 +5811,7 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights:
   - 0
   - 0
-  m_RootBone: {fileID: 5385236650748090296}
+  m_RootBone: {fileID: 0}
   m_AABB:
     m_Center: {x: 0, y: -0.000000029802322, z: 0.63771194}
     m_Extent: {x: 0.962176, y: 0.96217597, z: 1.2234075}

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
@@ -17,6 +16,8 @@ public class Inventory : MonoBehaviour
     private Dictionary<string, Transform> _boneMap = new Dictionary<string, Transform>();
     private Dictionary<EEquipmentType, string> _rootBones = new Dictionary<EEquipmentType, string>();
     private Dictionary<string, GameObject> _partMap = new Dictionary<string, GameObject>();
+
+    [SerializeField] private ParticleSystem changeEffect;
 
     public Dictionary<EEquipmentType, List<ItemData>> Items
     {
@@ -72,22 +73,42 @@ public class Inventory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            if (_equippedItems[EEquipmentType.Body].name == _items[EEquipmentType.Body][0].itemName)
+                return;
+
             EquipItem(_items[EEquipmentType.Body][0]);
+            changeEffect.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            if (_equippedItems[EEquipmentType.Body].name == _items[EEquipmentType.Body][1].itemName)
+                return;
+
             EquipItem(_items[EEquipmentType.Body][1]);
+            changeEffect.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            if (_equippedItems[EEquipmentType.Legs].name == _items[EEquipmentType.Legs][0].itemName)
+                return;
+
+            gameObject.GetComponent<PlayerController>().SetMovable(true);
+
             EquipItem(_items[EEquipmentType.Legs][0]);
+            changeEffect.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
+            if (_equippedItems[EEquipmentType.Legs].name == _items[EEquipmentType.Legs][1].itemName)
+                return;
+
+            gameObject.GetComponent<PlayerController>().SetMovable(false);
+
             EquipItem(_items[EEquipmentType.Legs][1]);
+            changeEffect.Play();
         }
     }
 
