@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Scriptable Object/Follow Camera Data", order = 0)]
+[CreateAssetMenu(menuName = "Scriptable Object/Follow Camera Data", order = 10)]
 public class FollowCameraData : ScriptableObject
 {
     public float FOV;

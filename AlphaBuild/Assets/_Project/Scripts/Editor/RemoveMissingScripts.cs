@@ -3,10 +3,12 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+// 선택한 게임오브젝트에서 Missing Script를 제거하는 에디터 클래스
+#if UNITY_EDITOR
 public class RemoveMissingScripts : MonoBehaviour
 {
-#if UNITY_EDITOR
-    [MenuItem("Tools/Remove Missing Scripts")]
+    // 메뉴 항목을 통해 선택한 프리팹 또는 게임오브젝트에서 Missing Script를 제거
+    [MenuItem("Tools/Remove Missing Scripts", priority = 100)]
     public static void DeleteMissingScriptInPrefabs()
     {
         string[] allPrefabs = AssetDatabase.FindAssets("t:Prefab");
@@ -21,7 +23,8 @@ public class RemoveMissingScripts : MonoBehaviour
             DeleteInternal(list);
     }
 
-    [MenuItem("Assets/Selection Delete Missing Scripts")]
+    // 우클릭 메뉴를 통해 선택한 프리팹에서 Missing Script를 제거
+    [MenuItem("Assets/Selection Delete Missing Scripts", priority = 100)]
     public static void DeleteMissingScriptInSelections()
     {
         List<GameObject> list = Selection.gameObjects.ToList();
@@ -61,5 +64,5 @@ public class RemoveMissingScripts : MonoBehaviour
             }
         }
     }
-#endif
 }
+#endif

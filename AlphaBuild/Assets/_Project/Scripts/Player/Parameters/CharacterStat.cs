@@ -1,14 +1,17 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterStat : MonoBehaviour
 {
+    #region Variables
     private StatDictionary _baseStats = new();
     private Dictionary<EPartType, StatDictionary> _partStatDict = new();
     private StatDictionary _totalStats = new();
+    #endregion
 
+    #region Properties
     public StatDictionary BaseStats
     {
         get { return _baseStats; }
@@ -25,29 +28,37 @@ public class CharacterStat : MonoBehaviour
         get { return _totalStats; }
         set { _totalStats = value; }
     }
+    #endregion
 
+    #region Unity Methods
     private void Awake()
     {
-        // partStatÀº ÆÄÃ÷ ºÎÀ§ Á¾·ù¸¸Å­ ¹Ì¸® »ı¼º
-        // ¶Ç´Â ÃßÈÄ¿¡ º£ÀÌ½º ÆÄÃ÷ ±âÁØÀ¸·Î ÃÊ±âÈ­
+        // Part Statì€ íŒŒì¸  ë¶€ìœ„ ì¢…ë¥˜ë§Œí¼ ë¯¸ë¦¬ ìƒì„±
+        // To-do: ì¶”í›„ì— ë² ì´ìŠ¤ íŒŒì¸  ê¸°ì¤€ìœ¼ë¡œ ì´ˆê¸°í™”í•˜ëŠ” ë°©ì‹ìœ¼ë¡œ ìˆ˜ì • ê°€ëŠ¥
         foreach (EPartType type in Enum.GetValues(typeof(EPartType)))
         {
             _partStatDict.Add(type, new StatDictionary());
         }
     }
+    #endregion
 
-    private void SetPartStats(EPartType type, StatDictionary partStats)
+    #region Public Methods
+    // íŒŒì¸  êµì²´ ì‹œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
+    // íŒŒì¸  êµì²´ì™€ í•¨ê»˜ Total Statì„ ê°±ì‹ 
+    public void SetPartStats(EPartType type, StatDictionary partStats)
     {
         _partStatDict[type] = partStats;
         CalculateTotalStats();
     }
+    #endregion
 
-    // ÆÄÃ÷ ±³Ã¼ ½Ã ½ÇÇà
+    #region Private Methods
+    // Total Stat(ìµœì¢…ì ìœ¼ë¡œ ì‚¬ìš©í•˜ëŠ” ìŠ¤íƒ¯)ì„ ê°±ì‹ í•˜ëŠ” í•¨ìˆ˜
     private void CalculateTotalStats()
     {
         _totalStats = new();
 
-        // Base ½ºÅÈ º¹»ç
+        // Stat Type ì¤‘ Base Statì— í•´ë‹¹í•˜ëŠ” ìŠ¤íƒ¯ì„ Total Statsì— ì¶”ê°€
         foreach (EStatType type in System.Enum.GetValues(typeof(EStatType)))
         {
             StatData baseData = _baseStats[type];
@@ -62,12 +73,13 @@ public class CharacterStat : MonoBehaviour
             }
         }
 
-        // ÆÄÃ÷ ½ºÅÈ ÇÕ»ê
-        foreach (var part in _partStatDict.Values)
+        // Stat Type ì¤‘ Part Statì— í•´ë‹¹í•˜ëŠ” ìŠ¤íƒ¯ì„ Total Statsì— ì¶”ê°€
+        // ì´ë¯¸ Base Statì„ í†µí•´ ì¶”ê°€ëœ ìƒíƒœë¼ë©´ Modify í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•˜ì—¬ ê°’ë§Œ ê°±ì‹ 
+        foreach (StatDictionary partStats in _partStatDict.Values)
         {
             foreach (EStatType type in System.Enum.GetValues(typeof(EStatType)))
             {
-                var stat = part[type];
+                StatData stat = partStats[type];
                 if (stat != null)
                 {
                     if (_totalStats[type] == null)
@@ -87,4 +99,5 @@ public class CharacterStat : MonoBehaviour
             }
         }
     }
+    #endregion
 }
