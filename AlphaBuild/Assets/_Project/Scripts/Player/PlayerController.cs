@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private float _damage = 1.0f;
 
+    CharacterStat _characterStat;
+
     public Vector3 FallVelocity
     {
         get { return _fallVelocity; }

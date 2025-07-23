@@ -53,7 +53,6 @@ public class CSVReader : MonoBehaviour
     private void Awake()
     {
         ReadCSV("CharacterParams.csv", characterParamDict);
-        TestLog();
     }
 
     public void ReadCSV<T>(string path, Dictionary<int, T> dict) where T : ICSVParsable, new()
@@ -74,14 +73,6 @@ public class CSVReader : MonoBehaviour
             values.FromCSV(splitData);
 
             dict.Add(values.GetKey(), values);
-        }
-    }
-
-    private void TestLog()
-    {
-        foreach (var kvp in characterParamDict.Values)
-        {
-            Debug.Log(kvp.form);
         }
     }
 }
