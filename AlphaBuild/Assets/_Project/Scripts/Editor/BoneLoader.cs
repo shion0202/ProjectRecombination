@@ -46,8 +46,8 @@ public class BoneLoader : MonoBehaviour
         // ScriptableObject 생성 및 데이터 입력
         CharacterBoneData boneMapSO = ScriptableObject.CreateInstance<CharacterBoneData>();
 
-        var targetMeshBone = targetGO.GetComponentInChildren<TargetMeshBone>();
-        var smr = targetMeshBone.gameObject.GetComponent<SkinnedMeshRenderer>();
+        var part = targetGO.GetComponentInChildren<PartBase>();
+        var smr = part.gameObject.GetComponent<SkinnedMeshRenderer>();
         foreach (var bone in smr.bones)
         {
             if (bone == null)

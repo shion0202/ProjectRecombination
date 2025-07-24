@@ -16,9 +16,14 @@ MonoBehaviour:
   screenX: 0.4
   screenY: 0.7
   cameraDistance: 2
+  sensitivityX: 3
+  sensitivityY: 1
   maxAimRangeX: 180
   minAimRangeX: -180
   maxAimRangeY: 50
   minAimRangeY: -30
-  sensitivityX: 3
-  sensitivityY: 1
+  accelTimeX: 0.1
+  decelTimeX: 0.1
+  accelTimeY: 0.1
+  decelTimeY: 0.1
+  convertSpeed: 100

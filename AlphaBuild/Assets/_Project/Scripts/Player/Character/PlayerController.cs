@@ -1,10 +1,21 @@
-using Cinemachine;
+Ôªøusing Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Processors;
+
+[Flags]
+public enum EPlayerState
+{
+    Idle = 1 << 0,
+    Moving = 1 << 1,
+    Falling = 1 << 2,
+    Dashing = 1 << 3,
+    Shooting = 1 << 4,
+    Zooming = 1 << 5
+}
 
 public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapActions
 {
@@ -20,8 +31,28 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Dictionary<ECameraState, float> _moveSpeeds = new Dictionary<ECameraState, float>();
     private bool _canMove = true;
 
+    [Header("Gravity")]
+    [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
+    [SerializeField] private float gravityScale = 2.0f;
+    private Transform _groundCheck;
+    private bool _isGrounded = false;
+    private Vector3 _fallVelocity;
+
+    public Vector3 FallVelocity
+    {
+        get { return _fallVelocity; }
+    }
+
+    [Header("Camera")]
+    [SerializeField] private GameObject followCameraPrefab;
+    [SerializeField] private float rotationSpeedByCamera = 40.0f;
+    private FollowCameraController _followCamera;
+
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+
     [Header("Dash")]
-    [SerializeField, Tooltip("¥ÎΩ√ø° « ø‰«— ºˆƒ° (X: ¥ÎΩ√ ∞≈∏Æ, Y: ¥ÎΩ√ ¿Ø¡ˆ Ω√∞£, Z: ¥ÎΩ√ ƒ≈∏¿”)")]
+    [SerializeField, Tooltip("ÎåÄÏãúÏóê ÌïÑÏöîÌïú ÏàòÏπò (X: ÎåÄÏãú Í±∞Î¶¨, Y: ÎåÄÏãú Ïú†ÏßÄ ÏãúÍ∞Ñ, Z: ÎåÄÏãú Ïø®ÌÉÄÏûÑ)")]
     private Vector3 dashValues = new Vector3(5.0f, 0.1f, 5.0f);
     private bool _isDashing = false;
     private bool _canDash = true;
@@ -37,38 +68,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private bool _isShooting = false;
     private bool _isRotating = false;
     private float _lastShootTime = -Mathf.Infinity;
-
-    [Header("Gravity")]
-    [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
-    [SerializeField] private float gravityScale = 2.0f;
-    private Transform _groundCheck;
-    private bool _isGrounded = false;
-    private Vector3 _fallVelocity;
-
-    private float _damage = 1.0f;
-
-    CharacterStat _characterStat;
-
-    public Vector3 FallVelocity
-    {
-        get { return _fallVelocity; }
-    }
-
-    [Header("Camera")]
-    [SerializeField] private GameObject followCameraPrefab;
-    [SerializeField] private float rotationSpeedByCamera = 40.0f;
-    private FollowCameraController _followCamera;
-
-    [Header("Animation")]
-    private Animator _animator;
     #endregion
 
-    #region Unity Events
+    #region Unity Methods
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _groundCheck = GetComponentInChildren<GroundCheck>().transform;
-        _animator = GetComponentInChildren<Animator>();
 
         _moveSpeeds.Add(ECameraState.Normal, moveSpeed);
         _moveSpeeds.Add(ECameraState.Zoom, zoomedMoveSpeed);
@@ -83,7 +89,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             cameraObject.name = followCameraPrefab.name;
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
-        _followCamera.SetFollowCamera(this);
+        _followCamera.InitFollowCamera(this);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -99,7 +105,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Inventory inven = GetComponent<Inventory>();
-            IPartAbility ability = inven.EquippedItems[EPartType.Legs].GetComponent<IPartAbility>();
+            PartBase ability = inven.EquippedItems[EPartType.Legs].GetComponent<PartBase>();
             if (ability != null)
             {
                 ability.UseAbility(this);
@@ -147,9 +153,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             _moveInput = Vector2.zero;
             _moveDirection = Vector3.zero;
-            _animator.SetFloat("moveX", 0.0f);
-            _animator.SetFloat("moveY", 0.0f);
-            _animator.SetFloat("moveMagnitude", 0.0f);
+            animator.SetFloat("moveX", 0.0f);
+            animator.SetFloat("moveY", 0.0f);
+            animator.SetFloat("moveMagnitude", 0.0f);
             return;
         }
 
@@ -158,9 +164,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
 
-            _animator.SetFloat("moveX", _moveDirection.x);
-            _animator.SetFloat("moveY", _moveDirection.z);
-            _animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
+            animator.SetFloat("moveX", _moveDirection.x);
+            animator.SetFloat("moveY", _moveDirection.z);
+            animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
         }
     }
 
@@ -191,12 +197,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (context.started)
         {
             _followCamera.IsZoomed = true;
-            _animator.SetBool("isAim", true);
+            animator.SetBool("isAim", true);
         }
         else if (context.canceled)
         {
             _followCamera.IsZoomed = false;
-            _animator.SetBool("isAim", false);
+            animator.SetBool("isAim", false);
         }
     }
 
@@ -213,16 +219,16 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     }
     #endregion
 
-    #region Functions
+    #region Methods
     public void TakeDamage(int takeDamage)
     {
-        Debug.Log($"{takeDamage}∏∏≈≠¿« «««ÿ∏¶ ¿‘æ˙Ω¿¥œ¥Ÿ.");
+        Debug.Log($"{takeDamage}ÎßåÌÅºÏùò ÌîºÌï¥Î•º ÏûÖÏóàÏäµÎãàÎã§.");
     }
 
     public void SetMovable(bool canMove)
     {
         _canMove = canMove;
-        _animator.enabled = canMove;
+        animator.enabled = canMove;
     }
 
     public void PartDash()
@@ -259,8 +265,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         bulletScale = size;
         shootCooldown = cooldown;
         _followCamera.SetRecoilValue(xValue, yValue, shakeValue);
-
-        _damage = damage;
     }
 
     private void HandleMove()
@@ -373,7 +377,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
 
         Inventory inven = GetComponent<Inventory>();
-        IPartAbility ability = inven.EquippedItems[EPartType.Body].GetComponent<IPartAbility>();
+        PartBase ability = inven.EquippedItems[EPartType.ShoulderL].GetComponent<PartBase>();
         if (ability != null)
         {
             ability.UseAbility(this);
@@ -387,7 +391,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (bulletComponent != null)
         {
             bulletComponent.from = gameObject;
-            bulletComponent.damage = (int)_damage;
+            bulletComponent.damage = (int)1;
         }
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)

@@ -45,7 +45,7 @@ public class Inventory : MonoBehaviour
         // Need to have parts in children.
         foreach (Transform child in meshRoot)
         {
-            TargetMeshBone target = child.GetComponent<TargetMeshBone>();
+            PartBase target = child.GetComponent<PartBase>();
             if (target != null)
             {
                 _parts[child.name] = child.gameObject;
@@ -79,18 +79,18 @@ public class Inventory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (_equippedItems[EPartType.Body].name == _items[EPartType.Body][0].name)
+            if (_equippedItems[EPartType.ShoulderL].name == _items[EPartType.ShoulderL][0].name)
                 return;
 
-            EquipItem(_items[EPartType.Body][0]);
+            EquipItem(_items[EPartType.ShoulderL][0]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (_equippedItems[EPartType.Body].name == _items[EPartType.Body][1].name)
+            if (_equippedItems[EPartType.ShoulderL].name == _items[EPartType.ShoulderL][1].name)
                 return;
 
-            EquipItem(_items[EPartType.Body][1]);
+            EquipItem(_items[EPartType.ShoulderL][1]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))

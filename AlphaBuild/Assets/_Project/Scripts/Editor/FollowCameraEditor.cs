@@ -25,6 +25,7 @@ public class CubeGenerateButton : Editor
     {
         base.OnInspectorGUI();
 
+        EditorGUILayout.LabelField("\n");
         EditorGUILayout.BeginHorizontal();
         _savePath = EditorGUILayout.TextField("저장 경로", _savePath);
         if (GUILayout.Button("...", GUILayout.MaxWidth(30)))
