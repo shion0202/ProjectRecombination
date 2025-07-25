@@ -9,39 +9,39 @@ using UnityEngine.Events;
 using UnityEditor;
 #endif
 
-// 캐릭터 파라미터 데이터를 불러와 저장하기 위한 구조체
+// 캐릭터 파라미터 데이터를 불러와 저장하기 위한 클래스
 [Serializable]
-public struct CharacterParamData
+public class CharacterParamData
 {
-    public int formID;
-    public string formName;
-    public string displayFormName;
-    public float hp;
+    public float maxHp;
     public float attack;
-    public float attackSpeed;
-    public float range;
-    public float defense;
-    public float runSpeed;
-    public float hpRecovery;
+    public float fireSpeed;
+    public float defence;
+    public float moveSpeed;
 
-    public CharacterParamData(int formID, string formName, string displayFormName, float hp, float attack,
-        float attackSpeed, float range, float defense, float runSpeed, float hpRecovery)
+    private Dictionary<EStatType, float> _statDict;
+    public float this[EStatType type]
     {
-        this.formID = formID;
-        this.formName = formName;
-        this.displayFormName = displayFormName;
-        this.hp = hp;
-        this.attack = attack;
-        this.attackSpeed = attackSpeed;
-        this.range = range;
-        this.defense = defense;
-        this.runSpeed = runSpeed;
-        this.hpRecovery = hpRecovery;
+        get
+        {
+            if (_statDict == null)
+            {
+                _statDict = new Dictionary<EStatType, float>
+                {
+                    { EStatType.MaxHp, maxHp },
+                    { EStatType.Attack, attack },
+                    { EStatType.FireSpeed, fireSpeed },
+                    { EStatType.Defence, defence },
+                    { EStatType.MoveSpeed, moveSpeed }
+                };
+            }
+            return _statDict.TryGetValue(type, out float value) ? value : 0.0f;
+        }
     }
 }
 
 // 캐릭터 파라미터 데이터를 읽어오기 위한 클래스
-[CreateAssetMenu(fileName = "CharacterParamData", menuName = "Scriptable Object/Character Param Data", order = 20)]
+[CreateAssetMenu(fileName = "CharacterParamData", menuName = "Scriptable Object/Character Param Data", order = 21)]
 public class CharacterParamDataReader : DataReaderBase
 {
     [Header("스프레드시트에서 읽혀져 직렬화된 오브젝트")]
@@ -56,61 +56,24 @@ public class CharacterParamDataReader : DataReaderBase
         {
             switch (list[i].columnId)
             {
-                case "formID":
-                {
-                    data.formID = int.Parse(list[i].value);
-                    break;
-                }
-                case "formName":
-                {
-                    data.formName = list[i].value;
-                    break;
-                }
-                case "displayFormName":
-                {
-                    data.displayFormName = list[i].value;
-                    break;
-                }
                 case "hp":
-                {
-                    data.hp = float.Parse(list[i].value);
+                    data.maxHp = float.Parse(list[i].value);
                     break;
-                }
                 case "attack":
-                {
                     data.attack = float.Parse(list[i].value);
                     break;
-                }
-                case "attackSpeed":
-                {
-                    data.attackSpeed = float.Parse(list[i].value);
+                case "fireRapid":
+                    data.fireSpeed = float.Parse(list[i].value);
                     break;
-                }
-                case "range":
-                {
-                    data.range = float.Parse(list[i].value);
+                case "defence":
+                    data.defence = float.Parse(list[i].value);
                     break;
-                }
-                case "defense":
-                {
-                    data.defense = float.Parse(list[i].value);
+                case "speed":
+                    data.moveSpeed = float.Parse(list[i].value);
                     break;
-                }
-                case "runSpeed":
-                {
-                    data.runSpeed = float.Parse(list[i].value);
-                    break;
-                }
-                case "hpRecovery":
-                {
-                    data.hpRecovery = float.Parse(list[i].value);
-                    break;
-                }
                 default:
-                {
-                    Debug.LogWarning($"Unknown column: {list[i].columnId} with value: {list[i].value}");
+                    Debug.LogWarning($"Unknown column: {list[i].columnId} at row {formId}");
                     break;
-                }
             }
         }
 

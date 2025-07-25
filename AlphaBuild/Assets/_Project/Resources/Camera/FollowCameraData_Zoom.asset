@@ -27,3 +27,4 @@ MonoBehaviour:
   accelTimeY: 0.1
   decelTimeY: 0.1
   convertSpeed: 10
+  CharacterRotateSpeed: 40

@@ -17,13 +17,8 @@ MonoBehaviour:
   START_ROW_LENGTH: 2
   END_ROW_LENGTH: 2
   DataList:
-  - formID: 1001
-    formName: normalWeaponed
-    displayFormName: "\uAE30\uBCF8"
-    hp: 500
-    attack: 50
-    attackSpeed: 0.3
-    range: 300
-    defense: 15
-    runSpeed: 5
-    hpRecovery: 100
+  - maxHp: 500
+    attack: 10
+    fireSpeed: 0.1
+    defence: 15
+    moveSpeed: 5

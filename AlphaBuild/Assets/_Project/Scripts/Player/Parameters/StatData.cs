@@ -4,12 +4,17 @@ using UnityEngine;
 
 public enum EStatType
 {
-    Hp,
+    MaxHp,
     Attack,
-    Range,
+    FireSpeed,
     Defence,
-    RunSpeed,
-    HpRecovery
+    MoveSpeed,
+    AttackSkillDamage,
+    SkillSpeed,
+    SkillCount,
+    SkillCooldown,
+    CooldownDecrease,
+    AttackAilment,
 }
 
 // 개별 스탯 데이터 클래스

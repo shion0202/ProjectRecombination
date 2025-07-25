@@ -19,9 +19,9 @@ public class FollowCameraController : MonoBehaviour
 
     [SerializeField] private ECameraState currentCameraState = ECameraState.Normal;
     private Dictionary<ECameraState, FollowCameraData> _cameraSettings = new Dictionary<ECameraState, FollowCameraData>();
-
     private PlayerController _owner;
     private Transform _cameraTarget;
+    private bool _isBeforeZoom = false;
 
     [Header("Recoil Settings")]
     [SerializeField] private CinemachineImpulseSource impulseSource;
@@ -36,6 +36,12 @@ public class FollowCameraController : MonoBehaviour
     #region Properties
     public ECameraState CurrentCameraState => currentCameraState;
     public Transform CameraTarget => _cameraTarget;
+
+    public bool IsBeforeZoom
+    {
+        get { return _isBeforeZoom; }
+        set { _isBeforeZoom = value; }
+    }
 
     public bool IsZoomed
     {

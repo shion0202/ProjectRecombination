@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class CharacterStat : MonoBehaviour
     #region Variables
     private StatDictionary _baseStats = new();
     private Dictionary<EPartType, StatDictionary> _partStatDict = new();
-    private StatDictionary _totalStats = new();
+    private StatDictionary _totalStats;
     #endregion
 
     #region Properties
@@ -39,6 +40,15 @@ public class CharacterStat : MonoBehaviour
         {
             _partStatDict.Add(type, new StatDictionary());
         }
+
+        // Base Stat 초기화
+        CharacterParamData baseParam = Resources.Load<CharacterParamDataReader>("Params/CharacterParamData").DataList[0];
+        foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
+        {
+            _baseStats.Add(type, new StatData(type, baseParam[type], 9999, -9999));
+        }
+
+        CalculateTotalStats();
     }
     #endregion
 
@@ -77,6 +87,8 @@ public class CharacterStat : MonoBehaviour
         // 이미 Base Stat을 통해 추가된 상태라면 Modify 함수를 사용하여 값만 갱신
         foreach (StatDictionary partStats in _partStatDict.Values)
         {
+            if (partStats.IsEmpty()) continue;
+
             foreach (EStatType type in System.Enum.GetValues(typeof(EStatType)))
             {
                 StatData stat = partStats[type];
