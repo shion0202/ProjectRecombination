@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class RifleBody : PartBase
 {
-    public override void UseAbility(PlayerController owner)
+    public override void FinishActionForced()
     {
-        Shoot(owner);
+        
     }
 
-    private void Shoot(PlayerController owner)
+    public override void UseAbility()
     {
-        owner.PartShoot(15.0f, 0.5f, 1.0f, 4.0f, 10.0f, new Vector3(0.1f, 0.1f), 100.0f);
+        Shoot();
+    }
+
+    private void Shoot()
+    {
+        _owner.PartShoot(15.0f, 0.5f, 1.0f, 4.0f, 10.0f, new Vector3(0.1f, 0.1f), 100.0f);
     }
 }

@@ -10,7 +10,11 @@ public class StatDictionary
     // Indexer 문법: 외부에서 StatDictionary[EStatType] 형태로 접근 가능
     public StatData this[EStatType type]
     {
-        get => _statDict[type];
+        get
+        {
+            if (_statDict.ContainsKey(type) == false) return null;
+            return _statDict[type];
+        }
     }
 
     public void Add(EStatType type, StatData data)

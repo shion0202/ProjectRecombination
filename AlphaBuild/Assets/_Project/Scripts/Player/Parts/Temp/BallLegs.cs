@@ -81,11 +81,9 @@ public class BallLegs : PartBase
         }
     }
 
-    public override void UseAbility(PlayerController owner)
+    public override void UseAbility()
     {
-        this.owner = owner;
-        // Jump(owner);
-
+        Jump(owner);
         isIncrease = true;
     }
 
@@ -100,5 +98,10 @@ public class BallLegs : PartBase
         smr.SetBlendShapeWeight(0, ValueA);
         modelPos.localPosition = Vector3.zero;
         transform.localPosition = defaultMyPos;
+    }
+
+    public override void FinishActionForced()
+    {
+        Debug.Log("FinishActionForced called in BallLegs");
     }
 }

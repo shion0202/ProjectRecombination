@@ -2,10 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnhancedLegs : PartBase
+public class EnhancedLegs : PartLegsBase
 {
-    public override void UseAbility(PlayerController owner)
-    {
-        
-    }
+
 }

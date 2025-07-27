@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7719059694901761608
+--- !u!1 &4620645494552771413
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1662052838148423328}
-  - component: {fileID: 41463745650662530}
-  - component: {fileID: 536826502867861420}
+  - component: {fileID: 4982995971286949764}
+  - component: {fileID: 8018512009832459678}
+  - component: {fileID: 1863457846702999369}
   m_Layer: 0
-  m_Name: BasicLeg
+  m_Name: CaterpillarLegs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!4 &1662052838148423328
+--- !u!4 &4982995971286949764
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7719059694901761608}
+  m_GameObject: {fileID: 4620645494552771413}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -33,13 +33,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
---- !u!137 &41463745650662530
+--- !u!137 &8018512009832459678
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7719059694901761608}
+  m_GameObject: {fileID: 4620645494552771413}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -53,7 +53,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d7d6252c81b0185468eaa85d7cad7d02, type: 2}
+  - {fileID: 2100000, guid: 04016911717bc15438d1b66da7cf7235, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -351,22 +351,22 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.00000029802322, y: 0.03074488, z: 0.7817439}
     m_Extent: {x: 0.19357914, y: 0.16798654, z: 0.78197706}
   m_DirtyAABB: 0
---- !u!114 &536826502867861420
+--- !u!114 &1863457846702999369
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7719059694901761608}
+  m_GameObject: {fileID: 4620645494552771413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0438b455a29e40a4d8cf7e9d712e0c3d, type: 3}
+  m_Script: {fileID: 11500000, guid: c8c26efaa3e327147b5cac29ae732f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partId: 3012
+  partId: 3014
   partType: 4
   meshType: 0
-  dashDistance: 5
+  dashDistance: 6
   skillTime: 0.3
-  skillCooldown: 3
+  skillCooldown: 4
   maxSkillCount: 1

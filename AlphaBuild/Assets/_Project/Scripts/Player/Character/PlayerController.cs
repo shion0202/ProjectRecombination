@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private EPlayerState dashBlockMask;
     [SerializeField] private EPlayerState shootBlockMask = EPlayerState.Dashing;
     [SerializeField] private EPlayerState zoomBlockMask = EPlayerState.Dashing;
-    private EPlayerState _currentplayerState = EPlayerState.Idle;
+    private EPlayerState _currentPlayerState = EPlayerState.Idle;
 
     [Header("Movement")]
     [SerializeField, Range(0.01f, 100.0f)] private float rotationSpeed = 40.0f;
@@ -53,18 +53,31 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Vector3 _fallVelocity;
 
     [Header("Dash")]
-    [SerializeField, Tooltip("대시에 필요한 수치 (X: 대시 거리, Y: 대시 유지 시간, Z: 대시 쿨타임)")]
-    private Vector3 dashValues = new Vector3(5.0f, 0.1f, 5.0f);
-    private bool _isDashing = false;
-    private bool _canDash = true;
     private Vector3 _dashDirection = Vector3.zero;
-    private Coroutine _dashCoroutine = null;
+    private float _dashSpeed = 0.0f;
     #endregion
 
     #region Properties
+    public CharacterStat Stats
+    {
+        get => stats;
+    }
+
     public Vector3 FallVelocity
     {
         get { return _fallVelocity; }
+    }
+
+    public Vector3 DashDirection
+    {
+        get { return _dashDirection; }
+        set { _dashDirection = value; }
+    }
+
+    public float DashSpeed
+    {
+        get { return _dashSpeed; }
+        set { _dashSpeed = value; }
     }
 
     [Header("Attack")]
@@ -136,51 +149,42 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     void PlayerActions.IPlayerActionMapActions.OnMove(InputAction.CallbackContext context)
     {
         _moveInput = context.ReadValue<Vector2>();
-        if ((_currentplayerState & movementBlockMask) != 0) _moveInput = Vector2.zero;
-
-        if (_moveInput == null || _moveInput == Vector2.zero)
-        {
-            _currentplayerState &= ~EPlayerState.Moving;
-            _currentplayerState |= EPlayerState.Idle;
-            _moveInput = Vector2.zero;
-            _moveDirection = Vector3.zero;
-            animator.SetFloat("moveX", 0.0f);
-            animator.SetFloat("moveY", 0.0f);
-            animator.SetFloat("moveMagnitude", 0.0f);
-            return;
-        }
-
-        _currentplayerState &= ~EPlayerState.Idle;
-        _currentplayerState |= EPlayerState.Moving;
-        _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
-        animator.SetFloat("moveX", _moveDirection.x);
-        animator.SetFloat("moveY", _moveDirection.z);
-        animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
+        if ((_currentPlayerState & movementBlockMask) != 0) return;
     }
 
     void PlayerActions.IPlayerActionMapActions.OnDash(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            if (!_canDash) return;
-            if ((_currentplayerState & dashBlockMask) != 0) return;
+            if ((_currentPlayerState & dashBlockMask) != 0) return;
+
+            if (_moveInput == null || _moveInput == Vector2.zero)
+            {
+                Vector3 camForward = _followCamera.transform.forward;
+                camForward.y = 0.0f;
+                _dashDirection = camForward.normalized;
+            }
+            else
+            {
+                _dashDirection = CalculateInputDirection();
+            }
 
             PartBase ability = inventory.EquippedItems[EPartType.Legs].GetComponent<PartBase>();
             if (ability != null)
             {
-                ability.UseAbility(this);
+                ability.UseAbility();
             }
         }
     }
 
     void PlayerActions.IPlayerActionMapActions.OnZoom(InputAction.CallbackContext context)
     {
-        if ((_currentplayerState & zoomBlockMask) != 0) return;
+        if ((_currentPlayerState & zoomBlockMask) != 0) return;
 
         if (context.started)
         {
-            _currentplayerState &= ~EPlayerState.Shooting;
-            _currentplayerState |= EPlayerState.Zooming;
+            _currentPlayerState &= ~EPlayerState.Shooting;
+            _currentPlayerState |= EPlayerState.Zooming;
             _followCamera.IsBeforeZoom = true;
             _followCamera.IsZoomed = true;
             animator.SetBool("isAim", true);
@@ -188,7 +192,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.canceled)
         {
-            _currentplayerState &= ~EPlayerState.Zooming;
+            _currentPlayerState &= ~EPlayerState.Shooting;
+            _currentPlayerState &= ~EPlayerState.Zooming;
             _followCamera.IsBeforeZoom = false;
             _followCamera.IsZoomed = false;
             animator.SetBool("isAim", false);
@@ -199,31 +204,37 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         if (context.started)
         {
-            if ((_currentplayerState & shootBlockMask) != 0) return;
+            if ((_currentPlayerState & shootBlockMask) != 0) return;
 
-            _currentplayerState |= EPlayerState.Shooting;
+            _currentPlayerState |= EPlayerState.Shooting;
             _isShooting = true;
         }
         
         if (context.canceled)
         {
-            _currentplayerState &= ~EPlayerState.Shooting;
+            _currentPlayerState &= ~EPlayerState.Shooting;
             _isShooting = false;
         }
     }
     #endregion
 
     #region Public Methods
-    public void PartDash()
+    public void Dash(float dashSpeed)
     {
-        if (!_canDash || _followCamera.IsZoomed) return;
+        _dashSpeed = dashSpeed;
 
-        if (_dashCoroutine != null)
-        {
-            StopCoroutine(_dashCoroutine);
-            _dashCoroutine = null;
-        }
-        _dashCoroutine = StartCoroutine(CoHandleDash());
+        _currentPlayerState &= ~EPlayerState.Idle;
+        _currentPlayerState &= ~EPlayerState.Moving;
+        _currentPlayerState |= EPlayerState.Dashing;
+    }
+
+    public void FinishDash()
+    {
+        _dashDirection = Vector3.zero;
+        _dashSpeed = 0.0f;
+
+        _currentPlayerState &= ~EPlayerState.Dashing;
+        SwitchStateToIdle();
     }
 
     public void PartJump(float jumpVelocity)
@@ -271,27 +282,53 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void HandleMove()
     {
         if (!_canMove) return;
-        if ((_currentplayerState & movementBlockMask) != 0) return;
+        if ((_currentPlayerState & movementBlockMask) != 0) return;
 
+        if (_moveInput == null || _moveInput == Vector2.zero)
+        {
+            SwitchStateToIdle();
+            return;
+        }
+
+        _currentPlayerState &= ~EPlayerState.Idle;
+        _currentPlayerState |= EPlayerState.Moving;
+        _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
+        animator.SetFloat("moveX", _moveDirection.x);
+        animator.SetFloat("moveY", _moveDirection.z);
+        animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
+
+        _totalDirection += CalculateInputDirection() * stats.TotalStats[EStatType.MoveSpeed].Value;
+    }
+
+    private void SwitchStateToIdle()
+    {
+        _currentPlayerState &= ~EPlayerState.Moving;
+        _currentPlayerState |= EPlayerState.Idle;
+        _moveDirection = Vector3.zero;
+        animator.SetFloat("moveX", 0.0f);
+        animator.SetFloat("moveY", 0.0f);
+        animator.SetFloat("moveMagnitude", 0.0f);
+    }
+
+    private Vector3 CalculateInputDirection()
+    {
         Vector3 camForward = _followCamera.transform.forward;
         Vector3 camRight = _followCamera.transform.right;
         camForward.y = 0.0f;
         camRight.y = 0.0f;
         camForward.Normalize();
         camRight.Normalize();
-        Vector3 camMoveDirection = camForward * _moveInput.y + camRight * _moveInput.x;
+        Vector3 camDirection = camForward * _moveInput.y + camRight * _moveInput.x;
 
-        _totalDirection += camMoveDirection.normalized * stats.TotalStats[EStatType.MoveSpeed].Value;
+        return camDirection.normalized;
     }
 
     private void DashMove()
     {
         if (!_canMove) return;
-        if (!_isDashing) return;
+        if (_currentPlayerState != EPlayerState.Dashing) return;
 
-        float dashSpeed = dashValues.x / dashValues.y;
-        // _characterController.Move(_dashDirection * dashSpeed * Time.deltaTime);
-        _totalDirection += _dashDirection * dashSpeed;
+        _totalDirection += _dashDirection * _dashSpeed;
         _followCamera.CameraTarget.position = transform.position + new Vector3(0.0f, 1.2f, 0.0f);
     }
 
@@ -300,18 +337,18 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity);
         if (_isGrounded && _fallVelocity.y <= 0.0f)
         {
-            _currentplayerState &= ~EPlayerState.Falling;
+            _currentPlayerState &= ~EPlayerState.Falling;
             _fallVelocity = Vector3.zero;
             return;
         }
-        _currentplayerState |= EPlayerState.Falling;
+        _currentPlayerState |= EPlayerState.Falling;
         _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
         _totalDirection += _fallVelocity;
     }
 
     private void RotateCharacter()
     {
-        if ((_currentplayerState & EPlayerState.RotateState) == 0) return;
+        if ((_currentPlayerState & EPlayerState.RotateState) == 0) return;
 
         Vector3 lookDirection = _followCamera.transform.forward;
 
@@ -329,7 +366,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         //    targetPoint = ray.origin + ray.direction * 100.0f;
         //}
         //lookDirection = (targetPoint - _followCamera.CameraTarget.transform.position).normalized;
-        //lookDirection.y = 0;
+
+        lookDirection.y = 0;
 
         if (lookDirection.sqrMagnitude > 0.01f)
         {
@@ -368,7 +406,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         PartBase ability = inven.EquippedItems[EPartType.Shoulder].GetComponent<PartBase>();
         if (ability != null)
         {
-            ability.UseAbility(this);
+            ability.UseAbility();
         }
 
         _followCamera.ApplyRecoil();
@@ -388,42 +426,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
         Destroy(bullet, 3.0f);
         _lastShootTime = Time.time;
-    }
-
-    IEnumerator CoHandleDash()
-    {
-        Vector3 _dashStartPos = _followCamera.CameraTarget.position;
-        _isDashing = true;
-        _canDash = false;
-
-        Vector3 camForward = _followCamera.transform.forward;
-        Vector3 camRight = _followCamera.transform.right;
-        camForward.y = 0.0f;
-        camRight.y = 0.0f;
-        camForward.Normalize();
-        camRight.Normalize();
-        Vector3 camDashDirection = camForward * _moveInput.y + camRight * _moveInput.x;
-
-        if (_moveInput == null || _moveInput == Vector2.zero)
-        {
-            _dashDirection = camForward.normalized;
-        }
-        else
-        {
-            _dashDirection = camDashDirection.normalized;
-        }
-
-        CinemachineVirtualCamera vcam = _followCamera.transform.GetComponent<CinemachineVirtualCamera>();
-        vcam.OnTargetObjectWarped(_followCamera.CameraTarget, _followCamera.CameraTarget.position - _dashStartPos);
-
-        yield return new WaitForSeconds(dashValues.y);
-
-        _isDashing = false;
-
-        yield return new WaitForSeconds(dashValues.z);
-
-        vcam.OnTargetObjectWarped(_followCamera.CameraTarget, _followCamera.CameraTarget.position - _dashStartPos);
-        _canDash = true;
     }
     #endregion
 }

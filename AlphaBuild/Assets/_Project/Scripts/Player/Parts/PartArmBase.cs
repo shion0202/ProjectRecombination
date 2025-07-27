@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DashLegs : PartBase
+public class PartArmBase : PartBase
 {
     public override void FinishActionForced()
     {
@@ -10,11 +10,6 @@ public class DashLegs : PartBase
     }
 
     public override void UseAbility()
-    {
-        Dash();
-    }
-
-    private void Dash()
     {
         
     }

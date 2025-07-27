@@ -10,12 +10,13 @@ public class Inventory : MonoBehaviour
     [SerializeField] private PlayerController owner;
     [SerializeField] private List<PartBase> baseParts = new List<PartBase>();
     private Dictionary<EPartType, List<PartBase>> _items = new Dictionary<EPartType, List<PartBase>>();
-    private Dictionary<EPartType, GameObject> _equippedItems = new Dictionary<EPartType, GameObject>();
+    private Dictionary<EPartType, PartBase> _equippedItems = new Dictionary<EPartType, PartBase>();
+    private int legsIndex = 0;  // 테스트용 Legs 인벤토리 인덱스
 
     [Header("Mesh and Bone Data")]
     [SerializeField] private Transform boneRoot;
     [SerializeField] private Transform meshRoot;
-    private Dictionary<string, GameObject> _parts = new();
+    private Dictionary<string, PartBase> _parts = new();    // Mesh Root에 자식으로 있는 모든 파츠
     private List<string> _boneList = new();
     private Dictionary<string, Transform> _boneMap = new();
     #endregion
@@ -26,7 +27,7 @@ public class Inventory : MonoBehaviour
         get { return _items; }
     }
 
-    public Dictionary<EPartType, GameObject> EquippedItems
+    public Dictionary<EPartType, PartBase> EquippedItems
     {
         get { return _equippedItems; }
     }
@@ -54,55 +55,29 @@ public class Inventory : MonoBehaviour
             PartBase target = child.GetComponent<PartBase>();
             if (target != null)
             {
-                _parts[child.name] = child.gameObject;
+                _parts[child.name] = target;
                 SetPartBone(target);
+                target.SetOwner(owner);
                 target.SetPartStat();
+
+                // 테스트용으로 MeshRoot에 있는 모든 파츠를 인벤토리에 추가
+                GetItem(target);
             }
         }
 
         foreach (PartBase part in baseParts)
         {
-            GetItem(part);
+            // GetItem(part);
             EquipItem(part);
         }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (_equippedItems[EPartType.Shoulder].name == _items[EPartType.Shoulder][0].name)
-                return;
-
-            EquipItem(_items[EPartType.Shoulder][0]);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (_equippedItems[EPartType.Shoulder].name == _items[EPartType.Shoulder][1].name)
-                return;
-
-            EquipItem(_items[EPartType.Shoulder][1]);
-        }
-
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            if (_equippedItems[EPartType.Legs].name == _items[EPartType.Legs][0].name)
-                return;
-
-            gameObject.GetComponent<PlayerController>().SetMovable(true);
-
-            EquipItem(_items[EPartType.Legs][0]);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            if (_equippedItems[EPartType.Legs].name == _items[EPartType.Legs][1].name)
-                return;
-
-            gameObject.GetComponent<PlayerController>().SetMovable(false);
-
-            EquipItem(_items[EPartType.Legs][1]);
+            legsIndex = (legsIndex + 1) % _items[EPartType.Legs].Count;
+            EquipItem(_items[EPartType.Legs][legsIndex]);
         }
     }
     #endregion
@@ -125,8 +100,8 @@ public class Inventory : MonoBehaviour
     {
         if (!_items[equipItem.PartType].Contains(equipItem)) return;
 
-        GameObject postEquipment = null;
-        GameObject currentEquipment = _parts[equipItem.name];
+        PartBase postEquipment = null;
+        PartBase currentEquipment = _parts[equipItem.name];
         if (!_equippedItems.ContainsKey(equipItem.PartType))
         {
             // For base parts
@@ -139,8 +114,11 @@ public class Inventory : MonoBehaviour
         }
 
         if (postEquipment != null)
-            postEquipment.SetActive(false);
-        currentEquipment.SetActive(true);
+        {
+            postEquipment.FinishActionForced();
+            postEquipment.gameObject.SetActive(false);
+        }
+        currentEquipment.gameObject.SetActive(true);
 
         // 스탯 반영
         owner.SetPartStat(equipItem);
@@ -184,7 +162,7 @@ public class Inventory : MonoBehaviour
     {
         part.transform.SetParent(_boneMap[_boneList[0]]);
 
-        // To-do: 파츠 별로 offset 값이 필요할 수 있다
+        // To-do: 파츠 별로 offset 값이 필요
         part.transform.localPosition = Vector3.zero;
         part.transform.localRotation = Quaternion.identity;
     }

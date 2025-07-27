@@ -38,6 +38,7 @@ public class CharacterStat : MonoBehaviour
         // To-do: 추후에 베이스 파츠 기준으로 초기화하는 방식으로 수정 가능
         foreach (EPartType type in Enum.GetValues(typeof(EPartType)))
         {
+            if (_partStatDict.ContainsKey(type)) continue;
             _partStatDict.Add(type, new StatDictionary());
         }
 
@@ -60,6 +61,11 @@ public class CharacterStat : MonoBehaviour
         _partStatDict[type] = partStats;
         CalculateTotalStats();
     }
+
+    public void CalculateStatsForced()
+    {
+        CalculateTotalStats();
+    }
     #endregion
 
     #region Private Methods
@@ -76,7 +82,7 @@ public class CharacterStat : MonoBehaviour
             {
                 _totalStats.Add(type, new StatData(
                     baseData.StatType,
-                    baseData.DefaultValue,
+                    baseData.Value,
                     baseData.MaxValue,
                     baseData.MinValue
                 ));
@@ -98,7 +104,7 @@ public class CharacterStat : MonoBehaviour
                     {
                         _totalStats.Add(type, new StatData(
                             stat.StatType,
-                            stat.DefaultValue,
+                            stat.Value,
                             stat.MaxValue,
                             stat.MinValue
                         ));

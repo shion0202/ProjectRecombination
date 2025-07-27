@@ -28,20 +28,28 @@ public abstract class PartBase : MonoBehaviour
     [SerializeField] protected EPartMeshType meshType;
 
     protected PlayerController _owner;
-    protected StatDictionary _stats;
+    protected StatDictionary _stats = new();
 
     public EPartType PartType => partType;
     public EPartMeshType MeshType => meshType;
     public StatDictionary Stats => _stats;
 
-    public abstract void UseAbility(PlayerController owner);
+    public abstract void UseAbility();
+    public abstract void FinishActionForced();
+
+    public void SetOwner(PlayerController owner)
+    {
+        _owner = owner;
+    }
 
     public void SetPartStat()
     {
-        if (partId == 0) return;
-
-        if (_stats == null)
-            _stats = new StatDictionary();
+        // 임시 파츠를 위한 값
+        if (partId % 1000 == 0)
+        {
+            _stats.Add(EStatType.Attack, new StatData(EStatType.Attack, 0, 9999, -9999));
+            return;
+        }
 
         PartParamData baseParam = Resources.Load<PartParamDataReader>("Params/PartParamData").DataList[partId - (3000 + 1)];
         foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
