@@ -64,6 +64,7 @@ Material:
     - _RimAlpha: 1
     - _RimLight: 1
     - _RimPower: 5
+    - __1: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 0.7490196, g: 0.43985188, b: 0.6071793, a: 1}
