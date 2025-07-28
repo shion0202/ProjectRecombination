@@ -11,6 +11,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private List<PartBase> baseParts = new List<PartBase>();
     private Dictionary<EPartType, List<PartBase>> _items = new Dictionary<EPartType, List<PartBase>>();
     private Dictionary<EPartType, PartBase> _equippedItems = new Dictionary<EPartType, PartBase>();
+    private int armIndex = 0;  // 테스트용 Arm 인벤토리 인덱스
     private int legsIndex = 0;  // 테스트용 Legs 인벤토리 인덱스
 
     [Header("Mesh and Bone Data")]
@@ -74,6 +75,18 @@ public class Inventory : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            armIndex = (armIndex + 1) % _items[EPartType.ArmL].Count;
+            EquipItem(_items[EPartType.ArmL][armIndex]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            armIndex = (armIndex + 1) % _items[EPartType.ArmR].Count;
+            EquipItem(_items[EPartType.ArmR][armIndex]);
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             legsIndex = (legsIndex + 1) % _items[EPartType.Legs].Count;

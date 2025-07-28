@@ -18,6 +18,6 @@ public class PistolBody : PartBase
 
     private void Shoot()
     {
-        _owner.PartShoot(bulletSpeed, 0.05f, 0.2f, 2.0f, 4.0f, Vector3.zero, 10.0f);
+        // _owner.PartShoot(bulletSpeed, 0.05f, 0.2f, 2.0f, 4.0f, Vector3.zero, 10.0f);
     }
 }

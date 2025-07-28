@@ -279,7 +279,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 0.95823747, b: 0.8443396, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -338,13 +338,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203844586}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22624749, y: -0.4084829, z: 0.105260625, w: 0.87799436}
+  m_LocalRotation: {x: -0.22723876, y: -0.46238086, z: 0.12389461, w: -0.8480664}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 28.9, y: -49.9, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: -302.8, z: 0}
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,6 +594,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lupa (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3813704515120923779, guid: 9cc12c9a85d8fed418bb24325a22c442,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bd7c259a0f977f14ca5e865f4b0438e4, type: 2}
     - target: {fileID: 9108504437615408295, guid: 9cc12c9a85d8fed418bb24325a22c442,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -890,13 +895,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1714719282}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.19359818, y: -0.78919244, z: -0.49400437, w: 0.3092811}
-  m_LocalPosition: {x: -5.7440434, y: 0.0635193, z: 12.531227}
+  m_LocalRotation: {x: 0.1332269, y: -0.7774616, z: -0.58856434, w: -0.17718963}
+  m_LocalPosition: {x: -8.115689, y: 0.014836788, z: 10.866419}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -115.91, y: 42.8, z: 540}
+  m_LocalEulerAnglesHint: {x: -74.235, y: 154.096, z: 360.299}
 --- !u!1001 &1742277189
 PrefabInstance:
   m_ObjectHideFlags: 0

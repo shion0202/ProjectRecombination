@@ -13,10 +13,13 @@ public enum EPlayerState
     Moving = 1 << 1,
     Falling = 1 << 2,
     Dashing = 1 << 3,
-    Shooting = 1 << 4,
-    Zooming = 1 << 5,
+    LeftShooting = 1 << 4,
+    RightShooting = 1 << 5,
+    Zooming = 1 << 6,
 
-    RotateState = Moving | Shooting | Zooming,
+    RotateState = Moving | LeftShooting | RightShooting | Zooming,
+    ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
+    ShootState = LeftShooting | RightShooting,
 }
 
 public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapActions
@@ -37,6 +40,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private EPlayerState shootBlockMask = EPlayerState.Dashing;
     [SerializeField] private EPlayerState zoomBlockMask = EPlayerState.Dashing;
     private EPlayerState _currentPlayerState = EPlayerState.Idle;
+    private EPlayerState _previousState = 0;
 
     [Header("Movement")]
     [SerializeField, Range(0.01f, 100.0f)] private float rotationSpeed = 40.0f;
@@ -79,16 +83,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         get { return _dashSpeed; }
         set { _dashSpeed = value; }
     }
-
-    [Header("Attack")]
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform bulletSpawnPoint;
-    [SerializeField] private float bulletSpeed = 20.0f;
-    [SerializeField] private float shootCooldown = 0.5f;
-    [SerializeField] private float bulletScale = 0.05f;
-    private bool _isShooting = false;
-    private bool _isRotating = false;
-    private float _lastShootTime = -Mathf.Infinity;
     #endregion
 
     #region Unity Methods
@@ -128,12 +122,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         HandleMove();
         DashMove();
 
-        // Shoot();
-
         HandleGravity();
 
         _followCamera.UpdateFollowCamera();
         RotateCharacter();
+
+        Shoot();
 
         characterController.Move(_totalDirection * Time.deltaTime);
         _totalDirection = Vector3.zero;
@@ -169,21 +163,19 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 _dashDirection = CalculateInputDirection();
             }
 
-            PartBase ability = inventory.EquippedItems[EPartType.Legs].GetComponent<PartBase>();
-            if (ability != null)
-            {
-                ability.UseAbility();
-            }
+            inventory.EquippedItems[EPartType.Legs].UseAbility();
         }
     }
 
+    // 현재 사용 X
     void PlayerActions.IPlayerActionMapActions.OnZoom(InputAction.CallbackContext context)
     {
         if ((_currentPlayerState & zoomBlockMask) != 0) return;
 
         if (context.started)
         {
-            _currentPlayerState &= ~EPlayerState.Shooting;
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
             _currentPlayerState |= EPlayerState.Zooming;
             _followCamera.IsBeforeZoom = true;
             _followCamera.IsZoomed = true;
@@ -192,7 +184,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.canceled)
         {
-            _currentPlayerState &= ~EPlayerState.Shooting;
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
             _currentPlayerState &= ~EPlayerState.Zooming;
             _followCamera.IsBeforeZoom = false;
             _followCamera.IsZoomed = false;
@@ -204,22 +197,28 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         if (context.started)
         {
-            if ((_currentPlayerState & shootBlockMask) != 0) return;
-
-            _currentPlayerState |= EPlayerState.Shooting;
-            _isShooting = true;
+            _currentPlayerState |= EPlayerState.LeftShooting;
         }
-        
+
         if (context.canceled)
         {
-            _currentPlayerState &= ~EPlayerState.Shooting;
-            _isShooting = false;
+            _previousState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
         }
     }
 
     void PlayerActions.IPlayerActionMapActions.OnRightAttack(InputAction.CallbackContext context)
     {
-        Debug.Log("Right Attack Triggered");
+        if (context.started)
+        {
+            _currentPlayerState |= EPlayerState.RightShooting;
+        }
+
+        if (context.canceled)
+        {
+            _previousState &= ~EPlayerState.RightShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
+        }
     }
     #endregion
 
@@ -228,8 +227,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         _dashSpeed = dashSpeed;
 
-        _currentPlayerState &= ~EPlayerState.Idle;
-        _currentPlayerState &= ~EPlayerState.Moving;
+        _previousState = _currentPlayerState & EPlayerState.ShootState;
+        _currentPlayerState &= ~EPlayerState.ActionState;
         _currentPlayerState |= EPlayerState.Dashing;
     }
 
@@ -239,9 +238,27 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _dashSpeed = 0.0f;
 
         _currentPlayerState &= ~EPlayerState.Dashing;
+        _currentPlayerState |= _previousState;
+        _previousState = 0;
         SwitchStateToIdle();
     }
 
+    public void ApplyRecoil()
+    {
+        _followCamera.ApplyRecoil();
+    }
+
+    public void SetPartStat(PartBase part)
+    {
+        stats.SetPartStats(part.PartType, part.Stats);
+    }
+
+    public void TakeDamage(int takeDamage)
+    {
+        Debug.Log($"Player에게 {takeDamage} 데미지! 효과는 굉장했다!");
+    }
+
+    // Ball Legs를 위한 임시 함수들
     public void PartJump(float jumpVelocity)
     {
         if (!_isGrounded) return;
@@ -255,25 +272,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         _fallVelocity.y = jumpVelocity;
         _totalDirection += _fallVelocity;
-    }
-
-    // Need to move values to parts.
-    public void PartShoot(float speed, float size, float cooldown, float xValue, float yValue, Vector3 shakeValue, float damage)
-    {
-        bulletSpeed = speed;
-        bulletScale = size;
-        shootCooldown = cooldown;
-        _followCamera.SetRecoilValue(xValue, yValue, shakeValue);
-    }
-
-    public void SetPartStat(PartBase part)
-    {
-        stats.SetPartStats(part.PartType, part.Stats);
-    }
-
-    public void TakeDamage(int takeDamage)
-    {
-        Debug.Log($"Player에게 {takeDamage} 데미지! 효과는 굉장했다!");
     }
 
     public void SetMovable(bool canMove)
@@ -382,55 +380,18 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void Shoot()
     {
-        if (!_isShooting || Time.time < _lastShootTime + shootCooldown) return;
+        if ((_currentPlayerState & shootBlockMask) != 0) return;
 
-        Camera cam = Camera.main;
-        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-        Vector3 targetPoint;
-
-        if (Physics.Raycast(ray, out hit, 100.0f))
+        if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
         {
-            targetPoint = hit.point;
+            // To-do: 왼팔 애니메이션 재생
+            inventory.EquippedItems[EPartType.ArmL].UseAbility();
         }
-        else
+        if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
-            targetPoint = ray.origin + ray.direction * 100.0f;
+            // To-do: 오른팔 애니메이션 재생
+            inventory.EquippedItems[EPartType.ArmR].UseAbility();
         }
-        Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
-
-        if (!_followCamera.IsZoomed)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(camShootDirection, Vector3.up);
-            targetRotation.x = 0.0f;
-            targetRotation.z = 0.0f;
-            transform.rotation = targetRotation;
-        }
-
-        Inventory inven = GetComponent<Inventory>();
-        PartBase ability = inven.EquippedItems[EPartType.Shoulder].GetComponent<PartBase>();
-        if (ability != null)
-        {
-            ability.UseAbility();
-        }
-
-        _followCamera.ApplyRecoil();
-
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-        bullet.transform.localScale = Vector3.one * bulletScale;
-        Bullet bulletComponent = bullet.GetComponent<Bullet>();
-        if (bulletComponent != null)
-        {
-            bulletComponent.from = gameObject;
-            bulletComponent.damage = (int)1;
-        }
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.velocity = camShootDirection * bulletSpeed;
-        }
-        Destroy(bullet, 3.0f);
-        _lastShootTime = Time.time;
     }
     #endregion
 }

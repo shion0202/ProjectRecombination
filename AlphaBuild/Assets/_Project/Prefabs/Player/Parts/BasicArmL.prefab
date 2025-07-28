@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4620645494552771413
+--- !u!1 &9040809499480994113
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,38 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4982995971286949764}
-  - component: {fileID: 8018512009832459678}
-  - component: {fileID: 1863457846702999369}
+  - component: {fileID: 1322337520814130607}
+  - component: {fileID: 6899491575357786375}
+  - component: {fileID: 4436936090352034493}
   m_Layer: 0
-  m_Name: CaterpillarLegs
+  m_Name: BasicArmL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!4 &4982995971286949764
+--- !u!4 &1322337520814130607
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4620645494552771413}
+  m_GameObject: {fileID: 9040809499480994113}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0, y: -0.0010995865, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
---- !u!137 &8018512009832459678
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!137 &6899491575357786375
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4620645494552771413}
+  m_GameObject: {fileID: 9040809499480994113}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -53,7 +53,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6bd77e3e229c34d44bf74c492535d2f9, type: 2}
+  - {fileID: 2100000, guid: 9275ef6ec67d277409273ae1baf9f01f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -78,7 +78,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 912042012398750756, guid: dc81b7a3a0ff7974abe1bfa768df65e3, type: 3}
+  m_Mesh: {fileID: 7487036378628277985, guid: dc81b7a3a0ff7974abe1bfa768df65e3, type: 3}
   m_Bones:
   - {fileID: 0}
   - {fileID: 0}
@@ -348,25 +348,27 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 0}
   m_AABB:
-    m_Center: {x: 0.00000029802322, y: 0.03074488, z: 0.7817439}
-    m_Extent: {x: 0.19357914, y: 0.16798654, z: 0.78197706}
+    m_Center: {x: -0.003376335, y: 0.078806385, z: 1.0010996}
+    m_Extent: {x: 0.3444734, y: 0.22295146, z: 0.33521122}
   m_DirtyAABB: 0
---- !u!114 &1863457846702999369
+--- !u!114 &4436936090352034493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4620645494552771413}
+  m_GameObject: {fileID: 9040809499480994113}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8c26efaa3e327147b5cac29ae732f32, type: 3}
+  m_Script: {fileID: 11500000, guid: 892e8e8852f7a8e4f997e77d15c41b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partId: 3014
-  partType: 4
+  partId: 3005
+  partType: 1
   meshType: 0
-  dashDistance: 6
-  skillTime: 0.3
-  skillCooldown: 4
-  maxSkillCount: 1
+  bulletPrefab: {fileID: 914363595772914150, guid: a3ba8d7c3b7c34eaf8f1d979a0319c54,
+    type: 3}
+  bulletSpawnPoint: {fileID: 1322337520814130607}
+  _currentPartType: 1
+  bulletSpeed: 20
+  shootCooldown: 0.5

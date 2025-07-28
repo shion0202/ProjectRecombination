@@ -521,7 +521,7 @@
         },
         "preventRotation": false
     },
-    "m_Path": "_NeoMantra/Learn",
+    "m_Path": "_NeoMantra",
     "m_GraphPrecision": 1,
     "m_PreviewMode": 2,
     "m_OutputNode": {

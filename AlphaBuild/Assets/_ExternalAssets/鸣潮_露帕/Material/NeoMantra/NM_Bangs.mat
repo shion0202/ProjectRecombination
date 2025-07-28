@@ -12,8 +12,10 @@ Material:
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_ValidKeywords:
+  - _BLEND_MODE_ADD
+  m_InvalidKeywords:
+  - _BLENDMODE_ADD
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -344,6 +346,8 @@ Material:
     - _AudioLinkMask_UVMode: 0
     - _AudioLinkUVMode: 1
     - _AudioLinkVertexUVMode: 1
+    - _BLENDMODE: 0
+    - _BLEND_MODE: 0
     - _BackfaceForceShadow: 0
     - _BacklightBackfaceMask: 1
     - _BacklightBlur: 0.05
@@ -428,6 +432,7 @@ Material:
     - _EmissionMap_UVMode: 0
     - _EmissionParallaxDepth: 0
     - _EmissionUseGrad: 0
+    - _EnableLighting: 1
     - _EnvironmentReflections: 1
     - _FlipNormal: 0
     - _GSAAStrength: 0
@@ -510,6 +515,7 @@ Material:
     - _Main3rdTex_UVMode: 0
     - _MainColorPower: 1
     - _MainGradationStrength: 0
+    - _MatCap: 0
     - _MatCap2ndApplyTransparency: 1
     - _MatCap2ndBackfaceMask: 0
     - _MatCap2ndBlend: 1
@@ -531,6 +537,7 @@ Material:
     - _MatCapBumpScale: 1
     - _MatCapCustomNormal: 0
     - _MatCapEnableLighting: 1
+    - _MatCapLighting: 0
     - _MatCapLod: 0
     - _MatCapMainStrength: 0
     - _MatCapNormalStrength: 1
@@ -612,6 +619,8 @@ Material:
     - _RimIndirBorder: 0.5
     - _RimIndirRange: 0
     - _RimLight: 1
+    - _RimLightBackfaceMask: 0
+    - _RimLightShadowMask: 0.5
     - _RimMainStrength: 0
     - _RimNormalStrength: 1
     - _RimPower: 5
