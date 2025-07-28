@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
-    void PlayerActions.IPlayerActionMapActions.OnAttack(InputAction.CallbackContext context)
+    void PlayerActions.IPlayerActionMapActions.OnLeftAttack(InputAction.CallbackContext context)
     {
         if (context.started)
         {
@@ -215,6 +215,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _currentPlayerState &= ~EPlayerState.Shooting;
             _isShooting = false;
         }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnRightAttack(InputAction.CallbackContext context)
+    {
+        Debug.Log("Right Attack Triggered");
     }
     #endregion
 

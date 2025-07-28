@@ -844,7 +844,7 @@ GameObject:
   - component: {fileID: 779745454}
   - component: {fileID: 779745455}
   m_Layer: 0
-  m_Name: BaseArmL
+  m_Name: BasicArmL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -119,9 +119,18 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""LeftAttack"",
                     ""type"": ""Button"",
                     ""id"": ""233ae484-8c17-415b-83ae-96159fe85900"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b603cd7-0c26-4ea4-ab26-cfdd58e85568"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -197,11 +206,11 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c9a13388-3caa-4113-878a-bdaf61c1b644"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""id"": ""5b5cf15a-a247-499f-99fd-ab36997a0ffd"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";PC_Keyboard"",
+                    ""groups"": """",
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -213,7 +222,18 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";PC_Keyboard"",
-                    ""action"": ""Attack"",
+                    ""action"": ""LeftAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""13696436-f5d4-458d-905e-8b3b7ee98cc2"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""RightAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -255,7 +275,8 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_PlayerActionMap_Move = m_PlayerActionMap.FindAction("Move", throwIfNotFound: true);
         m_PlayerActionMap_Dash = m_PlayerActionMap.FindAction("Dash", throwIfNotFound: true);
         m_PlayerActionMap_Zoom = m_PlayerActionMap.FindAction("Zoom", throwIfNotFound: true);
-        m_PlayerActionMap_Attack = m_PlayerActionMap.FindAction("Attack", throwIfNotFound: true);
+        m_PlayerActionMap_LeftAttack = m_PlayerActionMap.FindAction("LeftAttack", throwIfNotFound: true);
+        m_PlayerActionMap_RightAttack = m_PlayerActionMap.FindAction("RightAttack", throwIfNotFound: true);
     }
 
     ~@PlayerActions()
@@ -339,7 +360,8 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_Move;
     private readonly InputAction m_PlayerActionMap_Dash;
     private readonly InputAction m_PlayerActionMap_Zoom;
-    private readonly InputAction m_PlayerActionMap_Attack;
+    private readonly InputAction m_PlayerActionMap_LeftAttack;
+    private readonly InputAction m_PlayerActionMap_RightAttack;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerActionMap".
     /// </summary>
@@ -364,9 +386,13 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Zoom => m_Wrapper.m_PlayerActionMap_Zoom;
         /// <summary>
-        /// Provides access to the underlying input action "PlayerActionMap/Attack".
+        /// Provides access to the underlying input action "PlayerActionMap/LeftAttack".
         /// </summary>
-        public InputAction @Attack => m_Wrapper.m_PlayerActionMap_Attack;
+        public InputAction @LeftAttack => m_Wrapper.m_PlayerActionMap_LeftAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActionMap/RightAttack".
+        /// </summary>
+        public InputAction @RightAttack => m_Wrapper.m_PlayerActionMap_RightAttack;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -402,9 +428,12 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Zoom.started += instance.OnZoom;
             @Zoom.performed += instance.OnZoom;
             @Zoom.canceled += instance.OnZoom;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
+            @LeftAttack.started += instance.OnLeftAttack;
+            @LeftAttack.performed += instance.OnLeftAttack;
+            @LeftAttack.canceled += instance.OnLeftAttack;
+            @RightAttack.started += instance.OnRightAttack;
+            @RightAttack.performed += instance.OnRightAttack;
+            @RightAttack.canceled += instance.OnRightAttack;
         }
 
         /// <summary>
@@ -425,9 +454,12 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Zoom.started -= instance.OnZoom;
             @Zoom.performed -= instance.OnZoom;
             @Zoom.canceled -= instance.OnZoom;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
+            @LeftAttack.started -= instance.OnLeftAttack;
+            @LeftAttack.performed -= instance.OnLeftAttack;
+            @LeftAttack.canceled -= instance.OnLeftAttack;
+            @RightAttack.started -= instance.OnRightAttack;
+            @RightAttack.performed -= instance.OnRightAttack;
+            @RightAttack.canceled -= instance.OnRightAttack;
         }
 
         /// <summary>
@@ -516,11 +548,18 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnZoom(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "LeftAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAttack(InputAction.CallbackContext context);
+        void OnLeftAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RightAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRightAttack(InputAction.CallbackContext context);
     }
 }
