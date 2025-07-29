@@ -24,11 +24,7 @@ public class FollowCameraController : MonoBehaviour
     private bool _isBeforeZoom = false;
 
     [Header("Recoil Settings")]
-    [SerializeField] private CinemachineImpulseSource impulseSource;
-    [SerializeField] private float recoilAmountX = 2.0f;
-    [SerializeField] private float recoilAmountY = 4.0f;
     [SerializeField] private float recoilRecoverySpeed = 20.0f;
-    [SerializeField] private Vector3 shakeAmount = Vector3.zero;
     private float _currentRecoilX = 0.0f;
     private float _currentRecoilY = 0.0f;
     #endregion
@@ -95,27 +91,18 @@ public class FollowCameraController : MonoBehaviour
         HandleRecoil();
     }
 
-    public void SetRecoilValue(float xValue, float yValue, Vector3 shakeValue)
+    public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY)
     {
-        recoilAmountX = xValue;
-        recoilAmountY = yValue;
-        shakeAmount = shakeValue;
+        _currentRecoilX += recoilX * (UnityEngine.Random.value > 0.5f ? 1 : -1);
+        _currentRecoilY += recoilY;
+        ApplyShake(source);
     }
 
-    public void ApplyRecoil()
+    public void ApplyShake(CinemachineImpulseSource source)
     {
-        _currentRecoilX += recoilAmountX * (UnityEngine.Random.value > 0.5f ? 1 : -1);
-        _currentRecoilY += recoilAmountY;
-        ApplyShake();
-    }
-
-    public void ApplyShake()
-    {
-        shakeAmount.x = shakeAmount.x * (UnityEngine.Random.value > 0.5f ? 1 : -1);
-        shakeAmount.y = shakeAmount.y * (UnityEngine.Random.value > 0.5f ? 1 : -1);
-        impulseSource.m_DefaultVelocity = shakeAmount;
-
-        impulseSource.GenerateImpulse();
+        source.m_DefaultVelocity.x = source.m_DefaultVelocity.x * (UnityEngine.Random.value > 0.5f ? 1 : -1);
+        source.m_DefaultVelocity.y = source.m_DefaultVelocity.y * (UnityEngine.Random.value > 0.5f ? 1 : -1);
+        source.GenerateImpulse();
     }
     #endregion
 

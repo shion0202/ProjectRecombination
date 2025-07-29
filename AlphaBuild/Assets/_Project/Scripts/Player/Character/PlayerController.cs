@@ -202,6 +202,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.canceled)
         {
+            inventory.EquippedItems[EPartType.ArmL].UseCancleAbility();
+
+            animator.SetBool("isLeftAttack", false);
             _previousState &= ~EPlayerState.LeftShooting;
             _currentPlayerState &= ~EPlayerState.LeftShooting;
         }
@@ -216,6 +219,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.canceled)
         {
+            inventory.EquippedItems[EPartType.ArmR].UseCancleAbility();
+
+            animator.SetBool("isRightAttack", false);
             _previousState &= ~EPlayerState.RightShooting;
             _currentPlayerState &= ~EPlayerState.RightShooting;
         }
@@ -228,6 +234,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _dashSpeed = dashSpeed;
 
         _previousState = _currentPlayerState & EPlayerState.ShootState;
+        animator.SetBool("isLeftAttack", false);
+        animator.SetBool("isRightAttack", false);
+
         _currentPlayerState &= ~EPlayerState.ActionState;
         _currentPlayerState |= EPlayerState.Dashing;
     }
@@ -239,13 +248,18 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         _currentPlayerState &= ~EPlayerState.Dashing;
         _currentPlayerState |= _previousState;
+        if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
+            animator.SetBool("isLeftAttack", true);
+        if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
+            animator.SetBool("isRightAttack", true);
+
         _previousState = 0;
         SwitchStateToIdle();
     }
 
-    public void ApplyRecoil()
+    public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY)
     {
-        _followCamera.ApplyRecoil();
+        _followCamera.ApplyRecoil(source, recoilX, recoilY);
     }
 
     public void SetPartStat(PartBase part)
@@ -255,6 +269,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public void TakeDamage(int takeDamage)
     {
+        stats.TotalStats[EStatType.MaxHp].Value -= takeDamage;
         Debug.Log($"Player에게 {takeDamage} 데미지! 효과는 굉장했다!");
     }
 
@@ -384,12 +399,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
         {
-            // To-do: 왼팔 애니메이션 재생
+            animator.SetBool("isLeftAttack", true);
             inventory.EquippedItems[EPartType.ArmL].UseAbility();
         }
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
-            // To-do: 오른팔 애니메이션 재생
+            animator.SetBool("isRightAttack", true);
             inventory.EquippedItems[EPartType.ArmR].UseAbility();
         }
     }

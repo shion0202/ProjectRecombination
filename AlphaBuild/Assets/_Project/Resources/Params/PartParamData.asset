@@ -111,7 +111,7 @@ MonoBehaviour:
   - partId: 3008
     partName: rapidArm1
     attackAilment: 0
-    fireSpeed: 0.2
+    fireSpeed: 0.05
     attackSkillDamage: 0
     skillSpeed: 0
     skillCount: 0

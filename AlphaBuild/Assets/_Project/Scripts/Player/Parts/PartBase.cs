@@ -35,6 +35,7 @@ public abstract class PartBase : MonoBehaviour
     public StatDictionary Stats => _stats;
 
     public abstract void UseAbility();
+    public abstract void UseCancleAbility();
     public abstract void FinishActionForced();
 
     public void SetOwner(PlayerController owner)

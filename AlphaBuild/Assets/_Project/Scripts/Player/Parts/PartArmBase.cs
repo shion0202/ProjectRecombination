@@ -1,37 +1,48 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PartArmBase : PartBase
 {
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform bulletSpawnPoint;
+    [SerializeField] protected CinemachineImpulseSource impulseSource;
+    [SerializeField] protected GameObject bulletPrefab;
+    [SerializeField] protected Transform bulletSpawnPoint;
     [SerializeField] protected EPartType _currentPartType = EPartType.ArmL;
-
-    [SerializeField] private float bulletSpeed = 20.0f;
-    [SerializeField] private float shootCooldown = 0.5f;
-    private float _lastShootTime = -Mathf.Infinity;
+    [SerializeField] protected float recoilX = 4.0f;
+    [SerializeField] protected float recoilY = 2.0f;
+    protected float _currentShootTime = 0.0f;
 
     public override void FinishActionForced()
     {
-        
+        // 공격을 강제로 종료할 때 필요한 로직이 있다면 여기에 작성
     }
 
     public override void UseAbility()
     {
-        Debug.Log("빵야빵야");
-        // Shoot();
+        _currentShootTime -= Time.deltaTime;
+        if (_currentShootTime <= 0.0f)
+        {
+            _currentShootTime = (_owner.Stats.BaseStats[EStatType.FireSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.FireSpeed].Value);
+            Shoot();
+        }
+    }
+
+    public override void UseCancleAbility()
+    {
+        // 공격 취소 시 필요한 로직이 있다면 여기에 작성
     }
 
     // Player의 Update에서 호출되는 공격 함수
     protected void Shoot()
     {
+        // 사격 방향
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
         Vector3 targetPoint;
 
-        if (Physics.Raycast(ray, out hit, 100.0f))
+        if (Physics.Raycast(ray, out hit, 100.0f, 7))
         {
             targetPoint = hit.point;
         }
@@ -46,30 +57,15 @@ public class PartArmBase : PartBase
         targetRotation.z = 0.0f;
         transform.rotation = targetRotation;
 
-        Inventory inven = GetComponent<Inventory>();
-        PartBase ability = inven.EquippedItems[EPartType.Shoulder].GetComponent<PartBase>();
-        if (ability != null)
-        {
-            ability.UseAbility();
-        }
-
-        // 반동 인자 필요
-        _owner.ApplyRecoil();
+        _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
 
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-        bullet.transform.localScale = Vector3.one * 0.1f;
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {
             bulletComponent.from = gameObject;
-            bulletComponent.damage = (int)1;
+            bulletComponent.damage = (int)_owner.Stats.TotalStats[EStatType.Attack].Value;
+            bulletComponent.SetBullet(camShootDirection);
         }
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.velocity = camShootDirection * bulletSpeed;
-        }
-        Destroy(bullet, 3.0f);
-        _lastShootTime = Time.time;
     }
 }

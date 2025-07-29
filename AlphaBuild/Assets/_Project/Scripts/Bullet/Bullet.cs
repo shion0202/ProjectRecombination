@@ -10,6 +10,10 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float lifeTime = 5f; // 총알의 생명 시간
     private float _timer;
 
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private bool isCollision = true;
+    [SerializeField] private float bulletSpeed = 30.0f;
+
     private void Start()
     {
         _timer = lifeTime;
@@ -39,13 +43,21 @@ public class Bullet : MonoBehaviour
         set => _from = value;
     }
 
+    public void SetBullet(Vector3 direction)
+    {
+        rb.velocity = direction * bulletSpeed;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        if (isCollision)
+            return;
+
         // 총알의 규칙
         // 1. 플레이어가 발사한 총알은 적에게만 데미지를 입힌다.
         // 2. 적이 발사한 총알은 플레이어에게만 데미지를 입힌다.
         // 3. 총알은 벽(또는 기타 오브젝트)에 닿으면 파괴된다.
-        
+
         // 플레이어가 발사한 총알
         if (from.CompareTag("Player") && other.CompareTag("Enemy"))
         {

@@ -5995,7 +5995,7 @@
     "m_Title": "Normal Map",
     "m_Position": {
         "x": -4401.0,
-        "y": -121.00007629394531
+        "y": -121.0
     }
 }
 
@@ -7381,7 +7381,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"519fbe04c7a67184a8bc1ace14341c96\",\"type\":3}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -8680,7 +8680,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"9db6cd28fff160847b0d71e5b77c9468\",\"type\":3}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -8741,8 +8741,8 @@
     "m_ObjectId": "97b51d563ef84485af2fcb86c0498af4",
     "m_Title": "SDF",
     "m_Position": {
-        "x": -3655.999755859375,
-        "y": 502.0000915527344
+        "x": -3656.0,
+        "y": 502.0
     }
 }
 
@@ -9846,8 +9846,8 @@
     "m_ObjectId": "b3b39694779d44cbbc412663ff75387f",
     "m_Title": "RimLight",
     "m_Position": {
-        "x": -2892.000244140625,
-        "y": -1812.0001220703125
+        "x": -2892.0,
+        "y": -1812.0
     }
 }
 
@@ -10407,7 +10407,7 @@
     "m_Title": "MatCap (Blend Mode)",
     "m_Position": {
         "x": 2156.0,
-        "y": -23.99993896484375
+        "y": -24.0
     }
 }
 
@@ -11460,7 +11460,7 @@
     "m_StageCapability": 2,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"519fbe04c7a67184a8bc1ace14341c96\",\"type\":3}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -12066,8 +12066,8 @@
     "m_ObjectId": "dd436a666d9d49229e54d68ff2bea86e",
     "m_Title": "Base Map",
     "m_Position": {
-        "x": -2911.000244140625,
-        "y": -2.9999313354492189
+        "x": -2911.0,
+        "y": -3.0
     }
 }
 
@@ -13159,7 +13159,7 @@
     "m_ObjectId": "f4c7d787daa947c4bbddc2cdd91c97dc",
     "m_Title": "Matcap",
     "m_Position": {
-        "x": -1611.0001220703125,
+        "x": -1611.0,
         "y": -12.0
     }
 }

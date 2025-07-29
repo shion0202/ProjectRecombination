@@ -19,6 +19,12 @@ public class PartLegsBase : PartBase
         Dash();
     }
 
+    public override void UseCancleAbility()
+    {
+        // 대시 취소 시 필요한 로직이 있다면 여기에 작성
+        // 예를 들어, 대시 중에 다른 행동을 할 수 있도록 하는 로직 등
+    }
+
     // 장비 교체 등 특수한 상황에서 대시를 강제로 종료해야 할 때 사용
     public override void FinishActionForced()
     {

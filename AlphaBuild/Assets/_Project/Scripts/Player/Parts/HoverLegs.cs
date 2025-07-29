@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class HoverLegs : PartLegsBase
 {
+    [SerializeField] private GameObject effectPrefab;
     [SerializeField] private float baseSpeed = 9.0f;
+    private GameObject effect = null;
 
     public override void UseAbility()
     {
         if (_currentSkillCount >= maxSkillCount) return;
 
         Boost();
+    }
+
+    public override void FinishActionForced()
+    {
+        base.FinishActionForced();
+        Destroy(effect);
     }
 
     private void Boost()
@@ -26,7 +34,8 @@ public class HoverLegs : PartLegsBase
         _owner.Stats.BaseStats[EStatType.MoveSpeed].Value = baseSpeed;
         _owner.Stats.CalculateStatsForced();
         _skillCoroutine = StartCoroutine(CoCooldownBoost());
-        Debug.Log("부스트 시작. 기본 이동 속도가 증가합니다.");
+        
+        effect = Instantiate(effectPrefab, _owner.transform.position, Quaternion.identity, _owner.transform);
     }
 
     protected IEnumerator CoCooldownBoost()
@@ -38,7 +47,7 @@ public class HoverLegs : PartLegsBase
         // 부스트 종료
         _owner.Stats.BaseStats[EStatType.MoveSpeed].Reset();
         _owner.Stats.CalculateStatsForced();
-        Debug.Log("부스트 종료. 기본 이동 속도가 Base Stat으로 돌아갑니다.");
+        Destroy(effect);
 
         yield return new WaitForSeconds(skillCooldown * (_currentSkillCount));
 
