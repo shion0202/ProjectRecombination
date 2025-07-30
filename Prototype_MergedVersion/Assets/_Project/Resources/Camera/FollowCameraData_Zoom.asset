@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e43e2ea5c0442f748867a8854283f923, type: 3}
+  m_Name: FollowCameraData_Zoom
+  m_EditorClassIdentifier: 
+  FOV: 35
+  screenX: 0.3
+  screenY: 0.8
+  cameraDistance: 2
+  sensitivityX: 1
+  sensitivityY: 0.5
+  maxAimRangeX: 180
+  minAimRangeX: -180
+  maxAimRangeY: 50
+  minAimRangeY: -30
+  accelTimeX: 0.1
+  decelTimeX: 0.1
+  accelTimeY: 0.1
+  decelTimeY: 0.1
+  convertSpeed: 10
+  CharacterRotateSpeed: 40
