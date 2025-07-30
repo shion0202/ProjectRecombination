@@ -39,7 +39,7 @@ public class RapidArmA : PartArmBase
         RaycastHit hit;
 
         // 7: Enemy (임시로 LayerMask 신경 안 쓰고 번호로 지정)
-        if (Physics.Raycast(ray.origin, ray.direction, out hit, 100.0f, _shootLayerMask))
+        if (Physics.Raycast(ray.origin, ray.direction, out hit, 100.0f))
         {
             targetPoint = hit.point;
         }

@@ -30,7 +30,7 @@ public class LaserArmA : PartArmBase
         Vector3 targetPoint;
 
         // 7: Enemy (임시로 LayerMask 신경 안 쓰고 번호로 지정)
-        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, 100.0f, _shootLayerMask);
+        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, 100.0f, 7);
         if (hits.Length > 0)
         {
             targetPoint = hits[0].point;

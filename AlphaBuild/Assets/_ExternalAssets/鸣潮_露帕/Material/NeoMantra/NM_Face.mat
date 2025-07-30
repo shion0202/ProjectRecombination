@@ -272,7 +272,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SDFMask:
-        m_Texture: {fileID: 2800000, guid: 519fbe04c7a67184a8bc1ace14341c96, type: 3}
+        m_Texture: {fileID: 2800000, guid: 40a19060d26258d468c7c91ed807fc97, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Shadow2ndColorTex:
@@ -631,7 +631,7 @@ Material:
     - _RimIndirBlur: 0.1
     - _RimIndirBorder: 0.5
     - _RimIndirRange: 0
-    - _RimLight: 1
+    - _RimLight: 0
     - _RimLightBackfaceMask: 0
     - _RimLightShadowMask: 0.5
     - _RimMainStrength: 0

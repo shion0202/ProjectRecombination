@@ -419,6 +419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6675107501638927834}
   - component: {fileID: 5495443502863611657}
+  - component: {fileID: 1468922964893053099}
   m_Layer: 0
   m_Name: Head_A
   m_TagString: Untagged
@@ -495,6 +496,20 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.07425488, y: 0.044910207, z: -0.000000067055225}
     m_Extent: {x: 0.0812496, y: 0.053195618, z: 0.07417478}
   m_DirtyAABB: 0
+--- !u!114 &1468922964893053099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232217926998057973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebad4797d878f8d4aa39c07e9bf09f0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTransform: {fileID: 402733199582554451}
+  faceMaterial: {fileID: 2100000, guid: 88d26f7f9e2c2174e8101496df234904, type: 2}
 --- !u!1 &1358374846656494241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,6 +1091,7 @@ MonoBehaviour:
   dashBlockMask: 0
   shootBlockMask: 8
   zoomBlockMask: 8
+  _currentPlayerState: 1
   rotationSpeed: 40
   boxSize: {x: 0.2, y: 0.01, z: 0.2}
   gravityScale: 2
@@ -1091,6 +1107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162e98359afe103498899e8fab1064e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _totalStatList: []
 --- !u!114 &835393663767908933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2940,7 +2957,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.01, y: 0.01, z: 0}
+  m_DefaultVelocity: {x: -0.01, y: 0.01, z: 0}
 --- !u!1 &8088036664997112092
 GameObject:
   m_ObjectHideFlags: 0

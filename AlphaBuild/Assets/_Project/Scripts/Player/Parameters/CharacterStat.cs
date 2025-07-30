@@ -33,7 +33,7 @@ public class CharacterStat : MonoBehaviour
         get { return _baseStats; }
         set { _baseStats = value; }
     }
-
+    
     public Dictionary<EPartType, StatDictionary> PartStatDict
     {
         get { return _partStatDict; }

@@ -16,6 +16,7 @@ public enum EPlayerState
     LeftShooting = 1 << 4,
     RightShooting = 1 << 5,
     Zooming = 1 << 6,
+    Dead = 1 << 7,
 
     RotateState = Moving | LeftShooting | RightShooting | Zooming,
     ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private EPlayerState dashBlockMask;
     [SerializeField] private EPlayerState shootBlockMask = EPlayerState.Dashing;
     [SerializeField] private EPlayerState zoomBlockMask = EPlayerState.Dashing;
-    private EPlayerState _currentPlayerState = EPlayerState.Idle;
+    [SerializeField, Tooltip("플레이어의 현재 상태")] private EPlayerState _currentPlayerState = EPlayerState.Idle;
     private EPlayerState _previousState = 0;
 
     [Header("Movement")]
@@ -53,7 +54,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [Header("Gravity")]
     [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
     [SerializeField] private float gravityScale = 2.0f;
-    [SerializeField] private LayerMask groundLayerMask;
     private bool _isGrounded = false;
     private Vector3 _fallVelocity;
 
@@ -100,9 +100,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
         _followCamera.InitFollowCamera(this);
-
-        groundLayerMask = ~0;
-        groundLayerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -356,7 +353,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void HandleGravity()
     {
-        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
+        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity);
         if (_isGrounded && _fallVelocity.y <= 0.0f)
         {
             _currentPlayerState &= ~EPlayerState.Falling;
