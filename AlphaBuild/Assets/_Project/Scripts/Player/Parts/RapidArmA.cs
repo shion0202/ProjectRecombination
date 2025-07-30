@@ -39,7 +39,7 @@ public class RapidArmA : PartArmBase
         RaycastHit hit;
 
         // 7: Enemy (임시로 LayerMask 신경 안 쓰고 번호로 지정)
-        if (Physics.Raycast(ray.origin, ray.direction, out hit, 100.0f))
+        if (Physics.Raycast(ray.origin, ray.direction, out hit, 100.0f, _shootLayerMask))
         {
             targetPoint = hit.point;
         }
@@ -57,6 +57,20 @@ public class RapidArmA : PartArmBase
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
 
         // 맞은 적에게 데미지
+        MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
+        if (monster != null)
+        {
+            monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+        }
+        else
+        {
+            monster = hit.transform.GetComponentInParent<MonsterBase>();
+            if (monster != null)
+            {
+                monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+            }
+        }
+
         Vector3 recoilPoint = new Vector3(targetPoint.x + Random.Range(-1f, 1f), 
                                            targetPoint.y + Random.Range(-1f, 1f), 
                                            targetPoint.z + Random.Range(-1f, 1f));

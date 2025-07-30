@@ -17,6 +17,11 @@ public class StatDictionary
         }
     }
 
+    public Dictionary<EStatType, StatData> StatDict
+    {
+        get { return _statDict; }
+    }
+
     public void Add(EStatType type, StatData data)
     {
         _statDict.Add(type, data);

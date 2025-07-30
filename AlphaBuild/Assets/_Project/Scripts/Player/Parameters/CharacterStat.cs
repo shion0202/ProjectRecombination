@@ -4,9 +4,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public struct StatPair
+{
+    public string StatName;
+    public float StatValue;
+
+    public StatPair(string name, float value)
+    {
+        StatName = name;
+        StatValue = value;
+    }
+}
+
 public class CharacterStat : MonoBehaviour
 {
     #region Variables
+    [SerializeField, Tooltip("플레이어의 현재 파라미터")] private List<StatPair> _totalStatList = new();
+
     private StatDictionary _baseStats = new();
     private Dictionary<EPartType, StatDictionary> _partStatDict = new();
     private StatDictionary _totalStats;
@@ -18,7 +33,7 @@ public class CharacterStat : MonoBehaviour
         get { return _baseStats; }
         set { _baseStats = value; }
     }
-    
+
     public Dictionary<EPartType, StatDictionary> PartStatDict
     {
         get { return _partStatDict; }
@@ -115,6 +130,18 @@ public class CharacterStat : MonoBehaviour
                     }
                 }
             }
+        }
+
+        VisualizeStats();
+    }
+
+    private void VisualizeStats()
+    {
+        _totalStatList.Clear();
+
+        foreach (StatData stat in _totalStats.StatDict.Values)
+        {
+            _totalStatList.Add(new StatPair(stat.StatType.ToString(), stat.Value));
         }
     }
     #endregion

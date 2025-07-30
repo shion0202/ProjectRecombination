@@ -3,8 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Jaeho.Monster
-{
     [Serializable]
     public class MovementSettings
     {
@@ -177,4 +175,3 @@ namespace Jaeho.Monster
 
         #endregion
     }
-}

@@ -38,7 +38,7 @@ public abstract class PartBase : MonoBehaviour
     public abstract void UseCancleAbility();
     public abstract void FinishActionForced();
 
-    public void SetOwner(PlayerController owner)
+    public virtual void SetOwner(PlayerController owner)
     {
         _owner = owner;
     }

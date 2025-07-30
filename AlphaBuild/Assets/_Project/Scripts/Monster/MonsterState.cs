@@ -1,5 +1,3 @@
-namespace Jaeho.Monster
-{
     public enum MonsterState
     {
         Spawn = 0,
@@ -10,4 +8,3 @@ namespace Jaeho.Monster
         Hit = 5,
         Dead = 6,
     }
-}

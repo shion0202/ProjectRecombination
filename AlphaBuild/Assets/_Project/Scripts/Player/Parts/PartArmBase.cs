@@ -12,6 +12,15 @@ public class PartArmBase : PartBase
     [SerializeField] protected float recoilX = 4.0f;
     [SerializeField] protected float recoilY = 2.0f;
     protected float _currentShootTime = 0.0f;
+    protected LayerMask _shootLayerMask;
+
+    public override void SetOwner(PlayerController owner)
+    {
+        base.SetOwner(owner);
+
+        _shootLayerMask = ~0;
+        _shootLayerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+    }
 
     public override void FinishActionForced()
     {
@@ -42,7 +51,7 @@ public class PartArmBase : PartBase
         RaycastHit hit;
         Vector3 targetPoint;
 
-        if (Physics.Raycast(ray, out hit, 100.0f, 7))
+        if (Physics.Raycast(ray, out hit, 100.0f, _shootLayerMask))
         {
             targetPoint = hit.point;
         }

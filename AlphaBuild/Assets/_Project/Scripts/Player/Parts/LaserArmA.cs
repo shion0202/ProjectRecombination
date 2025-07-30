@@ -30,7 +30,7 @@ public class LaserArmA : PartArmBase
         Vector3 targetPoint;
 
         // 7: Enemy (임시로 LayerMask 신경 안 쓰고 번호로 지정)
-        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, 100.0f, 7);
+        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, 100.0f, _shootLayerMask);
         if (hits.Length > 0)
         {
             targetPoint = hits[0].point;
@@ -52,7 +52,19 @@ public class LaserArmA : PartArmBase
 
         foreach (var hit in hits)
         {
-            // 레이저 경로에 있는 모든 적에게 데미지
+            MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
+            if (monster != null)
+            {
+                monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+            }
+            else
+            {
+                monster = hit.transform.GetComponentInParent<MonsterBase>();
+                if (monster != null)
+                {
+                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                }
+            }
         }
 
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);

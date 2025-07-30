@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [Header("Gravity")]
     [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
     [SerializeField] private float gravityScale = 2.0f;
+    [SerializeField] private LayerMask groundLayerMask;
     private bool _isGrounded = false;
     private Vector3 _fallVelocity;
 
@@ -99,6 +100,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
         _followCamera.InitFollowCamera(this);
+
+        groundLayerMask = ~0;
+        groundLayerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -352,7 +356,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void HandleGravity()
     {
-        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity);
+        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
         if (_isGrounded && _fallVelocity.y <= 0.0f)
         {
             _currentPlayerState &= ~EPlayerState.Falling;

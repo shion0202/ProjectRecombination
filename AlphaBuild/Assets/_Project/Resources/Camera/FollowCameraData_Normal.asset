@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43e2ea5c0442f748867a8854283f923, type: 3}
   m_Name: FollowCameraData_Normal
   m_EditorClassIdentifier: 
-  FOV: 60
+  FOV: 73.6
   screenX: 0.4
   screenY: 0.7
   cameraDistance: 2
@@ -27,4 +27,3 @@ MonoBehaviour:
   accelTimeY: 0.1
   decelTimeY: 0.1
   convertSpeed: 100
-  CharacterRotateSpeed: 40
