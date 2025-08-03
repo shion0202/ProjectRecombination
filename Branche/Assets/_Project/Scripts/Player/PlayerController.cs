@@ -1,0 +1,462 @@
+﻿using Cinemachine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Processors;
+
+[Flags]
+public enum EPlayerState
+{
+    Idle = 1 << 0,
+    Moving = 1 << 1,
+    Falling = 1 << 2,
+    Dashing = 1 << 3,
+    LeftShooting = 1 << 4,
+    RightShooting = 1 << 5,
+    Zooming = 1 << 6,
+
+    RotateState = Moving | LeftShooting | RightShooting | Zooming,
+    ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
+    ShootState = LeftShooting | RightShooting,
+}
+
+public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapActions
+{
+    #region Variables
+    [Header("Components")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private CharacterController characterController;
+    [SerializeField] private CharacterStat stats;
+    [SerializeField] private Inventory inventory;
+    [SerializeField] private GameObject followCameraPrefab;
+    private FollowCameraController _followCamera;
+
+    [Header("State")]
+    [SerializeField] private EPlayerState movementBlockMask = EPlayerState.Dashing;
+    [SerializeField] private EPlayerState dashBlockMask;
+    [SerializeField] private EPlayerState shootBlockMask = EPlayerState.Dashing;
+    [SerializeField] private EPlayerState zoomBlockMask = EPlayerState.Dashing;
+    private EPlayerState _currentPlayerState = EPlayerState.Idle;
+    private EPlayerState _previousState = 0;
+
+    [Header("Movement")]
+    [SerializeField, Range(0.01f, 100.0f)] private float rotationSpeed = 40.0f;
+    private PlayerActions _playerActions;
+    private Vector2 _moveInput;
+    private Vector3 _moveDirection;
+    private Vector3 _totalDirection = Vector3.zero;
+    private bool _canMove = true;
+
+    [Header("Gravity")]
+    [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
+    [SerializeField] private float gravityScale = 2.0f;
+    [SerializeField] private LayerMask groundLayerMask;
+    private bool _isGrounded = false;
+    private Vector3 _fallVelocity;
+
+    [Header("Dash")]
+    private Vector3 _dashDirection = Vector3.zero;
+    private float _dashSpeed = 0.0f;
+    #endregion
+
+    #region Properties
+    public CharacterStat Stats
+    {
+        get => stats;
+    }
+
+    public Vector3 FallVelocity
+    {
+        get { return _fallVelocity; }
+    }
+
+    public Vector3 DashDirection
+    {
+        get { return _dashDirection; }
+        set { _dashDirection = value; }
+    }
+
+    public float DashSpeed
+    {
+        get { return _dashSpeed; }
+        set { _dashSpeed = value; }
+    }
+    #endregion
+
+    #region Unity Methods
+    private void Awake()
+    {
+        _playerActions = new PlayerActions();
+        _playerActions.PlayerActionMap.SetCallbacks(this);
+
+        _followCamera = FindFirstObjectByType<FollowCameraController>();
+        if (_followCamera == null)
+        {
+            GameObject cameraObject = Instantiate(followCameraPrefab);
+            cameraObject.name = followCameraPrefab.name;
+            _followCamera = cameraObject.GetComponent<FollowCameraController>();
+        }
+        _followCamera.InitFollowCamera(this);
+        
+        // 비트 마스크 방식으로 레이케스트를 관리할 레이어를 설정
+        groundLayerMask = ~0;
+        groundLayerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        // stats.CurrentHealth = stats.TotalStats[EStatType.MaxHp].Value;
+        // GUIManager.instance.SetHpSlider(stats.CurrentHealth, stats.TotalStats[EStatType.MaxHp].Value);
+    }
+
+    private void OnEnable()
+    {
+        _playerActions.PlayerActionMap.Enable();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+        
+        // Debug.Log("Player HP: " + stats.CurrentHealth);
+        // GUI HP 바 갱신
+        GUIManager.instance.SetHpSlider(stats.CurrentHealth, stats.TotalStats[EStatType.MaxHp].Value);
+    }
+
+    private void LateUpdate()
+    {
+        HandleMove();
+        DashMove();
+
+        HandleGravity();
+
+        _followCamera.UpdateFollowCamera();
+        RotateCharacter();
+
+        Shoot();
+
+        characterController.Move(_totalDirection * Time.deltaTime);
+        _totalDirection = Vector3.zero;
+    }
+
+    private void OnDisable()
+    {
+        _playerActions.PlayerActionMap.Disable();
+    }
+    #endregion
+
+    #region Input Actions
+    void PlayerActions.IPlayerActionMapActions.OnMove(InputAction.CallbackContext context)
+    {
+        _moveInput = context.ReadValue<Vector2>();
+        if ((_currentPlayerState & movementBlockMask) != 0) return;
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnDash(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if ((_currentPlayerState & dashBlockMask) != 0) return;
+
+            if (_moveInput == null || _moveInput == Vector2.zero)
+            {
+                Vector3 camForward = _followCamera.transform.forward;
+                camForward.y = 0.0f;
+                _dashDirection = camForward.normalized;
+            }
+            else
+            {
+                _dashDirection = CalculateInputDirection();
+            }
+
+            inventory.EquippedItems[EPartType.Legs].UseAbility();
+        }
+    }
+
+    // 현재 사용 X
+    void PlayerActions.IPlayerActionMapActions.OnZoom(InputAction.CallbackContext context)
+    {
+        if ((_currentPlayerState & zoomBlockMask) != 0) return;
+
+        if (context.started)
+        {
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
+            _currentPlayerState |= EPlayerState.Zooming;
+            _followCamera.IsBeforeZoom = true;
+            _followCamera.IsZoomed = true;
+            animator.SetBool("isAim", true);
+        }
+
+        if (context.canceled)
+        {
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
+            _currentPlayerState &= ~EPlayerState.Zooming;
+            _followCamera.IsBeforeZoom = false;
+            _followCamera.IsZoomed = false;
+            animator.SetBool("isAim", false);
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnLeftAttack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            _currentPlayerState |= EPlayerState.LeftShooting;
+        }
+
+        if (context.canceled)
+        {
+            inventory.EquippedItems[EPartType.ArmL].UseCancleAbility();
+
+            animator.SetBool("isLeftAttack", false);
+            _previousState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnRightAttack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            _currentPlayerState |= EPlayerState.RightShooting;
+        }
+
+        if (context.canceled)
+        {
+            inventory.EquippedItems[EPartType.ArmR].UseCancleAbility();
+
+            animator.SetBool("isRightAttack", false);
+            _previousState &= ~EPlayerState.RightShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
+        }
+    }
+    #endregion
+
+    #region Public Methods
+    public void Dash(float dashSpeed)
+    {
+        _dashSpeed = dashSpeed;
+
+        _previousState = _currentPlayerState & EPlayerState.ShootState;
+        animator.SetBool("isLeftAttack", false);
+        animator.SetBool("isRightAttack", false);
+
+        _currentPlayerState &= ~EPlayerState.ActionState;
+        _currentPlayerState |= EPlayerState.Dashing;
+    }
+
+    public void FinishDash()
+    {
+        _dashDirection = Vector3.zero;
+        _dashSpeed = 0.0f;
+
+        _currentPlayerState &= ~EPlayerState.Dashing;
+        _currentPlayerState |= _previousState;
+        if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
+            animator.SetBool("isLeftAttack", true);
+        if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
+            animator.SetBool("isRightAttack", true);
+
+        _previousState = 0;
+        SwitchStateToIdle();
+    }
+
+    public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY)
+    {
+        _followCamera.ApplyRecoil(source, recoilX, recoilY);
+    }
+
+    public void SetPartStat(PartBase part)
+    {
+        stats.SetPartStats(part.PartType, part.Stats);
+    }
+
+    public void TakeDamage(float takeDamage)
+    {
+        // 현재 HP의 값을 데미지 만큼 처리
+        // stats.CurrentHealth = takeDamage;
+
+        if (takeDamage > 0)
+        {
+            if (stats.CurrentHealth <= 0) return;
+            
+            var damage = takeDamage;
+
+            if (stats.CurrentPartHealth > 0)        // 파츠 HP가 남아있으면 파츠를 우선 데미지 계산
+            {
+                stats.CurrentPartHealth -= damage;  
+                
+                // 계산 후 파츠 HP가 음수가 된 경우
+                if (stats.CurrentPartHealth < 0)
+                {
+                    damage += stats.CurrentPartHealth;  // 바디에 적용할 데미지를 감소
+                    stats.CurrentPartHealth = 0;        // 파츠 HP를 0으로 초기화
+                }
+                else
+                {
+                    damage = 0;
+                }
+            }
+
+            if (stats.CurrentBodyHealth > 0)
+            {
+                stats.CurrentBodyHealth -= damage;
+                if (stats.CurrentBodyHealth < 0)
+                    stats.CurrentBodyHealth = 0;
+            }
+        }
+        else
+        {
+            // TODO: 데미지가 음수일때 어떻게 처리할 것인지 논의 필요 (힐을 시킬 것인지 무시할 것인지)
+        }
+        
+        Debug.Log($"Player에게 {takeDamage} 데미지! 효과는 굉장했다!");
+        Debug.Log($"Body HP: {stats.CurrentBodyHealth}");
+        Debug.Log($"Part HP: {stats.CurrentPartHealth}");
+    }
+
+    // Ball Legs를 위한 임시 함수들
+    public void PartJump(float jumpVelocity)
+    {
+        if (!_isGrounded) return;
+
+        Vector3 forward = _followCamera.transform.forward;
+        forward.y = 0;
+        forward.Normalize();
+
+        _fallVelocity = forward * jumpVelocity * 0.5f;
+        _fallVelocity.y = jumpVelocity;
+
+        _fallVelocity.y = jumpVelocity;
+        _totalDirection += _fallVelocity;
+    }
+
+    public void SetMovable(bool canMove)
+    {
+        _canMove = canMove;
+        animator.enabled = canMove;
+    }
+    #endregion
+
+    #region Private Methods
+    private void HandleMove()
+    {
+        if (!_canMove) return;
+        if ((_currentPlayerState & movementBlockMask) != 0) return;
+
+        if (_moveInput == null || _moveInput == Vector2.zero)
+        {
+            SwitchStateToIdle();
+            return;
+        }
+
+        _currentPlayerState &= ~EPlayerState.Idle;
+        _currentPlayerState |= EPlayerState.Moving;
+        _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
+        animator.SetFloat("moveX", _moveDirection.x);
+        animator.SetFloat("moveY", _moveDirection.z);
+        animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
+
+        _totalDirection += CalculateInputDirection() * stats.TotalStats[EStatType.MoveSpeed].Value;
+    }
+
+    private void SwitchStateToIdle()
+    {
+        _currentPlayerState &= ~EPlayerState.Moving;
+        _currentPlayerState |= EPlayerState.Idle;
+        _moveDirection = Vector3.zero;
+        animator.SetFloat("moveX", 0.0f);
+        animator.SetFloat("moveY", 0.0f);
+        animator.SetFloat("moveMagnitude", 0.0f);
+    }
+
+    private Vector3 CalculateInputDirection()
+    {
+        Vector3 camForward = _followCamera.transform.forward;
+        Vector3 camRight = _followCamera.transform.right;
+        camForward.y = 0.0f;
+        camRight.y = 0.0f;
+        camForward.Normalize();
+        camRight.Normalize();
+        Vector3 camDirection = camForward * _moveInput.y + camRight * _moveInput.x;
+
+        return camDirection.normalized;
+    }
+
+    private void DashMove()
+    {
+        if (!_canMove) return;
+        if (_currentPlayerState != EPlayerState.Dashing) return;
+
+        _totalDirection += _dashDirection * _dashSpeed;
+        _followCamera.CameraTarget.position = transform.position + new Vector3(0.0f, 1.2f, 0.0f);
+    }
+
+    private void HandleGravity()
+    {
+        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
+        if (_isGrounded && _fallVelocity.y <= 0.0f)
+        {
+            _currentPlayerState &= ~EPlayerState.Falling;
+            _fallVelocity = Vector3.zero;
+            return;
+        }
+        _currentPlayerState |= EPlayerState.Falling;
+        _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
+        _totalDirection += _fallVelocity;
+    }
+
+    private void RotateCharacter()
+    {
+        if ((_currentPlayerState & EPlayerState.RotateState) == 0) return;
+
+        Vector3 lookDirection = _followCamera.transform.forward;
+
+        //Camera cam = Camera.main;
+        //Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        //RaycastHit hit;
+        //Vector3 targetPoint;
+
+        //if (Physics.Raycast(ray, out hit, 100.0f))
+        //{
+        //    targetPoint = hit.point;
+        //}
+        //else
+        //{
+        //    targetPoint = ray.origin + ray.direction * 100.0f;
+        //}
+        //lookDirection = (targetPoint - _followCamera.CameraTarget.transform.position).normalized;
+
+        lookDirection.y = 0;
+
+        if (lookDirection.sqrMagnitude > 0.01f)
+        {
+            transform.forward = Vector3.Slerp(transform.forward, lookDirection, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    private void Shoot()
+    {
+        if ((_currentPlayerState & shootBlockMask) != 0) return;
+
+        if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
+        {
+            animator.SetBool("isLeftAttack", true);
+            inventory.EquippedItems[EPartType.ArmL].UseAbility();
+        }
+        if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
+        {
+            animator.SetBool("isRightAttack", true);
+            inventory.EquippedItems[EPartType.ArmR].UseAbility();
+        }
+    }
+    #endregion
+}

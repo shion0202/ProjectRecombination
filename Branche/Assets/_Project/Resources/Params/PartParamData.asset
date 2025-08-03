@@ -1,0 +1,214 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d24f94a33fa9a34bae90f02deb13e4a, type: 3}
+  m_Name: PartParamData
+  m_EditorClassIdentifier: 
+  associatedSheet: 1Haa-bYjMBgwnmZcYOElVQ2_zyMGfy0GDxbJr5TP6pF8
+  associatedWorksheet: CharacterParts
+  START_ROW_LENGTH: 2
+  END_ROW_LENGTH: 16
+  DataList:
+  - partId: 3001
+    partName: basicShoulder
+    attackAilment: 0
+    fireSpeed: 0
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 0
+    defence: 0
+    moveSpeed: 0
+    cooldownDecrease: 0
+  - partId: 3002
+    partName: pinPannel
+    attackAilment: 0
+    fireSpeed: 0
+    attackSkillDamage: 200
+    skillSpeed: 0
+    skillCount: 8
+    skillCooldown: 12
+    maxHp: 25
+    attack: 0
+    defence: 10
+    moveSpeed: 0
+    cooldownDecrease: 0
+  - partId: 3003
+    partName: multiLauncher
+    attackAilment: 0
+    fireSpeed: 0
+    attackSkillDamage: 150
+    skillSpeed: 20
+    skillCount: 12
+    skillCooldown: 10
+    maxHp: 25
+    attack: 0
+    defence: 10
+    moveSpeed: 0.25
+    cooldownDecrease: 0
+  - partId: 3004
+    partName: bigCannon
+    attackAilment: 0
+    fireSpeed: 0
+    attackSkillDamage: 2000
+    skillSpeed: 0
+    skillCount: 1
+    skillCooldown: 15
+    maxHp: 50
+    attack: 0
+    defence: 20
+    moveSpeed: -0.5
+    cooldownDecrease: 0
+  - partId: 3005
+    partName: basicArm
+    attackAilment: 0
+    fireSpeed: 0.33
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 40
+    defence: 0
+    moveSpeed: 0
+    cooldownDecrease: 0
+  - partId: 3006
+    partName: laserArm1
+    attackAilment: 1
+    fireSpeed: 0.65
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 90
+    defence: 0
+    moveSpeed: 0.1
+    cooldownDecrease: 0.2
+  - partId: 3007
+    partName: laserArm2
+    attackAilment: 1
+    fireSpeed: 0.7
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 95
+    defence: 0
+    moveSpeed: 0.1
+    cooldownDecrease: 0.2
+  - partId: 3008
+    partName: rapidArm1
+    attackAilment: 0
+    fireSpeed: 0.05
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 40
+    defence: 0
+    moveSpeed: 0.2
+    cooldownDecrease: 0.4
+  - partId: 3009
+    partName: rapidArm2
+    attackAilment: 0
+    fireSpeed: 0.17
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 35
+    defence: 0
+    moveSpeed: 0.2
+    cooldownDecrease: 0.4
+  - partId: 3010
+    partName: heavyArm1
+    attackAilment: 2
+    fireSpeed: 1.25
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 210
+    defence: 5
+    moveSpeed: -0.25
+    cooldownDecrease: 0
+  - partId: 3011
+    partName: heavyArm2
+    attackAilment: 2
+    fireSpeed: 1.65
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 275
+    defence: 5
+    moveSpeed: -0.25
+    cooldownDecrease: 0
+  - partId: 3012
+    partName: basicLeg
+    attackAilment: 0
+    fireSpeed: 0
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 0
+    attack: 0
+    defence: 0
+    moveSpeed: 0
+    cooldownDecrease: 0
+  - partId: 3013
+    partName: enhancedLeg
+    attackAilment: 0
+    fireSpeed: 0
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 50
+    attack: 0
+    defence: 15
+    moveSpeed: 1
+    cooldownDecrease: 0.5
+  - partId: 3014
+    partName: caterpillarLeg
+    attackAilment: 0
+    fireSpeed: 0
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 100
+    attack: 0
+    defence: 30
+    moveSpeed: -1.5
+    cooldownDecrease: 0
+  - partId: 3015
+    partName: hoverLeg
+    attackAilment: 0
+    fireSpeed: 0
+    attackSkillDamage: 0
+    skillSpeed: 0
+    skillCount: 0
+    skillCooldown: 0
+    maxHp: 50
+    attack: 0
+    defence: 10
+    moveSpeed: 2
+    cooldownDecrease: 0.75
