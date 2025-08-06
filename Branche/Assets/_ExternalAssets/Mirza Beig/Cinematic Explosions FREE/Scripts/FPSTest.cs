@@ -5,7 +5,6 @@ using System;
 
 namespace MirzaBeig.CinematicExplosionsFree
 {
-    [ExecuteAlways]
     public class FPSTest : MonoBehaviour
     {
         public Vector2 size = new Vector2(128.0f, 64.0f);

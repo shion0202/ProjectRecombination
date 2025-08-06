@@ -21,7 +21,7 @@ namespace Monster
         [SerializeField] private Animator animator;
         
         [Header("Physics")]
-        [SerializeField] private Rigidbody rigid;
+        [SerializeField] protected Rigidbody rigid;
         [SerializeField] private Collider coll;
         
         #region Properties

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class CameraTarget : MonoBehaviour
 {
-    // Camera TargetÀ» ½Äº°ÇÏ±â À§ÇØ ÅÂ±× ¿ëµµ·Î »ç¿ëÇÏ´Â ÄÄÆ÷³ÍÆ® Å¬·¡½º
+    // Camera Targetì„ ì‹ë³„í•˜ê¸° ìœ„í•´ íƒœê·¸ ìš©ë„ë¡œ ì‚¬ìš©í•˜ëŠ” ì»´í¬ë„ŒíŠ¸ í´ë˜ìŠ¤
 }

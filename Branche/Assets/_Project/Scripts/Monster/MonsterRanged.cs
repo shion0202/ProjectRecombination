@@ -31,7 +31,7 @@ namespace Monster
         
         private bool _isDead; // 사망 여부
         [FormerlySerializedAs("VFXPrefab")] [SerializeField] private GameObject vfxPrefab; // 사망 시 생성할 이펙트 프리팹
-        [FormerlySerializedAs("rigidbody")] [SerializeField] private Rigidbody rigid; // Rigidbody 컴포넌트
+        //[FormerlySerializedAs("rigidbody")] [SerializeField] private Rigidbody rigid; // Rigidbody 컴포넌트
 
         #endregion
         

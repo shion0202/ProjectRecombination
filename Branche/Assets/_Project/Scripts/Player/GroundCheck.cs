@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
 {
-    // Ground Check¸¦ À§ÇØ ÅÂ±× ¿ëµµ·Î »ç¿ëÇÏ´Â ÄÄÆ÷³ÍÆ® Å¬·¡½º
+    // Ground Checkë¥¼ ìœ„í•´ íƒœê·¸ ìš©ë„ë¡œ ì‚¬ìš©í•˜ëŠ” ì»´í¬ë„ŒíŠ¸ í´ë˜ìŠ¤
 }

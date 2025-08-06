@@ -1,4 +1,4 @@
-﻿using Cinemachine;
+using Cinemachine;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -64,6 +64,7 @@ public class FollowCameraController : MonoBehaviour
     }
     #endregion
 
+    #region Editor Methods
 #if UNITY_EDITOR
     private void Update()
     {
@@ -75,7 +76,7 @@ public class FollowCameraController : MonoBehaviour
         _cameraBody = vcam.GetCinemachineComponent<CinemachineFramingTransposer>();
         _cameraAim = vcam.GetCinemachineComponent<CinemachinePOV>();
 
-        HandleZoom();
+        ApplyCameraSettings();
     }
 
     void OnDrawGizmos()
@@ -108,6 +109,7 @@ public class FollowCameraController : MonoBehaviour
         Gizmos.DrawWireCube(center, new Vector3(w, h, 0.01f));
     }
 #endif
+    #endregion
 
     #region Public Methods
     public void InitFollowCamera(PlayerController owner)
@@ -131,7 +133,7 @@ public class FollowCameraController : MonoBehaviour
             _cameraSettings[state] = Resources.Load<FollowCameraData>($"Camera/FollowCameraData_{state}");
         }
 
-        _cameraAim.m_HorizontalAxis.Value = _cameraSettings[currentCameraState].defaultCameraRotationX;
+        _cameraAim.m_HorizontalAxis.Value = owner.transform.localEulerAngles.y;
 
         ApplyCameraSettings();
     }
@@ -139,7 +141,7 @@ public class FollowCameraController : MonoBehaviour
     // Update에서 매 프레임마다 실행되는 카메라 관련 함수
     public void UpdateFollowCamera()
     {
-        HandleZoom();
+        ApplyCameraSettings();
         HandleRecoil();
     }
 
@@ -200,10 +202,10 @@ public class FollowCameraController : MonoBehaviour
     // 프레임 단위로 노말/줌 카메라로 위치를 전환하는 함수
     private void HandleZoom()
     {
-        //vcam.m_Lens.FieldOfView = Mathf.Lerp(vcam.m_Lens.FieldOfView, _cameraSettings[currentCameraState].FOV, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
-        //_cameraBody.m_ScreenX = Mathf.Lerp(_cameraBody.m_ScreenX, _cameraSettings[currentCameraState].screenX, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
-        //_cameraBody.m_ScreenY = Mathf.Lerp(_cameraBody.m_ScreenY, _cameraSettings[currentCameraState].screenY, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
-        //_cameraBody.m_CameraDistance = Mathf.Lerp(_cameraBody.m_CameraDistance, _cameraSettings[currentCameraState].cameraDistance, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
+        vcam.m_Lens.FieldOfView = Mathf.Lerp(vcam.m_Lens.FieldOfView, _cameraSettings[currentCameraState].FOV, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
+        _cameraBody.m_ScreenX = Mathf.Lerp(_cameraBody.m_ScreenX, _cameraSettings[currentCameraState].screenX, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
+        _cameraBody.m_ScreenY = Mathf.Lerp(_cameraBody.m_ScreenY, _cameraSettings[currentCameraState].screenY, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
+        _cameraBody.m_CameraDistance = Mathf.Lerp(_cameraBody.m_CameraDistance, _cameraSettings[currentCameraState].cameraDistance, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
 
         ApplyCameraSettings();
     }

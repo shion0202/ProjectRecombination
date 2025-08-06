@@ -8,19 +8,28 @@ namespace _Project.Scripts.VisualScripting
         [SerializeField] private ProcessData inputData;
         [SerializeField] private List<ProcessData> outputData;
 
+        private bool _isRunning;
+
+
+        // TODO: inputData 가 ture 일때 한번만 실행된다.
+        // Input Data에 True 신호가 들어올 때 마다 한번 실행한다.
         private void Update()
         {
-            if (CheckInputProcessStatus(inputData))
+            IsOn = CheckInputProcessStatus(inputData);
+
+            if (IsOn)
             {
-                IsOn = true;
+                if (_isRunning) return;
+
                 Execute();
+                _isRunning = true;
             }
             else
             {
-                IsOn = false;
+                _isRunning = false;
             }
         }
-        
+
         public override void Execute()
         {
             foreach (var output in outputData)

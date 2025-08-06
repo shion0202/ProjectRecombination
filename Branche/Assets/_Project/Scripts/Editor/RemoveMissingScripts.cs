@@ -3,11 +3,11 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-// ¼±ÅÃÇÑ °ÔÀÓ¿ÀºêÁ§Æ®¿¡¼­ Missing Script¸¦ Á¦°ÅÇÏ´Â ¿¡µğÅÍ Å¬·¡½º
+// ì„ íƒí•œ ê²Œì„ì˜¤ë¸Œì íŠ¸ì—ì„œ Missing Scriptë¥¼ ì œê±°í•˜ëŠ” ì—ë””í„° í´ë˜ìŠ¤
 #if UNITY_EDITOR
 public class RemoveMissingScripts : MonoBehaviour
 {
-    // ¸Ş´º Ç×¸ñÀ» ÅëÇØ ¼±ÅÃÇÑ ÇÁ¸®ÆÕ ¶Ç´Â °ÔÀÓ¿ÀºêÁ§Æ®¿¡¼­ Missing Script¸¦ Á¦°Å
+    // ë©”ë‰´ í•­ëª©ì„ í†µí•´ ì„ íƒí•œ í”„ë¦¬íŒ¹ ë˜ëŠ” ê²Œì„ì˜¤ë¸Œì íŠ¸ì—ì„œ Missing Scriptë¥¼ ì œê±°
     [MenuItem("Tools/Remove Missing Scripts", priority = 100)]
     public static void DeleteMissingScriptInPrefabs()
     {
@@ -23,7 +23,7 @@ public class RemoveMissingScripts : MonoBehaviour
             DeleteInternal(list);
     }
 
-    // ¿ìÅ¬¸¯ ¸Ş´º¸¦ ÅëÇØ ¼±ÅÃÇÑ ÇÁ¸®ÆÕ¿¡¼­ Missing Script¸¦ Á¦°Å
+    // ìš°í´ë¦­ ë©”ë‰´ë¥¼ í†µí•´ ì„ íƒí•œ í”„ë¦¬íŒ¹ì—ì„œ Missing Scriptë¥¼ ì œê±°
     [MenuItem("Assets/Selection Delete Missing Scripts", priority = 100)]
     public static void DeleteMissingScriptInSelections()
     {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-// ¼±ÅÃÇÑ °ÔÀÓ¿ÀºêÁ§Æ®ÀÇ Bone µ¥ÀÌÅÍ¸¦ ½ºÅ©¸³ÅÍºí ¿ÀºêÁ§Æ®·Î ÀúÀåÇÏ´Â ¿¡µğÅÍ ½ºÅ©¸³Æ®
+// ì„ íƒí•œ ê²Œì„ì˜¤ë¸Œì íŠ¸ì˜ Bone ë°ì´í„°ë¥¼ ìŠ¤í¬ë¦½í„°ë¸” ì˜¤ë¸Œì íŠ¸ë¡œ ì €ì¥í•˜ëŠ” ì—ë””í„° ìŠ¤í¬ë¦½íŠ¸
 public class BoneLoader : MonoBehaviour
 {
     [MenuItem("Tools/Save Bone Data To Scriptable Object", priority = 100)]
@@ -10,18 +10,18 @@ public class BoneLoader : MonoBehaviour
         Object selectedObj = Selection.activeObject;
         if (selectedObj == null)
         {
-            Debug.LogWarning("¿ÀºêÁ§Æ®¸¦ ¼±ÅÃÇÏ¼¼¿ä.");
+            Debug.LogWarning("ì˜¤ë¸Œì íŠ¸ë¥¼ ì„ íƒí•˜ì„¸ìš”.");
             return;
         }
 
         GameObject targetGO = null;
 
-        // 1. ÇÁ·ÎÁ§Æ® Ã¢¿¡¼­ ÇÁ¸®ÆÕ ¿¡¼Â ¼±ÅÃ ½Ã
+        // 1. í”„ë¡œì íŠ¸ ì°½ì—ì„œ í”„ë¦¬íŒ¹ ì—ì…‹ ì„ íƒ ì‹œ
         if (PrefabUtility.IsPartOfPrefabAsset(selectedObj))
         {
             targetGO = PrefabUtility.InstantiatePrefab(selectedObj) as GameObject;
         }
-        // 2. ¾À¿¡¼­ GameObject ¼±ÅÃ ½Ã
+        // 2. ì”¬ì—ì„œ GameObject ì„ íƒ ì‹œ
         else if (selectedObj is GameObject)
         {
             targetGO = selectedObj as GameObject;
@@ -29,21 +29,21 @@ public class BoneLoader : MonoBehaviour
 
         if (targetGO == null)
         {
-            Debug.LogWarning("GameObject¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("GameObjectë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        // ÀúÀå °æ·Î ÀÔ·Â
+        // ì €ì¥ ê²½ë¡œ ì…ë ¥
         string path = EditorUtility.SaveFilePanelInProject(
             "Save Bone Data",
             "BoneData",
             "asset",
-            "ScriptableObject¸¦ ÀúÀåÇÒ °æ·Î¿Í ÆÄÀÏ¸íÀ» ÀÔ·ÂÇÏ¼¼¿ä."
+            "ScriptableObjectë¥¼ ì €ì¥í•  ê²½ë¡œì™€ íŒŒì¼ëª…ì„ ì…ë ¥í•˜ì„¸ìš”."
         );
         if (string.IsNullOrEmpty(path))
             return;
 
-        // ScriptableObject »ı¼º ¹× µ¥ÀÌÅÍ ÀÔ·Â
+        // ScriptableObject ìƒì„± ë° ë°ì´í„° ì…ë ¥
         CharacterBoneData boneMapSO = ScriptableObject.CreateInstance<CharacterBoneData>();
 
         var part = targetGO.GetComponentInChildren<PartBase>();
@@ -62,13 +62,13 @@ public class BoneLoader : MonoBehaviour
         AssetDatabase.CreateAsset(boneMapSO, path);
         AssetDatabase.SaveAssets();
 
-        // ÇÁ¸®ÆÕ ¿¡¼Â¿¡¼­ ÀÓ½Ã·Î ÀÎ½ºÅÏ½ºÈ­ÇÑ °æ¿ì »èÁ¦
+        // í”„ë¦¬íŒ¹ ì—ì…‹ì—ì„œ ì„ì‹œë¡œ ì¸ìŠ¤í„´ìŠ¤í™”í•œ ê²½ìš° ì‚­ì œ
         if (PrefabUtility.IsPartOfPrefabAsset(selectedObj) && targetGO != null)
         {
             GameObject.DestroyImmediate(targetGO);
         }
 
-        Debug.Log($"Bone Data ÀúÀå ¿Ï·á: {path}");
+        Debug.Log($"Bone Data ì €ì¥ ì™„ë£Œ: {path}");
         AssetDatabase.Refresh();
     }
 }

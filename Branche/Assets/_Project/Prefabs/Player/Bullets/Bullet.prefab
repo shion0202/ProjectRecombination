@@ -133,7 +133,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &5347008127179061229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,4 +149,4 @@ MonoBehaviour:
   lifeTime: 3
   rb: {fileID: 6022039817454698780}
   isCollision: 1
-  bulletSpeed: 30
+  bulletSpeed: 50

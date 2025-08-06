@@ -135,6 +135,15 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""ece2909f-23d1-4db1-9d8b-e69ff61c17ec"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -236,6 +245,17 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""action"": ""RightAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""199dd1fa-0a51-42de-8d7a-789724b05b3c"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -277,6 +297,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_PlayerActionMap_Zoom = m_PlayerActionMap.FindAction("Zoom", throwIfNotFound: true);
         m_PlayerActionMap_LeftAttack = m_PlayerActionMap.FindAction("LeftAttack", throwIfNotFound: true);
         m_PlayerActionMap_RightAttack = m_PlayerActionMap.FindAction("RightAttack", throwIfNotFound: true);
+        m_PlayerActionMap_Interaction = m_PlayerActionMap.FindAction("Interaction", throwIfNotFound: true);
     }
 
     ~@PlayerActions()
@@ -362,6 +383,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_Zoom;
     private readonly InputAction m_PlayerActionMap_LeftAttack;
     private readonly InputAction m_PlayerActionMap_RightAttack;
+    private readonly InputAction m_PlayerActionMap_Interaction;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerActionMap".
     /// </summary>
@@ -393,6 +415,10 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActionMap/RightAttack".
         /// </summary>
         public InputAction @RightAttack => m_Wrapper.m_PlayerActionMap_RightAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActionMap/Interaction".
+        /// </summary>
+        public InputAction @Interaction => m_Wrapper.m_PlayerActionMap_Interaction;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -434,6 +460,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @RightAttack.started += instance.OnRightAttack;
             @RightAttack.performed += instance.OnRightAttack;
             @RightAttack.canceled += instance.OnRightAttack;
+            @Interaction.started += instance.OnInteraction;
+            @Interaction.performed += instance.OnInteraction;
+            @Interaction.canceled += instance.OnInteraction;
         }
 
         /// <summary>
@@ -460,6 +489,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @RightAttack.started -= instance.OnRightAttack;
             @RightAttack.performed -= instance.OnRightAttack;
             @RightAttack.canceled -= instance.OnRightAttack;
+            @Interaction.started -= instance.OnInteraction;
+            @Interaction.performed -= instance.OnInteraction;
+            @Interaction.canceled -= instance.OnInteraction;
         }
 
         /// <summary>
@@ -561,5 +593,12 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRightAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Interaction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInteraction(InputAction.CallbackContext context);
     }
 }

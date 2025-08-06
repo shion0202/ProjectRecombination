@@ -12,14 +12,14 @@ public class Inventory : MonoBehaviour
     [SerializeField] private List<PartBase> baseParts = new List<PartBase>();
     private Dictionary<EPartType, List<PartBase>> _items = new Dictionary<EPartType, List<PartBase>>();
     private Dictionary<EPartType, PartBase> _equippedItems = new Dictionary<EPartType, PartBase>();
-    private int armLIndex = 0;  // Å×½ºÆ®¿ë Arm ÀÎº¥Åä¸® ÀÎµ¦½º
-    private int armRIndex = 0;  // Å×½ºÆ®¿ë Arm ÀÎº¥Åä¸® ÀÎµ¦½º
-    private int legsIndex = 0;  // Å×½ºÆ®¿ë Legs ÀÎº¥Åä¸® ÀÎµ¦½º
+    private int armLIndex = 0;  // í…ŒìŠ¤íŠ¸ìš© ArmL ì¸ë²¤í† ë¦¬ ì¸ë±ìŠ¤
+    private int armRIndex = 0;  // í…ŒìŠ¤íŠ¸ìš© ArmR ì¸ë²¤í† ë¦¬ ì¸ë±ìŠ¤
+    private int legsIndex = 0;  // í…ŒìŠ¤íŠ¸ìš© Legs ì¸ë²¤í† ë¦¬ ì¸ë±ìŠ¤
 
     [Header("Mesh and Bone Data")]
     [SerializeField] private Transform boneRoot;
     [SerializeField] private Transform meshRoot;
-    private Dictionary<string, PartBase> _parts = new();    // Mesh Root¿¡ ÀÚ½ÄÀ¸·Î ÀÖ´Â ¸ğµç ÆÄÃ÷
+    private Dictionary<string, PartBase> _parts = new();    // Mesh Rootì— ìì‹ìœ¼ë¡œ ìˆëŠ” ëª¨ë“  íŒŒì¸ 
     private Dictionary<EPartType, List<string>> _boneList = new();
     private Dictionary<EPartType, Dictionary<string, Transform>> _boneMap = new();
     #endregion
@@ -75,7 +75,7 @@ public class Inventory : MonoBehaviour
                 target.SetPartStat();
                 target.gameObject.SetActive(false);
 
-                // Å×½ºÆ®¿ëÀ¸·Î MeshRoot¿¡ ÀÖ´Â ¸ğµç ÆÄÃ÷¸¦ ÀÎº¥Åä¸®¿¡ Ãß°¡
+                // í…ŒìŠ¤íŠ¸ìš©ìœ¼ë¡œ MeshRootì— ìˆëŠ” ëª¨ë“  íŒŒì¸ ë¥¼ ì¸ë²¤í† ë¦¬ì— ì¶”ê°€
                 GetItem(target);
             }
         }
@@ -107,7 +107,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.Legs][legsIndex]);
         }
 
-		// GUI °»½Å ½ºÅ©¸³Æ®
+		// GUI ê°±ì‹  ìŠ¤í¬ë¦½íŠ¸
         GUIManager.instance.SetLeftPartText(_items[EPartType.ArmL][armLIndex].name);
         GUIManager.instance.SetRightPartText(_items[EPartType.ArmR][armRIndex].name);
         GUIManager.instance.SetLegsText(_items[EPartType.Legs][legsIndex].name);
@@ -128,7 +128,7 @@ public class Inventory : MonoBehaviour
         return _items[removeItem.PartType].Remove(removeItem);
     }
 	
-	// TODO: ÆÄÃ÷º°,ÆÄ¸®¹ÌÅÍº° Àû¿ë ¹æ½Ä µğÅ×ÀÏÇÑ ³íÀÇ ÇÊ¿ä
+	// TODO: íŒŒì¸ ë³„,íŒŒë¦¬ë¯¸í„°ë³„ ì ìš© ë°©ì‹ ë””í…Œì¼í•œ ë…¼ì˜ í•„ìš”
     public void EquipItem(PartBase equipItem)
     {
         if (!_items[equipItem.PartType].Contains(equipItem)) return;
@@ -153,7 +153,7 @@ public class Inventory : MonoBehaviour
         }
         currentEquipment.gameObject.SetActive(true);
 
-        // ½ºÅÈ ¹İ¿µ
+        // ìŠ¤íƒ¯ ë°˜ì˜
         owner.SetPartStat(equipItem);
     }
     #endregion
@@ -206,7 +206,7 @@ public class Inventory : MonoBehaviour
             part.transform.SetParent(boneRoot);
         }
 
-        // To-do: ÆÄÃ÷ º°·Î offset °ªÀÌ ÇÊ¿ä
+        // To-do: íŒŒì¸  ë³„ë¡œ offset ê°’ì´ í•„ìš”
         part.transform.localPosition = Vector3.zero;
         part.transform.localRotation = Quaternion.identity;
     }

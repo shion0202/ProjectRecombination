@@ -5,7 +5,6 @@ using System;
 
 namespace MirzaBeig.CinematicExplosionsFree
 {
-    [ExecuteAlways]
     public class FPSDisplay : MonoBehaviour
     {
         public float fps { get; private set; }      // Frames per second (interval average).

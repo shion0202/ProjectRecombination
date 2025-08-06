@@ -1,4 +1,4 @@
-﻿using Cinemachine;
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,6 +60,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [Header("Dash")]
     private Vector3 _dashDirection = Vector3.zero;
     private float _dashSpeed = 0.0f;
+
+    private static event Action OnInteractionKeyPressed;
     #endregion
 
     #region Properties
@@ -139,8 +141,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _followCamera.UpdateFollowCamera();
         RotateCharacter();
 
-        Shoot();
-
         characterController.Move(_totalDirection * Time.deltaTime);
         _totalDirection = Vector3.zero;
     }
@@ -210,6 +210,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (context.started)
         {
             _currentPlayerState |= EPlayerState.LeftShooting;
+            Shoot();
         }
 
         if (context.canceled)
@@ -227,6 +228,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (context.started)
         {
             _currentPlayerState |= EPlayerState.RightShooting;
+            Shoot();
         }
 
         if (context.canceled)
@@ -236,6 +238,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetBool("isRightAttack", false);
             _previousState &= ~EPlayerState.RightShooting;
             _currentPlayerState &= ~EPlayerState.RightShooting;
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnInteraction(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnInteractionKeyPressed?.Invoke();
         }
     }
     #endregion
@@ -258,12 +268,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _dashDirection = Vector3.zero;
         _dashSpeed = 0.0f;
 
-        _currentPlayerState &= ~EPlayerState.Dashing;
         _currentPlayerState |= _previousState;
+        _currentPlayerState &= ~EPlayerState.Dashing;
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
-            animator.SetBool("isLeftAttack", true);
+        {
+            Shoot();
+        }
+            
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
-            animator.SetBool("isRightAttack", true);
+        {
+            Shoot();
+        }
 
         _previousState = 0;
         SwitchStateToIdle();
@@ -321,6 +336,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         Debug.Log($"Player에게 {takeDamage} 데미지! 효과는 굉장했다!");
         Debug.Log($"Body HP: {stats.CurrentBodyHealth}");
         Debug.Log($"Part HP: {stats.CurrentPartHealth}");
+    }
+
+    public static void RegisterEvent(Action action)
+    {
+        OnInteractionKeyPressed -= action;
+        OnInteractionKeyPressed += action;
+    }
+
+    public static void UnregisterEvent(Action action)
+    {
+        OnInteractionKeyPressed -= action;
     }
 
     // Ball Legs를 위한 임시 함수들

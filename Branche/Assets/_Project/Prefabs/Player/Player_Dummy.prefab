@@ -1881,9 +1881,9 @@ MonoBehaviour:
   followCameraPrefab: {fileID: 8765793853822610566, guid: ef3eb5519f6701e4ab90e7fe45bfb5c8,
     type: 3}
   movementBlockMask: 8
-  dashBlockMask: 0
+  dashBlockMask: 4
   shootBlockMask: 8
-  zoomBlockMask: 8
+  zoomBlockMask: 0
   rotationSpeed: 30
   boxSize: {x: 0.2, y: 0.01, z: 0.2}
   gravityScale: 2
