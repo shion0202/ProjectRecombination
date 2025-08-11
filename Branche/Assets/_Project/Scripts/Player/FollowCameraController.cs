@@ -20,7 +20,7 @@ public class FollowCameraController : MonoBehaviour
 
     [SerializeField] private ECameraState currentCameraState = ECameraState.Normal;
     private Dictionary<ECameraState, FollowCameraData> _cameraSettings = new Dictionary<ECameraState, FollowCameraData>();
-    private PlayerController _owner;
+    private GameObject _owner;
     private Transform _cameraTarget;
     private bool _isBeforeZoom = false;
 
@@ -112,7 +112,7 @@ public class FollowCameraController : MonoBehaviour
     #endregion
 
     #region Public Methods
-    public void InitFollowCamera(PlayerController owner)
+    public void InitFollowCamera(GameObject owner)
     {
         _owner = owner;
 

@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             cameraObject.name = followCameraPrefab.name;
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
-        _followCamera.InitFollowCamera(this);
+        _followCamera.InitFollowCamera(gameObject);
         
         // 비트 마스크 방식으로 레이케스트를 관리할 레이어를 설정
         groundLayerMask = ~0;
