@@ -1,0 +1,40 @@
+﻿.node {
+    background-color: #1e1e1e;
+    border-color: #cccccc;
+    border-width: 2px;
+    border-radius: 8px;
+    padding: 6px;
+    color: white;
+    font-size: 13px;
+}
+
+.node.sequence {
+    background-color: #f67280;
+    border-color: #f67280;
+}
+
+.node.selector {
+    background-color: #0487BD;
+    border-color: #0487BD;
+}
+
+.node.condition {
+    background-color: #2ecc71;
+    border-color: #27ae60;
+}
+
+.node.action {
+    background-color: #EBD125;
+    border-color: #EBD125;
+}
+
+.node.decorator {
+    background-color: #7901F0;
+    border-color: #7901F0;
+}
+
+/*.edge {*/
+/*    border-color: #F7F701;*/
+/*    border-width: 2px;*/
+/*    background-color: #cccccc;*/
+/*}*/

@@ -46,35 +46,45 @@ public class ArmLaserCharge : PartBaseArm
         Vector3 targetPoint = Vector3.zero;
         RaycastHit[] hits = GetMultiTargetPoint(out targetPoint);
 
-        Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
-
         effect.SetActive(false);
 
         lineRenderer.material.color = Color.white;
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(0, bulletSpawnPoint.position);
-        lineRenderer.SetPosition(1, hits[0].point);
+
+        if (hits.Length > 0)
+        {
+            lineRenderer.SetPosition(1, hits[0].point);
+        }
+        else
+        {
+            Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
+            lineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * 100.0f);
+        }
 
         if (fadeCoroutine != null)
         {
             StopCoroutine(fadeCoroutine);
             fadeCoroutine = null;
         }
-        StartCoroutine(CoFadeOutLaser());
+        fadeCoroutine = StartCoroutine(CoFadeOutLaser());
 
-        foreach (var hit in hits)
+        if (hits.Length > 0)
         {
-            MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
-            if (monster != null)
+            foreach (var hit in hits)
             {
-                monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
-            }
-            else
-            {
-                monster = hit.transform.GetComponentInParent<MonsterBase>();
+                MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
                 if (monster != null)
                 {
                     monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                }
+                else
+                {
+                    monster = hit.transform.GetComponentInParent<MonsterBase>();
+                    if (monster != null)
+                    {
+                        monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                    }
                 }
             }
         }
@@ -90,6 +100,9 @@ public class ArmLaserCharge : PartBaseArm
 
         impulseSource.m_DefaultVelocity = defaultImpulseValue * _currentShootTime;
         _owner.ApplyRecoil(impulseSource, recoilX * _currentShootTime, recoilY * _currentShootTime);
+
+        // 충돌이 있을 경우 충돌 판정을 위한 Bullet을 생성
+        Destroy(Instantiate(bulletPrefab, targetPoint, Quaternion.identity), 0.5f);
     }
 
     private IEnumerator CoFadeOutLaser()

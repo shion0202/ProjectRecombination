@@ -11,8 +11,18 @@ public class PartBaseArm : PartBase
     [SerializeField] protected EPartType _currentPartType = EPartType.ArmL;
     [SerializeField] protected float recoilX = 4.0f;
     [SerializeField] protected float recoilY = 2.0f;
+    [SerializeField] protected LayerMask ignoreMask = 0;
     protected float _currentShootTime = 0.0f;
     protected bool _isShooting = false;
+
+    protected void Awake()
+    {
+        if (ignoreMask == 0)
+        {
+            ignoreMask |= 1;
+            ignoreMask &= ~LayerMask.NameToLayer("Ignore Raycast");
+        }
+    }
 
     protected virtual void Update()
     {

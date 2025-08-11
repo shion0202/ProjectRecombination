@@ -1,13 +1,15 @@
+using Monster;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Monster;
 
 public class ArmRapidCast : PartBaseArm
 {
+    [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private GameObject effectPrefab;
     [SerializeField] private float castingTime = 1.0f;
     private float _currentCastingTime = 0.0f;
+    private Coroutine fadeCoroutine = null;
 
     protected override void Update()
     {
@@ -51,18 +53,42 @@ public class ArmRapidCast : PartBaseArm
         Vector3 targetPoint = Vector3.zero;
         RaycastHit hit = GetTargetPoint(out targetPoint);
 
-        // 몬스터 피격 판정
-        MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
-        if (monster != null)
+        lineRenderer.material.color = Color.white;
+        lineRenderer.enabled = true;
+        lineRenderer.SetPosition(0, bulletSpawnPoint.position);
+
+        if (hit.collider != null)
         {
-            monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+            lineRenderer.SetPosition(1, hit.point);
         }
         else
         {
-            monster = hit.transform.GetComponentInParent<MonsterBase>();
+            Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
+            lineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * 100.0f);
+        }
+
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+            fadeCoroutine = null;
+        }
+        fadeCoroutine = StartCoroutine(CoFadeOutLaser());
+
+        if (hit.collider != null)
+        {
+            // 몬스터 피격 판정
+            MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
             if (monster != null)
             {
                 monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+            }
+            else
+            {
+                monster = hit.transform.GetComponentInParent<MonsterBase>();
+                if (monster != null)
+                {
+                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                }
             }
         }
 
@@ -70,5 +96,24 @@ public class ArmRapidCast : PartBaseArm
 
         Destroy(Instantiate(effectPrefab, targetPoint, Quaternion.identity), 0.5f);
         Destroy(Instantiate(bulletPrefab, targetPoint, Quaternion.identity), 0.5f);
+    }
+
+    private IEnumerator CoFadeOutLaser()
+    {
+        while (lineRenderer.material.color.a > 0.0f)
+        {
+            Color c = lineRenderer.material.color;
+            c.a -= Time.deltaTime;
+            lineRenderer.material.color = c;
+
+            yield return null;
+
+            if (lineRenderer.material.color.a <= 0.0f)
+            {
+                lineRenderer.enabled = false;
+                fadeCoroutine = null;
+                break;
+            }
+        }
     }
 }

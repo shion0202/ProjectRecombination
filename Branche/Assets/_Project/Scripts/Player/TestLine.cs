@@ -45,44 +45,6 @@ public class TestLine : MonoBehaviour
             // 빔 비활성화 등(옵션)
             beamRenderer.positionCount = 0;
         }
-
-        //targetPoint = FindClosestEnemyWithinCrosshair();
-        //if (targetPoint == null)
-        //{
-        //    beamRenderer.enabled = false;
-        //    return;
-        //}
-
-        //Vector3 p0 = startPoint.position + Vector3.up;
-        //Vector3 p2 = targetPoint.position + Vector3.up;
-
-        //Vector3 cameraRight = Camera.main.transform.right;
-        //Vector3 dirToTarget = (p2 - Camera.main.transform.position).normalized;
-
-        //// 1. 카메라 방향에서 타겟이 오른쪽에 있으면 +, 왼쪽이면 - (좌우 연속 값)
-        //float sideAmt = Vector3.Dot(dirToTarget, cameraRight);
-        //// sideAmt 값이 -1~+1에서 연속적으로 변함
-
-        //// 2. 최대 휘어짐 값 곱해서 적용 (비례해서 자연스럽게 곡선 변화)
-        //float appliedSideOffset = maxSideOffset * -sideAmt;
-
-        //// 3. midPoint 계산
-        //Vector3 midPoint = (p0 + p2) * 0.5f + Vector3.up * upOffset + cameraRight * appliedSideOffset;
-
-        //// 4. 베지어 곡선 샘플링
-        //int segmentCount = 20;
-        //beamRenderer.positionCount = segmentCount + 1;
-        //for (int i = 0; i <= segmentCount; i++)
-        //{
-        //    float t = i / (float)segmentCount;
-        //    Vector3 bezierPoint =
-        //        Mathf.Pow(1 - t, 2) * p0
-        //        + 2 * (1 - t) * t * midPoint
-        //        + Mathf.Pow(t, 2) * p2;
-        //    beamRenderer.SetPosition(i, bezierPoint);
-        //}
-
-        //beamRenderer.enabled = true;
     }
 
     // 크로스헤어 안에서 가장 가까운 적 반환
@@ -120,41 +82,6 @@ public class TestLine : MonoBehaviour
             }
         }
         return closest;
-
-        //var enemies = GameObject.FindGameObjectsWithTag(enemyTag);
-        //Transform closest = null;
-        //float minScreenDist = float.MaxValue;
-
-        //foreach (var enemy in enemies)
-        //{
-        //    // 1. 적의 월드 좌표 → 뷰포트 좌표 (0~1)
-        //    Vector3 viewportPos = Camera.main.WorldToViewportPoint(enemy.transform.position);
-
-        //    // 2. 화면 앞에 있고(0<z), 정중앙으로부터 일정 거리 안이면 후보
-        //    if (viewportPos.z > 0)
-        //    {
-        //        Vector2 screenCenter = new Vector2(0.5f, 0.5f);
-        //        Vector2 enemyXY = new Vector2(viewportPos.x, viewportPos.y);
-        //        float dist = Vector2.Distance(screenCenter, enemyXY);
-
-        //        if (dist < crosshairRadius && dist < minScreenDist)
-        //        {
-        //            // (옵션) Raycast로 실제 가려진 적은 제외
-        //            Vector3 dir = enemy.transform.position - Camera.main.transform.position;
-        //            if (Physics.Raycast(Camera.main.transform.position, dir.normalized, out RaycastHit hit, 100f))
-        //            {
-        //                // 적 본체 또는 자식 여부 체크
-        //                if (hit.collider != null && (hit.collider.gameObject == enemy.gameObject || hit.collider.transform.IsChildOf(enemy.transform)))
-        //                {
-        //                    closest = enemy.transform;
-        //                    minScreenDist = dist;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        //return closest;
     }
 
     // 타겟이 화면 범위 내에 있는지 확인 (예시)

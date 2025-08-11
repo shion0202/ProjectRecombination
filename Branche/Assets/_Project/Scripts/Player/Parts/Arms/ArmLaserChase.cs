@@ -1,50 +1,58 @@
 using Cinemachine;
+using Monster;
 using System.Collections;
 using System.Collections.Generic;
-using Monster;
 using UnityEngine;
 
 public class ArmLaserChase : PartBaseArm
 {
-    [SerializeField] private GameObject effect;
-    [SerializeField] private Vector3 defaultImpulseValue = new Vector3(0.0f, 0.0f, 0.0f);
+    [SerializeField] private LineRenderer lineRenderer;
 
     protected override void Update()
     {
         if (!_isShooting) return;
 
-        _currentShootTime += Time.deltaTime;
+        Shoot();
     }
 
     public override void UseAbility()
     {
         base.UseAbility();
 
-        effect.SetActive(true);
+        // 타게팅
     }
 
     public override void UseCancleAbility()
     {
-        _isShooting = false;
+        base.UseCancleAbility();
 
-        Shoot();
-        _currentShootTime = 0.0f;
+        //if (fadeCoroutine != null)
+        //{
+        //    StopCoroutine(fadeCoroutine);
+        //    fadeCoroutine = null;
+        //}
+        //fadeCoroutine = StartCoroutine(CoFadeOutLaser());
     }
 
+    // Update에서 실행
     protected override void Shoot()
     {
-        if (_currentShootTime > 0.0f)
-        {
-            // Max 값
-            _currentShootTime = 1.0f;
-        }
-
         Vector3 targetPoint = Vector3.zero;
         RaycastHit[] hits = GetMultiTargetPoint(out targetPoint);
 
-        Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
+        lineRenderer.material.color = Color.white;
+        lineRenderer.enabled = true;
+        lineRenderer.SetPosition(0, bulletSpawnPoint.position);
 
-        effect.SetActive(false);
+        //if (hit.collider != null)
+        //{
+        //    lineRenderer.SetPosition(1, hit.point);
+        //}
+        //else
+        //{
+        //    Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
+        //    lineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * 100.0f);
+        //}
 
         foreach (var hit in hits)
         {
@@ -63,16 +71,6 @@ public class ArmLaserChase : PartBaseArm
             }
         }
 
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-        Bullet bulletComponent = bullet.GetComponent<Bullet>();
-        if (bulletComponent != null)
-        {
-            bulletComponent.from = gameObject;
-            bulletComponent.damage = (int)_owner.Stats.TotalStats[EStatType.Attack].Value;
-            bulletComponent.SetBullet(camShootDirection);
-        }
-
-        impulseSource.m_DefaultVelocity = defaultImpulseValue * _currentShootTime;
-        _owner.ApplyRecoil(impulseSource, recoilX * _currentShootTime, recoilY * _currentShootTime);
+        Destroy(Instantiate(bulletPrefab, targetPoint, Quaternion.identity), 0.5f);
     }
 }
