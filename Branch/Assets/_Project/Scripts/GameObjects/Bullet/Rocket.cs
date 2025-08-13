@@ -1,4 +1,4 @@
-﻿using Monster;
+using Monster;
 using UnityEngine;
 
 namespace _Project.Scripts.GameObjects.Bullet
@@ -83,7 +83,7 @@ namespace _Project.Scripts.GameObjects.Bullet
                 MonsterBase monster = collider.GetComponent<MonsterBase>();
                 if (monster != null)
                 {
-                    monster.TakeDamage(damage);
+                    monster.TakeDamage((int)damage);
                 }
             }
 

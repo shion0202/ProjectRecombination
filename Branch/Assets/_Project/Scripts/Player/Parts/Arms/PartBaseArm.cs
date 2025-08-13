@@ -49,7 +49,7 @@ public class PartBaseArm : PartBase
     public override void UseCancleAbility()
     {
         _isShooting = false;
-        _currentShootTime = 0.0f;
+        //_currentShootTime = 0.0f;
     }
 
     // Update에서 호출되는 사격 함수
@@ -65,10 +65,7 @@ public class PartBaseArm : PartBase
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {
-            bulletComponent.from = _owner.gameObject;
-            bulletComponent.to = targetPoint;
-            bulletComponent.damage = (int)_owner.Stats.TotalStats[EStatType.Attack].Value;
-            bulletComponent.SetBullet(camShootDirection);
+            bulletComponent.Init(_owner.gameObject, bulletSpawnPoint.position, Vector3.zero, camShootDirection, (int)_owner.Stats.TotalStats[EStatType.Attack].Value);
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);

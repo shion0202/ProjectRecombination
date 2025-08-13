@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2675220451391203434}
   - component: {fileID: 6022039817454698780}
   - component: {fileID: 6408456888581578825}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Missile
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -146,5 +146,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca8d399b5b1e684a80c0861bff2ded2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 6022039817454698780}
+  bulletSpeed: 20
+  isCheckCollisionByBullet: 1
+  lifeTime: 3
   explosionEffectPrefab: {fileID: 6337632206232331454, guid: c5a4acf4f9230c9499752be436b89fed,
     type: 3}
+  explosionRange: 1
+  turnSpeed: 120

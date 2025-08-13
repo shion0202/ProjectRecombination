@@ -19,6 +19,6 @@ MonoBehaviour:
   DataList:
   - maxHp: 500
     attack: 10
-    fireSpeed: 0.1
+    fireSpeed: 0
     defence: 15
-    moveSpeed: 5
+    moveSpeed: 6

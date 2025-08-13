@@ -1,79 +1,67 @@
+using Monster;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
-public class Missile : MonoBehaviour
+public class Missile : Bullet
 {
-    [Header("발사 세팅")]
-    public GameObject missilePrefab;
-    public Transform firePoint;
-    public float maxRange = 60f;
-    public float flightTime = 1.5f; // 전체 비행 시간
+    [SerializeField] private float turnSpeed = 120f; // 초당 회전 속도 (deg/s)
+    private Coroutine _projectileCoroutine = null;
 
-    [Header("초기 랜덤 방향 세팅")]
-    public float maxYawAngle = 90f; // 좌우 방향 최대 90도씩 = 180도 범위
-    public float maxPitchAngle = 10f; // 상하 각도 범위 (조절 가능)
-
-    [Header("속도 및 회전 설정")]
-    public float missileSpeed = 30f;
-    public float turnSpeed = 90f; // 초당 회전 속도 (deg/s)
-
-    [Header("폭발 이펙트")]
-    public GameObject explosionEffectPrefab;
-
-    void Update()
+    protected override void OnTriggerEnter(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (!isCheckCollisionByBullet) return;
+
+        // 플레이어가 발사한 총알
+        if (from.CompareTag("Player") && other.CompareTag("Enemy"))
         {
-            FireMissile();
+            DestroyBullet();
+            return;
+        }
+
+        // 적이 발사한 총알
+        if (from.CompareTag("Enemy") && other.CompareTag("Player"))
+        {
+            DestroyBullet();
+            return;
+        }
+
+        // 벽(또는 기타 오브젝트)에 닿은 경우
+        if (other.CompareTag("Wall") || other.CompareTag("Obstacle"))
+        {
+            DestroyBullet();
+            return;
         }
     }
 
-    void FireMissile()
+    protected override void DestroyBullet()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        Vector3 targetPoint;
-
-        if (Physics.Raycast(ray, out hit, maxRange))
-            targetPoint = hit.point;
-        else
-            targetPoint = ray.origin + ray.direction * maxRange;
-
-        GameObject missile = Instantiate(missilePrefab, firePoint.position, Quaternion.identity);
-
-        // 목표까지 거리
-        float distance = Vector3.Distance(firePoint.position, targetPoint);
-
-        // 직선 비행 거리: 거리의 절반 사용
-        float straightDistance = distance * 0.5f;
-        // 직선 비행 시간 = 거리 / 속도
-        float initialFlightTime = straightDistance / missileSpeed;
-
-        // 캐릭터 정면 기준 랜덤 방향 생성
-        Vector3 randomDir = GetRandomDirection(firePoint.forward);
-
-        StartCoroutine(MissileRoutine(missile, randomDir, targetPoint, initialFlightTime));
+        if (_projectileCoroutine != null)
+        {
+            StopCoroutine(_projectileCoroutine);
+        }
+        Explode();
     }
 
-    Vector3 GetRandomDirection(Vector3 forward)
+    protected override void StartBulletLogic(Vector3 direction, Vector3 start)
     {
-        // 좌우 yaw -maxYaw ~ +maxYawdeg, 상하 pitch -maxPitch ~ +maxPitchdeg
-        float yaw = Random.Range(-maxYawAngle, maxYawAngle);
-        float pitch = Random.Range(-maxPitchAngle, maxPitchAngle);
-        Quaternion rot = Quaternion.Euler(pitch, yaw, 0);
-        return rot * forward;
+        _projectileCoroutine = StartCoroutine(CoMissileRoutine(direction, start));
     }
 
-    IEnumerator MissileRoutine(GameObject missile, Vector3 initialDir, Vector3 target, float initialFlightTime)
+    IEnumerator CoMissileRoutine(Vector3 initialDir, Vector3 fromPos)
     {
         float elapsed = 0f;
-        missile.transform.forward = initialDir;
+        transform.forward = initialDir;
+
+        float distance = Vector3.Distance(fromPos, _targetPos);    // 목표까지 거리
+        float straightDistance = distance * 0.3f;                   // 직선 비행 거리: 거리의 절반 사용
+        float initialFlightTime = straightDistance / bulletSpeed;  // 직선 비행 시간 = 거리 / 속도
 
         // 1. 초기 직선 비행 (거리 기반 시간)
         while (elapsed < initialFlightTime)
         {
-            missile.transform.position += missile.transform.forward * missileSpeed * Time.deltaTime;
+            transform.position += transform.forward * bulletSpeed * Time.deltaTime;
             elapsed += Time.deltaTime;
             yield return null;
         }
@@ -82,31 +70,23 @@ public class Missile : MonoBehaviour
         bool reached = false;
         while (!reached)
         {
-            Vector3 dirToTarget = (target - missile.transform.position).normalized;
-            missile.transform.forward = Vector3.RotateTowards(
-                missile.transform.forward,
+            Vector3 dirToTarget = (_targetPos - transform.position).normalized;
+            transform.forward = Vector3.RotateTowards(
+                transform.forward,
                 dirToTarget,
                 Mathf.Deg2Rad * turnSpeed * Time.deltaTime,
                 0f
             );
 
-            missile.transform.position += missile.transform.forward * missileSpeed * Time.deltaTime;
+            transform.position += transform.forward * bulletSpeed * Time.deltaTime;
 
-            if (Vector3.Distance(missile.transform.position, target) < 1.5f)
+            if (Vector3.Distance(transform.position, _targetPos) < 1.0f)
             {
-                Explode(missile);
+                Explode();
                 reached = true;
             }
 
             yield return null;
         }
-    }
-
-    void Explode(GameObject missile)
-    {
-        if (explosionEffectPrefab)
-            Instantiate(explosionEffectPrefab, missile.transform.position, Quaternion.identity);
-
-        Destroy(missile);
     }
 }

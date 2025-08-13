@@ -5,15 +5,48 @@ using Monster;
 
 public class Bullet : MonoBehaviour
 {
-    private int _damage;
+    [SerializeField] protected Rigidbody rb;
+
+    [SerializeField] protected float bulletSpeed = 30.0f;
+    [SerializeField] protected bool isCheckCollisionByBullet = true;
+    private float _damage;
     private GameObject _from; // 발사 주체
-    private Vector3 _to;
+    protected Vector3 _targetPos;
+
     [SerializeField] private float lifeTime = 5f; // 총알의 생명 시간
     private float _timer;
 
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private bool isCollision = true;
-    [SerializeField] private float bulletSpeed = 30.0f;
+    [SerializeField] protected GameObject explosionEffectPrefab;
+    [SerializeField] protected float explosionRange = 0.0f;
+
+    protected float LifeTime
+    {
+        get => lifeTime;
+        set => lifeTime = value;
+    }
+
+    protected float Timer
+    {
+        get => _timer;
+        set => _timer = value;
+    }
+
+    public float damage
+    {
+        get => _damage;
+        set => _damage = value;
+    }
+
+    public GameObject from
+    {
+        get => _from;
+        set => _from = value;
+    }
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     private void Start()
     {
@@ -28,49 +61,19 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            DestroyBullet();
         }
     }
-    
-    protected float LifeTime
-    {
-        get => lifeTime;
-        set => lifeTime = value;
-    }
-    
-    protected float Timer
-    {
-        get => _timer;
-        set => _timer = value;
-    }
 
-    public int damage 
+    private void OnDrawGizmos()
     {
-        get => _damage;
-        set => _damage = value;
-    }
-    
-    public GameObject from
-    {
-        get => _from;
-        set => _from = value;
-    }
-
-    public Vector3 to
-    {
-        get => _to;
-        set => _to = value;
-    }
-
-    public void SetBullet(Vector3 direction)
-    {
-        rb.velocity = direction * bulletSpeed;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(_targetPos, explosionRange);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (!isCollision)
-            return;
+        if (!isCheckCollisionByBullet) return;
 
         // 총알의 규칙
         // 1. 플레이어가 발사한 총알은 적에게만 데미지를 입힌다.
@@ -84,7 +87,7 @@ public class Bullet : MonoBehaviour
             var monster = other.GetComponent<MonsterBase>();
             if (monster != null)
             {
-                monster.TakeDamage(_damage);
+                monster.TakeDamage((int)_damage);
                 Destroy(gameObject); // 총알 파괴
             }
             else
@@ -92,7 +95,7 @@ public class Bullet : MonoBehaviour
                 monster = other.GetComponentInParent<MonsterBase>();
                 if (monster != null)
                 {
-                    monster.TakeDamage(_damage);
+                    monster.TakeDamage((int)_damage);
                     Destroy(gameObject);
                 }
                 else
@@ -123,5 +126,33 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject); // 총알 파괴
             return;
         }
+    }
+
+    public void Init(GameObject shooter, Vector3 start, Vector3 end, Vector3 direction, float damage)
+    {
+        _from = shooter;
+        _targetPos = end;
+        _damage = damage;
+
+        StartBulletLogic(direction, start);
+    }
+
+    protected virtual void StartBulletLogic(Vector3 direction, Vector3 start)
+    {
+        rb.velocity = direction * bulletSpeed;
+    }
+
+    protected virtual void DestroyBullet()
+    {
+        Destroy(gameObject);
+    }
+
+    protected void Explode()
+    {
+        if (explosionEffectPrefab != null)
+        {
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+        }
+        Destroy(gameObject);
     }
 }
