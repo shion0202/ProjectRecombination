@@ -1,0 +1,529 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f158387b8ce5bd46b875b3d3209f3bc, type: 3}
+  m_Name: ParamData_CharacterStats
+  m_EditorClassIdentifier: 
+  sheetLink: 1Haa-bYjMBgwnmZcYOElVQ2_zyMGfy0GDxbJr5TP6pF8
+  workSheetGid: 1356029795
+  datas:
+  - statEntries:
+    - key: 14
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4001
+        stringValue: 
+        boolValue: 0
+    - key: 15
+      value:
+        Type: 2
+        floatValue: 0
+        intValue: 0
+        stringValue: Player
+        boolValue: 0
+    - key: 0
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 500
+        stringValue: 
+        boolValue: 0
+    - key: 1
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 10
+        stringValue: 
+        boolValue: 0
+    - key: 3
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 5
+        stringValue: 
+        boolValue: 0
+    - key: 4
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 5
+        stringValue: 
+        boolValue: 0
+    - key: 5
+      value:
+        Type: 0
+        floatValue: 0.5
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 6
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 15
+        stringValue: 
+        boolValue: 0
+    - key: 7
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+  - statEntries:
+    - key: 14
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4002
+        stringValue: 
+        boolValue: 0
+    - key: 15
+      value:
+        Type: 2
+        floatValue: 0
+        intValue: 0
+        stringValue: androidGuard
+        boolValue: 0
+    - key: 0
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 450
+        stringValue: 
+        boolValue: 0
+    - key: 1
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 50
+        stringValue: 
+        boolValue: 0
+    - key: 3
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4
+        stringValue: 
+        boolValue: 0
+    - key: 4
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 7
+        stringValue: 
+        boolValue: 0
+    - key: 5
+      value:
+        Type: 0
+        floatValue: 1.7
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 6
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 7
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 15
+        stringValue: 
+        boolValue: 0
+  - statEntries:
+    - key: 14
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4003
+        stringValue: 
+        boolValue: 0
+    - key: 15
+      value:
+        Type: 2
+        floatValue: 0
+        intValue: 0
+        stringValue: securityDrone
+        boolValue: 0
+    - key: 0
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 300
+        stringValue: 
+        boolValue: 0
+    - key: 1
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 60
+        stringValue: 
+        boolValue: 0
+    - key: 3
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 3
+        stringValue: 
+        boolValue: 0
+    - key: 4
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 7
+        stringValue: 
+        boolValue: 0
+    - key: 5
+      value:
+        Type: 0
+        floatValue: 1.1
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 6
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 7
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 18
+        stringValue: 
+        boolValue: 0
+  - statEntries:
+    - key: 14
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4004
+        stringValue: 
+        boolValue: 0
+    - key: 15
+      value:
+        Type: 2
+        floatValue: 0
+        intValue: 0
+        stringValue: twistedSpectre
+        boolValue: 0
+    - key: 0
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 350
+        stringValue: 
+        boolValue: 0
+    - key: 1
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 55
+        stringValue: 
+        boolValue: 0
+    - key: 3
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 9
+        stringValue: 
+        boolValue: 0
+    - key: 4
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 12
+        stringValue: 
+        boolValue: 0
+    - key: 5
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 3
+        stringValue: 
+        boolValue: 0
+    - key: 6
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 7
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 22
+        stringValue: 
+        boolValue: 0
+  - statEntries:
+    - key: 14
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4005
+        stringValue: 
+        boolValue: 0
+    - key: 15
+      value:
+        Type: 2
+        floatValue: 0
+        intValue: 0
+        stringValue: corruptedHunter
+        boolValue: 0
+    - key: 0
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 500
+        stringValue: 
+        boolValue: 0
+    - key: 1
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 75
+        stringValue: 
+        boolValue: 0
+    - key: 3
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 8
+        stringValue: 
+        boolValue: 0
+    - key: 4
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 11
+        stringValue: 
+        boolValue: 0
+    - key: 5
+      value:
+        Type: 0
+        floatValue: 1.25
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 6
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 7
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 20
+        stringValue: 
+        boolValue: 0
+  - statEntries:
+    - key: 14
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4006
+        stringValue: 
+        boolValue: 0
+    - key: 15
+      value:
+        Type: 2
+        floatValue: 0
+        intValue: 0
+        stringValue: siegeBreaker
+        boolValue: 0
+    - key: 0
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4000
+        stringValue: 
+        boolValue: 0
+    - key: 1
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 90
+        stringValue: 
+        boolValue: 0
+    - key: 3
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4
+        stringValue: 
+        boolValue: 0
+    - key: 4
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 9
+        stringValue: 
+        boolValue: 0
+    - key: 5
+      value:
+        Type: 0
+        floatValue: 1.75
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 6
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 7
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 80
+        stringValue: 
+        boolValue: 0
+  - statEntries:
+    - key: 14
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4007
+        stringValue: 
+        boolValue: 0
+    - key: 15
+      value:
+        Type: 2
+        floatValue: 0
+        intValue: 0
+        stringValue: executioner
+        boolValue: 0
+    - key: 0
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 7000
+        stringValue: 
+        boolValue: 0
+    - key: 1
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 80
+        stringValue: 
+        boolValue: 0
+    - key: 3
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 7
+        stringValue: 
+        boolValue: 0
+    - key: 4
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 11
+        stringValue: 
+        boolValue: 0
+    - key: 5
+      value:
+        Type: 0
+        floatValue: 1.9
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 6
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 7
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 80
+        stringValue: 
+        boolValue: 0
+  - statEntries:
+    - key: 14
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 4008
+        stringValue: 
+        boolValue: 0
+    - key: 15
+      value:
+        Type: 2
+        floatValue: 0
+        intValue: 0
+        stringValue: amon
+        boolValue: 0
+    - key: 0
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 12000
+        stringValue: 
+        boolValue: 0
+    - key: 1
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 100
+        stringValue: 
+        boolValue: 0
+    - key: 3
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 8
+        stringValue: 
+        boolValue: 0
+    - key: 4
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 12
+        stringValue: 
+        boolValue: 0
+    - key: 5
+      value:
+        Type: 0
+        floatValue: 1.8
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 6
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 0
+        stringValue: 
+        boolValue: 0
+    - key: 7
+      value:
+        Type: 1
+        floatValue: 0
+        intValue: 100
+        stringValue: 
+        boolValue: 0

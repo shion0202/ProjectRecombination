@@ -91,7 +91,7 @@ public class ArmLaserChase : PartBaseArm
                         monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
                     }
                 }
-                _currentShootTime = (_owner.Stats.BaseStats[EStatType.FireSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.FireSpeed].Value);
+                _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].Value);
             }
         }
         else

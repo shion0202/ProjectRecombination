@@ -1,24 +1,31 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum EStatType
 {
-    // CurrentHealth,  // 현재 HP
-    MaxHp,          // 최대 HP
+    MaxHp,
     Attack,
-    FireSpeed,
-    Defence,
     MoveSpeed,
+    MinimumMoveSpeed,
+    MaximumMoveSpeed,
+    AttackSpeed,
+    Defence,
+    DetectiveRange,
+
     AttackSkillDamage,
     SkillSpeed,
     SkillCount,
     SkillCooldown,
     CooldownDecrease,
     AttackAilment,
+
+    Index,
+    Name,               // string
 }
 
 // 개별 스탯 데이터 클래스
+[System.Serializable]
 public class StatData
 {
     private EStatType _statType;

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GoogleSheetsToUnity;
@@ -30,7 +30,7 @@ public class CharacterParamData
                 {
                     { EStatType.MaxHp, maxHp },
                     { EStatType.Attack, attack },
-                    { EStatType.FireSpeed, fireSpeed },
+                    { EStatType.AttackSpeed, fireSpeed },
                     { EStatType.Defence, defence },
                     { EStatType.MoveSpeed, moveSpeed }
                 };

@@ -31,7 +31,7 @@ public class PartBaseArm : PartBase
         _currentShootTime -= Time.deltaTime;
         if (_currentShootTime <= 0.0f)
         {
-            _currentShootTime = (_owner.Stats.BaseStats[EStatType.FireSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.FireSpeed].Value);
+            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].Value);
             Shoot();
         }
     }
