@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum EStatType
 {
+    Index,
     MaxHp,
     Attack,
     MoveSpeed,
@@ -13,57 +14,46 @@ public enum EStatType
     Defence,
     DetectiveRange,
 
-    AttackSkillDamage,
+    PartType,
+    SkillDamage,
     SkillSpeed,
     SkillCount,
     SkillCooldown,
     CooldownDecrease,
-    AttackAilment,
-
-    Index,
-    Name,               // string
+    Ailment,
 }
 
 // 개별 스탯 데이터 클래스
 [System.Serializable]
 public class StatData
 {
-    private EStatType _statType;
-    private float _defaultValue;
-    private float _minValue;
-    private float _maxValue;
-    private float _value;
+    public EStatType statType;
+    public float value;
+    public float minValue;
+    public float maxValue;
 
-    public EStatType StatType { get { return _statType; } }
-    public float DefaultValue { get { return _defaultValue; } }
-    public float MinValue { get {  return _minValue; } }
-    public float MaxValue { get { return _maxValue; } }
-
-    public float Value
+    public StatData(EStatType type, float value, float min = float.MinValue, float max = float.MaxValue)
     {
-        get => _value;
-        set => _value = Mathf.Clamp(value, _minValue, _maxValue);
+        statType = type;
+        minValue = min;
+        maxValue = max;
+        SetValue(value);
     }
 
-    public StatData(EStatType statType, float defaultValue, float maxValue, float minValue)
+    public void SetValue(float newValue)
     {
-        _statType = statType;
-        _defaultValue = defaultValue;
-        _minValue = minValue;
-        _maxValue = maxValue;
-
-        _value = _defaultValue;
+        value = Mathf.Clamp(newValue, minValue, maxValue);
     }
 
-    // 스탯 값의 증감 함수
-    // 단순히 스탯 값을 변경하는 것은 Property로 처리
-    public void Modify(float newValue)
+    public void AddValue(float add)
     {
-        _value = Mathf.Clamp(_value + newValue, _minValue, _maxValue);
+        SetValue(value + add);
     }
 
-    public void Reset()
+    public float GetValue() => value;
+
+    public StatData Clone()
     {
-        _value = _defaultValue;
+        return new StatData(statType, value, minValue, maxValue);
     }
 }

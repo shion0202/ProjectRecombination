@@ -9,33 +9,10 @@ using UnityEditor;
 using Unity.EditorCoroutines.Editor;
 #endif
 
-[System.Serializable]
-public class StatValue
+public enum EValueType
 {
-    public enum ValueType { Float, Int, String, Bool }
-
-    public ValueType Type;
-    public float floatValue;
-    public int intValue;
-    public string stringValue;
-    public bool boolValue;
-
-    public object GetValue()
-    {
-        return Type switch
-        {
-            ValueType.Float => floatValue,
-            ValueType.Int => intValue,
-            ValueType.String => stringValue,
-            ValueType.Bool => boolValue,
-            _ => null
-        };
-    }
-
-    public T GetValue<T>()
-    {
-        return (T)GetValue();
-    }
+    Float,
+    Int,
 }
 
 [System.Serializable]
@@ -45,65 +22,56 @@ public class RowData
     public struct StatEntry
     {
         public EStatType key;
-        public StatValue value;
+        public StatData value;
     }
 
     [SerializeField] private List<StatEntry> statEntries = new List<StatEntry>();
-    private Dictionary<EStatType, StatValue> _stats;
+    private StatDictionary _stats;
+    private bool _isDirty = true;
 
-    public Dictionary<EStatType, StatValue> Stats
+    public StatDictionary Stats
     {
         get
         {
-            if (_stats == null)
+            if (_isDirty || _stats == null)
             {
-                _stats = new Dictionary<EStatType, StatValue>();
-                foreach (var entry in statEntries)
-                    _stats[entry.key] = entry.value;
+                BuildDictionary();
             }
             return _stats;
         }
     }
 
-    public T GetStat<T>(EStatType key)
+    private void BuildDictionary()
     {
-        if (Stats.TryGetValue(key, out var stat))
-            return stat.GetValue<T>();
-        return default;
+        _stats = new StatDictionary();
+        foreach (var entry in statEntries)
+        {
+            _stats.SetStat(entry.value);
+        }
+        _isDirty = false;
     }
 
-    public void SetStat(EStatType key, object value)
+    public float GetStat(EStatType key)
     {
-        if (_stats == null) _stats = new Dictionary<EStatType, StatValue>();
+        var stat = Stats[key];
+        return stat != null ? stat.value : 0.0f;
+    }
 
-        StatValue val = new StatValue();
-        switch (value)
+    public void SetStat(EStatType key, float value)
+    {
+        var idx = statEntries.FindIndex(e => e.key == key);
+        var newData = new StatData(key, value);
+
+        if (idx >= 0)
         {
-            case float f:
-                val.Type = StatValue.ValueType.Float;
-                val.floatValue = f;
-                break;
-            case int i:
-                val.Type = StatValue.ValueType.Int;
-                val.intValue = i;
-                break;
-            case bool b:
-                val.Type = StatValue.ValueType.Bool;
-                val.boolValue = b;
-                break;
-            case string s:
-                val.Type = StatValue.ValueType.String;
-                val.stringValue = s;
-                break;
+            statEntries[idx] = new StatEntry { key = key, value = newData };
+        }
+        else
+        {
+            statEntries.Add(new StatEntry { key = key, value = newData });
         }
 
-        _stats[key] = val;
-
-        int index = statEntries.FindIndex(e => e.key.Equals(key));
-        if (index >= 0)
-            statEntries[index] = new StatEntry { key = key, value = val };
-        else
-            statEntries.Add(new StatEntry { key = key, value = val });
+        _isDirty = true;
     }
 }
 
@@ -111,10 +79,9 @@ public class RowData
 public class GoogleSheetLoader : ScriptableObject
 {
     private static readonly Dictionary<string, EStatType> headerToStatType =
-        new Dictionary<string, EStatType>(StringComparer.OrdinalIgnoreCase)
+        new(StringComparer.OrdinalIgnoreCase)
         {
             { "Index", EStatType.Index },
-            { "Name", EStatType.Name },
             { "HP", EStatType.MaxHp },
             { "Damage", EStatType.Attack },
             { "MinSpeed", EStatType.MinimumMoveSpeed },
@@ -122,6 +89,20 @@ public class GoogleSheetLoader : ScriptableObject
             { "AttackSpeed", EStatType.AttackSpeed },
             { "Defence", EStatType.Defence },
             { "DetectiveRange", EStatType.DetectiveRange },
+
+            { "partsID", EStatType.Index },
+            { "partsType", EStatType.PartType },
+            { "attack", EStatType.Attack },
+            { "fireRapid", EStatType.AttackSpeed },
+            { "addHp", EStatType.MaxHp },
+            { "addDefence", EStatType.Defence },
+            { "addSpeed", EStatType.MoveSpeed },
+            { "cooldownDecrease", EStatType.CooldownDecrease },
+            { "attackSkillDamage", EStatType.SkillDamage },
+            { "skillSpeed", EStatType.SkillSpeed },
+            { "skillCount", EStatType.SkillCount },
+            { "skillCooldown", EStatType.SkillCooldown },
+            { "attackAilment", EStatType.Ailment },
             // 필요하면 계속 추가
         };
 
@@ -145,12 +126,18 @@ public class GoogleSheetLoader : ScriptableObject
         return null;
     }
 
+    private void OnEnable()
+    {
+        if (_dataDict == null && datas != null && datas.Count > 0)
+            BuildDictionary();
+    }
+
     private void BuildDictionary()
     {
         _dataDict = new Dictionary<int, RowData>();
         for (int i = 0; i < datas.Count; i++)
         {
-            _dataDict[i] = datas[i];
+            _dataDict[(int)datas[i].GetStat(EStatType.Index)] = datas[i];
         }
     }
 
@@ -163,7 +150,7 @@ public class GoogleSheetLoader : ScriptableObject
     private void ParseCsv(string csv)
     {
         datas.Clear();
-        string[] lines = csv.Split('\n');
+        string[] lines = csv.Replace("\r", "").Split('\n');
         if (lines.Length < 2) return;
         string[] headers = lines[0].Trim().Split(',');
 
@@ -177,29 +164,24 @@ public class GoogleSheetLoader : ScriptableObject
 
             for (int j = 0; j < headers.Length && j < values.Length; j++)
             {
-                EStatType statType;
-
                 // 매핑 딕셔너리 우선 사용
-                if (!headerToStatType.TryGetValue(headers[j], out statType))
+                // 매핑에 없으면 Enum.TryParse 시도
+                if (!headerToStatType.TryGetValue(headers[j], out var statType) && !Enum.TryParse(headers[j], true, out statType))
                 {
-                    // 매핑에 없으면 Enum.TryParse 시도
-                    if (!Enum.TryParse(headers[j], true, out statType))
-                    {
-                        Debug.LogWarning($"[Row {i}] 알 수 없는 StatType: {headers[j]}");
-                        continue;
-                    }
+                    Debug.LogWarning($"[Row {i}] 알 수 없는 StatType: {headers[j]}");
+                    continue;
                 }
 
                 string raw = values[j];
 
-                if (int.TryParse(raw, out int intVal))
-                    row.SetStat(statType, intVal);
-                else if (float.TryParse(raw, out float f))
+                if (float.TryParse(raw, out float f))
+                {
                     row.SetStat(statType, f);
-                else if (bool.TryParse(raw, out bool b))
-                    row.SetStat(statType, b);
+                }
                 else
-                    row.SetStat(statType, raw);
+                {
+                    Debug.LogWarning($"[Row {i}] '{headers[j]}' 값 '{raw}'은 숫자가 아닙니다.");
+                }
             }
 
             datas.Add(row);
@@ -224,23 +206,18 @@ public class GoogleSheetLoader : ScriptableObject
 
     private IEnumerator CoLoadDataFromSpreadSheet()
     {
-        using (UnityWebRequest www = UnityWebRequest.Get(GetSheetURL()))
+        using var www = UnityWebRequest.Get(GetSheetURL());
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
         {
-            yield return www.SendWebRequest();
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                string csvData = www.downloadHandler.text;
-                ParseCsv(csvData);
-                Debug.Log($"Google Sheet Data Loaded: {datas.Count} rows");
+            ParseCsv(www.downloadHandler.text);
+            Debug.Log($"Google Sheet Data Loaded: {datas.Count} rows");
 #if UNITY_EDITOR
-                UnityEditor.EditorUtility.SetDirty(this); // 저장 표시
+            UnityEditor.EditorUtility.SetDirty(this);
 #endif
-            }
-            else
-            {
-                Debug.LogError($"Failed to load sheet: {www.error}");
-            }
         }
+        else Debug.LogError($"Failed to load sheet: {www.error}");
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,25 +10,39 @@ public class StatDictionary
     // Indexer 문법: 외부에서 StatDictionary[EStatType] 형태로 접근 가능
     public StatData this[EStatType type]
     {
-        get
+        get => _statDict.TryGetValue(type, out var stat) ? stat : null;
+        set => _statDict[type] = value;
+    }
+
+    public void SetStat(StatData newStat) => _statDict[newStat.statType] = newStat.Clone();
+
+    public void SetStat(EStatType type, float value, float min = float.MinValue, float max = float.MaxValue)
+    {
+        if (_statDict.TryGetValue(type, out var stat))
         {
-            if (_statDict.ContainsKey(type) == false) return null;
-            return _statDict[type];
+            stat.SetValue(value);
+        }
+        else
+        {
+            _statDict[type] = new StatData(type, value, min, max);
         }
     }
 
-    public Dictionary<EStatType, StatData> StatDict
+    public StatDictionary Clone()
     {
-        get { return _statDict; }
+        var clone = new StatDictionary();
+        foreach (var kvp in _statDict)
+        {
+            clone._statDict[kvp.Key] = kvp.Value.Clone();
+        }
+        return clone;
     }
 
-    public void Add(EStatType type, StatData data)
-    {
-        _statDict.Add(type, data);
-    }
+    public IEnumerable<StatData> GetAllStats() => _statDict.Values;
 
-    public bool IsEmpty()
-    {
-        return _statDict.Count == 0;
-    }
+    public void RemoveStat(EStatType type) => _statDict.Remove(type);
+
+    public bool Contains(EStatType type) => _statDict.ContainsKey(type);
+
+    public bool IsEmpty() => _statDict.Count == 0;
 }

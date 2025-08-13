@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// ÆÄÃ÷ ºÎÀ§ Enum
+// íŒŒì¸  ë¶€ìœ„ Enum
 [System.Flags]
 public enum EPartType
 {
@@ -13,8 +13,8 @@ public enum EPartType
     Shoulder = 1 << 3,
 }
 
-// ÆÄÃ÷ ¿¬°áÀ» À§ÇÑ ¸Ş½Ã Á¾·ù Enum
-// Skinned Mesh Renderer¸¦ »ç¿ëÇÏ´õ¶óµµ Ä³ÅÍÇÊ·¯Ã³·³ ¿òÁ÷ÀÌ´Â ¹æ½ÄÀÌ ´Ù¸£´Ù¸é StaticÀ» »ç¿ë
+// íŒŒì¸  ì—°ê²°ì„ ìœ„í•œ ë©”ì‹œ ì¢…ë¥˜ Enum
+// Skinned Mesh Rendererë¥¼ ì‚¬ìš©í•˜ë”ë¼ë„ ìºí„°í•„ëŸ¬ì²˜ëŸ¼ ì›€ì§ì´ëŠ” ë°©ì‹ì´ ë‹¤ë¥´ë‹¤ë©´ Staticì„ ì‚¬ìš©
 public enum EPartMeshType
 {
     Skinned,
@@ -45,17 +45,26 @@ public abstract class PartBase : MonoBehaviour
 
     public void SetPartStat()
     {
-        // ÀÓ½Ã ÆÄÃ÷¸¦ À§ÇÑ °ª
+        // ì„ì‹œ íŒŒì¸ ë¥¼ ìœ„í•œ ê°’
         if (partId % 1000 == 0)
         {
-            _stats.Add(EStatType.Attack, new StatData(EStatType.Attack, 0, 9999, -9999));
+            _stats.SetStat(EStatType.Attack, 0);
             return;
         }
 
-        PartParamData baseParam = Resources.Load<PartParamDataReader>("Params/PartParamData").DataList[partId - (3000 + 1)];
-        foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
+        GoogleSheetLoader baseParam = Resources.Load<GoogleSheetLoader>("Params/ParamData_CharacterParts");
+        if (baseParam != null && baseParam.DataDict.Count > 0)
         {
-            _stats.Add(type, new StatData(type, baseParam[type], 9999, -9999));
+            InitializeFromRow(baseParam.DataDict[partId]);
         }
+        else
+        {
+            Debug.LogWarning("Base Stat ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤.");
+        }
+    }
+
+    public void InitializeFromRow(RowData row)
+    {
+        _stats = row.Stats.Clone();
     }
 }

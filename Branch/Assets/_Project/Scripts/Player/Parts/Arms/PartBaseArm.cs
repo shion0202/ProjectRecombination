@@ -31,7 +31,7 @@ public class PartBaseArm : PartBase
         _currentShootTime -= Time.deltaTime;
         if (_currentShootTime <= 0.0f)
         {
-            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].Value);
+            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].value);
             Shoot();
         }
     }
@@ -65,7 +65,7 @@ public class PartBaseArm : PartBase
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {
-            bulletComponent.Init(_owner.gameObject, bulletSpawnPoint.position, Vector3.zero, camShootDirection, (int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+            bulletComponent.Init(_owner.gameObject, bulletSpawnPoint.position, Vector3.zero, camShootDirection, (int)_owner.Stats.TotalStats[EStatType.Attack].value);
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);

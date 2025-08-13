@@ -81,17 +81,17 @@ public class ArmLaserChase : PartBaseArm
                 MonsterBase monster = currentTarget.GetComponent<MonsterBase>();
                 if (monster != null)
                 {
-                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
                 }
                 else
                 {
                     monster = currentTarget.GetComponentInParent<MonsterBase>();
                     if (monster != null)
                     {
-                        monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                        monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
                     }
                 }
-                _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].Value);
+                _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].value);
             }
         }
         else

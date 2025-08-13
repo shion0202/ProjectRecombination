@@ -1,0 +1,1202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f158387b8ce5bd46b875b3d3209f3bc, type: 3}
+  m_Name: ParamData_CharacterParts
+  m_EditorClassIdentifier: 
+  sheetLink: 1Haa-bYjMBgwnmZcYOElVQ2_zyMGfy0GDxbJr5TP6pF8
+  workSheetGid: 1695227689
+  datas:
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3001
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3002
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 200
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 8
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 12
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 25
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 10
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3003
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 150
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 20
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 12
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 10
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 25
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 10
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0.25
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3004
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 2000
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 15
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 50
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 20
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: -0.5
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3005
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 40
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0.33
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3006
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 90
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0.65
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0.1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0.2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3007
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 95
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0.7
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0.1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0.2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3008
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 40
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0.2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0.2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0.4
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3009
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 35
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0.17
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0.2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0.4
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3010
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 210
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 1.25
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 5
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: -0.25
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3011
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 275
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 1.65
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 5
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: -0.25
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3012
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 3
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3013
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 3
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 50
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 15
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0.5
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3014
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 3
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 100
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 30
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: -1.5
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+  - statEntries:
+    - key: 0
+      value:
+        statType: 0
+        value: 3015
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 9
+      value:
+        statType: 9
+        value: 3
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
+      value:
+        statType: 2
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 6
+      value:
+        statType: 6
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 10
+      value:
+        statType: 10
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 11
+      value:
+        statType: 11
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 12
+      value:
+        statType: 12
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 13
+      value:
+        statType: 13
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 1
+      value:
+        statType: 1
+        value: 50
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 7
+      value:
+        statType: 7
+        value: 10
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 3
+      value:
+        statType: 3
+        value: 2
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 14
+      value:
+        statType: 14
+        value: 0.75
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 15
+      value:
+        statType: 15
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38

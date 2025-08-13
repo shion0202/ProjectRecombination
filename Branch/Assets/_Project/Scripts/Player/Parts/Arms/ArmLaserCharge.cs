@@ -83,14 +83,14 @@ public class ArmLaserCharge : PartBaseArm
                 MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
                 if (monster != null)
                 {
-                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
                 }
                 else
                 {
                     monster = hit.transform.GetComponentInParent<MonsterBase>();
                     if (monster != null)
                     {
-                        monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                        monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
                     }
                 }
 

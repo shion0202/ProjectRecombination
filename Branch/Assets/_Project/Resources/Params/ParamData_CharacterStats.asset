@@ -16,514 +16,394 @@ MonoBehaviour:
   workSheetGid: 1356029795
   datas:
   - statEntries:
-    - key: 14
-      value:
-        Type: 1
-        floatValue: 0
-        intValue: 4001
-        stringValue: 
-        boolValue: 0
-    - key: 15
-      value:
-        Type: 2
-        floatValue: 0
-        intValue: 0
-        stringValue: Player
-        boolValue: 0
     - key: 0
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 500
-        stringValue: 
-        boolValue: 0
+        statType: 0
+        value: 4001
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 1
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 10
-        stringValue: 
-        boolValue: 0
-    - key: 3
+        statType: 1
+        value: 500
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 5
-        stringValue: 
-        boolValue: 0
+        statType: 2
+        value: 10
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 4
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 5
-        stringValue: 
-        boolValue: 0
+        statType: 4
+        value: 5
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 5
       value:
-        Type: 0
-        floatValue: 0.5
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 5
+        value: 5
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 6
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 15
-        stringValue: 
-        boolValue: 0
+        statType: 6
+        value: 0.5
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 7
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 7
+        value: 15
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 8
+      value:
+        statType: 8
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
   - statEntries:
-    - key: 14
-      value:
-        Type: 1
-        floatValue: 0
-        intValue: 4002
-        stringValue: 
-        boolValue: 0
-    - key: 15
-      value:
-        Type: 2
-        floatValue: 0
-        intValue: 0
-        stringValue: androidGuard
-        boolValue: 0
     - key: 0
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 450
-        stringValue: 
-        boolValue: 0
+        statType: 0
+        value: 4002
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 1
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 50
-        stringValue: 
-        boolValue: 0
-    - key: 3
+        statType: 1
+        value: 450
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 4
-        stringValue: 
-        boolValue: 0
+        statType: 2
+        value: 50
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 4
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 7
-        stringValue: 
-        boolValue: 0
+        statType: 4
+        value: 4
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 5
       value:
-        Type: 0
-        floatValue: 1.7
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 5
+        value: 7
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 6
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 6
+        value: 1.7
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 7
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 15
-        stringValue: 
-        boolValue: 0
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 8
+      value:
+        statType: 8
+        value: 15
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
   - statEntries:
-    - key: 14
-      value:
-        Type: 1
-        floatValue: 0
-        intValue: 4003
-        stringValue: 
-        boolValue: 0
-    - key: 15
-      value:
-        Type: 2
-        floatValue: 0
-        intValue: 0
-        stringValue: securityDrone
-        boolValue: 0
     - key: 0
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 300
-        stringValue: 
-        boolValue: 0
+        statType: 0
+        value: 4003
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 1
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 60
-        stringValue: 
-        boolValue: 0
-    - key: 3
+        statType: 1
+        value: 300
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 3
-        stringValue: 
-        boolValue: 0
+        statType: 2
+        value: 60
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 4
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 7
-        stringValue: 
-        boolValue: 0
+        statType: 4
+        value: 3
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 5
       value:
-        Type: 0
-        floatValue: 1.1
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 5
+        value: 7
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 6
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 6
+        value: 1.1
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 7
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 18
-        stringValue: 
-        boolValue: 0
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 8
+      value:
+        statType: 8
+        value: 18
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
   - statEntries:
-    - key: 14
-      value:
-        Type: 1
-        floatValue: 0
-        intValue: 4004
-        stringValue: 
-        boolValue: 0
-    - key: 15
-      value:
-        Type: 2
-        floatValue: 0
-        intValue: 0
-        stringValue: twistedSpectre
-        boolValue: 0
     - key: 0
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 350
-        stringValue: 
-        boolValue: 0
+        statType: 0
+        value: 4004
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 1
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 55
-        stringValue: 
-        boolValue: 0
-    - key: 3
+        statType: 1
+        value: 350
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 9
-        stringValue: 
-        boolValue: 0
+        statType: 2
+        value: 55
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 4
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 12
-        stringValue: 
-        boolValue: 0
+        statType: 4
+        value: 9
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 5
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 3
-        stringValue: 
-        boolValue: 0
+        statType: 5
+        value: 12
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 6
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 6
+        value: 3
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 7
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 22
-        stringValue: 
-        boolValue: 0
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 8
+      value:
+        statType: 8
+        value: 22
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
   - statEntries:
-    - key: 14
-      value:
-        Type: 1
-        floatValue: 0
-        intValue: 4005
-        stringValue: 
-        boolValue: 0
-    - key: 15
-      value:
-        Type: 2
-        floatValue: 0
-        intValue: 0
-        stringValue: corruptedHunter
-        boolValue: 0
     - key: 0
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 500
-        stringValue: 
-        boolValue: 0
+        statType: 0
+        value: 4005
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 1
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 75
-        stringValue: 
-        boolValue: 0
-    - key: 3
+        statType: 1
+        value: 500
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 8
-        stringValue: 
-        boolValue: 0
+        statType: 2
+        value: 75
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 4
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 11
-        stringValue: 
-        boolValue: 0
+        statType: 4
+        value: 8
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 5
       value:
-        Type: 0
-        floatValue: 1.25
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 5
+        value: 11
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 6
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 6
+        value: 1.25
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 7
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 20
-        stringValue: 
-        boolValue: 0
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 8
+      value:
+        statType: 8
+        value: 20
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
   - statEntries:
-    - key: 14
-      value:
-        Type: 1
-        floatValue: 0
-        intValue: 4006
-        stringValue: 
-        boolValue: 0
-    - key: 15
-      value:
-        Type: 2
-        floatValue: 0
-        intValue: 0
-        stringValue: siegeBreaker
-        boolValue: 0
     - key: 0
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 4000
-        stringValue: 
-        boolValue: 0
+        statType: 0
+        value: 4006
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 1
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 90
-        stringValue: 
-        boolValue: 0
-    - key: 3
+        statType: 1
+        value: 4000
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 4
-        stringValue: 
-        boolValue: 0
+        statType: 2
+        value: 90
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 4
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 9
-        stringValue: 
-        boolValue: 0
+        statType: 4
+        value: 4
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 5
       value:
-        Type: 0
-        floatValue: 1.75
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 5
+        value: 9
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 6
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 6
+        value: 1.75
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 7
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 80
-        stringValue: 
-        boolValue: 0
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 8
+      value:
+        statType: 8
+        value: 80
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
   - statEntries:
-    - key: 14
-      value:
-        Type: 1
-        floatValue: 0
-        intValue: 4007
-        stringValue: 
-        boolValue: 0
-    - key: 15
-      value:
-        Type: 2
-        floatValue: 0
-        intValue: 0
-        stringValue: executioner
-        boolValue: 0
     - key: 0
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 7000
-        stringValue: 
-        boolValue: 0
+        statType: 0
+        value: 4007
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 1
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 80
-        stringValue: 
-        boolValue: 0
-    - key: 3
+        statType: 1
+        value: 7000
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 7
-        stringValue: 
-        boolValue: 0
+        statType: 2
+        value: 80
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 4
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 11
-        stringValue: 
-        boolValue: 0
+        statType: 4
+        value: 7
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 5
       value:
-        Type: 0
-        floatValue: 1.9
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 5
+        value: 11
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 6
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 6
+        value: 1.9
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 7
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 80
-        stringValue: 
-        boolValue: 0
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 8
+      value:
+        statType: 8
+        value: 80
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
   - statEntries:
-    - key: 14
-      value:
-        Type: 1
-        floatValue: 0
-        intValue: 4008
-        stringValue: 
-        boolValue: 0
-    - key: 15
-      value:
-        Type: 2
-        floatValue: 0
-        intValue: 0
-        stringValue: amon
-        boolValue: 0
     - key: 0
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 12000
-        stringValue: 
-        boolValue: 0
+        statType: 0
+        value: 4008
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 1
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 100
-        stringValue: 
-        boolValue: 0
-    - key: 3
+        statType: 1
+        value: 12000
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 2
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 8
-        stringValue: 
-        boolValue: 0
+        statType: 2
+        value: 100
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 4
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 12
-        stringValue: 
-        boolValue: 0
+        statType: 4
+        value: 8
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 5
       value:
-        Type: 0
-        floatValue: 1.8
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 5
+        value: 12
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 6
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 0
-        stringValue: 
-        boolValue: 0
+        statType: 6
+        value: 1.8
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
     - key: 7
       value:
-        Type: 1
-        floatValue: 0
-        intValue: 100
-        stringValue: 
-        boolValue: 0
+        statType: 7
+        value: 0
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38
+    - key: 8
+      value:
+        statType: 8
+        value: 100
+        minValue: -3.4028235e+38
+        maxValue: 3.4028235e+38

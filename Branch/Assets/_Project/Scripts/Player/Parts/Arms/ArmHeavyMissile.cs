@@ -24,7 +24,7 @@ public class ArmHeavyMissile : PartBaseArm
         _currentShootTime -= Time.deltaTime;
         if (_currentShootTime <= 0.0f)
         {
-            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].Value);
+            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].value);
             Shoot();
         }
     }
@@ -68,7 +68,7 @@ public class ArmHeavyMissile : PartBaseArm
         Bullet bulletComp = missile.GetComponent<Bullet>();
         if (bulletComp != null)
         {
-            bulletComp.Init(_owner.gameObject, bulletSpawnPoint.position, targetPoint, randomDir, (int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+            bulletComp.Init(_owner.gameObject, bulletSpawnPoint.position, targetPoint, randomDir, (int)_owner.Stats.TotalStats[EStatType.Attack].value);
         }
     }
 

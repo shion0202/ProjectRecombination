@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         
         // Debug.Log("Player HP: " + stats.CurrentHealth);
         // GUI HP 바 갱신
-        GUIManager.instance.SetHpSlider(stats.CurrentHealth, stats.TotalStats[EStatType.MaxHp].Value);
+        GUIManager.instance.SetHpSlider(stats.CurrentHealth, stats.TotalStats[EStatType.MaxHp].value);
     }
 
     private void LateUpdate()
@@ -391,7 +391,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         animator.SetFloat("moveY", _moveDirection.z);
         animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
 
-        _totalDirection += CalculateInputDirection() * stats.TotalStats[EStatType.MoveSpeed].Value;
+        _totalDirection += CalculateInputDirection() * stats.TotalStats[EStatType.MoveSpeed].value;
     }
 
     private void SwitchStateToIdle()

@@ -39,7 +39,7 @@ public class ArmRapidCast : PartBaseArm
 
         if (_currentShootTime <= 0.0f)
         {
-            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].Value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].Value) / (1.0f + _chargingTime / maxChargingTime);
+            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].value) / (1.0f + _chargingTime / maxChargingTime);
             Shoot();
         }
     }
@@ -92,14 +92,14 @@ public class ArmRapidCast : PartBaseArm
             MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
             if (monster != null)
             {
-                monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
             }
             else
             {
                 monster = hit.transform.GetComponentInParent<MonsterBase>();
                 if (monster != null)
                 {
-                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
                 }
             }
         }
