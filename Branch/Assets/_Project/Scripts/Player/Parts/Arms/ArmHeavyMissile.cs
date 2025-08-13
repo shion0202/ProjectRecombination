@@ -68,16 +68,16 @@ public class ArmHeavyMissile : PartBaseArm
         Bullet bulletComp = missile.GetComponent<Bullet>();
         if (bulletComp != null)
         {
-            bulletComp.Init(_owner.gameObject, bulletSpawnPoint.position, finalTargetPoint, randomDir, (int)_owner.Stats.TotalStats[EStatType.Attack].Value);
+            bulletComp.Init(_owner.gameObject, bulletSpawnPoint.position, targetPoint, randomDir, (int)_owner.Stats.TotalStats[EStatType.Attack].Value);
         }
     }
 
     protected Vector3 GetRandomDirection(Vector3 forward)
     {
         // 좌우 yaw -maxYaw ~ +maxYawdeg, 상하 pitch -maxPitch ~ +maxPitchdeg
-        float roll = Random.Range(-maxPitchAngle, maxPitchAngle);
+        float roll = Random.Range(0.0f, maxPitchAngle);
         float yaw = Random.Range(-maxYawAngle, maxYawAngle);
-        float pitch = Random.Range(-maxPitchAngle, maxPitchAngle);
+        float pitch = Random.Range(0.0f, maxPitchAngle);
         Quaternion rot = Quaternion.Euler(pitch, yaw, roll);
         return rot * forward;
     }
