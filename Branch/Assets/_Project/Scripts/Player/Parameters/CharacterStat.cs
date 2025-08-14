@@ -115,16 +115,24 @@ public class CharacterStat : MonoBehaviour
         }
 
         // Base Stat 초기화
-        GoogleSheetLoader baseParam = Resources.Load<GoogleSheetLoader>("Params/ParamData_CharacterStats");
-        if (baseParam != null && baseParam.DataDict != null && baseParam.DataDict.Count > 0)
+        GoogleSheetLoader baseParam = Resources.Load<GoogleSheetLoader>("Params/ParamDatas");
+        if (baseParam != null)
         {
-            InitializeFromRow(baseParam.DataDict[4001]);
+            var row = baseParam.GetRow("CharacterStats", 4001);
+            if (row != null)
+            {
+                InitializeFromRow(row);
+            }
+            else
+            {
+                Debug.LogWarning("Bast Stat Index(4001)에 해당하는 데이터가 없습니다.");
+            }
         }
         else
         {
             Debug.LogWarning("Base Stat 데이터가 없습니다.");
         }
-        
+
         _currentBodyHealth = _baseStats[EStatType.MaxHp].value;     // 캐릭터의 바디 체력 값 초기화
         _currentPartHealth = CalculatePartHealth();                 // 기본 파츠 체력 총합 초기화
 

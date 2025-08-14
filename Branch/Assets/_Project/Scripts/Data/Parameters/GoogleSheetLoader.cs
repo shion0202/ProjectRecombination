@@ -16,6 +16,21 @@ public enum EValueType
 }
 
 [System.Serializable]
+public struct SheetInfo
+{
+    public string sheetKey;     // 시트 식별 이름 (ex: "CharacterStats")
+    public string sheetLink;    // 구글 스프레드시트 ID
+    public string workSheetGid; // 시트 GID
+}
+
+[System.Serializable]
+public class SheetData
+{
+    public string sheetKey;                             // 시트 이름
+    public List<RowData> rows = new List<RowData>();    // 해당 시트의 데이터 목록
+}
+
+[System.Serializable]
 public class RowData
 {
     [System.Serializable]
@@ -75,7 +90,7 @@ public class RowData
     }
 }
 
-[CreateAssetMenu(fileName = "ParamData", menuName = "Scriptable Object/Parameter Data", order = 21)]
+[CreateAssetMenu(fileName = "ParamDatas", menuName = "Scriptable Object/Parameter Datas", order = 21)]
 public class GoogleSheetLoader : ScriptableObject
 {
     private static readonly Dictionary<string, EStatType> headerToStatType =
@@ -84,8 +99,8 @@ public class GoogleSheetLoader : ScriptableObject
             { "Index", EStatType.Index },
             { "HP", EStatType.MaxHp },
             { "Damage", EStatType.Attack },
-            { "MinSpeed", EStatType.MinimumMoveSpeed },
-            { "MaxSpeed", EStatType.MaximumMoveSpeed },
+            { "MinSpeed", EStatType.BaseMoveSpeed },
+            { "MaxSpeed", EStatType.BattleMoveSpeed },
             { "AttackSpeed", EStatType.AttackSpeed },
             { "Defence", EStatType.Defence },
             { "DetectiveRange", EStatType.DetectiveRange },
@@ -96,60 +111,98 @@ public class GoogleSheetLoader : ScriptableObject
             { "fireRapid", EStatType.AttackSpeed },
             { "addHp", EStatType.MaxHp },
             { "addDefence", EStatType.Defence },
-            { "addSpeed", EStatType.MoveSpeed },
+            { "addSpeed", EStatType.BaseMoveSpeed },
             { "cooldownDecrease", EStatType.CooldownDecrease },
             { "attackSkillDamage", EStatType.SkillDamage },
             { "skillSpeed", EStatType.SkillSpeed },
             { "skillCount", EStatType.SkillCount },
             { "skillCooldown", EStatType.SkillCooldown },
             { "attackAilment", EStatType.Ailment },
+
             // 필요하면 계속 추가
         };
 
-    [Header("시트 주소")]
-    [SerializeField] private string sheetLink;
-
-    [Header("스프레드시트 GID")]
-    [SerializeField] private string workSheetGid;
+    [Header("시트 목록")]
+    [SerializeField] private List<SheetInfo> sheets = new();
 
     [Header("불러온 데이터 목록")]
-    [SerializeField] private List<RowData> datas = new();
+    [SerializeField] private List<SheetData> sheetDatas = new();
 
     // 런타임 전용 Dictionary (Index → RowData)
-    private Dictionary<int, RowData> _dataDict;
-    public Dictionary<int, RowData> DataDict => _dataDict;
+    private Dictionary<string, Dictionary<int, RowData>> _dataDict = new();
+    public Dictionary<string, Dictionary<int, RowData>> DataDict => _dataDict;
 
-    public RowData GetRow(int index)
+    private void OnEnable()
     {
-        if (_dataDict != null && _dataDict.TryGetValue(index, out var row))
+        if (sheetDatas != null && sheetDatas.Count > 0)
+        {
+            SyncListToDict();
+        }
+        else
+        {
+            Debug.Log($"[GoogleSheetLoader] '{name}' : sheetDatas가 비어있어 딕셔너리를 빌드하지 않았습니다.");
+        }
+    }
+
+    public void SyncListToDict()
+    {
+        _dataDict.Clear();
+        if (sheetDatas == null) return;
+
+        foreach (var sheet in sheetDatas)
+        {
+            if (string.IsNullOrEmpty(sheet.sheetKey)) continue;
+
+            if (_dataDict.ContainsKey(sheet.sheetKey))
+            {
+                Debug.LogWarning($"[GoogleSheetLoader] '{sheet.sheetKey}' 키가 중복됩니다. 마지막 항목만 사용됩니다.");
+            }
+
+            var dict = new Dictionary<int, RowData>();
+            foreach (var row in sheet.rows)
+            {
+                int idx = (int)row.GetStat(EStatType.Index);
+                dict[idx] = row;
+            }
+            _dataDict[sheet.sheetKey] = dict;
+        }
+    }
+
+    public void SyncDictToList()
+    {
+        sheetDatas.Clear();
+        foreach (var kv in _dataDict)
+        {
+            sheetDatas.Add(new SheetData
+            {
+                sheetKey = kv.Key,
+                rows = new List<RowData>(kv.Value.Values)
+            });
+        }
+    }
+
+    public RowData GetRow(string sheetKey, int index)
+    {
+        if (_dataDict.TryGetValue(sheetKey, out var dict) && dict.TryGetValue(index, out var row))
             return row;
         return null;
     }
 
-    private void OnEnable()
+    private string GetSheetURL(string sheetLink, string gid)
     {
-        if (_dataDict == null && datas != null && datas.Count > 0)
-            BuildDictionary();
+        return $"https://docs.google.com/spreadsheets/d/{sheetLink}/export?format=csv&gid={gid}";
     }
 
-    private void BuildDictionary()
+    private void ParseCsv(string sheetKey, string csv)
     {
-        _dataDict = new Dictionary<int, RowData>();
-        for (int i = 0; i < datas.Count; i++)
+        var sheet = sheetDatas.Find(s => s.sheetKey == sheetKey);
+        if (sheet == null)
         {
-            _dataDict[(int)datas[i].GetStat(EStatType.Index)] = datas[i];
+            sheet = new SheetData { sheetKey = sheetKey };
+            sheetDatas.Add(sheet);
         }
-    }
+        sheet.rows.Clear();
 
-    private string GetSheetURL()
-    {
-        string sheetUrl = $"https://docs.google.com/spreadsheets/d/{sheetLink}/export?format=csv&gid={workSheetGid}";
-        return sheetUrl;
-    }
-
-    private void ParseCsv(string csv)
-    {
-        datas.Clear();
         string[] lines = csv.Replace("\r", "").Split('\n');
         if (lines.Length < 2) return;
         string[] headers = lines[0].Trim().Split(',');
@@ -168,26 +221,24 @@ public class GoogleSheetLoader : ScriptableObject
                 // 매핑에 없으면 Enum.TryParse 시도
                 if (!headerToStatType.TryGetValue(headers[j], out var statType) && !Enum.TryParse(headers[j], true, out statType))
                 {
-                    Debug.LogWarning($"[Row {i}] 알 수 없는 StatType: {headers[j]}");
+                    // Debug.Log($"[Row {i}] 알 수 없는 StatType: {headers[j]}");
                     continue;
                 }
 
-                string raw = values[j];
-
-                if (float.TryParse(raw, out float f))
+                if (float.TryParse(values[j], out float f))
                 {
                     row.SetStat(statType, f);
                 }
                 else
                 {
-                    Debug.LogWarning($"[Row {i}] '{headers[j]}' 값 '{raw}'은 숫자가 아닙니다.");
+                    Debug.LogWarning($"[Row {i}] '{headers[j]}' 값 '{values[j]}'은 숫자가 아닙니다.");
                 }
             }
 
-            datas.Add(row);
+            sheet.rows.Add(row);
         }
 
-        BuildDictionary();
+        SyncListToDict();
     }
 
 #if UNITY_EDITOR
@@ -199,26 +250,38 @@ public class GoogleSheetLoader : ScriptableObject
 
     public void ClearData_Editor()
     {
-        datas.Clear();
+        sheetDatas.Clear();
+        _dataDict.Clear();
         EditorUtility.SetDirty(this);
     }
 #endif
 
     private IEnumerator CoLoadDataFromSpreadSheet()
     {
-        using var www = UnityWebRequest.Get(GetSheetURL());
-        yield return www.SendWebRequest();
-
-        if (www.result == UnityWebRequest.Result.Success)
+        foreach (var sheet in sheets)
         {
-            ParseCsv(www.downloadHandler.text);
-            Debug.Log($"Google Sheet Data Loaded: {datas.Count} rows");
+            using var www = UnityWebRequest.Get(GetSheetURL(sheet.sheetLink, sheet.workSheetGid));
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                ParseCsv(sheet.sheetKey, www.downloadHandler.text);
+
+                var loadedSheet = sheetDatas.Find(s => s.sheetKey == sheet.sheetKey);
+                int rowCount = loadedSheet != null ? loadedSheet.rows.Count : 0;
+
+                Debug.Log($"[GoogleSheetLoader] '{sheet.sheetKey}' 로드 완료 (행 {rowCount}개)");
+
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
+                EditorUtility.SetDirty(this);
 #endif
-        }
-        else Debug.LogError($"Failed to load sheet: {www.error}");
+            }
+            else
+            {
+                Debug.LogError($"[GoogleSheetLoader] '{sheet.sheetKey}' 로드 실패: {www.error}");
+            }
     }
+}
 }
 
 #if UNITY_EDITOR
@@ -228,23 +291,24 @@ public class GoogleSheetDataSOEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-
         var so = (GoogleSheetLoader)target;
 
         GUILayout.Space(10);
-
-        if (GUILayout.Button("스프레드시트로부터 데이터 불러오기"))
-        {
+        if (GUILayout.Button("모든 시트 불러오기"))
             so.LoadDataFromSpreadSheet_Editor();
-        }
 
+        GUILayout.Space(5);
+        if (GUILayout.Button("List → Dict 동기화"))
+            so.SyncListToDict();
+
+        if (GUILayout.Button("Dict → List 동기화"))
+            so.SyncDictToList();
+
+        GUILayout.Space(5);
         if (GUILayout.Button("데이터 초기화"))
         {
-            if (EditorUtility.DisplayDialog("데이터 초기화",
-                "저장된 모든 데이터를 삭제하시겠습니까?", "네", "아니요"))
-            {
+            if (EditorUtility.DisplayDialog("데이터 초기화", "모든 시트 데이터를 삭제할까요?", "네", "아니요"))
                 so.ClearData_Editor();
-            }
         }
     }
 }

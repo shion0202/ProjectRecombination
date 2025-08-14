@@ -45,17 +45,18 @@ public abstract class PartBase : MonoBehaviour
 
     public void SetPartStat()
     {
-        // 임시 파츠를 위한 값
-        if (partId % 1000 == 0)
+        GoogleSheetLoader baseParam = Resources.Load<GoogleSheetLoader>("Params/ParamDatas");
+        if (baseParam != null)
         {
-            _stats.SetStat(EStatType.Attack, 0);
-            return;
-        }
-
-        GoogleSheetLoader baseParam = Resources.Load<GoogleSheetLoader>("Params/ParamData_CharacterParts");
-        if (baseParam != null && baseParam.DataDict.Count > 0)
-        {
-            InitializeFromRow(baseParam.DataDict[partId]);
+            var row = baseParam.GetRow("CharacterParts", partId);
+            if (row != null)
+            {
+                InitializeFromRow(row);
+            }
+            else
+            {
+                Debug.LogWarning($"Part Stat Index({partId})에 해당하는 데이터가 없습니다.");
+            }
         }
         else
         {

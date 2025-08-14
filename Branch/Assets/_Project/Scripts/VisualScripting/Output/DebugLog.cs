@@ -8,8 +8,7 @@ namespace _Project.Scripts.VisualScripting
     {
         public override void Execute()
         {
-            Debug.Log("½ÇÇà!");
+            Debug.Log("ì‹¤í–‰!");
         }
     }
-
 }

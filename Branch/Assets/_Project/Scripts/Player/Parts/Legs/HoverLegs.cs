@@ -31,7 +31,7 @@ public class HoverLegs : PartLegsBase
 
         // 부스트 시작
         // 현재는 Base Stat을 변경하지만, 추후 비슷한 기믹이 많아질 경우 Buffer Stat을 추가할 수 있음
-        _owner.Stats.BaseStats[EStatType.MoveSpeed].value = (int)baseSpeed;
+        _owner.Stats.BaseStats[EStatType.BaseMoveSpeed].value = (int)baseSpeed;
         _owner.Stats.CalculateStatsForced();
         _skillCoroutine = StartCoroutine(CoCooldownBoost());
         

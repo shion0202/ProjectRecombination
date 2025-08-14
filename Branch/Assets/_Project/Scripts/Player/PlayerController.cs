@@ -391,7 +391,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         animator.SetFloat("moveY", _moveDirection.z);
         animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
 
-        _totalDirection += CalculateInputDirection() * stats.TotalStats[EStatType.MoveSpeed].value;
+        _totalDirection += CalculateInputDirection() * stats.TotalStats[EStatType.BaseMoveSpeed].value;
     }
 
     private void SwitchStateToIdle()
