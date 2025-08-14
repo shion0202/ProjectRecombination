@@ -387,9 +387,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _currentPlayerState &= ~EPlayerState.Idle;
         _currentPlayerState |= EPlayerState.Moving;
         _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
-        animator.SetFloat("moveX", _moveDirection.x);
-        animator.SetFloat("moveY", _moveDirection.z);
-        animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
+        if (inventory.EquippedItems[EPartType.Legs].IsAnimating)
+        {
+            animator.SetFloat("moveX", _moveDirection.x);
+            animator.SetFloat("moveY", _moveDirection.z);
+            animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
+        }
 
         _totalDirection += CalculateInputDirection() * stats.TotalStats[EStatType.BaseMoveSpeed].value;
     }
@@ -475,12 +478,18 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
         {
-            animator.SetBool("isLeftAttack", true);
+            if (inventory.EquippedItems[EPartType.ArmL].IsAnimating)
+            {
+                animator.SetBool("isLeftAttack", true);
+            }
             inventory.EquippedItems[EPartType.ArmL].UseAbility();
         }
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
-            animator.SetBool("isRightAttack", true);
+            if (inventory.EquippedItems[EPartType.ArmR].IsAnimating)
+            {
+                animator.SetBool("isRightAttack", true);
+            }
             inventory.EquippedItems[EPartType.ArmR].UseAbility();
         }
     }

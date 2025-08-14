@@ -11,9 +11,10 @@ public class PartBaseArm : PartBase
     [SerializeField] protected EPartType _currentPartType = EPartType.ArmL;
     [SerializeField] protected float recoilX = 4.0f;
     [SerializeField] protected float recoilY = 2.0f;
-    [SerializeField] protected LayerMask ignoreMask = 0;
     protected float _currentShootTime = 0.0f;
     protected bool _isShooting = false;
+
+    [SerializeField] protected LayerMask ignoreMask = 0;
 
     protected virtual void Awake()
     {
@@ -36,11 +37,6 @@ public class PartBaseArm : PartBase
         }
     }
 
-    public override void FinishActionForced()
-    {
-        // 공격을 강제로 종료할 때 필요한 로직이 있다면 여기에 작성
-    }
-
     public override void UseAbility()
     {
         _isShooting = true;
@@ -50,6 +46,11 @@ public class PartBaseArm : PartBase
     {
         _isShooting = false;
         //_currentShootTime = 0.0f;
+    }
+
+    public override void FinishActionForced()
+    {
+        // 공격을 강제로 종료할 때 필요한 로직이 있다면 여기에 작성
     }
 
     // Update에서 호출되는 사격 함수
@@ -87,11 +88,6 @@ public class PartBaseArm : PartBase
             targetPoint = ray.origin + ray.direction * 100.0f;
         }
 
-        //Quaternion targetRotation = Quaternion.LookRotation(camShootDirection, Vector3.up);
-        //targetRotation.x = 0.0f;
-        //targetRotation.z = 0.0f;
-        //transform.rotation = targetRotation;
-
         return hit;
     }
 
@@ -109,11 +105,6 @@ public class PartBaseArm : PartBase
         {
             targetPoint = ray.origin + ray.direction * 100.0f;
         }
-
-        //Quaternion targetRotation = Quaternion.LookRotation(camShootDirection, Vector3.up);
-        //targetRotation.x = 0.0f;
-        //targetRotation.z = 0.0f;
-        //transform.rotation = targetRotation;
 
         return hits;
     }

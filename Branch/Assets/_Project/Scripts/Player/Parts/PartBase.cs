@@ -23,20 +23,29 @@ public enum EPartMeshType
 
 public abstract class PartBase : MonoBehaviour
 {
-    [SerializeField] protected int partId = 3000;
+    [SerializeField, Range(3000, 3015)] protected int partId = 3000;
     [SerializeField] protected EPartType partType;
     [SerializeField] protected EPartMeshType meshType;
 
     protected PlayerController _owner;
     protected StatDictionary _stats = new();
 
+    protected bool _isAnimating = true;
+
     public EPartType PartType => partType;
     public EPartMeshType MeshType => meshType;
     public StatDictionary Stats => _stats;
+    public bool IsAnimating => _isAnimating;
 
     public abstract void UseAbility();
     public abstract void UseCancleAbility();
     public abstract void FinishActionForced();
+
+    public void Init(PlayerController owner)
+    {
+        SetOwner(owner);
+        SetPartStat();
+    }
 
     public void SetOwner(PlayerController owner)
     {
@@ -55,12 +64,12 @@ public abstract class PartBase : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"Part Stat Index({partId})에 해당하는 데이터가 없습니다.");
+                Debug.LogWarning($"Part Stat Index({partId}) 데이터가 없습니다.");
             }
         }
         else
         {
-            Debug.LogWarning("Base Stat 데이터가 없습니다.");
+            Debug.LogWarning("파츠 파라미터 데이터가 없습니다.");
         }
     }
 

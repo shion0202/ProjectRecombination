@@ -71,8 +71,7 @@ public class Inventory : MonoBehaviour
                     --i;
                 }
 
-                target.SetOwner(owner);
-                target.SetPartStat();
+                target.Init(owner);
                 target.gameObject.SetActive(false);
 
                 // 테스트용으로 MeshRoot에 있는 모든 파츠를 인벤토리에 추가

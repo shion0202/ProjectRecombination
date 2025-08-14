@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class ArmEmpty : PartBaseArm
 {
-    public override void UseAbility()
+    protected override void Awake()
     {
-        //Debug.Log("Empty Arm의 공격! 그러나 아무 일도 일어나지 않았다...");
+        base.Awake();
+        _isAnimating = false;
     }
 
-    public override void UseCancleAbility()
+    protected override void Update()
     {
-        //Debug.Log("Empty Arm은 도망쳤다!");
+
     }
 }
