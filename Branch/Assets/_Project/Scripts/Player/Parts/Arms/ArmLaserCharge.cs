@@ -7,10 +7,8 @@ using Unity.VisualScripting;
 
 public class ArmLaserCharge : PartBaseArm
 {
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private GameObject effect;
+    [SerializeField] private GameObject chargeEffect;
     [SerializeField] private Vector3 defaultImpulseValue = new Vector3(0.0f, 0.0f, 0.0f);
-    private float maxAlphas = 1.0f;
     private Coroutine fadeCoroutine = null;
     private Color originalColor = Color.white;
 
@@ -30,8 +28,7 @@ public class ArmLaserCharge : PartBaseArm
     public override void UseAbility()
     {
         base.UseAbility();
-
-        effect.SetActive(true);
+        chargeEffect.SetActive(true);
     }
 
     public override void UseCancleAbility()
@@ -53,7 +50,7 @@ public class ArmLaserCharge : PartBaseArm
         Vector3 targetPoint = Vector3.zero;
         RaycastHit[] hits = GetMultiTargetPoint(out targetPoint);
 
-        effect.SetActive(false);
+        chargeEffect.SetActive(false);
 
         lineRenderer.material.color = originalColor;
         lineRenderer.enabled = true;

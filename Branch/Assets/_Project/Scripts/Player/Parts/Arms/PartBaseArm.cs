@@ -5,16 +5,23 @@ using UnityEngine;
 
 public class PartBaseArm : PartBase
 {
-    [SerializeField] protected CinemachineImpulseSource impulseSource;
+    [Header("사격")]
     [SerializeField] protected GameObject bulletPrefab;
+    [SerializeField] protected LineRenderer lineRenderer;
     [SerializeField] protected Transform bulletSpawnPoint;
-    [SerializeField] protected EPartType _currentPartType = EPartType.ArmL;
-    [SerializeField] protected float recoilX = 4.0f;
-    [SerializeField] protected float recoilY = 2.0f;
+    [SerializeField] protected CinemachineImpulseSource impulseSource;
+    [SerializeField] protected LayerMask ignoreMask = 0;
     protected float _currentShootTime = 0.0f;
     protected bool _isShooting = false;
 
-    [SerializeField] protected LayerMask ignoreMask = 0;
+    [Header("이펙트")]
+    [SerializeField] protected GameObject effectPrefab;
+
+    // 반동 관련 값을 스탯으로 관리할지?
+    [Header("파라미터")]
+    [SerializeField] protected float shootingRange = 100.0f;
+    [SerializeField] protected float recoilX = 4.0f;
+    [SerializeField] protected float recoilY = 2.0f;
 
     protected virtual void Awake()
     {
@@ -32,8 +39,8 @@ public class PartBaseArm : PartBase
         _currentShootTime -= Time.deltaTime;
         if (_currentShootTime <= 0.0f)
         {
-            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].value);
             Shoot();
+            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStats[PartType][EStatType.AttackSpeed].value);
         }
     }
 
@@ -45,20 +52,18 @@ public class PartBaseArm : PartBase
     public override void UseCancleAbility()
     {
         _isShooting = false;
-        //_currentShootTime = 0.0f;
     }
 
     public override void FinishActionForced()
     {
-        // 공격을 강제로 종료할 때 필요한 로직이 있다면 여기에 작성
+        _isShooting = false;
+        _currentShootTime = 0.0f;
     }
 
-    // Update에서 호출되는 사격 함수
+    // Update를 통해 호출되는 사격 함수
     protected virtual void Shoot()
     {
-        Vector3 targetPoint = Vector3.zero;
-        GetTargetPoint(out targetPoint);
-
+        Vector3 targetPoint = GetTargetPoint(out RaycastHit hit);
         Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position);
         camShootDirection.Normalize();
 
@@ -66,29 +71,29 @@ public class PartBaseArm : PartBase
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {
-            bulletComponent.Init(_owner.gameObject, bulletSpawnPoint.position, Vector3.zero, camShootDirection, (int)_owner.Stats.TotalStats[EStatType.Attack].value);
+            bulletComponent.Init(_owner.gameObject, bulletSpawnPoint.position, Vector3.zero, camShootDirection, (int)_owner.Stats.CombinedPartStats[partType][EStatType.Attack].value);
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
     }
 
     // 카메라 기준 사격 방향을 결정하는 함수
-    protected RaycastHit GetTargetPoint(out Vector3 targetPoint)
+    protected Vector3 GetTargetPoint(out RaycastHit hit)
     {
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
+        Vector3 targetPoint = Vector3.zero;
 
-        if (Physics.Raycast(ray, out hit, 100.0f))
+        if (Physics.Raycast(ray, out hit, shootingRange))
         {
             targetPoint = hit.point;
         }
         else
         {
-            targetPoint = ray.origin + ray.direction * 100.0f;
+            targetPoint = ray.origin + ray.direction * shootingRange;
         }
 
-        return hit;
+        return targetPoint;
     }
 
     protected RaycastHit[] GetMultiTargetPoint(out Vector3 targetPoint)
@@ -96,14 +101,14 @@ public class PartBaseArm : PartBase
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
-        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, 100.0f);
+        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, shootingRange);
         if (hits.Length > 0)
         {
             targetPoint = hits[0].point;
         }
         else
         {
-            targetPoint = ray.origin + ray.direction * 100.0f;
+            targetPoint = ray.origin + ray.direction * shootingRange;
         }
 
         return hits;

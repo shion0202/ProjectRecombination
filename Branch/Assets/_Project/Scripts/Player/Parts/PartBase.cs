@@ -23,6 +23,7 @@ public enum EPartMeshType
 
 public abstract class PartBase : MonoBehaviour
 {
+    [Header("파츠 기본 설정")]
     [SerializeField, Range(3000, 3015)] protected int partId = 3000;
     [SerializeField] protected EPartType partType;
     [SerializeField] protected EPartMeshType meshType;

@@ -10,8 +10,8 @@ public class ArmEmpty : PartBaseArm
         _isAnimating = false;
     }
 
-    protected override void Update()
+    public override void UseAbility()
     {
-
+        // 경★아무것도안함★축
     }
 }

@@ -5,19 +5,17 @@ using UnityEngine;
 
 public class ArmRapidCast : PartBaseArm
 {
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private GameObject effectPrefab;
-    [SerializeField] private float castingTime = 1.0f;
+    [SerializeField] protected float castingTime = 1.0f;
     [SerializeField] private float maxChargingTime = 5.0f;
     private float _currentCastingTime = 0.0f;
+    private float _currentChargingTime = 0.0f;
     private Coroutine fadeCoroutine = null;
-    private float _chargingTime = 0.0f;
 
     protected override void Update()
     {
         if (!_isShooting)
         {
-            _currentCastingTime -= Time.deltaTime;       
+            _currentCastingTime -= Time.deltaTime;
             return;
         }
 
@@ -28,18 +26,18 @@ public class ArmRapidCast : PartBaseArm
         }
 
         _currentShootTime -= Time.deltaTime;
-        if (_chargingTime >= maxChargingTime)
+        if (_currentChargingTime >= maxChargingTime)
         {
-            _chargingTime = maxChargingTime;
+            _currentChargingTime = maxChargingTime;
         }
         else
         {
-            _chargingTime += Time.deltaTime;
+            _currentChargingTime += Time.deltaTime;
         }
 
         if (_currentShootTime <= 0.0f)
         {
-            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStatDict[PartType][EStatType.AttackSpeed].value) / (1.0f + _chargingTime / maxChargingTime);
+            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStats[PartType][EStatType.AttackSpeed].value) / (1.0f + _currentChargingTime / maxChargingTime);
             Shoot();
         }
     }
@@ -57,13 +55,13 @@ public class ArmRapidCast : PartBaseArm
     public override void UseCancleAbility()
     {
         base.UseCancleAbility();
-        _chargingTime = 0.0f;
+        _currentChargingTime = 0.0f;
     }
 
     protected override void Shoot()
     {
-        Vector3 targetPoint = Vector3.zero;
-        RaycastHit hit = GetTargetPoint(out targetPoint);
+        RaycastHit hit;
+        Vector3 targetPoint = GetTargetPoint(out hit);
 
         lineRenderer.material.color = Color.white;
         lineRenderer.enabled = true;

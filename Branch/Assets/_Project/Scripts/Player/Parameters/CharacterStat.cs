@@ -51,6 +51,9 @@ public class CharacterStat : MonoBehaviour
     [Header("플레이어의 종합 능력치")]
     [SerializeField] private StatListView totalStatsView = new StatListView();
 
+    [Header("파츠별 최종 능력치")]
+    [SerializeField] private List<PartStatView> combinedStatsView = new List<PartStatView>();
+
     [Header("플레이어의 기본 능력치")]
     [SerializeField] private StatListView baseStatsView = new StatListView();
 
@@ -64,10 +67,11 @@ public class CharacterStat : MonoBehaviour
     private float _currentBodyHealth;
     private float _currentPartHealth;
     
-    private StatDictionary _baseStats = new();                              // 캐릭터 기본 스탯
-    private Dictionary<EPartType, StatDictionary> _partStatDict = new();    // 파츠 부위별 스탯
-    private List<StatModifier> _modifiers = new();                          // 버프, 스킬 등 기타 스탯
-    private StatDictionary _totalStats;                                     // 캐릭터 + 파츠 + 기타 스탯
+    private StatDictionary _baseStats = new();                                  // 캐릭터 기본 스탯
+    private Dictionary<EPartType, StatDictionary> _partStats = new();           // 파츠 부위별 스탯
+    private List<StatModifier> _modifiers = new();                              // 버프, 스킬 등 기타 스탯
+    private Dictionary<EPartType, StatDictionary> _combinedPartStats = new();   // 기본 + 기타 스탯 보정을 포함하는 개별 파츠 스탯 (공격 속도 등 개별적으로 적용되는 파츠에서 사용)
+    private StatDictionary _totalStats;                                         // 기본 + 파츠 + 기타 스탯
     #endregion
 
     #region Properties
@@ -77,9 +81,15 @@ public class CharacterStat : MonoBehaviour
         set { _baseStats = value; }
     }
     
-    public Dictionary<EPartType, StatDictionary> PartStatDict
+    public Dictionary<EPartType, StatDictionary> PartStats
     {
-        get { return _partStatDict; }
+        get { return _partStats; }
+    }
+
+    public Dictionary<EPartType, StatDictionary> CombinedPartStats
+    {
+        get { return _combinedPartStats; }
+        set { _combinedPartStats = value; }
     }
 
     public StatDictionary TotalStats
@@ -110,8 +120,10 @@ public class CharacterStat : MonoBehaviour
         // To-do: 베이스 파츠는 기본 장착 파츠이므로 이를 기준으로 초기화하도록 수정 가능
         foreach (EPartType type in Enum.GetValues(typeof(EPartType)))
         {
-            if (_partStatDict.ContainsKey(type)) continue;
-            _partStatDict[type] = new StatDictionary();
+            if (_partStats.ContainsKey(type)) continue;
+
+            _partStats[type] = new StatDictionary();
+            _combinedPartStats[type] = new StatDictionary();
         }
 
         // Base Stat 초기화
@@ -151,7 +163,7 @@ public class CharacterStat : MonoBehaviour
     // 파츠 교체와 함께 Total Stat을 갱신
     public void SetPartStats(EPartType type, StatDictionary partStats)
     {
-        _partStatDict[type] = partStats ?? new StatDictionary();
+        _partStats[type] = partStats ?? new StatDictionary();
         CalculateTotalStats();
     }
 
@@ -179,11 +191,19 @@ public class CharacterStat : MonoBehaviour
         totalStatsView.FromDictionary(_totalStats);
 
         partStatsView.Clear();
-        foreach (var kvp in _partStatDict)
+        foreach (var kvp in _partStats)
         {
             var ps = new PartStatView { partType = kvp.Key };
             ps.stats.FromDictionary(kvp.Value);
             partStatsView.Add(ps);
+        }
+
+        combinedStatsView.Clear();
+        foreach (var kvp in _combinedPartStats)
+        {
+            var ps = new PartStatView { partType = kvp.Key };
+            ps.stats.FromDictionary(kvp.Value);
+            combinedStatsView.Add(ps);
         }
 
         modifiersView = new List<StatModifier>(_modifiers);
@@ -193,9 +213,9 @@ public class CharacterStat : MonoBehaviour
     {
         _baseStats = baseStatsView.ToDictionary();
 
-        _partStatDict.Clear();
+        _partStats.Clear();
         foreach (var pv in partStatsView)
-            _partStatDict[pv.partType] = pv.stats.ToDictionary();
+            _partStats[pv.partType] = pv.stats.ToDictionary();
 
         _modifiers = new List<StatModifier>(modifiersView);
 
@@ -205,21 +225,44 @@ public class CharacterStat : MonoBehaviour
 
     #region Private Methods
     // Total Stat(최종적으로 사용하는 스탯)을 갱신하는 함수
+    // Combined Part Stats도 함께 갱신
+    // To-do: Total Stats용 파라미터와 CPS용 파라미터 분리 고려
     private void CalculateTotalStats()
     {
         // Stat Type 중 Base Stat에 해당하는 스탯을 Total Stats에 추가
         _totalStats = _baseStats.Clone();
+        foreach (EPartType type in Enum.GetValues(typeof(EPartType)))
+        {
+            _combinedPartStats[type] = _baseStats.Clone();
+        }
 
         // Stat Type 중 Part Stat에 해당하는 스탯을 Total Stats에 추가
         // 이미 Base Stat을 통해 추가된 상태라면 값만 갱신
-        foreach (var partStats in _partStatDict.Values)
+        foreach (EPartType type in Enum.GetValues(typeof(EPartType)))
         {
+            StatDictionary partStats;
+            _partStats.TryGetValue(type, out partStats);
+            if (partStats == null)
+            {
+                partStats = new StatDictionary();
+            }
+
             foreach (var stat in partStats.GetAllStats())
             {
                 var target = _totalStats[stat.statType];
                 if (target != null)
                 {
                     target.AddValue(stat.value);
+                }
+                else
+                {
+                    _totalStats.SetStat(stat);
+                }
+
+                var partTarget = _combinedPartStats[type][stat.statType];
+                if (partTarget != null)
+                {
+                    partTarget.AddValue(stat.value);
                 }
                 else
                 {
@@ -248,6 +291,28 @@ public class CharacterStat : MonoBehaviour
 
             stat.SetValue(finalValue);
         }
+        foreach (var stats in _combinedPartStats.Values)
+        {
+            foreach (var stat in stats.GetAllStats())
+            {
+                float finalValue = stat.value;
+
+                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.Flat))
+                {
+                    finalValue += mod.value;
+                }
+                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.PercentAdd))
+                {
+                    finalValue += stat.value * mod.value;
+                }
+                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.PercentMul))
+                {
+                    finalValue *= (1 + mod.value);
+                }
+
+                stat.SetValue(finalValue);
+            }
+        }
     }
     
     // 캐릭터가 착용 중인 파츠별 HP 값을 총합하여 반환
@@ -255,7 +320,7 @@ public class CharacterStat : MonoBehaviour
     {
         var result = 0f;
         
-        foreach (StatDictionary partStats in _partStatDict.Values)
+        foreach (StatDictionary partStats in _partStats.Values)
         {
             if (partStats.IsEmpty()) continue;
 
