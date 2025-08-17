@@ -17,7 +17,8 @@ public class Bullet : MonoBehaviour
     private float _timer;
 
     [SerializeField] protected GameObject explosionEffectPrefab;
-    [SerializeField] protected float explosionRange = 0.0f;
+    [SerializeField] protected float explosionRange = 1.0f;
+    [SerializeField] protected float explosionRadius = 2.0f;
 
     protected float LifeTime
     {
@@ -69,6 +70,12 @@ public class Bullet : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(_targetPos, explosionRange);
+
+        if (explosionEffectPrefab != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, explosionRadius);
+        }
     }
 
     protected virtual void OnTriggerEnter(Collider other)
@@ -147,7 +154,7 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    protected void Explode()
+    protected virtual void Explode()
     {
         if (explosionEffectPrefab != null)
         {

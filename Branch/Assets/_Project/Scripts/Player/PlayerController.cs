@@ -22,6 +22,13 @@ public enum EPlayerState
     ShootState = LeftShooting | RightShooting,
 }
 
+public enum EHealRange
+{
+    All = 0,
+    Body = 1,
+    Part = 2,
+}
+
 public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapActions
 {
     #region Variables
@@ -49,6 +56,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Vector3 _moveDirection;
     private Vector3 _totalDirection = Vector3.zero;
     private bool _canMove = true;
+    private ILegsMovement _currentMovement;
 
     [Header("Gravity")]
     [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
@@ -106,7 +114,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // 비트 마스크 방식으로 레이케스트를 관리할 레이어를 설정
         groundLayerMask = ~0;
         groundLayerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
-        
+
+        ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs] as ILegsMovement;
+        _currentMovement = legsMovement;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
@@ -135,13 +146,21 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         HandleMove();
         DashMove();
-
         HandleGravity();
 
         _followCamera.UpdateFollowCamera();
         RotateCharacter();
 
-        characterController.Move(_totalDirection * Time.deltaTime);
+        Vector3 horizontalMove = new Vector3(_totalDirection.x, 0f, _totalDirection.z);
+        float hoverDeltaY = _totalDirection.y;
+        if (_currentMovement is HoverLegs hoverLegs)
+        {
+            hoverDeltaY = hoverLegs.CalculateHoverDeltaY(_currentPlayerState == EPlayerState.Idle, groundCheck.position.y);
+        }
+
+        // 이동 벡터에 호버링 y축 누적
+        Vector3 finalMove = horizontalMove + new Vector3(0f, hoverDeltaY, 0f);
+        characterController.Move(finalMove * Time.deltaTime);
         _totalDirection = Vector3.zero;
     }
 
@@ -291,7 +310,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public void SetPartStat(PartBase part)
     {
-        stats.SetPartStats(part.PartType, part.Stats);
+        stats.SetPartStats(part);
+
+        if (part.PartType == EPartType.Legs)
+        {
+            _currentMovement = part as ILegsMovement;
+        }
     }
 
     public void TakeDamage(float takeDamage)
@@ -338,6 +362,34 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         Debug.Log($"Part HP: {stats.CurrentPartHealth}");
     }
 
+    public void HealHp(float healAmount, EHealRange healRange = EHealRange.All)
+    {
+        if (healAmount <= 0.0f) return;
+        if (stats.CurrentHealth <= 0) return;
+
+        float amount = healAmount;
+
+        if (healRange != EHealRange.Part)
+        {
+            // 계산 후 Body Hp가 최대치를 초과했을 경우
+            stats.CurrentBodyHealth += amount;
+            if (stats.CurrentBodyHealth > stats.MaxBodyHealth)
+            {
+                amount = stats.CurrentBodyHealth - amount;          // 파츠 회복량 감소
+                stats.CurrentBodyHealth = stats.MaxBodyHealth;      // 바디 Hp를 최대값으로 초기화
+            }
+            else
+            {
+                amount = 0;
+            }
+        }
+
+        if (healRange != EHealRange.Body)
+        {
+            stats.CurrentPartHealth = Mathf.Clamp(stats.CurrentPartHealth + amount, 0.0f, stats.MaxPartHealth);
+        }
+    }
+
     public static void RegisterEvent(Action action)
     {
         OnInteractionKeyPressed -= action;
@@ -347,6 +399,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     public static void UnregisterEvent(Action action)
     {
         OnInteractionKeyPressed -= action;
+    }
+
+    public void SetMovable(bool canMove)
+    {
+        _canMove = canMove;
     }
 
     // Ball Legs를 위한 임시 함수들
@@ -364,12 +421,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _fallVelocity.y = jumpVelocity;
         _totalDirection += _fallVelocity;
     }
-
-    public void SetMovable(bool canMove)
-    {
-        _canMove = canMove;
-        animator.enabled = canMove;
-    }
     #endregion
 
     #region Private Methods
@@ -381,11 +432,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (_moveInput == null || _moveInput == Vector2.zero)
         {
             SwitchStateToIdle();
-            return;
         }
 
         _currentPlayerState &= ~EPlayerState.Idle;
         _currentPlayerState |= EPlayerState.Moving;
+
         _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
         if (inventory.EquippedItems[EPartType.Legs].IsAnimating)
         {
@@ -393,8 +444,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetFloat("moveY", _moveDirection.z);
             animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
         }
-
-        _totalDirection += CalculateInputDirection() * stats.TotalStats[EStatType.BaseMoveSpeed].value;
+        
+        _totalDirection += _currentMovement.GetMoveDirection(_moveInput, transform, _followCamera.transform);
     }
 
     private void SwitchStateToIdle()

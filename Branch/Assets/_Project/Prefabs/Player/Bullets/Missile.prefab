@@ -153,4 +153,5 @@ MonoBehaviour:
   explosionEffectPrefab: {fileID: 6337632206232331454, guid: c5a4acf4f9230c9499752be436b89fed,
     type: 3}
   explosionRange: 1
+  explosionRadius: 2
   turnSpeed: 120

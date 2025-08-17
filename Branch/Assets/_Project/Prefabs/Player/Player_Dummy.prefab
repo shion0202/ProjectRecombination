@@ -219,21 +219,24 @@ MonoBehaviour:
   partId: 3008
   partType: 2
   meshType: 0
-  impulseSource: {fileID: 4657592564304023089}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
     type: 3}
   bulletSpawnPoint: {fileID: 7403936749342958982}
-  _currentPartType: 2
-  recoilX: 1
-  recoilY: 1
+  impulseSource: {fileID: 4657592564304023089}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  lineRenderer: {fileID: 0}
-  effectPrefab: {fileID: 4408094649979702287, guid: bed427a4d3d4afa409e30ac4ad49fb76,
-    type: 3}
-  castingTime: 1
-  maxChargingTime: 5
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 1
+  recoilY: 1
+  castEffectPrefab: {fileID: 0}
+  maxChargeTime: 2
+  maxCastTime: 1
 --- !u!114 &4657592564304023089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,7 +398,7 @@ GameObject:
   - component: {fileID: 1354782077987348674}
   - component: {fileID: 1142766045471755409}
   m_Layer: 0
-  m_Name: RapidArmL
+  m_Name: RapidArmAlphaL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -493,21 +496,25 @@ MonoBehaviour:
   partId: 3008
   partType: 1
   meshType: 0
-  impulseSource: {fileID: 1142766045471755409}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
     type: 3}
   bulletSpawnPoint: {fileID: 7437387128489625766}
-  _currentPartType: 1
-  recoilX: 1
-  recoilY: 1
+  impulseSource: {fileID: 1142766045471755409}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  lineRenderer: {fileID: 0}
-  effectPrefab: {fileID: 4408094649979702287, guid: bed427a4d3d4afa409e30ac4ad49fb76,
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 4408094649979702287, guid: bed427a4d3d4afa409e30ac4ad49fb76,
     type: 3}
-  castingTime: 1
-  maxChargingTime: 5
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 1
+  recoilY: 1
+  castEffectPrefab: {fileID: 0}
+  maxChargeTime: 2
+  maxCastTime: 1
 --- !u!114 &1142766045471755409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,7 +567,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.05, y: -0.05, z: 0}
+  m_DefaultVelocity: {x: -0.05, y: 0.05, z: 0}
 --- !u!1 &1275601622729530346
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,16 +765,21 @@ MonoBehaviour:
   partId: 3000
   partType: 2
   meshType: 0
-  impulseSource: {fileID: 8403003259180816444}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 919132149155446097, guid: a0e341d2e53bc473f9058d15ba9e7fa8,
     type: 3}
   bulletSpawnPoint: {fileID: 7403936749342958982}
-  _currentPartType: 2
-  recoilX: 4
-  recoilY: 2
+  impulseSource: {fileID: 8403003259180816444}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 2
 --- !u!114 &8403003259180816444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1449,10 +1461,13 @@ MonoBehaviour:
   partId: 3015
   partType: 4
   meshType: 0
-  dashDistance: -1
+  staticOffset: {x: 0, y: 0, z: 0}
   skillTime: 3
+  skillDuration: 1
   skillCooldown: 5
   maxSkillCount: 1
+  skillRange: 1
+  skillDamage: 0
   effectPrefab: {fileID: 8382551375372270639, guid: 000dc48bd6b3d7247b2a8818c86e4d98,
     type: 3}
   baseSpeed: 9
@@ -1718,16 +1733,21 @@ MonoBehaviour:
   partId: 3005
   partType: 1
   meshType: 0
-  impulseSource: {fileID: 3659257655072157179}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: a3ba8d7c3b7c34eaf8f1d979a0319c54,
     type: 3}
   bulletSpawnPoint: {fileID: 7437387128489625766}
-  _currentPartType: 1
-  recoilX: 4
-  recoilY: 2
+  impulseSource: {fileID: 3659257655072157179}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 2
 --- !u!114 &3659257655072157179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1780,7 +1800,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.01, y: -0.01, z: 0}
+  m_DefaultVelocity: {x: 0.01, y: -0.01, z: 0}
 --- !u!1 &3087100797917781243
 GameObject:
   m_ObjectHideFlags: 0
@@ -1921,6 +1941,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalStatsView:
     stats: []
+  combinedStatsView: []
   baseStatsView:
     stats: []
   partStatsView: []
@@ -2410,7 +2431,7 @@ GameObject:
   - component: {fileID: 6878738183847475752}
   - component: {fileID: 7908110909524463724}
   m_Layer: 0
-  m_Name: LaserGunChaseL
+  m_Name: LaserGunBetaL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2502,18 +2523,21 @@ MonoBehaviour:
   partId: 3007
   partType: 1
   meshType: 1
-  impulseSource: {fileID: 7908110909524463724}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: 20b82d82319e08f43a31e7439717fcab,
     type: 3}
   bulletSpawnPoint: {fileID: 7437387128489625766}
-  _currentPartType: 1
-  recoilX: 1
-  recoilY: 1
+  impulseSource: {fileID: 7908110909524463724}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  startPoint: {fileID: 7437387128489625766}
-  beamRenderer: {fileID: 0}
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 1
+  recoilY: 1
   upOffset: 1
   maxSideOffset: 5
   crosshairRadius: 0.4
@@ -2715,24 +2739,23 @@ MonoBehaviour:
   partId: 3010
   partType: 2
   meshType: 0
-  impulseSource: {fileID: 3326085877940539673}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: e2c5b745768bd6a4fb0fe1e70c63e02e,
     type: 3}
   bulletSpawnPoint: {fileID: 7403936749342958982}
-  _currentPartType: 2
-  recoilX: 3
-  recoilY: 5
+  impulseSource: {fileID: 3326085877940539673}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  missilePrefab: {fileID: 914363595772914150, guid: e2c5b745768bd6a4fb0fe1e70c63e02e,
-    type: 3}
-  firePoint: {fileID: 7403936749342958982}
-  maxRange: 20
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 3
+  recoilY: 5
   maxYawAngle: 20
   maxPitchAngle: 10
-  minTargetOffsetRadius: 1
-  maxTargetOffsetRadius: 3
 --- !u!114 &3326085877940539673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2831,7 +2854,7 @@ GameObject:
   - component: {fileID: 4391208166941406405}
   - component: {fileID: 8985182866744272223}
   m_Layer: 0
-  m_Name: LaserGunL
+  m_Name: LaserGunAlphaL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2923,19 +2946,23 @@ MonoBehaviour:
   partId: 3006
   partType: 1
   meshType: 1
-  impulseSource: {fileID: 8985182866744272223}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: 20b82d82319e08f43a31e7439717fcab,
     type: 3}
   bulletSpawnPoint: {fileID: 7437387128489625766}
-  _currentPartType: 1
-  recoilX: 4
-  recoilY: 7
+  impulseSource: {fileID: 8985182866744272223}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  lineRenderer: {fileID: 0}
-  effect: {fileID: 863621361393390824}
-  defaultImpulseValue: {x: 0.2, y: 0.2, z: 0}
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 7
+  chargeEffectPrefab: {fileID: 0}
+  maxChargeTime: 2
 --- !u!114 &8985182866744272223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3129,10 +3156,13 @@ MonoBehaviour:
   partId: 3012
   partType: 4
   meshType: 0
-  dashDistance: 5
-  skillTime: 0.3
+  staticOffset: {x: 0, y: 0, z: 0}
+  skillTime: 0.1
+  skillDuration: -1
   skillCooldown: 3
   maxSkillCount: 1
+  skillRange: 8
+  skillDamage: -1
 --- !u!1 &5870626250888781075
 GameObject:
   m_ObjectHideFlags: 0
@@ -3165,117 +3195,6 @@ Transform:
   - {fileID: 4093590864029482888}
   m_Father: {fileID: 2620148828608692051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5900743003778772904
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7426232730524655129}
-  - component: {fileID: 6832385534006546860}
-  - component: {fileID: 1140151185829124931}
-  m_Layer: 0
-  m_Name: CaterpilarLegs
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7426232730524655129
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900743003778772904}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.00000008940697, y: -0.000000014901161, z: 0.000000029802322,
-    w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00066301227}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 383224706591212967}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &6832385534006546860
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900743003778772904}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 3
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 8354020972db4f546928baf63ba61939, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: -3178576508544696699, guid: 054838d00c5b1ed499e6c771dd314858, type: 3}
-  m_Bones:
-  - {fileID: 739952129755163606}
-  - {fileID: 7431134691009844506}
-  - {fileID: 5449935722667999809}
-  - {fileID: 2999486368037378826}
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 739952129755163606}
-  m_AABB:
-    m_Center: {x: -0.055071667, y: -0.045911953, z: 0.036406353}
-    m_Extent: {x: 0.16091064, y: 0.13580911, z: 0.13343449}
-  m_DirtyAABB: 0
---- !u!114 &1140151185829124931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900743003778772904}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8c26efaa3e327147b5cac29ae732f32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  partId: 3014
-  partType: 4
-  meshType: 0
-  dashDistance: 6
-  skillTime: 0.3
-  skillCooldown: 4
-  maxSkillCount: 1
 --- !u!1 &5908018267910742691
 GameObject:
   m_ObjectHideFlags: 0
@@ -3383,10 +3302,199 @@ MonoBehaviour:
   partId: 3013
   partType: 4
   meshType: 0
-  dashDistance: 5
+  staticOffset: {x: 0, y: 0, z: 0}
   skillTime: 0.3
+  skillDuration: 1
   skillCooldown: 1.5
   maxSkillCount: 2
+  skillRange: 1
+  skillDamage: 0
+  accelRate: 8
+  decelRate: 6
+  turnSpeed: 90
+--- !u!1 &5995346456071752012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1603315055176092561}
+  - component: {fileID: 634235216460725869}
+  - component: {fileID: 4291333661479757785}
+  - component: {fileID: 7714242457776880126}
+  m_Layer: 0
+  m_Name: RapidArmBetaL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1603315055176092561
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995346456071752012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.00000008940697, y: -0.000000014901161, z: 0.000000029802322,
+    w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.00066301227}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 383224706591212967}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!137 &634235216460725869
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995346456071752012}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 8b1021c6320018243ac2805592945c01, type: 2}
+  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: 7621869289906196317, guid: 054838d00c5b1ed499e6c771dd314858, type: 3}
+  m_Bones:
+  - {fileID: 7262403714679032990}
+  - {fileID: 4093590864029482888}
+  - {fileID: 8411647642746954582}
+  - {fileID: 7092676974748596905}
+  - {fileID: 2171474276724850438}
+  - {fileID: 2763275335216014787}
+  - {fileID: 2620148828608692051}
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 2620148828608692051}
+  m_AABB:
+    m_Center: {x: 0.085043706, y: -0.05978794, z: 0.19685176}
+    m_Extent: {x: 0.31069985, y: 0.072835624, z: 0.117838375}
+  m_DirtyAABB: 0
+--- !u!114 &4291333661479757785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995346456071752012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69fc5bc62c1f2be41a6298e78fdf9746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 3009
+  partType: 1
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  bulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
+    type: 3}
+  bulletSpawnPoint: {fileID: 7437387128489625766}
+  impulseSource: {fileID: 7714242457776880126}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 4408094649979702287, guid: bed427a4d3d4afa409e30ac4ad49fb76,
+    type: 3}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 2
+  castEffectPrefab: {fileID: 0}
+  maxChargeTime: 2
+  maxCastTime: 1
+--- !u!114 &7714242457776880126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995346456071752012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: -0.05, y: -0.05, z: 0}
 --- !u!1 &6066373835426251978
 GameObject:
   m_ObjectHideFlags: 0
@@ -3452,7 +3560,9 @@ Transform:
   - {fileID: 4911780673858224308}
   - {fileID: 2587306218391668897}
   - {fileID: 2446603416191893668}
+  - {fileID: 1603315055176092561}
   - {fileID: 2608958340993031695}
+  - {fileID: 1244223606272396312}
   - {fileID: 8925905665657714759}
   - {fileID: 2317793206849414501}
   - {fileID: 3483479483572057076}
@@ -3461,7 +3571,7 @@ Transform:
   - {fileID: 5562021929800826088}
   - {fileID: 3062359880794244049}
   - {fileID: 4703552042188521082}
-  - {fileID: 7426232730524655129}
+  - {fileID: 284660572374829981}
   - {fileID: 9075205658028349512}
   - {fileID: 4510571698617187350}
   - {fileID: 2861682621184375340}
@@ -3515,7 +3625,7 @@ GameObject:
   - component: {fileID: 5601254048694143934}
   - component: {fileID: 1208278475154131900}
   m_Layer: 0
-  m_Name: LaserGunR
+  m_Name: LaserGunChargeR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3607,19 +3717,23 @@ MonoBehaviour:
   partId: 3006
   partType: 2
   meshType: 1
-  impulseSource: {fileID: 1208278475154131900}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: 20b82d82319e08f43a31e7439717fcab,
     type: 3}
   bulletSpawnPoint: {fileID: 7403936749342958982}
-  _currentPartType: 2
-  recoilX: 4
-  recoilY: 7
+  impulseSource: {fileID: 1208278475154131900}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  lineRenderer: {fileID: 0}
-  effect: {fileID: 8322514254612019275}
-  defaultImpulseValue: {x: 0.2, y: 0.2, z: 0}
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 7
+  chargeEffectPrefab: {fileID: 0}
+  maxChargeTime: 2
 --- !u!114 &1208278475154131900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3769,6 +3883,139 @@ Transform:
   - {fileID: 5893553188629579787}
   m_Father: {fileID: 8307656634455437928}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7637540793933006768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 284660572374829981}
+  - component: {fileID: 5763172315699756007}
+  - component: {fileID: 6468941108827462124}
+  - component: {fileID: 4089915864777367859}
+  - component: {fileID: 2466469199051530105}
+  m_Layer: 0
+  m_Name: CaterpilarLegs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &284660572374829981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637540793933006768}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
+  m_LocalScale: {x: 1.5, y: 0.5, z: 1.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 383224706591212967}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!33 &5763172315699756007
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637540793933006768}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &6468941108827462124
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637540793933006768}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d9a0d8f7d46cca14fba15b5961767728, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4089915864777367859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637540793933006768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c26efaa3e327147b5cac29ae732f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 3014
+  partType: 4
+  meshType: 1
+  staticOffset: {x: 0, y: 0, z: -0.75}
+  skillTime: 0.9
+  skillDuration: 4
+  skillCooldown: 12
+  maxSkillCount: 1
+  skillRange: 10
+  skillDamage: 300
+  impactEffectPrefab: {fileID: 6337632206232331454, guid: c5a4acf4f9230c9499752be436b89fed,
+    type: 3}
+  turnSpeed: 120
+--- !u!136 &2466469199051530105
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637540793933006768}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5000001
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &7726231881957922790
 GameObject:
   m_ObjectHideFlags: 0
@@ -3801,6 +4048,186 @@ Transform:
   - {fileID: 6007037655791025112}
   m_Father: {fileID: 2225905455203712810}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7734469558117329417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1244223606272396312}
+  - component: {fileID: 4635034003795328895}
+  - component: {fileID: 4977151713162188010}
+  - component: {fileID: 2869228636816422908}
+  m_Layer: 0
+  m_Name: HeavyArmBetaL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1244223606272396312
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7734469558117329417}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.00000008940697, y: -0.000000014901161, z: 0.000000029802322,
+    w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.00066301227}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 383224706591212967}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!137 &4635034003795328895
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7734469558117329417}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 8aa374510b209fd4da42eb630cebdda4, type: 2}
+  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: 7621869289906196317, guid: 054838d00c5b1ed499e6c771dd314858, type: 3}
+  m_Bones:
+  - {fileID: 7262403714679032990}
+  - {fileID: 4093590864029482888}
+  - {fileID: 8411647642746954582}
+  - {fileID: 7092676974748596905}
+  - {fileID: 2171474276724850438}
+  - {fileID: 2763275335216014787}
+  - {fileID: 2620148828608692051}
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 2620148828608692051}
+  m_AABB:
+    m_Center: {x: 0.085043706, y: -0.05978794, z: 0.19685176}
+    m_Extent: {x: 0.31069985, y: 0.072835624, z: 0.117838375}
+  m_DirtyAABB: 0
+--- !u!114 &4977151713162188010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7734469558117329417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c352ce4d0ad40f489fde64423231efd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 3011
+  partType: 1
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  bulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
+    type: 3}
+  bulletSpawnPoint: {fileID: 7437387128489625766}
+  impulseSource: {fileID: 2869228636816422908}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 2
+  maxPenetration: 1
+--- !u!114 &2869228636816422908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7734469558117329417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0.1, y: -0.1, z: 0}
 --- !u!1 &7745092453978187287
 GameObject:
   m_ObjectHideFlags: 0
@@ -3814,7 +4241,7 @@ GameObject:
   - component: {fileID: 2171601842080165747}
   - component: {fileID: 832790704516856251}
   m_Layer: 0
-  m_Name: HeavyArmL
+  m_Name: HeavyArmAlphaL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3912,24 +4339,23 @@ MonoBehaviour:
   partId: 3010
   partType: 1
   meshType: 0
-  impulseSource: {fileID: 832790704516856251}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: e2c5b745768bd6a4fb0fe1e70c63e02e,
     type: 3}
   bulletSpawnPoint: {fileID: 7437387128489625766}
-  _currentPartType: 1
-  recoilX: 3
-  recoilY: 5
+  impulseSource: {fileID: 832790704516856251}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  missilePrefab: {fileID: 914363595772914150, guid: e2c5b745768bd6a4fb0fe1e70c63e02e,
-    type: 3}
-  firePoint: {fileID: 7437387128489625766}
-  maxRange: 20
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 3
+  recoilY: 5
   maxYawAngle: 20
   maxPitchAngle: 10
-  minTargetOffsetRadius: 1
-  maxTargetOffsetRadius: 3
 --- !u!114 &832790704516856251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3982,7 +4408,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
+  m_DefaultVelocity: {x: -0.1, y: -0.1, z: 0}
 --- !u!1 &8218479220056985247
 GameObject:
   m_ObjectHideFlags: 0
@@ -4352,18 +4778,21 @@ MonoBehaviour:
   partId: 3007
   partType: 2
   meshType: 1
-  impulseSource: {fileID: 120521289607525993}
+  staticOffset: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: 20b82d82319e08f43a31e7439717fcab,
     type: 3}
   bulletSpawnPoint: {fileID: 7403936749342958982}
-  _currentPartType: 2
-  recoilX: 1
-  recoilY: 1
+  impulseSource: {fileID: 120521289607525993}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  startPoint: {fileID: 7403936749342958982}
-  beamRenderer: {fileID: 0}
+  muzzleFlashEffectPrefab: {fileID: 0}
+  laserLineRenderer: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 1
+  recoilY: 1
   upOffset: 1
   maxSideOffset: 5
   crosshairRadius: 0.4
@@ -4575,12 +5004,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 420383114865359445}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &863621361393390824 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1020543853428862653, guid: 2b9c50f2e8533d74d9f8ac0f017236ec,
-    type: 3}
-  m_PrefabInstance: {fileID: 420383114865359445}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9031460687428441846
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4732,12 +5155,6 @@ PrefabInstance:
 --- !u!4 &8134724029598035626 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 986967555645487196, guid: 2b9c50f2e8533d74d9f8ac0f017236ec,
-    type: 3}
-  m_PrefabInstance: {fileID: 9031460687428441846}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8322514254612019275 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1020543853428862653, guid: 2b9c50f2e8533d74d9f8ac0f017236ec,
     type: 3}
   m_PrefabInstance: {fileID: 9031460687428441846}
   m_PrefabAsset: {fileID: 0}

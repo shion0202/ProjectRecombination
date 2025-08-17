@@ -7,7 +7,6 @@ public class PartBaseArm : PartBase
 {
     [Header("사격")]
     [SerializeField] protected GameObject bulletPrefab;
-    [SerializeField] protected LineRenderer lineRenderer;
     [SerializeField] protected Transform bulletSpawnPoint;
     [SerializeField] protected CinemachineImpulseSource impulseSource;
     [SerializeField] protected LayerMask ignoreMask = 0;
@@ -15,7 +14,12 @@ public class PartBaseArm : PartBase
     protected bool _isShooting = false;
 
     [Header("이펙트")]
-    [SerializeField] protected GameObject effectPrefab;
+    [SerializeField] protected GameObject muzzleFlashEffectPrefab;
+    [SerializeField] protected LineRenderer laserLineRenderer;
+    [SerializeField] protected GameObject hitEffectPrefab;
+    [SerializeField] protected GameObject projectileEffectPrefab;
+    protected Color originalColor = Color.white;
+    protected Coroutine fadeCoroutine = null;
 
     // 반동 관련 값을 스탯으로 관리할지?
     [Header("파라미터")]
@@ -34,9 +38,9 @@ public class PartBaseArm : PartBase
 
     protected virtual void Update()
     {
-        if (!_isShooting) return;
-
         _currentShootTime -= Time.deltaTime;
+        if (!_isShooting) return;
+        
         if (_currentShootTime <= 0.0f)
         {
             Shoot();
@@ -58,6 +62,15 @@ public class PartBaseArm : PartBase
     {
         _isShooting = false;
         _currentShootTime = 0.0f;
+
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+            fadeCoroutine = null;
+
+            laserLineRenderer.enabled = false;
+        }
+        
     }
 
     // Update를 통해 호출되는 사격 함수
@@ -84,7 +97,7 @@ public class PartBaseArm : PartBase
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 targetPoint = Vector3.zero;
 
-        if (Physics.Raycast(ray, out hit, shootingRange))
+        if (Physics.Raycast(ray, out hit, shootingRange, ignoreMask))
         {
             targetPoint = hit.point;
         }
@@ -96,12 +109,13 @@ public class PartBaseArm : PartBase
         return targetPoint;
     }
 
-    protected RaycastHit[] GetMultiTargetPoint(out Vector3 targetPoint)
+    protected Vector3 GetTargetPoint(out RaycastHit[] hits)
     {
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Vector3 targetPoint = Vector3.zero;
 
-        RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, shootingRange);
+        hits = Physics.RaycastAll(ray.origin, ray.direction, shootingRange, ignoreMask);
         if (hits.Length > 0)
         {
             targetPoint = hits[0].point;
@@ -111,6 +125,27 @@ public class PartBaseArm : PartBase
             targetPoint = ray.origin + ray.direction * shootingRange;
         }
 
-        return hits;
+        return targetPoint;
+    }
+
+    protected IEnumerator CoFadeOutLaser()
+    {
+        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+        laserLineRenderer.GetPropertyBlock(propertyBlock);
+        Color c = originalColor;
+
+        while (c.a > 0.0f)
+        {
+            propertyBlock.SetColor("_Color", Color.red);
+            laserLineRenderer.SetPropertyBlock(propertyBlock);
+
+            c.a -= Time.deltaTime;
+            if (c.a <= 0.0f) c.a = 0.0f;
+
+            yield return null;
+        }
+
+        laserLineRenderer.enabled = false;
+        fadeCoroutine = null;
     }
 }

@@ -1,58 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HoverLegs : PartLegsBase
 {
-    [SerializeField] private GameObject effectPrefab;
-    [SerializeField] private float baseSpeed = 9.0f;
-    private GameObject effect = null;
+    [Header("호버링 설정")]
+    public float hoverHeight = 1.5f;
+    public float hoverRange = 0.2f;
+    public float hoverSpeed = 2.0f;
+    public float hoverRiseSpeed = 2.0f;  // 상승 속도
 
-    public override void UseAbility()
+    private float baseY;
+    private float currentY;     // 현재 목표 hover 위치(상승 중)
+    private float lastHoverY;
+    private float hoverTime = 0f;
+    private bool wasIdleLastFrame = false;
+
+    protected override void Awake()
     {
-        if (_currentSkillCount >= maxSkillCount) return;
+        base.Awake();
 
-        Boost();
+        _partModifiers.Add(new StatModifier(EStatType.BaseMoveSpeed, EStatModifierType.PercentMul, 0.2f, this));
+        _partModifiers.Add(new StatModifier(EStatType.Defence, EStatModifierType.Flat, 10, this));
+
+        baseY = transform.position.y;
+        currentY = baseY;  // 초기 위치부터 시작
+        lastHoverY = baseY;
     }
 
-    public override void FinishActionForced()
+    public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
     {
-        base.FinishActionForced();
-        Destroy(effect);
+        if (moveInput == Vector2.zero) return Vector3.zero;
+
+        // 카메라 기준 이동 방향 처리
+        Vector3 camForward = cameraTransform.forward;
+        Vector3 camRight = cameraTransform.right;
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camForward.Normalize();
+        camRight.Normalize();
+        Vector3 moveDirection = camForward * moveInput.y + camRight * moveInput.x;
+
+        return moveDirection.normalized * _owner.Stats.TotalStats[EStatType.BaseMoveSpeed].value;
     }
 
-    private void Boost()
+    public float CalculateHoverDeltaY(bool isIdle, float groundY)
     {
-        if (_skillCoroutine != null)
+        if (isIdle)
         {
-            StopCoroutine(_skillCoroutine);
-            _skillCoroutine = null;
+            float targetY = groundY + hoverHeight;
+            currentY = Mathf.MoveTowards(currentY, targetY, hoverRiseSpeed * Time.deltaTime);
+
+            if (Mathf.Approximately(currentY, targetY))
+            {
+                hoverTime += Time.deltaTime;
+            }
+            else
+            {
+                hoverTime = 0f;
+            }
+
+            float offsetY = Mathf.Sin(hoverTime * hoverSpeed) * hoverRange;
+            float hoverY = currentY + offsetY;
+
+            float deltaY = hoverY - lastHoverY;
+            lastHoverY = hoverY;
+
+            wasIdleLastFrame = true;
+            return deltaY;
         }
-
-        // 부스트 시작
-        // 현재는 Base Stat을 변경하지만, 추후 비슷한 기믹이 많아질 경우 Buffer Stat을 추가할 수 있음
-        _owner.Stats.BaseStats[EStatType.BaseMoveSpeed].value = (int)baseSpeed;
-        _owner.Stats.CalculateStatsForced();
-        _skillCoroutine = StartCoroutine(CoCooldownBoost());
-        
-        effect = Instantiate(effectPrefab, _owner.transform.position, Quaternion.identity, _owner.transform);
-    }
-
-    protected IEnumerator CoCooldownBoost()
-    {
-        ++_currentSkillCount;
-
-        yield return new WaitForSeconds(skillTime);
-
-        // 부스트 종료
-        //_owner.Stats.BaseStats[EStatType.MoveSpeed].Reset();
-        _owner.Stats.CalculateStatsForced();
-        Destroy(effect);
-
-        yield return new WaitForSeconds(skillCooldown * (_currentSkillCount));
-
-        Debug.Log("부스트 쿨타임 종료. 다시 부스트를 사용할 수 있습니다.");
-        _currentSkillCount = 0;
-        _skillCoroutine = null;
+        else
+        {
+            wasIdleLastFrame = false;
+            hoverTime = 0f;
+            currentY = groundY;
+            lastHoverY = currentY;
+            return 0f;
+        }
     }
 }

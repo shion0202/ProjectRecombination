@@ -1,21 +1,23 @@
-using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using Monster;
 using UnityEngine;
-using Unity.VisualScripting;
 
 public class ArmLaserCharge : PartBaseArm
 {
-    [SerializeField] private GameObject chargeEffect;
-    [SerializeField] private Vector3 defaultImpulseValue = new Vector3(0.0f, 0.0f, 0.0f);
-    private Coroutine fadeCoroutine = null;
-    private Color originalColor = Color.white;
+    [Header("차지 레이저 설정")]
+    [SerializeField] protected GameObject chargeEffectPrefab;
+    [SerializeField] protected float maxChargeTime = 2.0f;
+    protected float _currentChargeTime = 0.0f;
+
+    protected Vector3 defaultImpulseValue;
 
     protected override void Awake()
     {
         base.Awake();
-        originalColor = lineRenderer.material.color;
+
+        defaultImpulseValue = impulseSource.m_DefaultVelocity;
+        originalColor = laserLineRenderer.material.color;
     }
 
     protected override void Update()
@@ -28,43 +30,41 @@ public class ArmLaserCharge : PartBaseArm
     public override void UseAbility()
     {
         base.UseAbility();
-        chargeEffect.SetActive(true);
+        //chargeEffectPrefab.SetActive(true);
     }
 
     public override void UseCancleAbility()
     {
-        _isShooting = false;
+        base.UseCancleAbility();
 
+        //chargeEffectPrefab.SetActive(false);
         Shoot();
         _currentShootTime = 0.0f;
     }
 
     protected override void Shoot()
     {
-        if (_currentShootTime > 1.0f)
+        if (_currentShootTime > maxChargeTime)
         {
-            // Max 값
-            _currentShootTime = 1.0f;
+            _currentShootTime = maxChargeTime;
         }
+        _currentChargeTime = _currentShootTime / maxChargeTime;
 
-        Vector3 targetPoint = Vector3.zero;
-        RaycastHit[] hits = GetMultiTargetPoint(out targetPoint);
-
-        chargeEffect.SetActive(false);
-
-        lineRenderer.material.color = originalColor;
-        lineRenderer.enabled = true;
-        lineRenderer.SetPosition(0, bulletSpawnPoint.position);
+        RaycastHit[] hits;
+        Vector3 targetPoint = GetTargetPoint(out hits);
+        laserLineRenderer.SetPosition(0, bulletSpawnPoint.position);
 
         if (hits.Length > 0)
         {
-            lineRenderer.SetPosition(1, targetPoint);
+            laserLineRenderer.SetPosition(1, targetPoint);
         }
         else
         {
             Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
-            lineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * 100.0f);
+            laserLineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * shootingRange);
         }
+
+        laserLineRenderer.enabled = true;
 
         if (fadeCoroutine != null)
         {
@@ -75,46 +75,27 @@ public class ArmLaserCharge : PartBaseArm
 
         if (hits.Length > 0)
         {
-            foreach (var hit in hits)
+            foreach (RaycastHit hit in hits)
             {
                 MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
                 if (monster != null)
                 {
-                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
+                    monster.TakeDamage((int)_owner.Stats.CombinedPartStats[partType][EStatType.Attack].value);
                 }
                 else
                 {
                     monster = hit.transform.GetComponentInParent<MonsterBase>();
                     if (monster != null)
                     {
-                        monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
+                        monster.TakeDamage((int)_owner.Stats.CombinedPartStats[partType][EStatType.Attack].value);
                     }
                 }
 
-                Destroy(Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.5f);
+                Destroy(Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);
             }
         }
 
-        impulseSource.m_DefaultVelocity = defaultImpulseValue * _currentShootTime;
-        _owner.ApplyRecoil(impulseSource, recoilX * _currentShootTime, recoilY * _currentShootTime);
-    }
-
-    private IEnumerator CoFadeOutLaser()
-    {
-        while (lineRenderer.material.color.a > 0.0f)
-        {
-            Color c = lineRenderer.material.color;
-            c.a -= Time.deltaTime;
-            lineRenderer.material.color = c;
-
-            yield return null;
-
-            if (lineRenderer.material.color.a <= 0.0f)
-            {
-                lineRenderer.enabled = false;
-                fadeCoroutine = null;
-                break;
-            }
-        }
+        impulseSource.m_DefaultVelocity = defaultImpulseValue * _currentChargeTime;
+        _owner.ApplyRecoil(impulseSource, recoilX * _currentChargeTime, recoilY * _currentChargeTime);
     }
 }

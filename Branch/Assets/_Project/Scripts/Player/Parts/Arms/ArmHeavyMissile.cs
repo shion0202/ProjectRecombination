@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ArmHeavyMissile : PartBaseArm
 {
-    [Header("초기 랜덤 방향 세팅")]
+    [Header("발사 범위")]
     [SerializeField] protected float maxYawAngle = 90f; // 좌우 방향 최대 90도씩 = 180도 범위
     [SerializeField] protected float maxPitchAngle = 10f; // 상하 각도 범위 (조절 가능)
 

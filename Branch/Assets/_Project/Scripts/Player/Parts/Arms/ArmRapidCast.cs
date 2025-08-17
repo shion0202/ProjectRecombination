@@ -5,39 +5,33 @@ using UnityEngine;
 
 public class ArmRapidCast : PartBaseArm
 {
-    [SerializeField] protected float castingTime = 1.0f;
-    [SerializeField] private float maxChargingTime = 5.0f;
-    private float _currentCastingTime = 0.0f;
-    private float _currentChargingTime = 0.0f;
-    private Coroutine fadeCoroutine = null;
+    [Header("속사 설정")]
+    [SerializeField] protected GameObject castEffectPrefab;
+    [SerializeField] protected float maxChargeTime = 2.0f;
+    [SerializeField] protected float maxCastTime = 1.0f;
+    protected float _currentChargeTime = 0.0f;
+    private float _currentCastTime = 0.0f;
 
     protected override void Update()
     {
+        _currentShootTime -= Time.deltaTime;
+
         if (!_isShooting)
         {
-            _currentCastingTime -= Time.deltaTime;
+            _currentCastTime -= Time.deltaTime;
             return;
         }
 
-        if (_currentCastingTime <= castingTime)
+        if (_currentCastTime <= maxCastTime)
         {
-            _currentCastingTime += Time.deltaTime;
+            _currentCastTime += Time.deltaTime;
             return;
         }
 
-        _currentShootTime -= Time.deltaTime;
-        if (_currentChargingTime >= maxChargingTime)
-        {
-            _currentChargingTime = maxChargingTime;
-        }
-        else
-        {
-            _currentChargingTime += Time.deltaTime;
-        }
-
+        _currentChargeTime += Time.deltaTime;
         if (_currentShootTime <= 0.0f)
         {
-            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStats[PartType][EStatType.AttackSpeed].value) / (1.0f + _currentChargingTime / maxChargingTime);
+            _currentShootTime = (_owner.Stats.BaseStats[EStatType.AttackSpeed].value + _owner.Stats.PartStats[PartType][EStatType.AttackSpeed].value) / (1.0f + _currentChargeTime / maxChargeTime);
             Shoot();
         }
     }
@@ -46,36 +40,40 @@ public class ArmRapidCast : PartBaseArm
     {
         base.UseAbility();
 
-        if (_currentCastingTime < 0.0f)
+        if (_currentCastTime < 0.0f)
         {
-            _currentCastingTime = 0.0f;
+            _currentCastTime = 0.0f;
         }
     }
 
     public override void UseCancleAbility()
     {
         base.UseCancleAbility();
-        _currentChargingTime = 0.0f;
+        _currentChargeTime = 0.0f;
     }
 
     protected override void Shoot()
     {
+        if (_currentChargeTime > maxChargeTime)
+        {
+            _currentChargeTime = maxChargeTime;
+        }
+
         RaycastHit hit;
         Vector3 targetPoint = GetTargetPoint(out hit);
-
-        lineRenderer.material.color = Color.white;
-        lineRenderer.enabled = true;
-        lineRenderer.SetPosition(0, bulletSpawnPoint.position);
+        laserLineRenderer.SetPosition(0, bulletSpawnPoint.position);
 
         if (hit.collider != null)
         {
-            lineRenderer.SetPosition(1, hit.point);
+            laserLineRenderer.SetPosition(1, hit.point);
         }
         else
         {
             Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
-            lineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * 100.0f);
+            laserLineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * 100.0f);
         }
+
+        laserLineRenderer.enabled = true;
 
         if (fadeCoroutine != null)
         {
@@ -100,30 +98,11 @@ public class ArmRapidCast : PartBaseArm
                     monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Attack].value);
                 }
             }
+
+            Destroy(Instantiate(hitEffectPrefab, targetPoint, Quaternion.identity), 0.5f);
+            Destroy(Instantiate(bulletPrefab, targetPoint, Quaternion.identity), 0.5f);
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
-
-        Destroy(Instantiate(effectPrefab, targetPoint, Quaternion.identity), 0.5f);
-        Destroy(Instantiate(bulletPrefab, targetPoint, Quaternion.identity), 0.5f);
-    }
-
-    private IEnumerator CoFadeOutLaser()
-    {
-        while (lineRenderer.material.color.a > 0.0f)
-        {
-            Color c = lineRenderer.material.color;
-            c.a -= Time.deltaTime;
-            lineRenderer.material.color = c;
-
-            yield return null;
-
-            if (lineRenderer.material.color.a <= 0.0f)
-            {
-                lineRenderer.enabled = false;
-                fadeCoroutine = null;
-                break;
-            }
-        }
     }
 }

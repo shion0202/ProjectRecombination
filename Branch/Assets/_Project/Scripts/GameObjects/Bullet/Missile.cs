@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Missile : Bullet
 {
-    [SerializeField] private float turnSpeed = 120f; // 초당 회전 속도 (deg/s)
-    private Coroutine _projectileCoroutine = null;
+    [SerializeField] protected float turnSpeed = 120f; // 초당 회전 속도 (deg/s)
+    protected Coroutine _projectileCoroutine = null;
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -49,14 +50,43 @@ public class Missile : Bullet
         _projectileCoroutine = StartCoroutine(CoMissileRoutine(direction, start));
     }
 
+    protected override void Explode()
+    {
+        if (explosionEffectPrefab != null)
+        {
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+        }
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        foreach (Collider collider in colliders)
+        {
+            MonsterBase monster = collider.GetComponent<MonsterBase>();
+            PlayerController player = from.GetComponent<PlayerController>();
+            if (monster != null)
+            {
+                monster.TakeDamage((int)damage);
+            }
+            else
+            {
+                monster = collider.GetComponentInParent<MonsterBase>();
+                if (monster != null)
+                {
+                    monster.TakeDamage((int)damage);
+                }
+            }
+        }
+
+        Destroy(gameObject);
+    }
+
     IEnumerator CoMissileRoutine(Vector3 initialDir, Vector3 fromPos)
     {
         float elapsed = 0f;
         transform.forward = initialDir;
 
-        float distance = Vector3.Distance(fromPos, _targetPos);    // 목표까지 거리
+        float distance = Vector3.Distance(fromPos, _targetPos);     // 목표까지 거리
         float straightDistance = distance * 0.3f;                   // 직선 비행 거리: 거리의 절반 사용
-        float initialFlightTime = straightDistance / bulletSpeed;  // 직선 비행 시간 = 거리 / 속도
+        float initialFlightTime = straightDistance / bulletSpeed;   // 직선 비행 시간 = 거리 / 속도
 
         // 1. 초기 직선 비행 (거리 기반 시간)
         while (elapsed < initialFlightTime)

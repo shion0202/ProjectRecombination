@@ -11,7 +11,7 @@ public class PartBaseShoulder : PartBase
 
     public override void UseAbility()
     {
-        // 스킬 사용
+        
     }
 
     public override void UseCancleAbility()

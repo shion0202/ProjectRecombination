@@ -6,18 +6,16 @@ using UnityEngine;
 
 public class ArmLaserChase : PartBaseArm
 {
-    [SerializeField] private Transform startPoint;
-    [SerializeField] private LineRenderer beamRenderer;
-
-    [SerializeField] private float upOffset = 2.0f;
-    [SerializeField] private float maxSideOffset = 5.0f; // 곡선 세기의 최대값
-    [SerializeField] private float crosshairRadius = 0.07f; // 0.07 = 화면의 7% 반경(조절 가능)
-    [SerializeField] private string enemyTag = "Enemy";
-
-    private Transform currentTarget = null;
+    [Header("곡선 레이저 설정")]
+    [SerializeField] protected float upOffset = 2.0f;
+    [SerializeField] protected float maxSideOffset = 5.0f;      // 곡선 세기의 최대값
+    [SerializeField] protected float crosshairRadius = 0.1f;    // 0.1 = 화면의 10% 반경(조절 가능)
+    [SerializeField] protected string enemyTag = "Enemy";
+    protected Transform currentTarget = null;
 
     protected override void Update()
     {
+        _currentShootTime -= Time.deltaTime;
         if (!_isShooting) return;
 
         Shoot();
@@ -26,13 +24,13 @@ public class ArmLaserChase : PartBaseArm
     public override void UseAbility()
     {
         base.UseAbility();
-        beamRenderer.gameObject.SetActive(true);
+        laserLineRenderer.gameObject.SetActive(true);
     }
 
     public override void UseCancleAbility()
     {
         base.UseCancleAbility();
-        beamRenderer.gameObject.SetActive(false);
+        laserLineRenderer.gameObject.SetActive(false);
     }
 
     // Update에서 실행
@@ -75,7 +73,6 @@ public class ArmLaserChase : PartBaseArm
         {
             DrawCurvedLaser(currentTarget.position);
 
-            _currentShootTime -= Time.deltaTime;
             if (_currentShootTime <= 0.0f)
             {
                 MonsterBase monster = currentTarget.GetComponent<MonsterBase>();
@@ -97,7 +94,7 @@ public class ArmLaserChase : PartBaseArm
         else
         {
             // 빔 비활성화 등(옵션)
-            beamRenderer.positionCount = 0;
+            laserLineRenderer.positionCount = 0;
         }
     }
 
@@ -148,7 +145,7 @@ public class ArmLaserChase : PartBaseArm
     // 곡선(베지어) 빔 연출
     void DrawCurvedLaser(Vector3 targetPos)
     {
-        Vector3 p0 = startPoint.position;
+        Vector3 p0 = bulletSpawnPoint.position;
         Vector3 p2 = targetPos + Vector3.up * 0.5f;
 
         Vector3 cameraRight = Camera.main.transform.right;
@@ -159,7 +156,7 @@ public class ArmLaserChase : PartBaseArm
         Vector3 midPoint = (p0 + p2) * 0.5f + Vector3.up * upOffset + cameraRight * appliedSideOffset;
 
         int segmentCount = 20;
-        beamRenderer.positionCount = segmentCount + 1;
+        laserLineRenderer.positionCount = segmentCount + 1;
         for (int i = 0; i <= segmentCount; i++)
         {
             float t = i / (float)segmentCount;
@@ -167,7 +164,7 @@ public class ArmLaserChase : PartBaseArm
                 Mathf.Pow(1 - t, 2) * p0
                 + 2 * (1 - t) * t * midPoint
                 + Mathf.Pow(t, 2) * p2;
-            beamRenderer.SetPosition(i, bezierPoint);
+            laserLineRenderer.SetPosition(i, bezierPoint);
         }
     }
 }

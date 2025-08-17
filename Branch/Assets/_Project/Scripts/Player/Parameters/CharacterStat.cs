@@ -66,6 +66,7 @@ public class CharacterStat : MonoBehaviour
     // private float _currentTotalHealth;
     private float _currentBodyHealth;
     private float _currentPartHealth;
+    protected float _maxPartHealth;
     
     private StatDictionary _baseStats = new();                                  // 캐릭터 기본 스탯
     private Dictionary<EPartType, StatDictionary> _partStats = new();           // 파츠 부위별 스탯
@@ -111,6 +112,9 @@ public class CharacterStat : MonoBehaviour
         get => _currentBodyHealth;
         set => _currentBodyHealth = value;
     }
+
+    public float MaxBodyHealth => _baseStats[EStatType.MaxHp].value;
+    public float MaxPartHealth => _maxPartHealth;
     #endregion
 
     #region Unity Methods
@@ -146,13 +150,15 @@ public class CharacterStat : MonoBehaviour
         }
 
         _currentBodyHealth = _baseStats[EStatType.MaxHp].value;     // 캐릭터의 바디 체력 값 초기화
-        _currentPartHealth = CalculatePartHealth();                 // 기본 파츠 체력 총합 초기화
+        _maxPartHealth = CalculatePartHealth();
+        _currentPartHealth = _maxPartHealth;                        // 기본 파츠 체력 총합 초기화
 
         SyncToInspector();
     }
     #endregion
 
     #region Public Methods
+
     public void InitializeFromRow(RowData row)
     {
         _baseStats = row.Stats.Clone();
@@ -161,15 +167,25 @@ public class CharacterStat : MonoBehaviour
 
     // 파츠 교체 시 실행되는 함수
     // 파츠 교체와 함께 Total Stat을 갱신
-    public void SetPartStats(EPartType type, StatDictionary partStats)
+    public void SetPartStats(PartBase part)
     {
-        _partStats[type] = partStats ?? new StatDictionary();
+        _partStats[part.PartType] = part.Stats ?? new StatDictionary();
+        AddModifier(part.PartModifiers);
         CalculateTotalStats();
     }
 
     public void AddModifier(StatModifier mod)
     {
         _modifiers.Add(mod);
+        CalculateTotalStats();
+    }
+
+    public void AddModifier(List<StatModifier> mods)
+    {
+        foreach (var mod in mods)
+        {
+            _modifiers.Add(mod);
+        }
         CalculateTotalStats();
     }
 

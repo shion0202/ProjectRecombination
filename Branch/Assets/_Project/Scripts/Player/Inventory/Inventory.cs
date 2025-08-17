@@ -148,6 +148,7 @@ public class Inventory : MonoBehaviour
         if (postEquipment != null)
         {
             postEquipment.FinishActionForced();
+            owner.Stats.RemoveModifierFromSource(postEquipment);
             postEquipment.gameObject.SetActive(false);
         }
         currentEquipment.gameObject.SetActive(true);
@@ -205,8 +206,7 @@ public class Inventory : MonoBehaviour
             part.transform.SetParent(boneRoot);
         }
 
-        // To-do: 파츠 별로 offset 값이 필요
-        part.transform.localPosition = Vector3.zero;
+        part.transform.localPosition = part.StaticOffset;
         part.transform.localRotation = Quaternion.identity;
     }
     #endregion

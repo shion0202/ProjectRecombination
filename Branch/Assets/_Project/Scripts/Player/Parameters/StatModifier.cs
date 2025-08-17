@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public enum EStatModifierType
     PercentMul      // 곱연산 (×1.1 × 1.1)
 }
 
+[Serializable]
 public class StatModifier : MonoBehaviour
 {
     public EStatType statType;
