@@ -11,12 +11,14 @@ public class HoverLegs : PartLegsBase
     private Vector3 _currentMoveVelocity = Vector3.zero;
     [SerializeField] protected float acceleration = 10f; // 클수록 즉각적, 작을수록 둔함
     [SerializeField] protected float deceleration = 14f; // 클수록 급브레이크, 작을수록 천천히 멈춤
-
     public float groundY = 0.0f;
     public float hoverHeight = 1.5f;
     public float hoverRange = 0.2f;
     public float hoverSpeed = 2.0f;
     public bool isInit = false;
+
+    private float previousGroundY = 0f;
+    [SerializeField] private float largeGroundYChangeThreshold = 0.3f; // 큰 높이 변화 임계값
 
     protected override void Awake()
     {
@@ -29,6 +31,8 @@ public class HoverLegs : PartLegsBase
     protected void OnEnable()
     {
         _currentMoveVelocity = Vector3.zero;
+        previousGroundY = groundY;
+        isInit = false;
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
@@ -54,17 +58,38 @@ public class HoverLegs : PartLegsBase
 
     public Vector3 CalculateHoverDeltaY()
     {
-        if (!isInit)
+        RaycastHit hit;
+        Vector3 rayOrigin = _owner.transform.position + Vector3.up * 0.5f;
+        if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 10f))
         {
-            groundY = _owner.transform.position.y;
-            isInit = true;
+            groundY = hit.point.y;
+        }
+        else
+        {
+            if (!isInit)
+            {
+                groundY = _owner.transform.position.y;
+                isInit = true;
+            }
         }
 
-        Vector3 moveDelta = Vector3.zero;
+        float groundYChange = Mathf.Abs(groundY - previousGroundY);
+        previousGroundY = groundY;
 
-        float offsetY = Mathf.Sin(Time.time * hoverSpeed) * hoverRange;
-        // 기존 위치에서 Y축만 움직임 적용
-        float targetY = groundY + hoverHeight + offsetY;
+        // groundY 변화량이 임계치를 초과하면 호버링 오프셋 0으로 처리
+        float hoverOffset = 0f;
+        if (groundYChange < largeGroundYChangeThreshold)
+        {
+            hoverOffset = Mathf.Sin(Time.time * hoverSpeed) * hoverRange;
+        }
+        else
+        {
+            // 큰 변화 시에는 고정된 호버 높이 유지 (oscillation 끔)
+            hoverOffset = 0f;
+        }
+
+        float targetY = groundY + hoverHeight + hoverOffset;
+        Vector3 moveDelta = Vector3.zero;
         moveDelta.y = targetY - (_owner.transform.localPosition.y);
 
         return moveDelta;

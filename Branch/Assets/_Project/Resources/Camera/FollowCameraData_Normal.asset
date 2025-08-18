@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43e2ea5c0442f748867a8854283f923, type: 3}
   m_Name: FollowCameraData_Normal
   m_EditorClassIdentifier: 
-  defaultCameraRotationX: 90
   FOV: 60
-  screenX: 0.4
-  screenY: 0.7
+  screenX: 0.5
+  screenY: 0.775
   cameraDistance: 2
   trackedOffset: {x: 0, y: 0, z: 0}
   lookaheadTime: 0
@@ -36,8 +35,8 @@ MonoBehaviour:
   sensitivityY: 1
   maxAimRangeX: 180
   minAimRangeX: -180
-  maxAimRangeY: 50
-  minAimRangeY: -30
+  maxAimRangeY: 70
+  minAimRangeY: -70
   accelTimeX: 0.1
   decelTimeX: 0.1
   accelTimeY: 0.1

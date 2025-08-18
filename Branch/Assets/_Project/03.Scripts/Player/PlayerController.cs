@@ -70,6 +70,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private float _dashSpeed = 0.0f;
 
     private static event Action OnInteractionKeyPressed;
+
+    private Transform _currentPlatform;
+    private Vector3 _lastPlatformPosition;
+    private Vector3 _platformVelocity;
     #endregion
 
     #region Properties
@@ -482,13 +486,44 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             return;
         }
 
-        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
+        RaycastHit hit;
+        if (Physics.BoxCast(groundCheck.position, boxSize * 0.5f, Vector3.down, out hit, Quaternion.identity, 0.1f, groundLayerMask))
+        {
+            Debug.Log("ground Check");
+            _isGrounded = true;
+            Transform groundTransform = hit.transform;
+            if (_currentPlatform != groundTransform)
+            {
+                _currentPlatform = groundTransform;
+                _lastPlatformPosition = _currentPlatform.position;
+            }
+        }
+        else
+        {
+            _isGrounded = false;
+            _currentPlatform = null;
+        }
+
         if (_isGrounded && _fallVelocity.y <= 0.0f)
         {
             _currentPlayerState &= ~EPlayerState.Falling;
             _fallVelocity = Vector3.zero;
             return;
         }
+
+        if (_currentPlatform != null)
+        {
+            _platformVelocity = (_currentPlatform.position - _lastPlatformPosition) / Time.deltaTime;
+            _lastPlatformPosition = _currentPlatform.position;
+
+            // 플랫폼의 velocity를 캐릭터에 더함 (y축만 적용하거나 전체 적용, 상황에 따라)
+            _totalDirection += _platformVelocity;
+        }
+        else
+        {
+            _platformVelocity = Vector3.zero;
+        }
+
         _currentPlayerState |= EPlayerState.Falling;
         _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
         _totalDirection += _fallVelocity;
