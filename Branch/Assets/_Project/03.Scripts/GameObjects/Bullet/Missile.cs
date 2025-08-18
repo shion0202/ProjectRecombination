@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 
 public class Missile : Bullet
 {
+    [SerializeField] protected GameObject collisionBulletPrefab;
     [SerializeField] protected float turnSpeed = 120f; // 초당 회전 속도 (deg/s)
     protected Coroutine _projectileCoroutine = null;
 
@@ -74,6 +75,8 @@ public class Missile : Bullet
                     monster.TakeDamage((int)damage);
                 }
             }
+
+            Destroy(Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
         }
 
         Destroy(gameObject);

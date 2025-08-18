@@ -4589,7 +4589,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 914363595772914150, guid: 20b82d82319e08f43a31e7439717fcab,
     type: 3}
   bulletSpawnPoint: {fileID: 1002009149152336405}
-  impulseSource: {fileID: 0}
+  impulseSource: {fileID: 1345281691333373352}
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0

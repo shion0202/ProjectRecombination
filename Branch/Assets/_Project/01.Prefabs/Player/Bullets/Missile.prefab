@@ -154,4 +154,6 @@ MonoBehaviour:
     type: 3}
   explosionRange: 1
   explosionRadius: 2
+  collisionBulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
+    type: 3}
   turnSpeed: 120
