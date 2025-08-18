@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AI.BehaviorTree.Nodes;
 using UnityEditor;
@@ -62,6 +62,7 @@ namespace AI.BehaviorTree
             }
         }
 
+#if UNITY_EDITOR
         public void OnEnable()
         {
             // 트리 에셋이 생성될 때 루트 노드가 없으면 자동으로 셀렉터 노드("루트 노드") 생성
@@ -99,5 +100,6 @@ namespace AI.BehaviorTree
             }
             return nodes;
         }
+#endif
     }
 }

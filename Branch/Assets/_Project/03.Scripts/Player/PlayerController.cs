@@ -401,6 +401,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _canMove = canMove;
     }
 
+    public PartBase GetCurrentLegsPart()
+    {
+        return inventory.EquippedItems[EPartType.Legs];
+    }
+
     // Ball Legs를 위한 임시 함수들
     public void PartJump(float jumpVelocity)
     {
@@ -486,44 +491,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             return;
         }
 
-        RaycastHit hit;
-        if (Physics.BoxCast(groundCheck.position, boxSize * 0.5f, Vector3.down, out hit, Quaternion.identity, 0.1f, groundLayerMask))
-        {
-            Debug.Log("ground Check");
-            _isGrounded = true;
-            Transform groundTransform = hit.transform;
-            if (_currentPlatform != groundTransform)
-            {
-                _currentPlatform = groundTransform;
-                _lastPlatformPosition = _currentPlatform.position;
-            }
-        }
-        else
-        {
-            _isGrounded = false;
-            _currentPlatform = null;
-        }
-
+        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
         if (_isGrounded && _fallVelocity.y <= 0.0f)
         {
             _currentPlayerState &= ~EPlayerState.Falling;
             _fallVelocity = Vector3.zero;
             return;
         }
-
-        if (_currentPlatform != null)
-        {
-            _platformVelocity = (_currentPlatform.position - _lastPlatformPosition) / Time.deltaTime;
-            _lastPlatformPosition = _currentPlatform.position;
-
-            // 플랫폼의 velocity를 캐릭터에 더함 (y축만 적용하거나 전체 적용, 상황에 따라)
-            _totalDirection += _platformVelocity;
-        }
-        else
-        {
-            _platformVelocity = Vector3.zero;
-        }
-
         _currentPlayerState |= EPlayerState.Falling;
         _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
         _totalDirection += _fallVelocity;

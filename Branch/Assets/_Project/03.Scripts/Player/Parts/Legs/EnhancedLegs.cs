@@ -19,6 +19,12 @@ public class EnhancedLegs : PartLegsBase
         _partModifiers.Add(new StatModifier(EStatType.Defence, EStatModifierType.Flat, 10, this));
     }
 
+    protected void OnEnable()
+    {
+        _currentSpeed = 0.0f;
+        _currentDirection = _owner.transform.forward;
+    }
+
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
     {
         if (_currentSpeed <= 0.0f)
@@ -63,11 +69,6 @@ public class EnhancedLegs : PartLegsBase
         else
         {
             _currentSpeed = Mathf.MoveTowards(_currentSpeed, targetSpeed, decelRate * Time.deltaTime);
-        }
-
-        if (_currentSpeed <= 0.1f)
-        {
-            _currentSpeed = 0.0f;
         }
 
         // 실제 이동 벡터 반환

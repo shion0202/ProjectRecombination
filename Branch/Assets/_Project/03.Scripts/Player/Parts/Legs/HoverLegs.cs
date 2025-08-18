@@ -8,17 +8,17 @@ using UnityEngine.SocialPlatforms;
 public class HoverLegs : PartLegsBase
 {
     [Header("호버링 설정")]
-    private Vector3 _currentMoveVelocity = Vector3.zero;
-    [SerializeField] protected float acceleration = 10f; // 클수록 즉각적, 작을수록 둔함
-    [SerializeField] protected float deceleration = 14f; // 클수록 급브레이크, 작을수록 천천히 멈춤
-    public float groundY = 0.0f;
-    public float hoverHeight = 1.5f;
-    public float hoverRange = 0.2f;
-    public float hoverSpeed = 2.0f;
-    public bool isInit = false;
+    [SerializeField] protected float acceleration = 10f;    // 클수록 즉각적, 작을수록 둔함
+    [SerializeField] protected float deceleration = 14f;    // 클수록 급브레이크, 작을수록 천천히 멈춤
+    [SerializeField] protected float hoverHeight = 1.5f;
+    [SerializeField] protected float hoverRange = 0.2f;
+    [SerializeField] protected float hoverSpeed = 2.0f;
+    protected Vector3 _currentMoveVelocity = Vector3.zero;
+    protected float groundY = 0.0f;
+    protected bool isInit = false;
 
-    private float previousGroundY = 0f;
-    [SerializeField] private float largeGroundYChangeThreshold = 0.3f; // 큰 높이 변화 임계값
+    [SerializeField] protected float largeGroundYChangeThreshold = 0.3f;    // 큰 높이 변화 임계값
+    protected float previousGroundY = 0f;
 
     protected override void Awake()
     {
@@ -93,5 +93,30 @@ public class HoverLegs : PartLegsBase
         moveDelta.y = targetY - (_owner.transform.localPosition.y);
 
         return moveDelta;
+    }
+
+    public float GetCurrentHoverOffset()
+    {
+        float hoverOffset = 0f;
+        float groundYChange = Mathf.Abs(groundY - previousGroundY);
+        if (groundYChange < largeGroundYChangeThreshold)
+        {
+            hoverOffset = Mathf.Sin(Time.time * hoverSpeed) * hoverRange;
+        }
+        // else일 땐 hoverOffset은 0
+        return hoverOffset;
+    }
+
+    public float GetCurrentHoverTargetY()
+    {
+        float hoverOffset = 0f;
+        float groundYChange = Mathf.Abs(groundY - previousGroundY);
+        if (groundYChange < largeGroundYChangeThreshold)
+        {
+            hoverOffset = Mathf.Sin(Time.time * hoverSpeed) * hoverRange;
+        }
+        // else hoverOffset = 0
+
+        return groundY + hoverHeight + hoverOffset;
     }
 }
