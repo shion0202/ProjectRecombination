@@ -28,6 +28,7 @@ public abstract class PartBase : MonoBehaviour
     [SerializeField] protected EPartType partType;
     [SerializeField] protected EPartMeshType meshType;
     [SerializeField] protected Vector3 staticOffset = Vector3.zero;
+    [SerializeField] protected Vector3 staticRotation = Vector3.zero;
 
     protected PlayerController _owner;
     protected StatDictionary _stats = new();
@@ -41,6 +42,7 @@ public abstract class PartBase : MonoBehaviour
     public List<StatModifier> PartModifiers => _partModifiers;
     public bool IsAnimating => _isAnimating;
     public Vector3 StaticOffset => staticOffset;
+    public Vector3 StaticRotation => staticRotation;
 
     public abstract void UseAbility();
     public abstract void UseCancleAbility();

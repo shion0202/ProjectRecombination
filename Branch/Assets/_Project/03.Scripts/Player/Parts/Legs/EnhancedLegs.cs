@@ -22,7 +22,11 @@ public class EnhancedLegs : PartLegsBase
     protected void OnEnable()
     {
         _currentSpeed = 0.0f;
-        _currentDirection = _owner.transform.forward;
+
+        if (_owner != null)
+        {
+            _currentDirection = _owner.transform.forward;
+        }
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)

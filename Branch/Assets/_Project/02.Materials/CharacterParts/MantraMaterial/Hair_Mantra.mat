@@ -599,7 +599,7 @@ Material:
     - _RimIndirBlur: 0.1
     - _RimIndirBorder: 0.5
     - _RimIndirRange: 0
-    - _RimLight: 1
+    - _RimLight: 0
     - _RimLightBackfaceMask: 0
     - _RimLightShadowMask: 0.5
     - _RimMainStrength: 0

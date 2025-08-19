@@ -58,7 +58,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 3f1532760d4bd8d4baca6210a30d5979, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5208f6fbc21628049b4e47069e1e9d7f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Bump2ndMap:
@@ -599,7 +599,7 @@ Material:
     - _RimIndirBlur: 0.1
     - _RimIndirBorder: 0.5
     - _RimIndirRange: 0
-    - _RimLight: 1
+    - _RimLight: 0
     - _RimLightBackfaceMask: 0
     - _RimLightShadowMask: 0.5
     - _RimMainStrength: 0

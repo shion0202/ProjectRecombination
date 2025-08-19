@@ -87,6 +87,8 @@ public class Bullet : MonoBehaviour
         // 2. 적이 발사한 총알은 플레이어에게만 데미지를 입힌다.
         // 3. 총알은 벽(또는 기타 오브젝트)에 닿으면 파괴된다.
 
+        if (other == null) return;
+
         // 플레이어가 발사한 총알
         if (from.CompareTag("Player") && other.CompareTag("Enemy"))
         {

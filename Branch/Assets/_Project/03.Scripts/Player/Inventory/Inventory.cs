@@ -12,9 +12,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private List<PartBase> baseParts = new List<PartBase>();
     private Dictionary<EPartType, List<PartBase>> _items = new Dictionary<EPartType, List<PartBase>>();
     private Dictionary<EPartType, PartBase> _equippedItems = new Dictionary<EPartType, PartBase>();
-    private int armLIndex = 0;  // 테스트용 ArmL 인벤토리 인덱스
-    private int armRIndex = 0;  // 테스트용 ArmR 인벤토리 인덱스
-    private int legsIndex = 0;  // 테스트용 Legs 인벤토리 인덱스
+    private int partIndex = 0;
 
     [Header("Mesh and Bone Data")]
     [SerializeField] private Transform boneRoot;
@@ -90,26 +88,44 @@ public class Inventory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            armLIndex = (armLIndex + 1) % _items[EPartType.ArmL].Count;
-            EquipItem(_items[EPartType.ArmL][armLIndex]);
+            partIndex = 0;
+            EquipItem(_items[EPartType.Shoulder][partIndex]);
+            EquipItem(_items[EPartType.ArmL][partIndex]);
+            EquipItem(_items[EPartType.ArmR][partIndex]);
+            EquipItem(_items[EPartType.Legs][partIndex]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            armRIndex = (armRIndex + 1) % _items[EPartType.ArmR].Count;
-            EquipItem(_items[EPartType.ArmR][armRIndex]);
+            partIndex = 1;
+            EquipItem(_items[EPartType.Shoulder][partIndex]);
+            EquipItem(_items[EPartType.ArmL][partIndex]);
+            EquipItem(_items[EPartType.ArmR][partIndex]);
+            EquipItem(_items[EPartType.Legs][partIndex]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            legsIndex = (legsIndex + 1) % _items[EPartType.Legs].Count;
-            EquipItem(_items[EPartType.Legs][legsIndex]);
+            partIndex = 2;
+            EquipItem(_items[EPartType.Shoulder][partIndex]);
+            EquipItem(_items[EPartType.ArmL][partIndex]);
+            EquipItem(_items[EPartType.ArmR][partIndex]);
+            EquipItem(_items[EPartType.Legs][partIndex]);
         }
 
-		// GUI 갱신 스크립트
-        GUIManager.instance.SetLeftPartText(_items[EPartType.ArmL][armLIndex].name);
-        GUIManager.instance.SetRightPartText(_items[EPartType.ArmR][armRIndex].name);
-        GUIManager.instance.SetLegsText(_items[EPartType.Legs][legsIndex].name);
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            partIndex = 3;
+            EquipItem(_items[EPartType.Shoulder][partIndex]);
+            EquipItem(_items[EPartType.ArmL][partIndex]);
+            EquipItem(_items[EPartType.ArmR][partIndex]);
+            EquipItem(_items[EPartType.Legs][partIndex]);
+        }
+
+        // GUI 갱신 스크립트
+        GUIManager.instance.SetLeftPartText(_items[EPartType.ArmL][partIndex].name);
+        GUIManager.instance.SetRightPartText(_items[EPartType.ArmR][partIndex].name);
+        GUIManager.instance.SetLegsText(_items[EPartType.Legs][partIndex].name);
     }
     #endregion
 
@@ -207,7 +223,7 @@ public class Inventory : MonoBehaviour
         }
 
         part.transform.localPosition = part.StaticOffset;
-        part.transform.localRotation = Quaternion.identity;
+        part.transform.localRotation = Quaternion.Euler(part.StaticRotation);
     }
     #endregion
 }
