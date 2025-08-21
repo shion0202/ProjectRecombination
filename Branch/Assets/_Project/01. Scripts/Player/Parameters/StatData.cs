@@ -17,6 +17,7 @@ public enum EStatType
     AddHp,
     AddDefence,
     AddMoveSpeed,
+    DamageReductionRate,    // 피해 감소 값 (%)
     CooldownReduction,      // 쿨타임 감소 값
     StatusEffectType,       // 상태이상 타입 (예: 중독, 기절 등)
     
@@ -45,13 +46,31 @@ public class StatData
     public float minValue;
     public float maxValue;
 
-    public StatData(EStatType type, /* string stringValue = "", */ float value = 0f, float min = float.MinValue, float max = float.MaxValue)
+    public StatData(EStatType type, float value, string stringValue, float min = float.MinValue, float max = float.MaxValue)
     {
         statType = type;
         minValue = min;
         maxValue = max;
         SetValue(value);
-        // SetStringValue(stringValue);
+        SetValue(stringValue);
+    }
+
+    public StatData(EStatType type, float value = 0f,float min = float.MinValue, float max = float.MaxValue)
+    {
+        statType = type;
+        minValue = min;
+        maxValue = max;
+        SetValue(value);
+        SetValue(string.Empty);
+    }
+
+    public StatData(EStatType type, string stringValue = "", float min = float.MinValue, float max = float.MaxValue)
+    {
+        statType = type;
+        minValue = min;
+        maxValue = max;
+        SetValue(0.0f);
+        SetValue(stringValue);
     }
 
     public void SetValue(float newValue)
@@ -59,7 +78,7 @@ public class StatData
         value = Mathf.Clamp(newValue, minValue, maxValue);
     }
     
-    public void SetStringValue(string newStringValue)
+    public void SetValue(string newStringValue)
     {
         stringValue = newStringValue;
     }
@@ -69,10 +88,16 @@ public class StatData
         SetValue(value + add);
     }
 
+    public void MultiplyValue(float multiplier)
+    {
+        SetValue(value * multiplier);
+    }
+
     public float GetValue() => value;
+    public string GetStringValue() => stringValue;
 
     public StatData Clone()
     {
-        return new StatData(statType, /* stringValue,*/ value, minValue, maxValue);
+        return new StatData(statType, value, stringValue, minValue, maxValue);
     }
 }

@@ -165,7 +165,7 @@ public class Inventory : MonoBehaviour
         if (postEquipment != null)
         {
             postEquipment.FinishActionForced();
-            owner.Stats.RemoveModifierFromSource(postEquipment);
+            owner.Stats.RemoveModifier(postEquipment);
             postEquipment.gameObject.SetActive(false);
         }
         currentEquipment.gameObject.SetActive(true);

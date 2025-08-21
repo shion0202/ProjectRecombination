@@ -61,20 +61,7 @@ public class Missile : Bullet
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider collider in colliders)
         {
-            MonsterBase monster = collider.GetComponent<MonsterBase>();
-            PlayerController player = from.GetComponent<PlayerController>();
-            if (monster != null)
-            {
-                monster.TakeDamage((int)damage);
-            }
-            else
-            {
-                monster = collider.GetComponentInParent<MonsterBase>();
-                if (monster != null)
-                {
-                    monster.TakeDamage((int)damage);
-                }
-            }
+            TakeDamage(collider.transform);
 
             Destroy(Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
         }

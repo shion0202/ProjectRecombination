@@ -5,14 +5,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
-public class HoverLegs : PartLegsBase
+public class LegsHover : PartBaseLegs
 {
     [Header("호버링 설정")]
-    [SerializeField] protected float acceleration = 10f;    // 클수록 즉각적, 작을수록 둔함
-    [SerializeField] protected float deceleration = 14f;    // 클수록 급브레이크, 작을수록 천천히 멈춤
+    [SerializeField] protected GameObject barrierPrefab;        // 보호막 프리팹
+    [SerializeField] protected Transform barrierSpawnPoint;     // 보호막 생성 위치
+    [SerializeField] protected float barrierDamage = 200.0f;
+    [SerializeField] protected float acceleration = 10f;        // 클수록 즉각적, 작을수록 둔함
+    [SerializeField] protected float deceleration = 14f;        // 클수록 급브레이크, 작을수록 천천히 멈춤
     [SerializeField] protected float hoverHeight = 1.5f;
     [SerializeField] protected float hoverRange = 0.2f;
     [SerializeField] protected float hoverSpeed = 2.0f;
+    protected GameObject _currentBarrier = null;                // 현재 활성화된 보호막
     protected Vector3 _currentMoveVelocity = Vector3.zero;
     protected float groundY = 0.0f;
     protected bool isInit = false;
@@ -24,8 +28,8 @@ public class HoverLegs : PartLegsBase
     {
         base.Awake();
 
-        _partModifiers.Add(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, 0.2f, this));
-        _partModifiers.Add(new StatModifier(EStatType.Defence, EStatModifierType.Flat, 10, this));
+        _partModifiers.Add(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, 0.5f, this));
+        _partModifiers.Add(new StatModifier(EStatType.DamageReductionRate, EStatModifierType.PercentMul, 0.7f, this));
     }
 
     protected void OnEnable()
@@ -33,6 +37,23 @@ public class HoverLegs : PartLegsBase
         _currentMoveVelocity = Vector3.zero;
         previousGroundY = groundY;
         isInit = false;
+    }
+
+    public override void UseAbility()
+    {
+        CreateBarrier();
+    }
+
+    public override void FinishActionForced()
+    {
+        base.FinishActionForced();
+
+        if (_currentBarrier != null)
+        {
+            Destroy(_currentBarrier);
+            _currentBarrier = null;
+        }
+        _owner.Stats.RemoveModifier(this);
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
@@ -45,7 +66,7 @@ public class HoverLegs : PartLegsBase
 
         Vector3 inputDir = (camForward * moveInput.y + camRight * moveInput.x).normalized;
 
-        float moveSpeed = _owner.Stats.TotalStats[EStatType.WalkSpeed].value;
+        float moveSpeed = (_owner.Stats.TotalStats[EStatType.WalkSpeed].value + _owner.Stats.TotalStats[EStatType.AddMoveSpeed].value);
         Vector3 targetVelocity = inputDir * moveSpeed;
 
         float accel = (inputDir.sqrMagnitude > 0.01f) ? acceleration : deceleration; // 멈출 땐 감속값
@@ -95,28 +116,42 @@ public class HoverLegs : PartLegsBase
         return moveDelta;
     }
 
-    public float GetCurrentHoverOffset()
+    protected void CreateBarrier()
     {
-        float hoverOffset = 0f;
-        float groundYChange = Mathf.Abs(groundY - previousGroundY);
-        if (groundYChange < largeGroundYChangeThreshold)
-        {
-            hoverOffset = Mathf.Sin(Time.time * hoverSpeed) * hoverRange;
-        }
-        // else일 땐 hoverOffset은 0
-        return hoverOffset;
+        if (_skillCoroutine != null) return;
+        _skillCoroutine = StartCoroutine(CoCreateBarrier());
+        
     }
 
-    public float GetCurrentHoverTargetY()
+    IEnumerator CoCreateBarrier()
     {
-        float hoverOffset = 0f;
-        float groundYChange = Mathf.Abs(groundY - previousGroundY);
-        if (groundYChange < largeGroundYChangeThreshold)
+        // 스킬 사용 시 보호막 생성
+        _currentBarrier = Instantiate(barrierPrefab, barrierSpawnPoint.position, Quaternion.identity, transform);
+        HoverBarrier barrier = _currentBarrier.GetComponent<HoverBarrier>();
+        if (barrier != null)
         {
-            hoverOffset = Mathf.Sin(Time.time * hoverSpeed) * hoverRange;
+            barrier.Damage = barrierDamage;
         }
-        // else hoverOffset = 0
+        Debug.Log("호버링 보호막 생성 및 버프");
 
-        return groundY + hoverHeight + hoverOffset;
+        // 이동 속도 증가 및 받는 피해 감소 = Modifier 적용
+        _owner.Stats.AddModifier(_partModifiers);
+
+        // 일정 시간 동안 지속 후 쿨타임
+        yield return new WaitForSeconds(skillDuration);
+        Debug.Log("호버링 보호막 종료");
+
+        // 보호막 파괴
+        if (_currentBarrier != null)
+        {
+            Destroy(_currentBarrier);
+            _currentBarrier = null;
+        }
+
+        _owner.Stats.RemoveModifier(this);
+
+        yield return new WaitForSeconds(skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value);
+        Debug.Log("호버링 쿨타임 초기화");
+        _skillCoroutine = null;
     }
 }

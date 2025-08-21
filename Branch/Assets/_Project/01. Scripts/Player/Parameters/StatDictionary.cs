@@ -16,7 +16,7 @@ public class StatDictionary
 
     public void SetStat(StatData newStat) => _statDict[newStat.statType] = newStat.Clone();
 
-    public void SetStat(EStatType type, float value, float min = float.MinValue, float max = float.MaxValue)
+    public void SetStat(EStatType type, float value = 0f, string stringValue = "", float min = float.MinValue, float max = float.MaxValue)
     {
         if (_statDict.TryGetValue(type, out var stat))
         {
@@ -24,7 +24,7 @@ public class StatDictionary
         }
         else
         {
-            _statDict[type] = new StatData(type, value, min, max);
+            _statDict[type] = new StatData(type, value, stringValue, min, max);
         }
     }
 

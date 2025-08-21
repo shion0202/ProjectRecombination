@@ -85,19 +85,7 @@ public class ArmRapidCast : PartBaseArm
         if (hit.collider != null)
         {
             // 몬스터 피격 판정
-            MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
-            if (monster != null)
-            {
-                monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Damage].value);
-            }
-            else
-            {
-                monster = hit.transform.GetComponentInParent<MonsterBase>();
-                if (monster != null)
-                {
-                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Damage].value);
-                }
-            }
+            TakeDamage(hit.transform);
 
             Destroy(Instantiate(hitEffectPrefab, targetPoint, Quaternion.identity), 0.5f);
             Destroy(Instantiate(bulletPrefab, targetPoint, Quaternion.identity), 0.5f);

@@ -77,19 +77,7 @@ public class ArmLaserCharge : PartBaseArm
         {
             foreach (RaycastHit hit in hits)
             {
-                MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
-                if (monster != null)
-                {
-                    monster.TakeDamage((int)_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value);
-                }
-                else
-                {
-                    monster = hit.transform.GetComponentInParent<MonsterBase>();
-                    if (monster != null)
-                    {
-                        monster.TakeDamage((int)_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value);
-                    }
-                }
+                TakeDamage(hit.transform);
 
                 Destroy(Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);
             }

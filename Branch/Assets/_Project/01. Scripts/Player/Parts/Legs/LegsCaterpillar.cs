@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Monster;
 
-public class CaterpillarLegs : PartLegsBase
+public class LegsCaterpillar : PartBaseLegs
 {
     [Header("캐터필러 설정")]
     [SerializeField] protected GameObject impactEffectPrefab;
@@ -13,10 +13,6 @@ public class CaterpillarLegs : PartLegsBase
     protected override void Awake()
     {
         base.Awake();
-
-        _partModifiers.Add(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.2f, this));
-        _partModifiers.Add(new StatModifier(EStatType.Defence, EStatModifierType.Flat, 10, this));
-
         _isAnimating = false;
     }
 
@@ -69,7 +65,7 @@ public class CaterpillarLegs : PartLegsBase
 
         HandleCylinderDirection(_currentMoveDirection);
 
-        return _currentMoveDirection * _owner.Stats.TotalStats[EStatType.WalkSpeed].value; // 좌우가 서서히 꺾이는 이동방향
+        return _currentMoveDirection * (_owner.Stats.TotalStats[EStatType.WalkSpeed].value + _owner.Stats.TotalStats[EStatType.AddMoveSpeed].value); // 좌우가 서서히 꺾이는 이동방향
     }
 
     protected void Impact()
@@ -132,7 +128,7 @@ public class CaterpillarLegs : PartLegsBase
         Debug.Log("캐터필러 스킬 효과: 이동 불가 해제");
 
         // 쿨타임 시작
-        yield return new WaitForSeconds(skillCooldown);
+        yield return new WaitForSeconds(skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value);
         _skillCoroutine = null;
         Debug.Log("캐터필러 스킬 쿨타임 종료");
     }

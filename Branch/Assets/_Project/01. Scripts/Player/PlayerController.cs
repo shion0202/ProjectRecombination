@@ -320,12 +320,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // 현재 HP의 값을 데미지 만큼 처리
         // stats.CurrentHealth = takeDamage;
 
-        if (takeDamage > 0)
-        {
-            if (stats.CurrentHealth <= 0) return;
-            
-            var damage = takeDamage;
+        if (stats.CurrentHealth <= 0) return;
 
+        var damage = (takeDamage - (stats.TotalStats[EStatType.Defence].value + stats.TotalStats[EStatType.AddDefence].value)) * stats.TotalStats[EStatType.DamageReductionRate].value;
+
+        if (damage > 0)
+        {
             if (stats.CurrentPartHealth > 0)        // 파츠 HP가 남아있으면 파츠를 우선 데미지 계산
             {
                 stats.CurrentPartHealth -= damage;  
@@ -353,8 +353,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             // TODO: 데미지가 음수일때 어떻게 처리할 것인지 논의 필요 (힐을 시킬 것인지 무시할 것인지)
         }
-        
-        Debug.Log($"Player에게 {takeDamage} 데미지! 효과는 굉장했다!");
+
+        Debug.Log($"Player에게 {damage} 데미지! 효과는 굉장했다!");
         Debug.Log($"Body HP: {stats.CurrentBodyHealth}");
         Debug.Log($"Part HP: {stats.CurrentPartHealth}");
     }
@@ -486,7 +486,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void HandleGravity()
     {
-        if (_currentMovement is HoverLegs hoverLegs)
+        if (_currentMovement is LegsHover hoverLegs)
         {
             Vector3 hoverDelta = hoverLegs.CalculateHoverDeltaY();
             _totalDirection += hoverDelta;

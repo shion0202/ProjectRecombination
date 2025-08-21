@@ -176,7 +176,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.01, y: 0.01, z: 0}
+  m_DefaultVelocity: {x: -0.01, y: 0.01, z: 0}
 --- !u!114 &6895942616152274495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566,7 +566,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.1, y: 0.1, z: 0}
+  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
 --- !u!114 &8807908289931689182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29179,12 +29179,15 @@ MonoBehaviour:
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
-  skillTime: 3
-  skillDuration: 1
-  skillCooldown: 5
+  skillTime: 0.3
+  skillDuration: 3
+  skillCooldown: 9
   maxSkillCount: 1
   skillRange: 1
-  skillDamage: 0
+  skillDamage: -1
+  barrierPrefab: {fileID: 5647480323800157417, guid: 1d6d9e89455ac9740bf6a6a9897f5da6,
+    type: 3}
+  barrierSpawnPoint: {fileID: 6983833896079959139}
   acceleration: 10
   deceleration: 15
   hoverHeight: 0.5
@@ -29598,7 +29601,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5957433963360902425
 Transform:
   m_ObjectHideFlags: 0

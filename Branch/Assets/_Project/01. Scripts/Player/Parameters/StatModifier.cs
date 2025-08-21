@@ -11,7 +11,7 @@ public enum EStatModifierType
 }
 
 [Serializable]
-public class StatModifier : MonoBehaviour
+public class StatModifier
 {
     public EStatType statType;
     public EStatModifierType modifierType;

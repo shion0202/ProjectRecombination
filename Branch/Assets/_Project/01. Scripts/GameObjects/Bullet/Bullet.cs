@@ -1,7 +1,9 @@
+using Monster;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Monster;
+using UnityEngine.Rendering;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class Bullet : MonoBehaviour
 {
@@ -92,27 +94,8 @@ public class Bullet : MonoBehaviour
         // 플레이어가 발사한 총알
         if (from.CompareTag("Player") && other.CompareTag("Enemy"))
         {
-            Debug.Log("is Monster");
-            var monster = other.GetComponent<MonsterBase>();
-            if (monster != null)
-            {
-                monster.TakeDamage((int)_damage);
-                Destroy(gameObject); // 총알 파괴
-            }
-            else
-            {
-                monster = other.GetComponentInParent<MonsterBase>();
-                if (monster != null)
-                {
-                    monster.TakeDamage((int)_damage);
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    Debug.Log("독한 놈 좀 뒤져라!!");
-                }
-            }
-
+            TakeDamage(other.transform);
+            Destroy(gameObject); // 총알 파괴
             return;
         }
         
@@ -134,6 +117,23 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject); // 총알 파괴
             return;
+        }
+    }
+
+    public void TakeDamage(Transform target, float coefficient = 1.0f)
+    {
+        MonsterBase monster = target.GetComponent<MonsterBase>();
+        if (monster != null)
+        {
+            monster.TakeDamage((int)(_damage * coefficient));
+        }
+        else
+        {
+            monster = target.transform.GetComponentInParent<MonsterBase>();
+            if (monster != null)
+            {
+                monster.TakeDamage((int)(_damage * coefficient));
+            }
         }
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnhancedLegs : PartLegsBase
+public class LegsEnhanced : PartBaseLegs
 {
     [Header("롤러 설정")]
     [SerializeField] private float accelRate = 8f;          // 가속 속도 (높을수록 빠른 출발)
@@ -10,14 +10,6 @@ public class EnhancedLegs : PartLegsBase
     [SerializeField] private float turnSpeed = 90.0f;       // 선회 속도 (초당 도)
     private Vector3 _currentDirection = Vector3.forward;    // 이동 방향 보관
     private float _currentSpeed = 0.0f;
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        _partModifiers.Add(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, 0.15f, this));
-        _partModifiers.Add(new StatModifier(EStatType.Defence, EStatModifierType.Flat, 10, this));
-    }
 
     protected void OnEnable()
     {
@@ -49,7 +41,7 @@ public class EnhancedLegs : PartLegsBase
             camForward.Normalize();
             camRight.Normalize();
             targetDir = (camForward * moveInput.y + camRight * moveInput.x).normalized;
-            targetSpeed = _owner.Stats.TotalStats[EStatType.WalkSpeed].value;
+            targetSpeed = (_owner.Stats.TotalStats[EStatType.WalkSpeed].value + _owner.Stats.TotalStats[EStatType.AddMoveSpeed].value);
         }
         else
         {

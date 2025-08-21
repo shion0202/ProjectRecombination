@@ -172,7 +172,6 @@ public class CharacterStat : MonoBehaviour
     public void SetPartStats(PartBase part)
     {
         _partStats[part.PartType] = part.Stats ?? new StatDictionary();
-        AddModifier(part.PartModifiers);
         CalculateTotalStats();
     }
 
@@ -191,7 +190,7 @@ public class CharacterStat : MonoBehaviour
         CalculateTotalStats();
     }
 
-    public void RemoveModifierFromSource(object source)
+    public void RemoveModifier(object source)
     {
         _modifiers.RemoveAll(m => m.source == source);
         CalculateTotalStats();
@@ -270,6 +269,12 @@ public class CharacterStat : MonoBehaviour
                 var target = _totalStats[stat.statType];
                 if (target != null)
                 {
+                    if (stat.statType == EStatType.DamageReductionRate)
+                    {
+                        target.MultiplyValue(stat.value);
+                        continue;
+                    }
+
                     target.AddValue(stat.value);
                 }
                 else
@@ -280,6 +285,12 @@ public class CharacterStat : MonoBehaviour
                 var partTarget = _combinedPartStats[type][stat.statType];
                 if (partTarget != null)
                 {
+                    if (stat.statType == EStatType.DamageReductionRate)
+                    {
+                        target.MultiplyValue(stat.value);
+                        continue;
+                    }
+
                     partTarget.AddValue(stat.value);
                 }
                 else
@@ -304,6 +315,12 @@ public class CharacterStat : MonoBehaviour
             }
             foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.PercentMul))
             {
+                if (stat.statType == EStatType.DamageReductionRate)
+                {
+                    finalValue *= (1 - mod.value);
+                    continue;
+                }
+
                 finalValue *= (1 + mod.value);
             }
 
@@ -331,6 +348,8 @@ public class CharacterStat : MonoBehaviour
                 stat.SetValue(finalValue);
             }
         }
+
+        SyncToInspector();
     }
     
     // 캐릭터가 착용 중인 파츠별 HP 값을 총합하여 반환

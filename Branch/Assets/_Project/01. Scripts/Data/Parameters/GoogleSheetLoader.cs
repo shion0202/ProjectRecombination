@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System;
+using Unity.VisualScripting;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -72,10 +74,33 @@ public class RowData
         return stat != null ? stat.value : 0.0f;
     }
 
+    public string GetStringStat(EStatType key)
+    {
+        var stat = Stats[key];
+        return stat != null ? stat.stringValue : string.Empty;
+    }
+
     public void SetStat(EStatType key, float value)
     {
         var idx = statEntries.FindIndex(e => e.key == key);
         var newData = new StatData(key, value);
+
+        if (idx >= 0)
+        {
+            statEntries[idx] = new StatEntry { key = key, value = newData };
+        }
+        else
+        {
+            statEntries.Add(new StatEntry { key = key, value = newData });
+        }
+
+        _isDirty = true;
+    }
+
+    public void SetStat(EStatType key, string value)
+    {
+        var idx = statEntries.FindIndex(e => e.key == key);
+        var newData = new StatData(key, 0f, value);
 
         if (idx >= 0)
         {
@@ -137,6 +162,7 @@ public class GoogleSheetLoader : ScriptableObject
             { "addHp", EStatType.AddHp },
             { "addDefence", EStatType.AddDefence },
             { "addMoveSpeed", EStatType.AddMoveSpeed },
+            { "damageReductionRate", EStatType.DamageReductionRate },
             { "cooldownReduction", EStatType.CooldownReduction },
             { "statusEffectType", EStatType.StatusEffectType },
             // { "addDefence", EStatType.Defence },
@@ -267,7 +293,8 @@ public class GoogleSheetLoader : ScriptableObject
                 }
                 else
                 {
-                    Debug.LogWarning($"[Row {i}] '{headers[j]}' 값 '{values[j]}'은 숫자가 아닙니다.");
+                    row.SetStat(statType, values[j]);
+                    //Debug.LogWarning($"[Row {i}] '{headers[j]}' 값 '{values[j]}'은 숫자가 아닙니다.");
                 }
             }
 

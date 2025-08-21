@@ -77,19 +77,7 @@ public class ArmLaserChase : PartBaseArm
 
             if (_currentShootTime <= 0.0f)
             {
-                MonsterBase monster = currentTarget.GetComponent<MonsterBase>();
-                if (monster != null)
-                {
-                    monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Damage].value);
-                }
-                else
-                {
-                    monster = currentTarget.GetComponentInParent<MonsterBase>();
-                    if (monster != null)
-                    {
-                        monster.TakeDamage((int)_owner.Stats.TotalStats[EStatType.Damage].value);
-                    }
-                }
+                TakeDamage(currentTarget);
                 _currentShootTime = (_owner.Stats.CombinedPartStats[partType][EStatType.IntervalBetweenShots].value);
             }
         }

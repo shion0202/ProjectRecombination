@@ -1,3 +1,4 @@
+using Monster;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -83,5 +84,22 @@ public abstract class PartBase : MonoBehaviour
     public void InitializeFromRow(RowData row)
     {
         _stats = row.Stats.Clone();
+    }
+
+    public void TakeDamage(Transform target, float coefficient = 1.0f)
+    {
+        MonsterBase monster = target.GetComponent<MonsterBase>();
+        if (monster != null)
+        {
+            monster.TakeDamage((int)(_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
+        }
+        else
+        {
+            monster = target.transform.GetComponentInParent<MonsterBase>();
+            if (monster != null)
+            {
+                monster.TakeDamage((int)(_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
+            }
+        }
     }
 }

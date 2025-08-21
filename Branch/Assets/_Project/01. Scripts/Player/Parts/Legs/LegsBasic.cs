@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class BasicLegs : PartLegsBase
+public class LegsBasic : PartBaseLegs
 {
     public override void UseAbility()
     {
@@ -31,7 +31,7 @@ public class BasicLegs : PartLegsBase
         camRight.Normalize();
 
         Vector3 moveDirection = camForward * moveInput.y + camRight * moveInput.x;
-        return moveDirection.normalized * _owner.Stats.TotalStats[EStatType.WalkSpeed].value;
+        return moveDirection.normalized * (_owner.Stats.TotalStats[EStatType.WalkSpeed].value + _owner.Stats.TotalStats[EStatType.AddMoveSpeed].value);
     }
 
     protected void Dash()
@@ -54,7 +54,7 @@ public class BasicLegs : PartLegsBase
 
         _owner.FinishDash();
 
-        yield return new WaitForSeconds(skillCooldown * (_currentSkillCount));
+        yield return new WaitForSeconds((skillCooldown * (_currentSkillCount)) - _owner.Stats.TotalStats[EStatType.CooldownReduction].value);
 
         _currentSkillCount = 0;
         _skillCoroutine = null;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PartLegsBase : PartBase, ILegsMovement
+public class PartBaseLegs : PartBase, ILegsMovement
 {
     [Header("다리 파츠 설정")]
     [SerializeField] protected float skillTime = 0.5f;
