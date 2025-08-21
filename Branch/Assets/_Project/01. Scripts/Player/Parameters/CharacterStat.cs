@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 [Serializable]
@@ -66,7 +67,6 @@ public class CharacterStat : MonoBehaviour
     // private float _currentTotalHealth;
     private float _currentBodyHealth;
     private float _currentPartHealth;
-    protected float _maxPartHealth;
     
     private StatDictionary _baseStats = new();                                  // 캐릭터 기본 스탯
     private Dictionary<EPartType, StatDictionary> _partStats = new();           // 파츠 부위별 스탯
@@ -113,8 +113,9 @@ public class CharacterStat : MonoBehaviour
         set => _currentBodyHealth = value;
     }
 
-    public float MaxBodyHealth => _baseStats[EStatType.MaxHp].value;
-    public float MaxPartHealth => _maxPartHealth;
+    public float MaxHealth => MaxBodyHealth + MaxPartHealth;            // 최대 체력 (몸통 + 파츠)
+    public float MaxBodyHealth => _totalStats[EStatType.MaxHp].value;
+    public float MaxPartHealth => _totalStats[EStatType.AddHp].value;
     #endregion
 
     #region Unity Methods
@@ -150,10 +151,12 @@ public class CharacterStat : MonoBehaviour
         }
 
         if (_baseStats == null) return;
-        
-        _currentBodyHealth = _baseStats[EStatType.MaxHp].value;     // 캐릭터의 바디 체력 값 초기화
-        _maxPartHealth = CalculatePartHealth();
-        _currentPartHealth = _maxPartHealth;                        // 기본 파츠 체력 총합 초기화
+
+        //_currentBodyHealth = _baseStats[EStatType.MaxHp].value;
+        //_currentPartHealth = CalculatePartHealth();
+
+        _currentBodyHealth = MaxBodyHealth;     // 캐릭터의 바디 체력 값 초기화
+        _currentPartHealth = MaxPartHealth;     // 기본 파츠 체력 총합 초기화
 
         SyncToInspector();
     }
@@ -173,6 +176,9 @@ public class CharacterStat : MonoBehaviour
     {
         _partStats[part.PartType] = part.Stats ?? new StatDictionary();
         CalculateTotalStats();
+
+        _currentPartHealth = MaxPartHealth;
+        Debug.Log($"파츠 교체: Body Hp({_currentBodyHealth}), Part Hp({_currentPartHealth})");
     }
 
     public void AddModifier(StatModifier mod)

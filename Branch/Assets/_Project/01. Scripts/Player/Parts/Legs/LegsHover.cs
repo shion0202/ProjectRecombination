@@ -11,13 +11,14 @@ public class LegsHover : PartBaseLegs
     [SerializeField] protected GameObject barrierPrefab;        // 보호막 프리팹
     [SerializeField] protected Transform barrierSpawnPoint;     // 보호막 생성 위치
     [SerializeField] protected float barrierDamage = 200.0f;
+    [SerializeField] protected float barrierPushForce = 50.0f;
     [SerializeField] protected float acceleration = 10f;        // 클수록 즉각적, 작을수록 둔함
     [SerializeField] protected float deceleration = 14f;        // 클수록 급브레이크, 작을수록 천천히 멈춤
     [SerializeField] protected float hoverHeight = 1.5f;
     [SerializeField] protected float hoverRange = 0.2f;
     [SerializeField] protected float hoverSpeed = 2.0f;
     protected GameObject _currentBarrier = null;                // 현재 활성화된 보호막
-    protected Vector3 _currentMoveVelocity = Vector3.zero;
+    protected Vector3 _currentMoveDirection = Vector3.zero;
     protected float groundY = 0.0f;
     protected bool isInit = false;
 
@@ -34,7 +35,7 @@ public class LegsHover : PartBaseLegs
 
     protected void OnEnable()
     {
-        _currentMoveVelocity = Vector3.zero;
+        _currentMoveDirection = Vector3.zero;
         previousGroundY = groundY;
         isInit = false;
     }
@@ -72,9 +73,9 @@ public class LegsHover : PartBaseLegs
         float accel = (inputDir.sqrMagnitude > 0.01f) ? acceleration : deceleration; // 멈출 땐 감속값
 
         // 감가속(관성) 처리
-        _currentMoveVelocity = Vector3.MoveTowards(_currentMoveVelocity, targetVelocity, accel * Time.deltaTime);
+        _currentMoveDirection = Vector3.MoveTowards(_currentMoveDirection, targetVelocity, accel * Time.deltaTime);
 
-        return _currentMoveVelocity;
+        return _currentMoveDirection;
     }
 
     public Vector3 CalculateHoverDeltaY()
@@ -131,6 +132,7 @@ public class LegsHover : PartBaseLegs
         if (barrier != null)
         {
             barrier.Damage = barrierDamage;
+            barrier.PushForce = barrierPushForce;
         }
         Debug.Log("호버링 보호막 생성 및 버프");
 

@@ -3865,10 +3865,40 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1735087255923743013, guid: 51ee3b4d2f96ad74482d694386a4c8dc,
+        type: 3}
+      propertyPath: barrierPushForce
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946052011361182940, guid: 51ee3b4d2f96ad74482d694386a4c8dc,
+        type: 3}
+      propertyPath: m_DefaultVelocity.x
+      value: -0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946052011361182940, guid: 51ee3b4d2f96ad74482d694386a4c8dc,
+        type: 3}
+      propertyPath: m_DefaultVelocity.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049595555731442153, guid: 51ee3b4d2f96ad74482d694386a4c8dc,
+        type: 3}
+      propertyPath: m_DefaultVelocity.x
+      value: -0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 3058323763864489833, guid: 51ee3b4d2f96ad74482d694386a4c8dc,
         type: 3}
       propertyPath: m_Name
       value: Player_Alpha
+      objectReference: {fileID: 0}
+    - target: {fileID: 3552161858890451740, guid: 51ee3b4d2f96ad74482d694386a4c8dc,
+        type: 3}
+      propertyPath: m_DefaultVelocity.x
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3552161858890451740, guid: 51ee3b4d2f96ad74482d694386a4c8dc,
+        type: 3}
+      propertyPath: m_DefaultVelocity.y
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3678875803870600619, guid: 51ee3b4d2f96ad74482d694386a4c8dc,
         type: 3}

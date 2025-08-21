@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // Debug.Log("Player HP: " + stats.CurrentHealth);
         // GUI HP 바 갱신
         // TODO: Null Reference
-        GUIManager.Instance.SetHpSlider(stats.CurrentHealth, stats.TotalStats[EStatType.MaxHp].value);
+        GUIManager.Instance.SetHpSlider(stats.CurrentHealth, stats.MaxHealth);
     }
 
     private void LateUpdate()
@@ -323,6 +323,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (stats.CurrentHealth <= 0) return;
 
         var damage = (takeDamage - (stats.TotalStats[EStatType.Defence].value + stats.TotalStats[EStatType.AddDefence].value)) * stats.TotalStats[EStatType.DamageReductionRate].value;
+        Debug.Log($"Player에게 {damage} 데미지! 효과는 굉장했다!");
 
         if (damage > 0)
         {
@@ -354,9 +355,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             // TODO: 데미지가 음수일때 어떻게 처리할 것인지 논의 필요 (힐을 시킬 것인지 무시할 것인지)
         }
 
-        Debug.Log($"Player에게 {damage} 데미지! 효과는 굉장했다!");
-        Debug.Log($"Body HP: {stats.CurrentBodyHealth}");
-        Debug.Log($"Part HP: {stats.CurrentPartHealth}");
+        Debug.Log($"HP: Body({stats.CurrentBodyHealth}), Part({stats.CurrentPartHealth})");
     }
 
     public void HealHp(float healAmount, EHealRange healRange = EHealRange.All)
@@ -369,10 +368,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (healRange != EHealRange.Part)
         {
             // 계산 후 Body Hp가 최대치를 초과했을 경우
+            float postHealth = stats.CurrentBodyHealth;
             stats.CurrentBodyHealth += amount;
             if (stats.CurrentBodyHealth > stats.MaxBodyHealth)
             {
-                amount = stats.CurrentBodyHealth - amount;          // 파츠 회복량 감소
+                amount = stats.CurrentBodyHealth - postHealth;          // 파츠 회복량 감소
                 stats.CurrentBodyHealth = stats.MaxBodyHealth;      // 바디 Hp를 최대값으로 초기화
             }
             else
