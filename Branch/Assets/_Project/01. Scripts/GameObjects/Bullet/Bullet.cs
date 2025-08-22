@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static UnityEditor.Progress;
 using static UnityEngine.UI.GridLayoutGroup;
 
 public class Bullet : MonoBehaviour
@@ -115,8 +116,33 @@ public class Bullet : MonoBehaviour
         // 벽(또는 기타 오브젝트)에 닿은 경우
         if (other.CompareTag("Wall") || other.CompareTag("Obstacle"))
         {
+            Debug.Log("장애물에 의한 삭제");
             Destroy(gameObject); // 총알 파괴
             return;
+        }
+
+        if (other.CompareTag("Breakable"))
+        {
+            Debug.Log("파괴 가능한 오브젝트에 의한 삭제");
+
+            foreach (Transform child in other.transform)
+            {
+
+                MeshCollider mCollider = child.GetComponent<MeshCollider>();
+                if (mCollider != null)
+                {
+                    mCollider.enabled = true; // 충돌을 비활성화
+                }
+
+                Rigidbody orb = other.GetComponent<Rigidbody>();
+                if (orb != null)
+                {
+                    orb.useGravity = true;
+                    orb.AddExplosionForce(200.0f, transform.position, 20.0f);
+                }
+            }
+
+            Destroy(gameObject);
         }
     }
 

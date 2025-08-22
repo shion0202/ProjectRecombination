@@ -146,7 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a45f9fe1b584274b65a063dceb6ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 3
   rb: {fileID: 6022039817454698780}
-  isCollision: 1
   bulletSpeed: 50
+  isCheckCollisionByBullet: 1
+  lifeTime: 3
+  explosionEffectPrefab: {fileID: 0}
+  explosionRange: 1
+  explosionRadius: 2

@@ -66,33 +66,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3891008934501823717}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d3ad692e7114cffb080776c15a8a497, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c7aca842978410c8541b7253f28f355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSettings:
-    walkSpeed: 2
-    runSpeed: 5
-  combatSettings:
-    lookAtRange: 10
-    attackRange: 10
-    attackCooldown: 1
-    maxHealth: 100
-    damage: 10
-  state: 0
-  currentHealth: 0
-  target: {fileID: 0}
-  agent: {fileID: 5802194635917357742}
-  animator: {fileID: 1596249401065585791}
-  rigid: {fileID: 4887725400772364304}
-  coll: {fileID: 7347646840699726702}
-  stats:
-    projectilePrefab: {fileID: 914363595772914150, guid: 6f5450e81ba064d569aee68c026bb7d6,
-      type: 3}
-    projectileSpeed: 10
-    dilayBetweenShots: 1
-    projectileSpawnPoint: {fileID: 2104882911867141733}
-    spinSpeed: 5
-  vfxPrefab: {fileID: 6399701238403386443}
 --- !u!114 &6112956626522810948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,36 +152,6 @@ PrefabInstance:
 --- !u!4 &538562666003085392 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4519718861212649151, guid: 058153e13cc99c046a6400a8b3a94ba5,
-    type: 3}
-  m_PrefabInstance: {fileID: 4161360964032151279}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1596249401065585791 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: -5771613745341955440, guid: 058153e13cc99c046a6400a8b3a94ba5,
-    type: 3}
-  m_PrefabInstance: {fileID: 4161360964032151279}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2104882911867141733 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2663338651864350858, guid: 058153e13cc99c046a6400a8b3a94ba5,
-    type: 3}
-  m_PrefabInstance: {fileID: 4161360964032151279}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &4887725400772364304 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 8796849368832472831, guid: 058153e13cc99c046a6400a8b3a94ba5,
-    type: 3}
-  m_PrefabInstance: {fileID: 4161360964032151279}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6399701238403386443 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6994180249138852516, guid: 058153e13cc99c046a6400a8b3a94ba5,
-    type: 3}
-  m_PrefabInstance: {fileID: 4161360964032151279}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &7347646840699726702 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 6645072661808256385, guid: 058153e13cc99c046a6400a8b3a94ba5,
     type: 3}
   m_PrefabInstance: {fileID: 4161360964032151279}
   m_PrefabAsset: {fileID: 0}

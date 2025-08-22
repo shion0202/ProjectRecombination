@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - Bullet
   - Platform
+  - Breakable
   layers:
   - Default
   - TransparentFX
