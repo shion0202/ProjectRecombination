@@ -52,25 +52,27 @@ void GetFirstPointLight_float(float3 PositionWS, float3 NormalWS, out float3 Out
     // 출력 변수 초기화
     OutDirection = float3(0, 0, 0);
 
-    float firstWeight = 0;
-    float3 firstDirection = float3(0, 0, 0);
+    float maxWeight = 0;
+    float3 selectedDirection = float3(0, 0, 1);
     
     // 추가 라이트 계산
     int lightCount = GetAdditionalLightsCount();
     for (int i = 0; i < lightCount; ++i)
     {
         Light light = GetAdditionalLight(i, PositionWS);
+
         float nDotL = saturate(dot(NormalWS, light.direction));
         float weight = nDotL * light.distanceAttenuation;
-        if (weight > firstWeight)
+
+        if (weight > maxWeight)
         {
-            firstWeight = weight;
-            firstDirection = light.direction;
+            maxWeight = weight;
+            selectedDirection = light.direction;
         }
     }
     
     // Spot Light일 경우
-    OutDirection = (firstWeight > 0) ? normalize(firstDirection) : float3(0, 0, 1);
+    OutDirection = selectedDirection;
 #endif
 }
 #endif

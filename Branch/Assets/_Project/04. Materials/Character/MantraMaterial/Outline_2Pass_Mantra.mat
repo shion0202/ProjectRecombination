@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_Outline_2Pass
+  m_Name: Outline_2Pass_Mantra
   m_Shader: {fileID: -6465566751694194690, guid: dbe53f765747ab34590092e873e6e01b,
     type: 3}
   m_Parent: {fileID: 0}
@@ -105,12 +105,12 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Hue: -0.5
+    - _Hue: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Outline: 1
     - _OutlineSize: 0.001
-    - _OutlineWidth: 0.2
+    - _OutlineWidth: 0.4
     - _Outline_Thickness: 0.005
     - _Parallax: 0.005
     - _QueueControl: 0
@@ -123,7 +123,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _Value: 0.954
+    - _Value: 1
     - _Width: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
