@@ -33,6 +33,7 @@ public class PartBaseArm : PartBase
         {
             ignoreMask |= 1;
             ignoreMask &= ~LayerMask.NameToLayer("Ignore Raycast");
+            ignoreMask &= ~LayerMask.NameToLayer("Outline");
         }
     }
 
