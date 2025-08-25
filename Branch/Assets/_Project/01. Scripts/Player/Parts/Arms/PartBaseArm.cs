@@ -40,13 +40,12 @@ public class PartBaseArm : PartBase
     {
         _currentShootTime -= Time.deltaTime;
         if (!_isShooting) return;
-        
+
         if (_currentShootTime <= 0.0f)
         {
             Shoot();
             _currentShootTime = (_owner.Stats.CombinedPartStats[partType][EStatType.IntervalBetweenShots].value);
         }
-        
     }
 
     public override void UseAbility()

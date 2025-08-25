@@ -548,7 +548,7 @@ Material:
     - _MatCapShadowMask: 0
     - _MatCapVRParallaxStrength: 1
     - _MatCapZRotCancel: 1
-    - _MatcapAlpha: 0.5
+    - _MatcapAlpha: 0.3
     - _MatcapBlur: 0
     - _MatcapShadowMask: 0
     - _Metallic: 0

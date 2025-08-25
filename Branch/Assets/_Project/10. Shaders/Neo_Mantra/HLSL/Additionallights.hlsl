@@ -75,4 +75,48 @@ void GetFirstPointLight_float(float3 PositionWS, float3 NormalWS, out float3 Out
     OutDirection = selectedDirection;
 #endif
 }
+
+// 메시 중앙 혹은 월드 기준점(예: BoundsCenter) 등 고정 위치 사용
+void GetSubLight_float(float3 ReferencePosWS, float3 ReferenceNormalWS, out float3 OutColor, out float3 OutDirection)
+{
+#if defined(SHADERGRAPH_PREVIEW)
+    OutDirection = float3(0, 0, 0);
+    OutColor = 0;
+#else
+
+// 기준점에서 최강 라이트 한 번만 선택
+    float maxWeight = 0;
+    float3 selectedDirection = float3(0, 0, 1);
+    float3 selectedColor = float3(0, 0, 0);
+
+// main light
+    Light mainLight = GetMainLight();
+    float nDotL = saturate(dot(ReferenceNormalWS, mainLight.direction));
+    float weight = nDotL * mainLight.distanceAttenuation * mainLight.shadowAttenuation;
+    if (weight > maxWeight)
+    {
+        maxWeight = weight;
+        selectedDirection = mainLight.direction;
+        selectedColor = mainLight.color.rgb * weight;
+    }
+
+// 추가 라이트들
+    for (int i = 0; i < GetAdditionalLightsCount(); ++i)
+    {
+        Light light = GetAdditionalLight(i, ReferencePosWS);
+        float nDotL = saturate(dot(ReferenceNormalWS, light.direction));
+        float weight = nDotL * light.distanceAttenuation * light.shadowAttenuation;
+        if (weight > maxWeight)
+        {
+            maxWeight = weight;
+            selectedDirection = light.direction;
+            selectedColor = light.color.rgb * weight;
+        }
+    }
+
+// 해당 라이트 정보를 머터리얼 전체에 사용
+    OutDirection = selectedDirection;
+    OutColor = selectedColor;
+#endif
+}
 #endif

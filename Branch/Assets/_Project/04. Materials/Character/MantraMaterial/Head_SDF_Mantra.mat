@@ -646,7 +646,7 @@ Material:
     - _Shadow3rdReceive: 0
     - _ShadowBlur: 0.1
     - _ShadowBlurMaskLOD: 0
-    - _ShadowBorder: 0.574
+    - _ShadowBorder: 0.5
     - _ShadowBorderMaskLOD: 0
     - _ShadowBorderRange: 0
     - _ShadowColorType: 0
@@ -768,8 +768,8 @@ Material:
     - _EmissionBlink: {r: 0, g: 0, b: 3.141593, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionMap_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}
-    - _FaceForwardDirection: {r: 0.9988311, g: 0, b: 0.048336387, a: 0}
-    - _FaceRightDirection: {r: 0.048336387, g: 0, b: -0.9988311, a: 0}
+    - _FaceForwardDirection: {r: 1.0000001, g: 0, b: -0.00000011920929, a: 0}
+    - _FaceRightDirection: {r: -0.00000011920929, g: 0, b: -1.0000001, a: 0}
     - _GlitterAtras: {r: 1, g: 1, b: 0, a: 0}
     - _GlitterColor: {r: 1, g: 1, b: 1, a: 1}
     - _GlitterParams1: {r: 256, g: 256, b: 0.16, a: 50}

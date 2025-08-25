@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 2674645008246414850}
   - component: {fileID: 2946052011361182940}
   - component: {fileID: 6895942616152274495}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Arm_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -435,7 +434,7 @@ GameObject:
   - component: {fileID: 1289034219145582725}
   - component: {fileID: 3552161858890451740}
   - component: {fileID: 8807908289931689182}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Heavy_Arm_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -478,7 +477,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5bc723bfd58fcee47a1f5e30b4034e73, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -784,7 +782,7 @@ GameObject:
   - component: {fileID: 5678182440279551998}
   - component: {fileID: 5656413973801317463}
   - component: {fileID: 7185743777903802034}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Arm_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -827,7 +825,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 8b5e9442aed1d5e498ea69143b33b25d, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1137,7 +1134,7 @@ GameObject:
   - component: {fileID: 2535660241923136242}
   - component: {fileID: 6841381816954873130}
   - component: {fileID: 5527479289416179982}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player_Head_SDF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1152,13 +1149,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2026230576495490267}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.00006103517, y: 1.5804653, z: 0.00003051757}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4421026336559092106}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!137 &6841381816954873130
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -1180,7 +1177,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 29c08f3eddcc1bc4abee2689fd257318, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1238,7 +1234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2672098549534739179}
   - component: {fileID: 5580703101996287352}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player_Hair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1281,7 +1277,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 4355bd1c84111b1418c093a8b2c06287, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1357,7 +1352,7 @@ GameObject:
   - component: {fileID: 1320854486025801782}
   - component: {fileID: 440205695089180967}
   - component: {fileID: 7311154934055457045}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1400,7 +1395,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d47f51ee81f5ff941b090b5b92f6af80, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6483,7 +6477,7 @@ GameObject:
   - component: {fileID: 418212300612142144}
   - component: {fileID: 3049595555731442153}
   - component: {fileID: 8400120370635485102}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Heavy_Arm_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6526,7 +6520,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5bc723bfd58fcee47a1f5e30b4034e73, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6825,7 +6818,7 @@ GameObject:
   - component: {fileID: 6460753173729015601}
   - component: {fileID: 6406927593136476034}
   - component: {fileID: 5337688155596030100}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6868,7 +6861,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 8b5e9442aed1d5e498ea69143b33b25d, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7057,7 +7049,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1994083688367734679}
   - component: {fileID: 4564287738880914851}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7146,13 +7138,13 @@ GameObject:
   - component: {fileID: 4055221427697607304}
   - component: {fileID: 2575400823702936263}
   - component: {fileID: 8330519062977981866}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Arm_Fire_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2297649504746767682
 Transform:
   m_ObjectHideFlags: 0
@@ -7190,7 +7182,6 @@ SkinnedMeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: 22d22b42bb9a56f4a85e21f96acea89a, type: 2}
   - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12444,7 +12435,7 @@ GameObject:
   - component: {fileID: 685371072893014310}
   - component: {fileID: 3948043707881295587}
   - component: {fileID: 3678875803870600619}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Arm_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12487,7 +12478,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 8b5e9442aed1d5e498ea69143b33b25d, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -22696,7 +22686,7 @@ GameObject:
   - component: {fileID: 5968897802837165845}
   - component: {fileID: 8233354366521220822}
   - component: {fileID: 7640003098686037164}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Arm_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22739,7 +22729,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -28309,13 +28298,13 @@ GameObject:
   - component: {fileID: 4929804531697781108}
   - component: {fileID: 475648190941248360}
   - component: {fileID: 7357712937202402288}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Arm_Laser_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4256404167566898213
 Transform:
   m_ObjectHideFlags: 0
@@ -28486,7 +28475,7 @@ GameObject:
   - component: {fileID: 3369135883320620411}
   - component: {fileID: 8783514136091974856}
   - component: {fileID: 8869958949838368158}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28529,7 +28518,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -28720,7 +28708,7 @@ GameObject:
   - component: {fileID: 1946899316997946697}
   - component: {fileID: 6228668630736099510}
   - component: {fileID: 6605033330325029464}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_BackParts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28765,7 +28753,6 @@ SkinnedMeshRenderer:
   - {fileID: 2100000, guid: c75e2a0efc1749a47a5b9136164ca047, type: 2}
   - {fileID: 2100000, guid: 1314c0fc1db9d264aabb5aed3aa7e8e7, type: 2}
   - {fileID: 2100000, guid: 1314c0fc1db9d264aabb5aed3aa7e8e7, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -28830,7 +28817,7 @@ GameObject:
   - component: {fileID: 7970372861378524472}
   - component: {fileID: 8276759623960779116}
   - component: {fileID: 1185610311219989960}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28873,7 +28860,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -28944,7 +28930,7 @@ GameObject:
   - component: {fileID: 2387874986630678680}
   - component: {fileID: 2948828172054563468}
   - component: {fileID: 7502435312336189945}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Heavy_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28987,7 +28973,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5bc723bfd58fcee47a1f5e30b4034e73, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29082,7 +29067,7 @@ GameObject:
   - component: {fileID: 686515102160142764}
   - component: {fileID: 1266390248397606302}
   - component: {fileID: 1735087255923743013}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hover_Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29125,7 +29110,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 8b5e9442aed1d5e498ea69143b33b25d, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29493,7 +29477,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1207866068270378073}
   - component: {fileID: 2299622107331228731}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29536,7 +29520,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 8aa374510b209fd4da42eb630cebdda4, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29648,7 +29631,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 4c54457fbea0e61458d0a27e9e7bfdc3, type: 2}
-  - {fileID: 2100000, guid: eed8b86f5e281cc419c29482d6b8f894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
