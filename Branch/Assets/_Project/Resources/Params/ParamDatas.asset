@@ -996,14 +996,14 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 40
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 9
         value:
           statType: 9
           stringValue: 
-          value: 0.2
+          value: 0.1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 10

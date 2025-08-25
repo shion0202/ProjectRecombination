@@ -21,6 +21,16 @@ public class LegsEnhanced : PartBaseLegs
         }
     }
 
+    public override void UseAbility()
+    {
+        JumpAttack();
+    }
+
+    protected void JumpAttack()
+    {
+        Debug.Log("Jump Attack!");
+    }
+
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
     {
         if (_currentSpeed <= 0.0f)
