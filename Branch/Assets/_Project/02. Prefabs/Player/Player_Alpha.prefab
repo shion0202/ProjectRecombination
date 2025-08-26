@@ -6807,7 +6807,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 3098793104601577748}
   baseParts:
-  - {fileID: 8869958949838368158}
+  - {fileID: 0}
   - {fileID: 6895942616152274495}
   - {fileID: 7640003098686037164}
   - {fileID: 1185610311219989960}
@@ -7236,7 +7236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2009
   partType: 2
-  meshType: 0
+  meshType: 1
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
   bulletPrefab: {fileID: 914363595772914150, guid: bd5c19fe2fdaef546a9472288c9eb309,
@@ -7253,8 +7253,8 @@ MonoBehaviour:
   shootingRange: 100
   recoilX: 4
   recoilY: 2
-  maxYawAngle: 90
-  maxPitchAngle: 10
+  maxYawAngle: 30
+  maxPitchAngle: 20
 --- !u!114 &2575400823702936263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7307,7 +7307,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.05, y: -0.05, z: 0}
+  m_DefaultVelocity: {x: 0.02, y: -0.02, z: 0}
 --- !u!1 &3972321335749560241
 GameObject:
   m_ObjectHideFlags: 0
@@ -28481,7 +28481,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3369135883320620411}
   - component: {fileID: 8783514136091974856}
-  - component: {fileID: 8869958949838368158}
+  - component: {fileID: 4739420552404023656}
   m_Layer: 8
   m_Name: Basic_Shoulder
   m_TagString: Untagged
@@ -28559,7 +28559,7 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.010185055, y: -0.005585581, z: 0.14149776}
     m_Extent: {x: 0.112962276, y: 0.058804028, z: 0.18763074}
   m_DirtyAABB: 0
---- !u!114 &8869958949838368158
+--- !u!114 &4739420552404023656
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -28568,7 +28568,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7609574231734340446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4a8c7acfd907804f85deee6f2a886fa, type: 3}
+  m_Script: {fileID: 11500000, guid: b3ad8eaf001ce9042b56bd390dc567e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partId: 2001

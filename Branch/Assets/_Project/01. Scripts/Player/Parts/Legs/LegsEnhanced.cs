@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class LegsEnhanced : PartBaseLegs
 {
     [Header("롤러 설정")]
+    [SerializeField] private GameObject RapidPlayerPrefab;
     [SerializeField] private float accelRate = 8f;          // 가속 속도 (높을수록 빠른 출발)
     [SerializeField] private float decelRate = 5f;          // 감속 속도 (높을수록 빠른 멈춤)
     [SerializeField] private float turnSpeed = 90.0f;       // 선회 속도 (초당 도)
@@ -28,7 +30,16 @@ public class LegsEnhanced : PartBaseLegs
 
     protected void JumpAttack()
     {
-        Debug.Log("Jump Attack!");
+        // 연출 이후 생성
+
+        GameObject go = Instantiate(RapidPlayerPrefab, _owner.transform.position, _owner.transform.rotation);
+        RapidPlayer rapidPlayer = go.GetComponent<RapidPlayer>();
+        if (rapidPlayer != null)
+        {
+            rapidPlayer.Init(_owner, _owner.FollowCamera);
+        }
+
+        // 쿨타임, 다시 등장한 이후 연출, 데미지 판정 등
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)

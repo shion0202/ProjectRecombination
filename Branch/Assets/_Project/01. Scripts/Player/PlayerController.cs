@@ -83,6 +83,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         get => stats;
     }
 
+    public FollowCameraController FollowCamera
+    {
+        get => _followCamera;
+    }
+
+    public CharacterController Controller
+    {
+        get => characterController;
+        set => characterController = value;
+    }
+
     public Vector3 FallVelocity
     {
         get { return _fallVelocity; }

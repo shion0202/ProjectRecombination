@@ -265,5 +265,20 @@ namespace _Project.Scripts.VisualScripting.Editor
             Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
             Selection.activeObject = go;
         }
+
+        [MenuItem("GameObject/VisualScripting/Output/BreakObject", false, 10)]
+        private static void CreateBreakObjectAsset(MenuCommand menuCommand)
+        {
+            // Activate 스크립트를 컴포넌트로 등록한 GameObject를 생성합니다.
+            GameObject go = new GameObject("NewBreakObject");
+            go.AddComponent<BreakObject>();
+
+            // 부모 객체가 선택되어 있을 때 해당 객체의 자식으로 추가합니다.
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            // Undo 등록 및 선택
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
     }
 }

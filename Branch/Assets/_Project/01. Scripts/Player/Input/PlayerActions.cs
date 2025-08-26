@@ -258,6 +258,118 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""JumpAttackActionMap"",
+            ""id"": ""5caea060-33a2-4129-8f02-5765ab9fb5af"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""1d052449-b53f-4e87-968a-071e0e356843"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Apply"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5938ded-7ad8-46b2-b2bf-d3bb5f52b50c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""a799d7e9-e1a0-4cd1-b157-e381727e07bb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""22a40bf7-b1d1-4a12-8947-2aaebe5ed248"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""9bf9f131-b07c-41de-b2b9-07f9ef7c1d8a"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""70418b14-8840-44ef-bf70-0d0abf9df2bf"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ce4296f5-f6e2-4893-b521-431bcd0cf8df"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""44fc41b1-36bd-473c-b404-2fc91a4d3254"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2be26461-0867-4674-8cba-507aa7d482fe"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""Apply"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0fa69bed-042c-49a8-b23b-1ceddffd5603"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -298,11 +410,17 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_PlayerActionMap_LeftAttack = m_PlayerActionMap.FindAction("LeftAttack", throwIfNotFound: true);
         m_PlayerActionMap_RightAttack = m_PlayerActionMap.FindAction("RightAttack", throwIfNotFound: true);
         m_PlayerActionMap_Interaction = m_PlayerActionMap.FindAction("Interaction", throwIfNotFound: true);
+        // JumpAttackActionMap
+        m_JumpAttackActionMap = asset.FindActionMap("JumpAttackActionMap", throwIfNotFound: true);
+        m_JumpAttackActionMap_Move = m_JumpAttackActionMap.FindAction("Move", throwIfNotFound: true);
+        m_JumpAttackActionMap_Apply = m_JumpAttackActionMap.FindAction("Apply", throwIfNotFound: true);
+        m_JumpAttackActionMap_Cancel = m_JumpAttackActionMap.FindAction("Cancel", throwIfNotFound: true);
     }
 
     ~@PlayerActions()
     {
         UnityEngine.Debug.Assert(!m_PlayerActionMap.enabled, "This will cause a leak and performance issues, PlayerActions.PlayerActionMap.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_JumpAttackActionMap.enabled, "This will cause a leak and performance issues, PlayerActions.JumpAttackActionMap.Disable() has not been called.");
     }
 
     /// <summary>
@@ -525,6 +643,124 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerActionMapActions" /> instance referencing this action map.
     /// </summary>
     public PlayerActionMapActions @PlayerActionMap => new PlayerActionMapActions(this);
+
+    // JumpAttackActionMap
+    private readonly InputActionMap m_JumpAttackActionMap;
+    private List<IJumpAttackActionMapActions> m_JumpAttackActionMapActionsCallbackInterfaces = new List<IJumpAttackActionMapActions>();
+    private readonly InputAction m_JumpAttackActionMap_Move;
+    private readonly InputAction m_JumpAttackActionMap_Apply;
+    private readonly InputAction m_JumpAttackActionMap_Cancel;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "JumpAttackActionMap".
+    /// </summary>
+    public struct JumpAttackActionMapActions
+    {
+        private @PlayerActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public JumpAttackActionMapActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "JumpAttackActionMap/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_JumpAttackActionMap_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "JumpAttackActionMap/Apply".
+        /// </summary>
+        public InputAction @Apply => m_Wrapper.m_JumpAttackActionMap_Apply;
+        /// <summary>
+        /// Provides access to the underlying input action "JumpAttackActionMap/Cancel".
+        /// </summary>
+        public InputAction @Cancel => m_Wrapper.m_JumpAttackActionMap_Cancel;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_JumpAttackActionMap; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="JumpAttackActionMapActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(JumpAttackActionMapActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="JumpAttackActionMapActions" />
+        public void AddCallbacks(IJumpAttackActionMapActions instance)
+        {
+            if (instance == null || m_Wrapper.m_JumpAttackActionMapActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_JumpAttackActionMapActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @Apply.started += instance.OnApply;
+            @Apply.performed += instance.OnApply;
+            @Apply.canceled += instance.OnApply;
+            @Cancel.started += instance.OnCancel;
+            @Cancel.performed += instance.OnCancel;
+            @Cancel.canceled += instance.OnCancel;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="JumpAttackActionMapActions" />
+        private void UnregisterCallbacks(IJumpAttackActionMapActions instance)
+        {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @Apply.started -= instance.OnApply;
+            @Apply.performed -= instance.OnApply;
+            @Apply.canceled -= instance.OnApply;
+            @Cancel.started -= instance.OnCancel;
+            @Cancel.performed -= instance.OnCancel;
+            @Cancel.canceled -= instance.OnCancel;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="JumpAttackActionMapActions.UnregisterCallbacks(IJumpAttackActionMapActions)" />.
+        /// </summary>
+        /// <seealso cref="JumpAttackActionMapActions.UnregisterCallbacks(IJumpAttackActionMapActions)" />
+        public void RemoveCallbacks(IJumpAttackActionMapActions instance)
+        {
+            if (m_Wrapper.m_JumpAttackActionMapActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="JumpAttackActionMapActions.AddCallbacks(IJumpAttackActionMapActions)" />
+        /// <seealso cref="JumpAttackActionMapActions.RemoveCallbacks(IJumpAttackActionMapActions)" />
+        /// <seealso cref="JumpAttackActionMapActions.UnregisterCallbacks(IJumpAttackActionMapActions)" />
+        public void SetCallbacks(IJumpAttackActionMapActions instance)
+        {
+            foreach (var item in m_Wrapper.m_JumpAttackActionMapActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_JumpAttackActionMapActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="JumpAttackActionMapActions" /> instance referencing this action map.
+    /// </summary>
+    public JumpAttackActionMapActions @JumpAttackActionMap => new JumpAttackActionMapActions(this);
     private int m_PC_KeyboardSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -600,5 +836,34 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteraction(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "JumpAttackActionMap" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="JumpAttackActionMapActions.AddCallbacks(IJumpAttackActionMapActions)" />
+    /// <seealso cref="JumpAttackActionMapActions.RemoveCallbacks(IJumpAttackActionMapActions)" />
+    public interface IJumpAttackActionMapActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Apply" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnApply(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCancel(InputAction.CallbackContext context);
     }
 }
