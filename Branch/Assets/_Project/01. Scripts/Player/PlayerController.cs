@@ -130,6 +130,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // 비트 마스크 방식으로 레이케스트를 관리할 레이어를 설정
         groundLayerMask = ~0;
         groundLayerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+        groundLayerMask &= ~(1 << LayerMask.NameToLayer("Outline"));
+        groundLayerMask &= ~(1 << LayerMask.NameToLayer("Player"));
 
         ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs] as ILegsMovement;
         _currentMovement = legsMovement;
@@ -203,6 +205,16 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             }
 
             inventory.EquippedItems[EPartType.Legs].UseAbility();
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnShoulderSkill(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if ((_currentPlayerState & dashBlockMask) != 0) return;
+
+            inventory.EquippedItems[EPartType.Shoulder].UseAbility();
         }
     }
 

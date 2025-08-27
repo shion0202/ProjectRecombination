@@ -110,6 +110,15 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ShoulderSkill"",
+                    ""type"": ""Button"",
+                    ""id"": ""0852d740-5c42-46a8-9f06-6aacafe3af34"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Zoom"",
                     ""type"": ""Button"",
                     ""id"": ""636b85ff-1f9c-4589-8e15-3779e0575ccf"",
@@ -210,6 +219,17 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";PC_Keyboard"",
                     ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3bf891d2-13a1-4ac8-95c6-1ae1b66f5ede"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""ShoulderSkill"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -406,6 +426,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_PlayerActionMap = asset.FindActionMap("PlayerActionMap", throwIfNotFound: true);
         m_PlayerActionMap_Move = m_PlayerActionMap.FindAction("Move", throwIfNotFound: true);
         m_PlayerActionMap_Dash = m_PlayerActionMap.FindAction("Dash", throwIfNotFound: true);
+        m_PlayerActionMap_ShoulderSkill = m_PlayerActionMap.FindAction("ShoulderSkill", throwIfNotFound: true);
         m_PlayerActionMap_Zoom = m_PlayerActionMap.FindAction("Zoom", throwIfNotFound: true);
         m_PlayerActionMap_LeftAttack = m_PlayerActionMap.FindAction("LeftAttack", throwIfNotFound: true);
         m_PlayerActionMap_RightAttack = m_PlayerActionMap.FindAction("RightAttack", throwIfNotFound: true);
@@ -498,6 +519,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private List<IPlayerActionMapActions> m_PlayerActionMapActionsCallbackInterfaces = new List<IPlayerActionMapActions>();
     private readonly InputAction m_PlayerActionMap_Move;
     private readonly InputAction m_PlayerActionMap_Dash;
+    private readonly InputAction m_PlayerActionMap_ShoulderSkill;
     private readonly InputAction m_PlayerActionMap_Zoom;
     private readonly InputAction m_PlayerActionMap_LeftAttack;
     private readonly InputAction m_PlayerActionMap_RightAttack;
@@ -521,6 +543,10 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActionMap/Dash".
         /// </summary>
         public InputAction @Dash => m_Wrapper.m_PlayerActionMap_Dash;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActionMap/ShoulderSkill".
+        /// </summary>
+        public InputAction @ShoulderSkill => m_Wrapper.m_PlayerActionMap_ShoulderSkill;
         /// <summary>
         /// Provides access to the underlying input action "PlayerActionMap/Zoom".
         /// </summary>
@@ -569,6 +595,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @ShoulderSkill.started += instance.OnShoulderSkill;
+            @ShoulderSkill.performed += instance.OnShoulderSkill;
+            @ShoulderSkill.canceled += instance.OnShoulderSkill;
             @Zoom.started += instance.OnZoom;
             @Zoom.performed += instance.OnZoom;
             @Zoom.canceled += instance.OnZoom;
@@ -598,6 +627,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @ShoulderSkill.started -= instance.OnShoulderSkill;
+            @ShoulderSkill.performed -= instance.OnShoulderSkill;
+            @ShoulderSkill.canceled -= instance.OnShoulderSkill;
             @Zoom.started -= instance.OnZoom;
             @Zoom.performed -= instance.OnZoom;
             @Zoom.canceled -= instance.OnZoom;
@@ -808,6 +840,13 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ShoulderSkill" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShoulderSkill(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Zoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

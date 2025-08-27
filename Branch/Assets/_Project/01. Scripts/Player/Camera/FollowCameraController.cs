@@ -23,6 +23,7 @@ public class FollowCameraController : MonoBehaviour
     private GameObject _owner;
     private Transform _cameraTarget;
     private bool _isBeforeZoom = false;
+    private bool _isLock = false;
 
     [Header("Recoil Settings")]
     [SerializeField] private float recoilRecoverySpeed = 20.0f;
@@ -143,6 +144,19 @@ public class FollowCameraController : MonoBehaviour
     {
         ApplyCameraSettings();
         HandleRecoil();
+
+        if (_isLock)
+        {
+            _cameraAim.m_HorizontalAxis.m_InputAxisName = ""; // 입력 비활성화
+            _cameraAim.m_VerticalAxis.m_InputAxisName = "";
+            _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
+            _cameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
+        }
+        else
+        {
+            _cameraAim.m_HorizontalAxis.m_InputAxisName = "Mouse X";
+            _cameraAim.m_VerticalAxis.m_InputAxisName = "Mouse Y";
+        }
     }
 
     public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY)
@@ -160,6 +174,11 @@ public class FollowCameraController : MonoBehaviour
         source.m_DefaultVelocity.x = source.m_DefaultVelocity.x * (UnityEngine.Random.value > 0.5f ? 1 : -1);
         source.m_DefaultVelocity.y = source.m_DefaultVelocity.y * (UnityEngine.Random.value > 0.5f ? 1 : -1);
         source.GenerateImpulse();
+    }
+
+    public void LockCameraRotation(bool lockState)
+    {
+        _isLock = lockState;
     }
     #endregion
 

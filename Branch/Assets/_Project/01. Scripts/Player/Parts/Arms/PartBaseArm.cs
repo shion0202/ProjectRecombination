@@ -32,8 +32,9 @@ public class PartBaseArm : PartBase
         if (ignoreMask == 0)
         {
             ignoreMask |= 1;
-            ignoreMask &= ~LayerMask.NameToLayer("Ignore Raycast");
-            ignoreMask &= ~LayerMask.NameToLayer("Outline");
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Outline"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Player"));
         }
     }
 

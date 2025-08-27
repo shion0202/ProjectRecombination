@@ -92,7 +92,7 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
     {
         if (context.started)
         {
-            _owner.gameObject.SetActive(true);
+            //_owner.gameObject.SetActive(true);
             PlayerInput inputComp = _owner.GetComponent<PlayerInput>();
             if (inputComp != null)
             {
@@ -103,6 +103,7 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
             _owner.transform.position = transform.position;
             _owner.Controller.enabled = true;
 
+            _owner.gameObject.SetActive(true);
             Destroy(gameObject);
         }
     }

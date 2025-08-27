@@ -93,7 +93,7 @@ public class LegsCaterpillar : PartBaseLegs
 
     protected IEnumerator CoImpartRoutine()
     {
-        Destroy(Instantiate(impactEffectPrefab, _owner.transform.position, Quaternion.identity), 5.0f);
+        Destroy(Instantiate(impactEffectPrefab, _owner.transform.position, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(-90.0f, 0.0f, 0.0f))), 5.0f);
 
         // 적 탐지 및 데미지 적용
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, skillRange);

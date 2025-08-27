@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class PartBaseShoulder : PartBase
 {
+    [SerializeField] protected LayerMask ignoreMask = 0;
+
+    protected virtual void Awake()
+    {
+        if (ignoreMask == 0)
+        {
+            ignoreMask |= 1;
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Outline"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Player"));
+        }
+    }
+
     public override void FinishActionForced()
     {
         

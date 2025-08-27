@@ -24,6 +24,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ShoulderSkill",
+                    "type": "Button",
+                    "id": "0852d740-5c42-46a8-9f06-6aacafe3af34",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Zoom",
                     "type": "Button",
                     "id": "636b85ff-1f9c-4589-8e15-3779e0575ccf",
@@ -124,6 +133,17 @@
                     "processors": "",
                     "groups": ";PC_Keyboard",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3bf891d2-13a1-4ac8-95c6-1ae1b66f5ede",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC_Keyboard",
+                    "action": "ShoulderSkill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -50,12 +50,12 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         _timer = lifeTime;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (_timer > 0)
         {
@@ -114,15 +114,12 @@ public class Bullet : MonoBehaviour
         // 벽(또는 기타 오브젝트)에 닿은 경우
         if (other.CompareTag("Wall") || other.CompareTag("Obstacle"))
         {
-            Debug.Log("장애물에 의한 삭제");
             Destroy(gameObject); // 총알 파괴
             return;
         }
 
         if (other.CompareTag("Breakable"))
         {
-            Debug.Log("파괴 가능한 오브젝트에 의한 삭제");
-
             foreach (Transform child in other.transform)
             {
 

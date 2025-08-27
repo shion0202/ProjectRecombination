@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LegsBasic : PartBaseLegs
 {
+    [SerializeField] protected GameObject dashEffectPrefab;
+
     public override void UseAbility()
     {
         if (_currentSkillCount >= maxSkillCount) return;
@@ -42,12 +44,23 @@ public class LegsBasic : PartBaseLegs
             _skillCoroutine = null;
         }
 
+        LookCameraDirection();
         _owner.Dash(skillRange / skillTime);
         _skillCoroutine = StartCoroutine(CoHandleDash());
     }
 
+    protected void LookCameraDirection()
+    {
+        Camera cam = Camera.main;
+        Vector3 lookDirection = cam.transform.forward;
+        lookDirection.y = 0; // 수평 방향으로만 회전
+        if (lookDirection != Vector3.zero)
+            _owner.transform.rotation = Quaternion.LookRotation(lookDirection);
+    }
+
     protected IEnumerator CoHandleDash()
     {
+        Destroy(Instantiate(dashEffectPrefab, _owner.transform.position + _owner.transform.forward * skillRange + Vector3.up, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(0.0f, 180.0f, 0.0f))), 2.0f);
         ++_currentSkillCount;
 
         yield return new WaitForSeconds(skillTime);

@@ -90,15 +90,6 @@ public class ArmLaserMultiple : PartBaseArm
         if (target == null) return false;
         if (!target.gameObject.activeInHierarchy) return false;
 
-        // Enemy 스크립트가 있다면 사망 체크 (아래는 예시)
-        /*
-        Enemy enemyComp = target.GetComponent<Enemy>();
-        if (enemyComp != null && enemyComp.IsDead)
-        {
-            return false;
-        }
-        */
-
         return true;
     }
 
@@ -107,7 +98,7 @@ public class ArmLaserMultiple : PartBaseArm
     {
         if (targetPrefab != null && currentTarget != null)
         {
-            Vector3 startPos = currentTarget.position + targetIndicatorStartPosOffset;
+            Vector3 startPos = (currentTarget.position + Vector3.up) + targetIndicatorStartPosOffset;
             currentTargetIndicator = Instantiate(targetPrefab, startPos, Quaternion.identity, currentTarget);
 
             SetTargetIndicatorColor(targetingInProgressColor);
@@ -119,8 +110,8 @@ public class ArmLaserMultiple : PartBaseArm
         if (currentTargetIndicator == null || currentTarget == null) return;
 
         float t = targetingProgress / maxCastTime;
-        Vector3 startPos = currentTarget.position + targetIndicatorStartPosOffset;
-        Vector3 endPos = currentTarget.position;
+        Vector3 startPos = (currentTarget.position + Vector3.up) + targetIndicatorStartPosOffset;
+        Vector3 endPos = (currentTarget.position + Vector3.up);
 
         // 부드럽게 lerp (선형 보간) 해서 내려오는 위치 계산
         Vector3 lerpedPos = Vector3.Lerp(startPos, endPos, t);

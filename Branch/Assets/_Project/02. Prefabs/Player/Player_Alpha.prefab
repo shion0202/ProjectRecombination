@@ -175,7 +175,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.01, y: -0.01, z: 0}
+  m_DefaultVelocity: {x: 0.01, y: 0.01, z: 0}
 --- !u!114 &6895942616152274495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,8 +193,7 @@ MonoBehaviour:
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
-  bulletPrefab: {fileID: 914363595772914150, guid: a3ba8d7c3b7c34eaf8f1d979a0319c54,
-    type: 3}
+  bulletPrefab: {fileID: 199764, guid: a722c1f6fea53614a920ed802bff377d, type: 3}
   bulletSpawnPoint: {fileID: 75496544899068862}
   impulseSource: {fileID: 2946052011361182940}
   ignoreMask:
@@ -564,7 +563,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.1, y: 0.1, z: 0}
+  m_DefaultVelocity: {x: 0.1, y: -0.1, z: 0}
 --- !u!114 &293710737741830609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1453,12 +1452,16 @@ MonoBehaviour:
   meshType: 1
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
-  skillTime: 0.3
-  skillDuration: 1
-  skillCooldown: 1.5
-  maxSkillCount: 2
-  skillRange: 1
-  skillDamage: 0
+  skillTime: 0.6
+  skillDuration: -1
+  skillCooldown: 9
+  maxSkillCount: 1
+  skillRange: 6
+  skillDamage: 150
+  RapidPlayerPrefab: {fileID: 8820006985737929240, guid: 1ee90b2c6b49cf2478c647751a3a5c59,
+    type: 3}
+  jumpEffectPrefab: {fileID: 6337632206232331454, guid: c5a4acf4f9230c9499752be436b89fed,
+    type: 3}
   accelRate: 10
   decelRate: 10
   turnSpeed: 120
@@ -6613,7 +6616,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.1, y: -0.1, z: 0}
+  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
 --- !u!114 &8400120370635485102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6807,7 +6810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 3098793104601577748}
   baseParts:
-  - {fileID: 0}
+  - {fileID: 4739420552404023656}
   - {fileID: 6895942616152274495}
   - {fileID: 7640003098686037164}
   - {fileID: 1185610311219989960}
@@ -6823,7 +6826,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6460753173729015601}
   - component: {fileID: 6406927593136476034}
-  - component: {fileID: 5337688155596030100}
+  - component: {fileID: 2271954806802928472}
   m_Layer: 8
   m_Name: Laser_Shoulder
   m_TagString: Untagged
@@ -6901,7 +6904,7 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.010185055, y: -0.005585581, z: 0.14149776}
     m_Extent: {x: 0.112962276, y: 0.058804028, z: 0.18763074}
   m_DirtyAABB: 0
---- !u!114 &5337688155596030100
+--- !u!114 &2271954806802928472
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6910,7 +6913,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3072577435064885605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4a8c7acfd907804f85deee6f2a886fa, type: 3}
+  m_Script: {fileID: 11500000, guid: c3147382559d16a4385005f5747f48ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partId: 2002
@@ -6918,6 +6921,17 @@ MonoBehaviour:
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
+  beamLineRendererPrefab: {fileID: 113598, guid: 9bc40fcd7e707f149b47aa3fbb1773df,
+    type: 3}
+  beamStartPrefab: {fileID: 108584, guid: 9b0245240330cec41893d8611880df8d, type: 3}
+  beamEndPrefab: {fileID: 131904, guid: 16d8536db6f4c8e469e7c0929758624d, type: 3}
+  bulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
+    type: 3}
+  beamDuration: 2
+  beamCooldown: 5
 --- !u!1 &3280718300205857242
 GameObject:
   m_ObjectHideFlags: 0
@@ -7253,8 +7267,8 @@ MonoBehaviour:
   shootingRange: 100
   recoilX: 4
   recoilY: 2
-  maxYawAngle: 30
-  maxPitchAngle: 20
+  maxYawAngle: 15
+  maxPitchAngle: 10
 --- !u!114 &2575400823702936263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28576,6 +28590,9 @@ MonoBehaviour:
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &7698360262300945454
 GameObject:
   m_ObjectHideFlags: 0
@@ -28714,7 +28731,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1946899316997946697}
   - component: {fileID: 6228668630736099510}
-  - component: {fileID: 6605033330325029464}
+  - component: {fileID: 6498118978728906375}
   m_Layer: 8
   m_Name: Rapid_BackParts
   m_TagString: Untagged
@@ -28796,7 +28813,7 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.42984396, y: -0.20265311, z: 0.0000005364418}
     m_Extent: {x: 0.40521497, y: 0.26559353, z: 0.52831995}
   m_DirtyAABB: 0
---- !u!114 &6605033330325029464
+--- !u!114 &6498118978728906375
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -28805,7 +28822,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8338347392025715565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4a8c7acfd907804f85deee6f2a886fa, type: 3}
+  m_Script: {fileID: 11500000, guid: b0db0f4af9475d34d9b421b96dfecca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partId: 2003
@@ -28813,6 +28830,15 @@ MonoBehaviour:
   meshType: 1
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
+  missilePrefab: {fileID: 152452, guid: d153344d8c1dfb249a74761cf5fbd67c, type: 3}
+  targetingPrefab: {fileID: 5935870820068878259, guid: 74e4314ed44209242931552312968e35,
+    type: 3}
+  maxTargetCount: 12
+  maxYawAngle: 45
+  maxPitchAngle: 10
 --- !u!1 &8412690276607535946
 GameObject:
   m_ObjectHideFlags: 0
@@ -28936,7 +28962,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2387874986630678680}
   - component: {fileID: 2948828172054563468}
-  - component: {fileID: 7502435312336189945}
+  - component: {fileID: 8968452896643723306}
   m_Layer: 8
   m_Name: Heavy_Shoulder
   m_TagString: Untagged
@@ -29014,7 +29040,7 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.010185055, y: -0.005585581, z: 0.14149776}
     m_Extent: {x: 0.112962276, y: 0.058804028, z: 0.18763074}
   m_DirtyAABB: 0
---- !u!114 &7502435312336189945
+--- !u!114 &8968452896643723306
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -29023,7 +29049,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8424216129480279212}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4a8c7acfd907804f85deee6f2a886fa, type: 3}
+  m_Script: {fileID: 11500000, guid: e5d0dfdfb39ed50419d33a3ad19572aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partId: 2004
@@ -29031,6 +29057,12 @@ MonoBehaviour:
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
+  shootPrefab: {fileID: 169642, guid: fff13bebbd256b54db6f12ff5455bb45, type: 3}
+  orbPrefab: {fileID: 364168584227083269, guid: 23f7c226d30f55e48841c26e8087eb37,
+    type: 3}
 --- !u!1 &8564670448995319505
 GameObject:
   m_ObjectHideFlags: 0
