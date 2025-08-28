@@ -17,6 +17,7 @@ public class PlayAnimation : ProcessBase
         {
             obj.Play();
         }
+        IsOn = true;
     }
 
     private bool CheckNull()

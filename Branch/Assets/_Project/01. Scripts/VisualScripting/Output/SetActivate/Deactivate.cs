@@ -12,5 +12,4 @@ public class Deactivate : ProcessBase
         obj.SetActive(false);
     }
 }
-    
 }

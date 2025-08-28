@@ -133,9 +133,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         groundLayerMask &= ~(1 << LayerMask.NameToLayer("Outline"));
         groundLayerMask &= ~(1 << LayerMask.NameToLayer("Player"));
 
-        ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs] as ILegsMovement;
-        _currentMovement = legsMovement;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
@@ -146,6 +143,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void OnEnable()
     {
         _playerActions.PlayerActionMap.Enable();
+    }
+
+    private void Start()
+    {
+        ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs] as ILegsMovement;
+        _currentMovement = legsMovement;
     }
 
     private void Update()

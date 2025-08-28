@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AI.BehaviorTree.Nodes;
 using UnityEditor;
@@ -64,6 +64,7 @@ namespace AI.BehaviorTree
 
         public void OnEnable()
         {
+#if UNITY_EDITOR
             // 트리 에셋이 생성될 때 루트 노드가 없으면 자동으로 셀렉터 노드("루트 노드") 생성
             if (rootNode != null)
             {
@@ -86,11 +87,13 @@ namespace AI.BehaviorTree
             AssetDatabase.AddObjectToAsset(selector, this);
             AssetDatabase.SaveAssets();
             Debug.Log("[BehaviorTree] 루트 노드가 자동 생성되었습니다.");
+#endif
         }
         
         // 트리 에셋에 포함된 모든 BTNode 반환
         public List<BTNode> GetAllAssetNodes()
         {
+#if UNITY_EDITOR
             var assetPath = AssetDatabase.GetAssetPath(this);
             var assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
             var nodes = new List<BTNode>();
@@ -100,6 +103,9 @@ namespace AI.BehaviorTree
                     nodes.Add(node);
             }
             return nodes;
+#else
+            return new List<BTNode>();
+#endif
         }
     }
 }

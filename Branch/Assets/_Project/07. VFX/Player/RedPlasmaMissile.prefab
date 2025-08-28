@@ -9739,7 +9739,7 @@ GameObject:
   - component: {fileID: 7610566166020614749}
   m_Layer: 0
   m_Name: RedPlasmaMissile
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
