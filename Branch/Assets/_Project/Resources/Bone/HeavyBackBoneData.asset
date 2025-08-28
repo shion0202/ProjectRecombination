@@ -10,10 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 167e025aff43044419d87a827fc3b097, type: 3}
-  m_Name: Old_PlayerArmLBoneData
+  m_Name: HeavyBackBoneData
   m_EditorClassIdentifier: 
   boneNames:
-  - Bip001 L UpperArm
-  - Bip001 L Forearm
-  - Bip001 L Hand
-  - Bip001 L ForeTwist1
+  - Bip001 Spine1

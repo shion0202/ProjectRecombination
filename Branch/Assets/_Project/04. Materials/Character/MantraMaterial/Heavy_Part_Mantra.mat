@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Heavy_Part_Mantra_Temp
+  m_Name: Heavy_Part_Mantra
   m_Shader: {fileID: -6465566751694194690, guid: 3ed97c8a27e0564448c0ac2d8925af72,
     type: 3}
   m_Parent: {fileID: 0}
@@ -58,7 +58,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 78fffbf0b64efc74a9a7fd8dcbbb2b22, type: 3}
+        m_Texture: {fileID: 2800000, guid: 20fb84d9be8a2bd43b662fc76a813641, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Bump2ndMap:
@@ -607,7 +607,7 @@ Material:
     - _RimIndirBlur: 0.1
     - _RimIndirBorder: 0.5
     - _RimIndirRange: 0
-    - _RimLight: 1
+    - _RimLight: 0
     - _RimLightBackfaceMask: 0
     - _RimLightShadowMask: 0.5
     - _RimMainStrength: 0
@@ -734,7 +734,7 @@ Material:
     - _BackfaceColor: {r: 0, g: 0, b: 0, a: 0}
     - _BacklightColor: {r: 0.85, g: 0.8, b: 0.7, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.5, g: 0.13725491, b: 0.13725491, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color2nd: {r: 1, g: 1, b: 1, a: 1}
     - _Color3rd: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveColor: {r: 1, g: 1, b: 1, a: 1}

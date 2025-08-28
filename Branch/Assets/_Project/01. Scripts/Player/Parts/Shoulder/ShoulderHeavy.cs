@@ -39,12 +39,12 @@ public class ShoulderHeavy : PartBaseShoulder
         yield return new WaitForSeconds(1.0f);
 
         // 오브 생성 및 발사
-        Destroy(Instantiate(shootPrefab, transform.position + _owner.transform.forward, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(0.0f, 180.0f, 0.0f))), 2.0f);
-        GameObject orb = Instantiate(orbPrefab, transform.position, Quaternion.identity);
+        Destroy(Instantiate(shootPrefab, transform.position + _owner.transform.forward + Vector3.up, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(0.0f, 180.0f, 0.0f))), 2.0f);
+        GameObject orb = Instantiate(orbPrefab, transform.position + _owner.transform.forward + Vector3.up, Quaternion.identity);
         Bullet orbComp = orb.GetComponent<Bullet>();
         if (orbComp != null)
         {
-            orbComp.Init(_owner.gameObject, transform.position + _owner.transform.forward * 1.0f, Vector3.zero, _owner.transform.forward, 50.0f);
+            orbComp.Init(_owner.gameObject, transform.position + _owner.transform.forward * 1.0f + Vector3.up, Vector3.zero, _owner.transform.forward, 50.0f);
         }
 
         _owner.FollowCamera.LockCameraRotation(false);

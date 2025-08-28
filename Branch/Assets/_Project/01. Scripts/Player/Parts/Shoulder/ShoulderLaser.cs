@@ -26,7 +26,7 @@ public class ShoulderLaser : PartBaseShoulder
     {
         if (_isShooting)
         {
-            ShootBeamInDir(transform.position, _targetPoint);
+            ShootBeamInDir(transform.position + (Vector3.up * 1.0f), _targetPoint);
         }
     }
 
@@ -73,8 +73,8 @@ public class ShoulderLaser : PartBaseShoulder
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 targetPoint = Vector3.zero;
 
-        targetPoint = transform.position + ray.direction * 100.0f;
-        hits = Physics.CapsuleCastAll(transform.position, targetPoint, 1.0f, ray.direction, 100.0f);
+        targetPoint = transform.position + (Vector3.up * 1.0f) + ray.direction * 100.0f;
+        hits = Physics.CapsuleCastAll(transform.position + (Vector3.up * 1.0f), targetPoint, 1.0f, ray.direction, 100.0f);
 
         foreach (RaycastHit hit in hits)
         {

@@ -12,6 +12,7 @@ public enum EPartType
     ArmR = 1 << 1,
     Legs = 1 << 2,
     Shoulder = 1 << 3,
+    Back = 1 << 4,
 }
 
 // 파츠 연결을 위한 메시 종류 Enum

@@ -21,6 +21,8 @@ public class Inventory : MonoBehaviour
     private Dictionary<string, PartBase> _parts = new();    // Mesh Root에 자식으로 있는 모든 파츠
     private Dictionary<EPartType, List<string>> _boneList = new();
     private Dictionary<EPartType, Dictionary<string, Transform>> _boneMap = new();
+    private Dictionary<EPartType, List<string>> _heavyBoneList = new();
+    private Dictionary<EPartType, Dictionary<string, Transform>> _heavyBoneMap = new();
     #endregion
 
     #region Properties
@@ -43,17 +45,25 @@ public class Inventory : MonoBehaviour
             _items.Add((EPartType)(1 << i), new List<PartBase>());
             _boneList.Add((EPartType)(1 << i), new List<string>());
             _boneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
+            _heavyBoneList.Add((EPartType)(1 << i), new List<string>());
+            _heavyBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
         }
 
         foreach (EPartType partType in Enum.GetValues(typeof(EPartType)))
         {
             _boneList[partType] = Resources.Load<CharacterBoneData>($"Bone/Player{partType.ToString()}BoneData").boneNames;
+            _heavyBoneList[partType] = Resources.Load<CharacterBoneData>($"Bone/Heavy{partType.ToString()}BoneData").boneNames;
 
             foreach (Transform bone in boneRoot.GetComponentsInChildren<Transform>())
             {
                 if (_boneList[partType].Contains(bone.name))
                 {
                     _boneMap[partType].Add(bone.name, bone);
+                }
+
+                if (_heavyBoneList[partType].Contains(bone.name))
+                {
+                    _heavyBoneMap[partType].Add(bone.name, bone);
                 }
             }
         }
@@ -94,6 +104,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.ArmL][partIndex]);
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
+            EquipItem(_items[EPartType.Back][partIndex]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -103,6 +114,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.ArmL][partIndex]);
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
+            EquipItem(_items[EPartType.Back][partIndex]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
@@ -112,6 +124,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.ArmL][partIndex]);
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
+            EquipItem(_items[EPartType.Back][partIndex]);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
@@ -121,6 +134,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.ArmL][partIndex]);
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
+            EquipItem(_items[EPartType.Back][partIndex]);
         }
 
         // GUI 갱신 스크립트
@@ -200,9 +214,19 @@ public class Inventory : MonoBehaviour
         }
 
         List<Transform> meshTransforms = new List<Transform>();
-        for (int i = 0; i < smr.bones.Length; ++i)
+        if (part.gameObject.name.Contains("Heavy"))
         {
-            meshTransforms.Add(_boneMap[part.PartType][_boneList[part.PartType][i]]);
+            for (int i = 0; i < smr.bones.Length; ++i)
+            {
+                meshTransforms.Add(_heavyBoneMap[part.PartType][_heavyBoneList[part.PartType][i]]);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < smr.bones.Length; ++i)
+            {
+                meshTransforms.Add(_boneMap[part.PartType][_boneList[part.PartType][i]]);
+            }
         }
         smr.bones = meshTransforms.ToArray();
         //smr.rootBone = rootBone;
