@@ -15,5 +15,6 @@ MonoBehaviour:
   boneNames:
   - Bip001 L Calf
   - Bip001 L Thigh
+  - Bip001 Pelvis
   - Bip001 R Calf
   - Bip001 R Thigh

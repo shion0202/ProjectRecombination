@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class Bullet : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected GameObject explosionEffectPrefab;
     [SerializeField] protected float explosionRange = 1.0f;
     [SerializeField] protected float explosionRadius = 2.0f;
+
+    [SerializeField] protected GameObject muzzleParticle;
+    [SerializeField] protected GameObject impactParticle;
 
     protected float LifeTime
     {
@@ -53,6 +57,14 @@ public class Bullet : MonoBehaviour
     protected virtual void Start()
     {
         _timer = lifeTime;
+
+        transform.forward = _from.transform.forward;
+
+        if (muzzleParticle)
+        {
+            muzzleParticle = Instantiate(muzzleParticle, transform.position, Quaternion.LookRotation(-_from.transform.forward));
+            Destroy(muzzleParticle, 1.5f); // Lifetime of muzzle effect.
+        }
     }
 
     protected virtual void Update()
@@ -93,6 +105,16 @@ public class Bullet : MonoBehaviour
         // 플레이어가 발사한 총알
         if (from.CompareTag("Player") && other.CompareTag("Enemy"))
         {
+            Vector3 contactPoint = other.ClosestPoint(transform.position);
+            Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
+            Quaternion rotation = Quaternion.LookRotation(effectDirection);
+            GameObject impactP = Instantiate(
+                impactParticle,
+                contactPoint, // 접점 위치
+                Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
+            );
+            Destroy(impactP, 5.0f);
+
             TakeDamage(other.transform);
             Destroy(gameObject); // 총알 파괴
             return;
@@ -101,6 +123,16 @@ public class Bullet : MonoBehaviour
         // 적이 발사한 총알
         if (from.CompareTag("Enemy") && other.CompareTag("Player"))
         {
+            Vector3 contactPoint = other.ClosestPoint(transform.position);
+            Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
+            Quaternion rotation = Quaternion.LookRotation(effectDirection);
+            GameObject impactP = Instantiate(
+                impactParticle,
+                contactPoint, // 접점 위치
+                Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
+            );
+            Destroy(impactP, 5.0f);
+
             var player = other.GetComponent<PlayerController>();
             if (player != null)
             {
@@ -114,12 +146,32 @@ public class Bullet : MonoBehaviour
         // 벽(또는 기타 오브젝트)에 닿은 경우
         if (other.CompareTag("Wall") || other.CompareTag("Obstacle"))
         {
+            Vector3 contactPoint = other.ClosestPoint(transform.position);
+            Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
+            Quaternion rotation = Quaternion.LookRotation(effectDirection);
+            GameObject impactP = Instantiate(
+                impactParticle,
+                contactPoint, // 접점 위치
+                Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
+            );
+            Destroy(impactP, 5.0f);
+
             Destroy(gameObject); // 총알 파괴
             return;
         }
 
         if (other.CompareTag("Breakable"))
         {
+            Vector3 contactPoint = other.ClosestPoint(transform.position);
+            Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
+            Quaternion rotation = Quaternion.LookRotation(effectDirection);
+            GameObject impactP = Instantiate(
+                impactParticle,
+                contactPoint, // 접점 위치
+                Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
+            );
+            Destroy(impactP, 5.0f);
+
             foreach (Transform child in other.transform)
             {
 

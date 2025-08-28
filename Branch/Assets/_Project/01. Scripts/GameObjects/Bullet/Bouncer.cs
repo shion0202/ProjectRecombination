@@ -12,11 +12,6 @@ public class Bouncer : Bullet
     {
         if (!isCheckCollisionByBullet) return;
 
-        // 총알의 규칙
-        // 1. 플레이어가 발사한 총알은 적에게만 데미지를 입힌다.
-        // 2. 적이 발사한 총알은 플레이어에게만 데미지를 입힌다.
-        // 3. 총알은 벽(또는 기타 오브젝트)에 닿으면 파괴된다.
-
         bounceCount++;
 
         // 충돌한 표면의 법선 벡터 얻기
@@ -31,6 +26,15 @@ public class Bouncer : Bullet
         // 플레이어가 발사한 총알
         if (from.CompareTag("Player") && collision.transform.CompareTag("Enemy"))
         {
+            Vector3 contactPoint = collision.contacts[0].point;
+            Vector3 contactNormal = collision.contacts[0].normal;
+            GameObject impactP = Instantiate(
+                impactParticle,
+                contactPoint,
+                Quaternion.FromToRotation(Vector3.up, contactNormal)
+            );
+            Destroy(impactP, 5.0f);
+
             TakeDamage(collision.transform);
 
             // 충돌 횟수 초과 시 투사체 파괴
@@ -44,6 +48,15 @@ public class Bouncer : Bullet
         // 적이 발사한 총알
         if (from.CompareTag("Enemy") && collision.transform.CompareTag("Player"))
         {
+            Vector3 contactPoint = collision.contacts[0].point;
+            Vector3 contactNormal = collision.contacts[0].normal;
+            GameObject impactP = Instantiate(
+                impactParticle,
+                contactPoint,
+                Quaternion.FromToRotation(Vector3.up, contactNormal)
+            );
+            Destroy(impactP, 5.0f);
+
             var player = collision.transform.GetComponent<PlayerController>();
             if (player != null)
             {
@@ -60,12 +73,30 @@ public class Bouncer : Bullet
         // 벽(또는 기타 오브젝트)에 닿은 경우
         if (collision.transform.CompareTag("Wall") || collision.transform.CompareTag("Obstacle"))
         {
+            Vector3 contactPoint = collision.contacts[0].point;
+            Vector3 contactNormal = collision.contacts[0].normal;
+            GameObject impactP = Instantiate(
+                impactParticle,
+                contactPoint,
+                Quaternion.FromToRotation(Vector3.up, contactNormal)
+            );
+            Destroy(impactP, 5.0f);
+
             if (bounceCount >= maxBounces)
             {
                 Destroy(gameObject);
             }
             return;
         }
+
+        Vector3 contactP = collision.contacts[0].point;
+        Vector3 contactN = collision.contacts[0].normal;
+        GameObject iP = Instantiate(
+            impactParticle,
+            contactP,
+            Quaternion.FromToRotation(Vector3.up, contactN)
+        );
+        Destroy(iP, 5.0f);
 
         if (bounceCount >= maxBounces)
         {

@@ -13,7 +13,22 @@ MonoBehaviour:
   m_Name: PlayerArmLBoneData
   m_EditorClassIdentifier: 
   boneNames:
-  - Bip001 L UpperArm
-  - Bip001 L Forearm
   - Bip001 L Hand
+  - Bip001 L Finger41
+  - Bip001 L Finger4
+  - Bip001 L Finger1
+  - Bip001 L Finger11
+  - Bip001 L Finger2
+  - Bip001 L Finger21
+  - Bip001 L Finger3
+  - Bip001 L Finger31
+  - Bip001 L Finger02
+  - Bip001 L Finger0
+  - Bip001 L Finger01
+  - Bip001 L Finger42
+  - Bip001 L Finger12
+  - Bip001 L Finger22
+  - Bip001 L Finger32
+  - Bip001 L Forearm
   - Bip001 L ForeTwist1
+  - Bip001 L UpperArm

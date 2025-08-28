@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43e2ea5c0442f748867a8854283f923, type: 3}
   m_Name: FollowCameraData_Normal
   m_EditorClassIdentifier: 
-  FOV: 60
-  screenX: 0.5
-  screenY: 0.775
-  cameraDistance: 2
+  FOV: 80
+  screenX: 0.45
+  screenY: 0.7
+  cameraDistance: 1.3
   trackedOffset: {x: 0, y: 0, z: 0}
   lookaheadTime: 0
   lookaheadSmoothing: 0

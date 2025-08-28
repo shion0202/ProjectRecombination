@@ -6,16 +6,24 @@ using Monster;
 public class ArmHeavyShotgun : PartBaseArm
 {
     [Header("샷건 설정")]
+    [SerializeField] protected GameObject muzzleFlashPrefab;
     [SerializeField] private int pelletCount = 12;              // 펠릿 총 개수
     [SerializeField] private float denseSpreadAngle = 5f;       // 밀집 구간 각도
     [SerializeField] private float denseRange = 10f;            // 밀집 구간 최대 거리
     [SerializeField] private float spreadAngle = 25f;           // 확산 최대 각도
     [SerializeField] private float maxRange = 20f;              // 전체 사거리
+    protected GameObject muzzleFlashEffect;
 
     protected override void Shoot()
     {
         Vector3 origin = bulletSpawnPoint.position;
         Vector3 forward = Camera.main.transform.forward;
+
+        if (muzzleFlashPrefab)
+        {
+            muzzleFlashEffect = Instantiate(muzzleFlashPrefab, transform.position, Quaternion.LookRotation(-_owner.transform.forward));
+            Destroy(muzzleFlashEffect, 0.5f); // Lifetime of muzzle effect.
+        }
 
         for (int i = 0; i < pelletCount; i++)
         {
