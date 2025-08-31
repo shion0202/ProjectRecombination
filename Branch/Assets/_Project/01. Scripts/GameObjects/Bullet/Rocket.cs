@@ -1,4 +1,4 @@
-using Monster;
+using Monster.AI;
 using UnityEngine;
 
 namespace _Project.Scripts.GameObjects.Bullet
@@ -25,7 +25,7 @@ namespace _Project.Scripts.GameObjects.Bullet
             if (from.CompareTag("Player") && other.CompareTag("Enemy"))
             {
                 // Debug.Log("is Monster");
-                var monster = other.GetComponent<MonsterBase>();
+                var monster = other.GetComponent<AIController>();
                 if (monster != null)
                 {
                     // 충돌 시 폭발 처리
@@ -33,7 +33,7 @@ namespace _Project.Scripts.GameObjects.Bullet
                 }
                 else
                 {
-                    monster = other.GetComponentInParent<MonsterBase>();
+                    monster = other.GetComponentInParent<AIController>();
                     if (monster != null)
                     {
                         // 충돌 시 폭발 처리
@@ -79,10 +79,10 @@ namespace _Project.Scripts.GameObjects.Bullet
                 }
 
                 // 적에게 데미지 적용
-                MonsterBase monster = collider.GetComponent<MonsterBase>();
+                AIController monster = collider.GetComponent<AIController>();
                 if (monster != null)
                 {
-                    monster.TakeDamage((int)damage);
+                    monster.OnHit(damage);
                 }
             }
 

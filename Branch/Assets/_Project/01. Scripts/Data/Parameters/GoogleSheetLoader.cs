@@ -156,7 +156,8 @@ public class GoogleSheetLoader : ScriptableObject
             { "walkSpeed", EStatType.WalkSpeed },
             { "runSpeed", EStatType.RunSpeed },
             { "Defence", EStatType.Defence },
-            { "DetectiveRange", EStatType.Range },
+            { "maxDetectiveRange", EStatType.MaxDetectiveRange },
+            { "minDetectiveRange", EStatType.MinDetectiveRange },
             { "partsType", EStatType.PartType },
             { "intervalBetweenShots", EStatType.IntervalBetweenShots },
             { "addHp", EStatType.AddHp },
@@ -176,11 +177,15 @@ public class GoogleSheetLoader : ScriptableObject
 
             // 몬스터 스킬 관련
             { "skillType", EStatType.SkillType },           // 스킬 타입
+            { "range", EStatType.Range },                   // 스킬 사거리
             { "cooldownTime", EStatType.CooldownTime },     // 스킬 쿨타임
             { "animSpeed", EStatType.AnimSpeed },           // 애니메이션 속도
             
-            // TODO: 필요하면 계속 추가
+            // monster2Skill
+            { "charId", EStatType.ID},
+            { "monsterSkillsId", EStatType.IdArray}
             
+            // TODO: 필요하면 계속 추가
         };
 
     [Header("시트 목록")]

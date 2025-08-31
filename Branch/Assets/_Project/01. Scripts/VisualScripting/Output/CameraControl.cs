@@ -12,12 +12,27 @@ public enum CutsceneMode
     CameraMove, // 카메라 이동
 }
 
+[System.Serializable]
+public struct CinemachineCutsceneData
+{
+    public CinemachineVirtualCamera cutsceneVirtualCamera;     // 컷씬 재생할 카메라
+    public float cutsceneDuration;                             // 컷씬 재생 시간
+
+    public CinemachineCutsceneData(CinemachineVirtualCamera camera, float duration)
+    {
+        cutsceneVirtualCamera = camera;
+        cutsceneDuration = duration;
+    }
+}
+
 public class CameraControl : ProcessBase
 {
     [Header("Cinemachine Virtual Camera Settings")]
     [SerializeField] private CinemachineVirtualCamera mainVirtualCamera;        // 컷씬 재생 후 되돌아갈 카메라
-    [SerializeField] private CinemachineVirtualCamera cutsceneVirtualCamera;    // 컷씬 재생할 카메라
-    [SerializeField] private float cutsceneDuration = 5f;                       // 컷씬 재생 시간
+    // [SerializeField] private CinemachineVirtualCamera cutsceneVirtualCamera;    // 컷씬 재생할 카메라
+    // [SerializeField] private float cutsceneDuration = 5f;                       // 컷씬 재생 시간
+    [SerializeField] private CinemachineCutsceneData[] cutsceneData;
+    
     // [Header("")]
     [Header("Cinemachine Brain Settings")]
     [SerializeField] private CinemachineBrain cinemachineBrain;
@@ -47,25 +62,36 @@ public class CameraControl : ProcessBase
 
     private IEnumerator SwitchToCutscene()
     {
-        var originalPriority = mainVirtualCamera.Priority;
-        
+        int originalPriority = mainVirtualCamera.Priority;
         // 컷씬 카메라의 우선순위를 높이고, 메인 카메라의 우선순위를 낮춘다.
-        if (cutsceneMode == CutsceneMode.FadeInNOut) GUIManager.Instance.FadeOut(cutsceneBlendTime);
-        cutsceneVirtualCamera.Priority = originalPriority + 1;
-        if (cutsceneMode == CutsceneMode.FadeInNOut) GUIManager.Instance.FadeIn(cutsceneBlendTime);
-        
-        yield return new WaitForSeconds(cutsceneDuration);
-        
-        if (cutsceneMode == CutsceneMode.FadeInNOut) GUIManager.Instance.FadeOut(cutsceneBlendTime);
-        cutsceneVirtualCamera.Priority = originalPriority - 1;
-        if (cutsceneMode == CutsceneMode.FadeInNOut) GUIManager.Instance.FadeIn(cutsceneBlendTime);
+        for (int i = 0; i < cutsceneData.Length; i++)
+        {
+            CinemachineCutsceneData cutscene = cutsceneData[i];
+            if (cutscene.cutsceneVirtualCamera is null)
+            {
+                Debug.LogError($"Cutscene camera at index {i} is not assigned.");
+                continue;
+            }
+            if (cutsceneMode == CutsceneMode.FadeInNOut) GUIManager.Instance.FadeOut(cutsceneBlendTime);
+            cutscene.cutsceneVirtualCamera.Priority = originalPriority + 1 + i;
+            if (cutsceneMode == CutsceneMode.FadeInNOut) GUIManager.Instance.FadeIn(cutsceneBlendTime);
+
+            yield return new WaitForSeconds(cutscene.cutsceneDuration);
+        }
+
+        foreach (CinemachineCutsceneData cutscene in cutsceneData)
+        {
+            if (cutsceneMode == CutsceneMode.FadeInNOut) GUIManager.Instance.FadeOut(cutsceneBlendTime);
+            cutscene.cutsceneVirtualCamera.Priority = originalPriority - 1;
+            if (cutsceneMode == CutsceneMode.FadeInNOut) GUIManager.Instance.FadeIn(cutsceneBlendTime);
+        }
     }
 
     private void BlendToCutscene()
     {
         if (cinemachineBrain is null) return;
         
-        var style = cutsceneMode switch
+        CinemachineBlendDefinition.Style style = cutsceneMode switch
         {
             CutsceneMode.FadeInNOut => CinemachineBlendDefinition.Style.Cut,
             CutsceneMode.CameraMove => CinemachineBlendDefinition.Style.EaseInOut,

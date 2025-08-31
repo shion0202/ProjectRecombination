@@ -1,4 +1,5 @@
 using Monster;
+using Monster.AI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -89,17 +90,17 @@ public abstract class PartBase : MonoBehaviour
 
     public void TakeDamage(Transform target, float coefficient = 1.0f)
     {
-        MonsterBase monster = target.GetComponent<MonsterBase>();
+        AIController monster = target.GetComponent<AIController>();
         if (monster != null)
         {
-            monster.TakeDamage((int)(_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
+            monster.OnHit((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
         }
         else
         {
-            monster = target.transform.GetComponentInParent<MonsterBase>();
+            monster = target.transform.GetComponentInParent<AIController>();
             if (monster != null)
             {
-                monster.TakeDamage((int)(_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
+                monster.OnHit((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
             }
         }
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Monster;
+using Monster.AI;
 
 public class LegsCaterpillar : PartBaseLegs
 {
@@ -99,18 +100,18 @@ public class LegsCaterpillar : PartBaseLegs
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, skillRange);
         foreach (Collider hit in hitColliders)
         {
-            MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
+            AIController monster = hit.transform.GetComponent<AIController>();
             if (monster != null)
             {
-                monster.TakeDamage((int)skillDamage);
+                monster.OnHit(skillDamage);
                 // TODO: 적 기절 (2초)
             }
             else
             {
-                monster = hit.transform.GetComponentInParent<MonsterBase>();
+                monster = hit.transform.GetComponentInParent<AIController>();
                 if (monster != null)
                 {
-                    monster.TakeDamage((int)skillDamage);
+                    monster.OnHit(skillDamage);
                     // TODO: 적 기절 (2초)
                 }
             }

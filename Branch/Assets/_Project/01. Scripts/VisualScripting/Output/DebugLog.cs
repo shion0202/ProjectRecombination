@@ -6,9 +6,12 @@ namespace _Project.Scripts.VisualScripting
 {
     public class DebugLog : ProcessBase
     {
+        [SerializeField] private string logMessage = "디버그 로그 메시지";
         public override void Execute()
         {
-            Debug.Log("실행!");
+            if (IsOn) return;
+            Debug.Log($"{logMessage}");
+            IsOn = true;
         }
     }
 }

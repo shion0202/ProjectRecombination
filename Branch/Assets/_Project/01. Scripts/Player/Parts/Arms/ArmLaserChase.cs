@@ -1,4 +1,4 @@
-using AI;
+using Monster.AI;
 using Cinemachine;
 using Monster;
 using System.Collections;

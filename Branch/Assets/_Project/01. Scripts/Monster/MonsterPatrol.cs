@@ -11,7 +11,7 @@ namespace Monster
         
         private float _startPatrolTime; // 순찰 시작 시간
         private float _currentPatrolTime; // 현재 순찰 시간
-        private bool _isPatrolling; // 순찰 중인지 여부
+        // private bool _isPatrolling; // 순찰 중인지 여부
         private int _currentWayPointIndex; // 현재 순찰 경로 포인트 인덱스
         
         public float StartPatrolTime
@@ -25,11 +25,12 @@ namespace Monster
             set => _currentPatrolTime = value;
         }
 
-        public bool IsPatrolling
-        {
-            get => _isPatrolling;
-            set => _isPatrolling = value;
-        }
+        // public bool IsPatrolling
+        // {
+        //     get => _isPatrolling;
+        //     set => _isPatrolling = value;
+        // }
+        
         public int CurrentWayPointIndex
         {
             get => _currentWayPointIndex;

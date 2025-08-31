@@ -1,9 +1,9 @@
-using Monster;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
+using Monster.AI;
 
 public class Bullet : MonoBehaviour
 {
@@ -108,12 +108,15 @@ public class Bullet : MonoBehaviour
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
             Quaternion rotation = Quaternion.LookRotation(effectDirection);
-            GameObject impactP = Instantiate(
+            if (impactParticle)
+            {
+                GameObject impactP = Instantiate(
                 impactParticle,
                 contactPoint, // 접점 위치
                 Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
             );
-            Destroy(impactP, 5.0f);
+                Destroy(impactP, 5.0f);
+            }
 
             TakeDamage(other.transform);
             Destroy(gameObject); // 총알 파괴
@@ -126,12 +129,15 @@ public class Bullet : MonoBehaviour
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
             Quaternion rotation = Quaternion.LookRotation(effectDirection);
-            GameObject impactP = Instantiate(
+            if (impactParticle)
+            {
+                GameObject impactP = Instantiate(
                 impactParticle,
                 contactPoint, // 접점 위치
                 Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
             );
-            Destroy(impactP, 5.0f);
+                Destroy(impactP, 5.0f);
+            }
 
             var player = other.GetComponent<PlayerController>();
             if (player != null)
@@ -149,12 +155,16 @@ public class Bullet : MonoBehaviour
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
             Quaternion rotation = Quaternion.LookRotation(effectDirection);
-            GameObject impactP = Instantiate(
+
+            if (impactParticle)
+            {
+                GameObject impactP = Instantiate(
                 impactParticle,
                 contactPoint, // 접점 위치
                 Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
             );
-            Destroy(impactP, 5.0f);
+                Destroy(impactP, 5.0f);
+            }
 
             Destroy(gameObject); // 총알 파괴
             return;
@@ -165,12 +175,15 @@ public class Bullet : MonoBehaviour
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
             Quaternion rotation = Quaternion.LookRotation(effectDirection);
-            GameObject impactP = Instantiate(
+            if (impactParticle)
+            {
+                GameObject impactP = Instantiate(
                 impactParticle,
                 contactPoint, // 접점 위치
                 Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
             );
-            Destroy(impactP, 5.0f);
+                Destroy(impactP, 5.0f);
+            }
 
             foreach (Transform child in other.transform)
             {
@@ -195,17 +208,17 @@ public class Bullet : MonoBehaviour
 
     public void TakeDamage(Transform target, float coefficient = 1.0f)
     {
-        MonsterBase monster = target.GetComponent<MonsterBase>();
+        AIController monster = target.GetComponent<AIController>();
         if (monster != null)
         {
-            monster.TakeDamage((int)(_damage * coefficient));
+            monster.OnHit(_damage * coefficient);
         }
         else
         {
-            monster = target.transform.GetComponentInParent<MonsterBase>();
+            monster = target.transform.GetComponentInParent<AIController>();
             if (monster != null)
             {
-                monster.TakeDamage((int)(_damage * coefficient));
+                monster.OnHit(_damage * coefficient);
             }
         }
     }

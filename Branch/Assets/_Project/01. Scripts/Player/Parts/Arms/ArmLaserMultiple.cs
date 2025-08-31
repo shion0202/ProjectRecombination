@@ -100,6 +100,7 @@ public class ArmLaserMultiple : PartBaseArm
         {
             Vector3 startPos = (currentTarget.position + Vector3.up) + targetIndicatorStartPosOffset;
             currentTargetIndicator = Instantiate(targetPrefab, startPos, Quaternion.identity, currentTarget);
+            currentTargetIndicator.transform.localScale = Vector3.one * (0.1f / currentTarget.transform.localScale.x);
 
             SetTargetIndicatorColor(targetingInProgressColor);
         }
@@ -216,7 +217,7 @@ public class ArmLaserMultiple : PartBaseArm
             {
                 // 카메라와 적 간 거리 (사거리) 체크
                 float distanceToCam = Vector3.Distance(cam.transform.position, enemy.transform.position);
-                if (distanceToCam <= shootingRange)  // shootingRange는 부모 클래스 변수로 가정
+                if (distanceToCam <= shootingRange)
                 {
                     // 뷰포트 중앙과 적 위치 간 거리 계산
                     Vector2 enemyViewportPos2D = new Vector2(viewportPos.x, viewportPos.y);

@@ -11,7 +11,8 @@ public enum EStatType
     WalkSpeed,
     RunSpeed,
     Defence,
-    Range,                  // 범위 (예: 적을 인식하는 거리)
+    MaxDetectiveRange,                  // 범위 (예: 적을 인식하는 거리)
+    MinDetectiveRange,
     PartType,               // 파츠 타입 (예: 등/어깨, 팔, 다리)
     IntervalBetweenShots,   // 탄 발사 간격 시간값
     AddHp,
@@ -24,9 +25,10 @@ public enum EStatType
     // 몬스터 스킬
     SkillType,            // 스킬 타입 (예: 근거리 공격, 원거리 공격, 방어 등)
     CooldownTime,         // 스킬 쿨타임
-    AnimSpeed,          // 애니메이션 속도
+    AnimSpeed,            // 애니메이션 속도
+    Range,                // 스킬 사거리
     
-    
+    IdArray,             // ID 배열 (예: 아이템을 장착할 때 사용)
     // TODO: 스킬은 다시 정의해야함
     // SkillDamage,
     // SkillSpeed,

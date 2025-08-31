@@ -75,6 +75,30 @@ namespace Script.CustomCollections
             return topItem;
         }
 
+        public (TElement item, int priority) DequeueRow()
+        {
+            if (_heap.Count == 0)
+            {
+                throw new InvalidOperationException("PriorityQueue is empty.");
+            }
+            
+            TElement item = _heap[0].item;
+            int priority = _heap[0].priority;
+            
+            // 마지막 요소를 루트로 이동하고 힙 크기 줄이기
+            int lastIndex = _heap.Count - 1;
+            _heap[0] = _heap[lastIndex];
+            _heap.RemoveAt(lastIndex);
+
+            // 새 루트를 올바른 위치로 정렬 (HeapifyDown)
+            if (_heap.Count > 0)
+            {
+                HeapifyDown(0);
+            }
+            
+            return (item, priority);
+        }
+
         // 최상위 요소 확인 (Peek)
         public TElement Peek()
         {
@@ -83,6 +107,13 @@ namespace Script.CustomCollections
                 throw new InvalidOperationException("PriorityQueue is empty.");
             }
             return _heap[0].item;
+        }
+
+        // 큐 청소
+        public void CleanUp()
+        {
+            // 힙 초기화
+            _heap.Clear();
         }
 
         #endregion
@@ -144,5 +175,15 @@ namespace Script.CustomCollections
         }
 
         #endregion
+        
+        public override string ToString()
+        {
+            string result = "PriorityQueue: [";
+            for (int i = 0; i < _heap.Count; i++)
+            {
+                result += $"{i}: {_heap[i].item}\n";
+            }
+            return $"PriorityQueue with {_heap.Count} elements.\n{result}]";
+        }
     }    
 }

@@ -19,6 +19,12 @@ MonoBehaviour:
   - sheetKey: CharacterParts
     sheetLink: 1Haa-bYjMBgwnmZcYOElVQ2_zyMGfy0GDxbJr5TP6pF8
     workSheetGid: 1695227689
+  - sheetKey: MonsterSkill
+    sheetLink: 1Haa-bYjMBgwnmZcYOElVQ2_zyMGfy0GDxbJr5TP6pF8
+    workSheetGid: 192128569
+  - sheetKey: Monster2Skill
+    sheetLink: 1Haa-bYjMBgwnmZcYOElVQ2_zyMGfy0GDxbJr5TP6pF8
+    workSheetGid: 789787461
   sheetDatas:
   - sheetKey: CharacterStats
     rows:
@@ -72,6 +78,20 @@ MonoBehaviour:
           value: 15
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -120,6 +140,20 @@ MonoBehaviour:
           statType: 6
           stringValue: 
           value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 12
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -172,6 +206,20 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -220,6 +268,20 @@ MonoBehaviour:
           statType: 6
           stringValue: 
           value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 15
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -272,6 +334,20 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 15
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -320,6 +396,20 @@ MonoBehaviour:
           statType: 6
           stringValue: 
           value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 20
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -372,6 +462,20 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 25
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -422,6 +526,20 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 70
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
   - sheetKey: CharacterParts
     rows:
     - statEntries:
@@ -439,9 +557,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 1
           minValue: -3.4028235e+38
@@ -449,13 +567,6 @@ MonoBehaviour:
       - key: 3
         value:
           statType: 3
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -485,19 +596,26 @@ MonoBehaviour:
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -517,9 +635,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 1
           minValue: -3.4028235e+38
@@ -531,51 +649,51 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 25
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
         value:
           statType: 11
           stringValue: 
-          value: 10
+          value: 25
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 12
         value:
           statType: 12
           stringValue: 
-          value: 0
+          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -595,9 +713,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 1
           minValue: -3.4028235e+38
@@ -609,51 +727,51 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 25
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
         value:
           statType: 11
           stringValue: 
-          value: 10
+          value: 25
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 12
         value:
           statType: 12
           stringValue: 
-          value: 0.25
+          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0.25
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -673,9 +791,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 1
           minValue: -3.4028235e+38
@@ -687,51 +805,51 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 50
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
         value:
           statType: 11
           stringValue: 
-          value: 20
+          value: 50
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 12
         value:
           statType: 12
           stringValue: 
-          value: -0.5
+          value: 20
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: -0.5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -751,9 +869,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -765,18 +883,11 @@ MonoBehaviour:
           value: 40
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0.33
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 0
+          value: 0.33
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
@@ -797,19 +908,26 @@ MonoBehaviour:
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -829,9 +947,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -843,18 +961,11 @@ MonoBehaviour:
           value: 90
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0.65
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 0
+          value: 0.65
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
@@ -868,26 +979,33 @@ MonoBehaviour:
         value:
           statType: 12
           stringValue: 
-          value: 0.1
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0.1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0.2
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0.2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 1
           minValue: -3.4028235e+38
@@ -907,9 +1025,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -921,18 +1039,11 @@ MonoBehaviour:
           value: 95
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0.7
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 0
+          value: 0.7
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
@@ -946,26 +1057,33 @@ MonoBehaviour:
         value:
           statType: 12
           stringValue: 
-          value: 0.1
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0.1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0.2
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0.2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 1
           minValue: -3.4028235e+38
@@ -985,9 +1103,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -996,21 +1114,14 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 1
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0.1
+          value: 40
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 0
+          value: 0.2
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
@@ -1024,26 +1135,33 @@ MonoBehaviour:
         value:
           statType: 12
           stringValue: 
-          value: 0.2
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0.2
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0.4
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0.4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -1063,9 +1181,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -1077,18 +1195,11 @@ MonoBehaviour:
           value: 35
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0.17
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 0
+          value: 0.17
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
@@ -1102,26 +1213,33 @@ MonoBehaviour:
         value:
           statType: 12
           stringValue: 
-          value: 0.2
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0.2
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0.4
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0.4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -1141,9 +1259,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -1155,51 +1273,51 @@ MonoBehaviour:
           value: 210
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 1.25
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 0
+          value: 1.25
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
         value:
           statType: 11
           stringValue: 
-          value: 5
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 12
         value:
           statType: 12
           stringValue: 
-          value: -0.25
+          value: 5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: -0.25
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -1219,9 +1337,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -1233,51 +1351,51 @@ MonoBehaviour:
           value: 275
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 1.65
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 0
+          value: 1.65
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
         value:
           statType: 11
           stringValue: 
-          value: 5
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 12
         value:
           statType: 12
           stringValue: 
-          value: -0.25
+          value: 5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: -0.25
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 2
           minValue: -3.4028235e+38
@@ -1297,9 +1415,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 3
           minValue: -3.4028235e+38
@@ -1307,13 +1425,6 @@ MonoBehaviour:
       - key: 3
         value:
           statType: 3
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -1343,19 +1454,26 @@ MonoBehaviour:
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -1375,9 +1493,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 3
           minValue: -3.4028235e+38
@@ -1389,32 +1507,25 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 50
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
         value:
           statType: 11
           stringValue: 
-          value: 15
+          value: 50
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 12
         value:
           statType: 12
           stringValue: 
-          value: 1
+          value: 15
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
@@ -1428,12 +1539,19 @@ MonoBehaviour:
         value:
           statType: 14
           stringValue: 
-          value: 0.5
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0.5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -1453,9 +1571,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 3
           minValue: -3.4028235e+38
@@ -1467,51 +1585,51 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 100
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
         value:
           statType: 11
           stringValue: 
-          value: 30
+          value: 100
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 12
         value:
           statType: 12
           stringValue: 
-          value: -1.5
+          value: 30
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: -1.5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -1531,9 +1649,9 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 8
+      - key: 9
         value:
-          statType: 8
+          statType: 9
           stringValue: 
           value: 3
           minValue: -3.4028235e+38
@@ -1545,52 +1663,2498 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 9
-        value:
-          statType: 9
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 10
         value:
           statType: 10
           stringValue: 
-          value: 50
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 11
         value:
           statType: 11
           stringValue: 
-          value: 10
+          value: 50
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 12
         value:
           statType: 12
           stringValue: 
-          value: 2
+          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 13
         value:
           statType: 13
           stringValue: 
-          value: 1
+          value: 2
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 14
         value:
           statType: 14
           stringValue: 
-          value: 0.75
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 15
         value:
           statType: 15
           stringValue: 
+          value: 0.75
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+  - sheetKey: MonsterSkill
+    rows:
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4001
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Swing
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 50
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 1.2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4002
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Firing
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 12
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 25
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 1.3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4003
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Butt
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 60
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 1.45
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4004
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Charging shot
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 15
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 40
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4005
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Avoidance
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 12
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4006
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Two-handswhip
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 90
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 1.1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4007
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Rush
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 15
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 50
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4008
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Whiplash
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 12
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 100
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4009
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: One in the Pipe
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 30
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 120
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4010
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Fatal Laser
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 40
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 200
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 8
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 6
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4011
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Bladethrust
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 100
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4012
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Detonatorfire
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 60
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 200
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4013
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Legstrike
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 75
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4014
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Leap
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 20
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 90
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4015
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: InterceptBeam
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 40
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 70
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 6
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4016
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: TripleStrike
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 200
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4017
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: SuicideExplosion
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 15
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 300
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4018
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: ActivateShield
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 6
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4019
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Lockdown
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 30
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 12
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4020
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Repair
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4021
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: FormChange
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 60
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 7
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+  - sheetKey: Monster2Skill
+    rows:
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1002
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 4002 4004
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1003
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 4002 4003
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1004
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 4005 4006 4017
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1005
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 4001 4005 4006
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1006
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 4001 4006 4014 4018
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1007
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 4008 4009 4010 4012 4013 4020
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1008
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 4001 4002 4005 4012 4015 4016 4018 4019 4021
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38

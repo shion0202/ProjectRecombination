@@ -13,7 +13,7 @@ namespace Monster
         private Vector3 _currentWanderPoint;  // 현재 방황 지점
         private float _currentWanderTime;     // 현재 방황 시간
         private float _startWanderTime;       // 방황 시작 시간
-        private bool _isWandering;            // 방황 중인지 여부
+        // private bool _isWandering;            // 방황 중인지 여부
         
         public MonsterWander(Vector3 center, float radius)
         {
@@ -37,11 +37,11 @@ namespace Monster
             get => _startWanderTime;
             set => _startWanderTime = value;
         }
-        public bool IsWandering
-        {
-            get => _isWandering;
-            set => _isWandering = value;
-        }
+        // public bool IsWandering
+        // {
+        //     get => _isWandering;
+        //     set => _isWandering = value;
+        // }
         
         public Vector3 GetRandomWanderPoint()
         {

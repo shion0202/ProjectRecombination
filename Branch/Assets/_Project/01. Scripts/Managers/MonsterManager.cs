@@ -1,7 +1,9 @@
-using System.Collections.Generic;
-using AI.Blackboard;
-using UnityEngine;
 using Monster;
+using Monster.AI;
+using Monster.AI.Blackboard;
+using System.Collections.Generic;
+using System.Threading;
+using UnityEngine;
 
 namespace Managers
 {
@@ -44,13 +46,39 @@ namespace Managers
                 if (otherMonster == monster || !(Vector3.Distance(standardPosition, otherPosition) <= distance)) continue;
                 
                 // 몬스터의 상태가 전투와 관련된 상태인 경우 (Chase, Attack 등)
-                var blackboard = otherMonster.GetComponent<Blackboard>();
+                var blackboard = otherMonster.GetComponentInChildren<Blackboard>();
                 if (blackboard == null) continue;
                 if (blackboard.State != MonsterState.Chase && blackboard.State != MonsterState.Attack &&
                     blackboard.State != MonsterState.Hit) continue;
                 return true; // 근처에 전투 중인 몬스터가 있음
             }
             return false; // 근처에 전투 중인 몬스터가 없음
+        }
+        
+        /// <summary>
+        /// 몬스터 인스턴스 관리(풀링)
+        /// </summary>
+        
+
+        private void Update()
+        {
+            for (int i = 0; i < monsters.Count; ++i)
+            {
+                GameObject monster = monsters[i];
+                AIController aiController = monster.GetComponent<AIController>();
+                if (aiController is null) continue;
+                Blackboard blackboard = aiController.Blackboard;
+                if (blackboard is null) continue;
+                if (blackboard.State == MonsterState.Death)
+                {
+                    monster.transform.position = new Vector3(999, 999, 999);
+                    // IsDestroy 기믹을 위해 임시로 Destroy로 변경
+                    //monster.SetActive(false);
+                    monsters.Remove(monster);
+                    Destroy(monster);
+                    --i;
+                }
+            }
         }
     }
 }
