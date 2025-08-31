@@ -1,0 +1,188 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8825682907153586095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 976b6677885a41739ad8b6b8804fc302, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  name: Root
+  guid: 6d6f3f72-4bbb-4c77-becf-e92b321458f1
+  position: {x: 0, y: 0}
+  input: {fileID: 0}
+  outputs: []
+  children: []
+--- !u!114 &-8009894338119140018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp:AI.BehaviorTree.Nodes:BTSelector
+  state: 0
+  name: Root
+  guid: 53c2fa6c-18ec-49de-adaf-ddcdb9ad94fd
+  position: {x: -391, y: -198}
+  input: {fileID: 0}
+  outputs: []
+  children:
+  - {fileID: -3773494697784003557}
+  - {fileID: -2797183176804207132}
+  - {fileID: 0}
+--- !u!114 &-4628153678510405230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 004a6ac8685d4b4f96520cf0549f332b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 2
+  name: Action Patrol
+  guid: e9bc6de0-ba9a-4be3-98f2-0d3fa2eed827
+  position: {x: -200, y: -87}
+  input: {fileID: 0}
+  outputs: []
+--- !u!114 &-3773494697784003557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce1f294b09e0d4219b6b42b664756a6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 1
+  name: CheckAttackRange
+  guid: ae9d0b74-4ecd-4fcd-b31a-d6a37d97b720
+  position: {x: -278.5, y: -437}
+  input: {fileID: 0}
+  outputs: []
+  skillId: 4001
+--- !u!114 &-3465799058976386019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ced75fabe5dd46528ca1d8f7a1110a56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 1
+  name: Sequence
+  guid: 0d35e6ed-6f44-4d82-bb55-142cefa216c2
+  position: {x: -227, y: -310}
+  input: {fileID: 0}
+  outputs: []
+  children:
+  - {fileID: 8127864186045074744}
+  - {fileID: 7372945988186243205}
+--- !u!114 &-2797183176804207132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a92a2ba0a8a44c581e40f8204ecc61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  name: Attack Node
+  guid: 1f7fda0f-f7c0-439b-bacb-8132c060c771
+  position: {x: -245.5, y: -185}
+  input: {fileID: 0}
+  outputs: []
+  skillId: 4001
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 781e6390e5ee4bf3be7a75f2a69a7b1a, type: 3}
+  m_Name: New BT
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: -8825682907153586095}
+--- !u!114 &2118621077811348274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be6bf99952543e2868b2c01e480149d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  name: Is Random
+  guid: 290e200b-59c1-457f-a0cf-0d2f5c9df226
+  position: {x: -187, y: 61.5}
+  input: {fileID: 0}
+  outputs: []
+  threshold: 0.2
+--- !u!114 &7372945988186243205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b311de98415448cf9765bdd0ba7ab30e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 1
+  name: Action Chase
+  guid: e3641592-593b-4cd3-90f0-13c16598036d
+  position: {x: -49, y: -236.5}
+  input: {fileID: -3465799058976386019}
+  outputs: []
+--- !u!114 &8127864186045074744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fe1a26adfc946bda40418593c725159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  name: Is Detection
+  guid: 1f3098f0-8560-4364-a551-8b6e978adf3f
+  position: {x: -49, y: -332}
+  input: {fileID: -3465799058976386019}
+  outputs: []
