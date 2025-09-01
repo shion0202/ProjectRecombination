@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private bool _isGrounded = false;
     private bool _isOnPlatform = false;
     private Vector3 _fallVelocity;
+    private Transform _postPlatform;
     private Vector3 _lastPlatformPosition = Vector3.zero;
     private Vector3 _platformVelocity;
 
@@ -243,6 +244,22 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera.IsBeforeZoom = false;
             _followCamera.IsZoomed = false;
             animator.SetBool("isAim", false);
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnJump(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            // 바닥에 있을 때만 점프 실행
+            if (_isGrounded || _isOnPlatform)
+            {
+                float jumpVelocity = 20.0f;  // 점프 힘, 적절히 조절 가능
+                _fallVelocity.y = jumpVelocity;
+
+                // 점프 상태 갱신
+                _currentPlayerState |= EPlayerState.Falling;
+            }
         }
     }
 
@@ -520,6 +537,35 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             return;
         }
 
+        // 내리막 경사 체크
+        RaycastHit hit;
+        float raycastDistance = 0.5f;
+        if (Physics.Raycast(groundCheck.position, Vector3.down, out hit, raycastDistance, groundLayerMask))
+        {
+            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            if (slopeAngle > characterController.slopeLimit)  // 너무 가파른 경사면
+            {
+                // 경사가 가파르면 떨어지도록 처리
+                _currentPlayerState |= EPlayerState.Falling;
+                _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
+                _totalDirection += _fallVelocity;
+                return;
+            }
+            else
+            {
+                // 경사가 완만하면, 내리막 보정
+                // 바닥과 캐릭터 간 높이 차이를 보정해 자연스러운 착지 구현 가능
+                float desiredHeight = hit.point.y + characterController.skinWidth;
+                float heightDiff = transform.position.y - desiredHeight;
+
+                if (heightDiff > 0.01f)
+                {
+                    // 서서히 내리막 이동 보정 (lerp 등 스무딩 가능)
+                    _totalDirection.y -= Mathf.Min(heightDiff, 0.4f);
+                }
+            }
+        }
+
         //_isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
         if ((_isGrounded || _isOnPlatform) && _fallVelocity.y <= 0.0f)
         {
@@ -540,6 +586,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (_isOnPlatform)
         {
+            if (_postPlatform != platform)
+            {
+                _postPlatform = platform;
+                _lastPlatformPosition = Vector3.zero;
+            }
+
             if (_lastPlatformPosition == Vector3.zero)
             {
                 _lastPlatformPosition = platform.position;
@@ -547,8 +599,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             Vector3 platformDelta = platform.position - _lastPlatformPosition;
             _platformVelocity = platformDelta / Time.deltaTime;
             _lastPlatformPosition = platform.position;
-
-            // Optional: 떨어져도 플랫폼 속도 유지하려면 _isGrounded 조건과 분리 가능
         }
         else
         {
