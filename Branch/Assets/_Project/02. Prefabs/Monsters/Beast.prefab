@@ -45,11 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 1
-  index: 0
+  index: 1
   navMeshAgent: {fileID: 0}
   agent: {fileID: 0}
   animator: {fileID: 0}
   target: {fileID: 0}
+  deathEffect: {fileID: 0}
   patrolInfo:
     minPatrolTime: 0
     maxPatrolTime: 0
@@ -59,6 +60,9 @@ MonoBehaviour:
     maxWanderTime: 0
     wanderAreaCenter: {x: 0, y: 0, z: 0}
     wanderAreaRadius: 0
+  attackInfo:
+    bulletPrefab: {fileID: 0}
+    firePoint: {fileID: 0}
 --- !u!1 &3137694467332847588
 GameObject:
   m_ObjectHideFlags: 0

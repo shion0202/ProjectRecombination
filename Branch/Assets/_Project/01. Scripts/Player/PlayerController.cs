@@ -64,17 +64,16 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private float gravityScale = 2.0f;
     [SerializeField] private LayerMask groundLayerMask;
     private bool _isGrounded = false;
+    private bool _isOnPlatform = false;
     private Vector3 _fallVelocity;
+    private Vector3 _lastPlatformPosition = Vector3.zero;
+    private Vector3 _platformVelocity;
 
     [Header("Dash")]
     private Vector3 _dashDirection = Vector3.zero;
     private float _dashSpeed = 0.0f;
 
     private static event Action OnInteractionKeyPressed;
-
-    private Transform _currentPlatform;
-    private Vector3 _lastPlatformPosition;
-    private Vector3 _platformVelocity;
     #endregion
 
     #region Properties
@@ -512,6 +511,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void HandleGravity()
     {
+        UpdatePlatformMovement();
+
         if (_currentMovement is LegsHover hoverLegs)
         {
             Vector3 hoverDelta = hoverLegs.CalculateHoverDeltaY();
@@ -519,16 +520,61 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             return;
         }
 
-        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
-        if (_isGrounded && _fallVelocity.y <= 0.0f)
+        //_isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
+        if ((_isGrounded || _isOnPlatform) && _fallVelocity.y <= 0.0f)
         {
             _currentPlayerState &= ~EPlayerState.Falling;
             _fallVelocity = Vector3.zero;
+            _totalDirection += _platformVelocity;
             return;
         }
         _currentPlayerState |= EPlayerState.Falling;
         _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
         _totalDirection += _fallVelocity;
+    }
+
+    private void UpdatePlatformMovement()
+    {
+        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
+        _isOnPlatform = IsOnMovingPlatform(out Transform platform);
+
+        if (_isOnPlatform)
+        {
+            if (_lastPlatformPosition == Vector3.zero)
+            {
+                _lastPlatformPosition = platform.position;
+            }
+            Vector3 platformDelta = platform.position - _lastPlatformPosition;
+            _platformVelocity = platformDelta / Time.deltaTime;
+            _lastPlatformPosition = platform.position;
+
+            // Optional: 떨어져도 플랫폼 속도 유지하려면 _isGrounded 조건과 분리 가능
+        }
+        else
+        {
+            _platformVelocity = Vector3.zero;
+            _lastPlatformPosition = Vector3.zero;
+        }
+    }
+
+    private bool IsOnMovingPlatform(out Transform platform)
+    {
+        platform = null;
+        // 캐릭터 중심에서 하단으로 BoxCast 진행
+        RaycastHit hit;
+        Vector3 boxCastOrigin = groundCheck.position + Vector3.up * 0.1f;
+        float castDistance = 0.3f; // 짧게 설정
+
+        if (Physics.BoxCast(boxCastOrigin, boxSize, Vector3.down, out hit, Quaternion.identity, castDistance))
+        {
+            // 플랫폼 판정: 'Platform' 태그를 가진 경우만
+            if (hit.collider.CompareTag("Platform"))
+            {
+                platform = hit.collider.transform;
+                return true;
+            }
+        }
+        return false;
     }
 
     private void RotateCharacter()
