@@ -41,6 +41,7 @@ public class PartBaseArm : PartBase
     protected virtual void Update()
     {
         _currentShootTime -= Time.deltaTime;
+        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
         if (!_isShooting) return;
 
         if (_currentShootTime <= 0.0f)
@@ -82,7 +83,7 @@ public class PartBaseArm : PartBase
         Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position);
         camShootDirection.Normalize();
 
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection));
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {

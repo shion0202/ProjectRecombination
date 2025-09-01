@@ -17,6 +17,7 @@ public class ArmLaserChase : PartBaseArm
     protected override void Update()
     {
         _currentShootTime -= Time.deltaTime;
+        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
         if (!_isShooting) return;
 
         Shoot();

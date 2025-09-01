@@ -22,6 +22,7 @@ public class ArmLaserCharge : PartBaseArm
 
     protected override void Update()
     {
+        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
         if (!_isShooting) return;
 
         _currentShootTime += Time.deltaTime;

@@ -16,6 +16,7 @@ public class ArmRapidCast : PartBaseArm
     {
         _currentShootTime -= Time.deltaTime;
 
+        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
         if (!_isShooting)
         {
             _currentCastTime -= Time.deltaTime;

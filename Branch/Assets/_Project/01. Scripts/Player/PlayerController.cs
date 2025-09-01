@@ -17,6 +17,7 @@ public enum EPlayerState
     LeftShooting = 1 << 4,
     RightShooting = 1 << 5,
     Zooming = 1 << 6,
+    Rotating = 1 << 7,
 
     RotateState = Moving | LeftShooting | RightShooting | Zooming,
     ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
@@ -49,6 +50,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private EPlayerState zoomBlockMask = EPlayerState.Dashing;
     private EPlayerState _currentPlayerState = EPlayerState.Idle;
     private EPlayerState _previousState = 0;
+    private bool _isLeftAttackReady = false;
+    private bool _isRightAttackReady = false;
 
     [Header("Movement")]
     [SerializeField, Range(0.01f, 100.0f)] private float rotationSpeed = 40.0f;
@@ -92,6 +95,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         get => characterController;
         set => characterController = value;
+    }
+
+    public EPlayerState CurrentPlayerState
+    {
+        get { return _currentPlayerState; }
     }
 
     public Vector3 FallVelocity
@@ -162,6 +170,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // GUI HP 바 갱신
         // TODO: Null Reference
         GUIManager.Instance.SetHpSlider(stats.CurrentHealth, stats.MaxHealth);
+
+        AnimCheckShoot();
     }
 
     private void LateUpdate()
@@ -278,6 +288,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetBool("isLeftAttack", false);
             _previousState &= ~EPlayerState.LeftShooting;
             _currentPlayerState &= ~EPlayerState.LeftShooting;
+            _isLeftAttackReady = false;  // 상태 초기화
         }
     }
 
@@ -537,36 +548,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             return;
         }
 
-        // 내리막 경사 체크
-        RaycastHit hit;
-        float raycastDistance = 0.5f;
-        if (Physics.Raycast(groundCheck.position, Vector3.down, out hit, raycastDistance, groundLayerMask))
-        {
-            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-            if (slopeAngle > characterController.slopeLimit)  // 너무 가파른 경사면
-            {
-                // 경사가 가파르면 떨어지도록 처리
-                _currentPlayerState |= EPlayerState.Falling;
-                _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
-                _totalDirection += _fallVelocity;
-                return;
-            }
-            else
-            {
-                // 경사가 완만하면, 내리막 보정
-                // 바닥과 캐릭터 간 높이 차이를 보정해 자연스러운 착지 구현 가능
-                float desiredHeight = hit.point.y + characterController.skinWidth;
-                float heightDiff = transform.position.y - desiredHeight;
-
-                if (heightDiff > 0.01f)
-                {
-                    // 서서히 내리막 이동 보정 (lerp 등 스무딩 가능)
-                    _totalDirection.y -= Mathf.Min(heightDiff, 0.4f);
-                }
-            }
-        }
-
-        //_isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
         if ((_isGrounded || _isOnPlatform) && _fallVelocity.y <= 0.0f)
         {
             _currentPlayerState &= ~EPlayerState.Falling;
@@ -589,13 +570,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             if (_postPlatform != platform)
             {
                 _postPlatform = platform;
-                _lastPlatformPosition = Vector3.zero;
+                _lastPlatformPosition = platform.position;
             }
 
             if (_lastPlatformPosition == Vector3.zero)
             {
                 _lastPlatformPosition = platform.position;
             }
+
             Vector3 platformDelta = platform.position - _lastPlatformPosition;
             _platformVelocity = platformDelta / Time.deltaTime;
             _lastPlatformPosition = platform.position;
@@ -612,7 +594,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         platform = null;
         // 캐릭터 중심에서 하단으로 BoxCast 진행
         RaycastHit hit;
-        Vector3 boxCastOrigin = groundCheck.position + Vector3.up * 0.1f;
+        Vector3 boxCastOrigin = groundCheck.position;
         float castDistance = 0.3f; // 짧게 설정
 
         if (Physics.BoxCast(boxCastOrigin, boxSize, Vector3.down, out hit, Quaternion.identity, castDistance))
@@ -629,20 +611,48 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void RotateCharacter()
     {
-        if ((_currentPlayerState & EPlayerState.RotateState) == 0) return;
+        if ((_currentPlayerState & EPlayerState.RotateState) == 0)
+        {
+            _currentPlayerState &= ~EPlayerState.Rotating;
+            return;
+        }
 
         Vector3 lookDirection = _followCamera.transform.forward;
         lookDirection.y = 0;
 
-        if (lookDirection.sqrMagnitude > 0.01f)
+        if (lookDirection.sqrMagnitude > 0.1f)
         {
-            transform.forward = Vector3.Slerp(transform.forward, lookDirection, rotationSpeed * Time.deltaTime);
+            // 회전 중 상태 활성화
+            _currentPlayerState |= EPlayerState.Rotating;
+
+            // 목표 회전 방향
+            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+
+            // 현재 회전과 목표 회전 사이의 각도
+            float angleDifference = Quaternion.Angle(transform.rotation, targetRotation);
+
+            // Slerp로 부드럽게 회전
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+            // 각도가 충분히 줄면 회전 종료 처리
+            if (angleDifference < 1f)  // 1도 이내면 회전 완료
+            {
+                transform.rotation = targetRotation;  // 완전히 맞춤
+                _currentPlayerState &= ~EPlayerState.Rotating;
+            }
+        }
+        else
+        {
+            _currentPlayerState &= ~EPlayerState.Rotating;
         }
     }
 
     private void Shoot()
     {
         if ((_currentPlayerState & shootBlockMask) != 0) return;
+        _currentPlayerState |= EPlayerState.Rotating;
+        _isLeftAttackReady = false;
+        _isRightAttackReady = false;
 
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
         {
@@ -650,8 +660,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             {
                 animator.SetBool("isLeftAttack", true);
             }
-            inventory.EquippedItems[EPartType.ArmL].UseAbility();
         }
+
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
             if (inventory.EquippedItems[EPartType.ArmR].IsAnimating)
@@ -659,6 +669,20 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 animator.SetBool("isRightAttack", true);
             }
             inventory.EquippedItems[EPartType.ArmR].UseAbility();
+        }
+    }
+
+    private void AnimCheckShoot()
+    {
+        // Left attack 애니메이션 상태 체크
+        if ((_currentPlayerState & EPlayerState.LeftShooting) != 0 && !_isLeftAttackReady)
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(2);
+            if (stateInfo.IsName("Shoot") && stateInfo.normalizedTime >= 0.9f)
+            {
+                _isLeftAttackReady = true;
+                inventory.EquippedItems[EPartType.ArmL].UseAbility();
+            }
         }
     }
     #endregion

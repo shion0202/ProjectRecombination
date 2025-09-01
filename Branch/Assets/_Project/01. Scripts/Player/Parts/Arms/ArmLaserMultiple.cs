@@ -20,6 +20,7 @@ public class ArmLaserMultiple : PartBaseArm
 
     protected override void Update()
     {
+        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
         if (!_isShooting)
         {
             targetingProgress = 0f;
