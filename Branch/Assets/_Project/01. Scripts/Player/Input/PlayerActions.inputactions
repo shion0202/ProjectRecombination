@@ -15,33 +15,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Dash",
-                    "type": "Button",
-                    "id": "580a207e-97da-4205-9050-cd5f12fca0b1",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "ShoulderSkill",
-                    "type": "Button",
-                    "id": "0852d740-5c42-46a8-9f06-6aacafe3af34",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Zoom",
-                    "type": "Button",
-                    "id": "636b85ff-1f9c-4589-8e15-3779e0575ccf",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "LeftAttack",
                     "type": "Button",
                     "id": "233ae484-8c17-415b-83ae-96159fe85900",
@@ -60,6 +33,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "580a207e-97da-4205-9050-cd5f12fca0b1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShoulderSkill",
+                    "type": "Button",
+                    "id": "0852d740-5c42-46a8-9f06-6aacafe3af34",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Interaction",
                     "type": "Button",
                     "id": "ece2909f-23d1-4db1-9d8b-e69ff61c17ec",
@@ -72,6 +63,33 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "c72704f6-7149-4736-9bde-ecf6e0f64281",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Button",
+                    "id": "636b85ff-1f9c-4589-8e15-3779e0575ccf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MouseScroll",
+                    "type": "PassThrough",
+                    "id": "898759bc-9d17-41ff-97d4-4dd07589f75e",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ResetCamera",
+                    "type": "Button",
+                    "id": "5e81a24e-5b16-46a6-ae5e-67c4d7d28a35",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -162,7 +180,7 @@
                     "path": "",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";PC_Keyboard",
                     "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -208,6 +226,28 @@
                     "processors": "",
                     "groups": ";PC_Keyboard",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e4106616-3576-499b-ba91-329321d208d9",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC_Keyboard",
+                    "action": "MouseScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "29983172-77bd-4b61-a805-f1c4826dd19b",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC_Keyboard",
+                    "action": "ResetCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

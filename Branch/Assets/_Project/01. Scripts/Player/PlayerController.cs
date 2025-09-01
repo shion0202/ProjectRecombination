@@ -317,6 +317,24 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             OnInteractionKeyPressed?.Invoke();
         }
     }
+
+    void PlayerActions.IPlayerActionMapActions.OnMouseScroll(InputAction.CallbackContext context)
+    {
+        //_playerActions.PlayerActionMap.MouseScroll.performed += x => _followCamera.ScrollY = x.ReadValue<float>() * 0.02f * -1;
+        if (context.performed)
+        {
+            float scrollValue = context.ReadValue<float>();
+            _followCamera.ScrollY = scrollValue * -0.001f;
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnResetCamera(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            _followCamera.ResetCamera();
+        }
+    }
     #endregion
 
     #region Public Methods

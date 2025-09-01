@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum ECameraState
 {
@@ -24,6 +25,8 @@ public class FollowCameraController : MonoBehaviour
     private Transform _cameraTarget;
     private bool _isBeforeZoom = false;
     private bool _isLock = false;
+    private float _scrollY = 0.0f;
+    private float _defaultCameraDistance = 2.0f;
 
     [Header("Recoil Settings")]
     [SerializeField] private float recoilRecoverySpeed = 20.0f;
@@ -62,6 +65,12 @@ public class FollowCameraController : MonoBehaviour
 
             ApplyCameraSettings();
         }
+    }
+
+    public float ScrollY
+    {
+        get { return _scrollY; }
+        set { _scrollY = value; }
     }
     #endregion
 
@@ -137,6 +146,8 @@ public class FollowCameraController : MonoBehaviour
         _cameraAim.m_HorizontalAxis.Value = owner.transform.localEulerAngles.y;
 
         ApplyCameraSettings();
+
+        _defaultCameraDistance = _cameraSettings[currentCameraState].cameraDistance;
     }
 
     // Update에서 매 프레임마다 실행되는 카메라 관련 함수
@@ -144,6 +155,7 @@ public class FollowCameraController : MonoBehaviour
     {
         ApplyCameraSettings();
         HandleRecoil();
+        ZoomCamera();
 
         if (_isLock)
         {
@@ -179,6 +191,27 @@ public class FollowCameraController : MonoBehaviour
     public void LockCameraRotation(bool lockState)
     {
         _isLock = lockState;
+    }
+
+    public void ResetCamera()
+    {
+        _cameraSettings[currentCameraState].cameraDistance = _defaultCameraDistance;
+    }
+
+    public void ZoomCamera()
+    {
+        if (_scrollY < 0 && _cameraBody.m_CameraDistance <= 0.5f)
+        {
+            _cameraSettings[currentCameraState].cameraDistance = 0.5f;
+        }
+        else if (_scrollY > 0 && _cameraBody.m_CameraDistance >= 3.0f)
+        {
+            _cameraSettings[currentCameraState].cameraDistance = 3.0f;
+        }
+        else
+        {
+            _cameraSettings[currentCameraState].cameraDistance += _scrollY;
+        }
     }
     #endregion
 
