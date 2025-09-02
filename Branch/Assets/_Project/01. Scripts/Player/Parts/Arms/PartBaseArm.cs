@@ -81,13 +81,13 @@ public class PartBaseArm : PartBase
     {
         Vector3 targetPoint = GetTargetPoint(out RaycastHit hit);
         Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position);
-        camShootDirection.Normalize();
 
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection));
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection.normalized));
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {
-            bulletComponent.Init(_owner.gameObject, bulletSpawnPoint.position, Vector3.zero, camShootDirection, (int)_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value);
+            bulletComponent.Init(_owner.gameObject, bulletSpawnPoint.position, Vector3.zero, camShootDirection.normalized, (int)_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value);
+            bulletComponent.Parent = bulletSpawnPoint;
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);

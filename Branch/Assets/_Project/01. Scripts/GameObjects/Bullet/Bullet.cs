@@ -13,6 +13,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected bool isCheckCollisionByBullet = true;
     private float _damage;
     private GameObject _from; // 발사 주체
+    protected Transform _parent;
+    protected Vector3 _targetDirection;
     protected Vector3 _targetPos;
 
     [SerializeField] private float lifeTime = 5f; // 총알의 생명 시간
@@ -49,6 +51,12 @@ public class Bullet : MonoBehaviour
         set => _from = value;
     }
 
+    public Transform Parent
+    {
+        get => _parent;
+        set => _parent = value;
+    }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -58,11 +66,11 @@ public class Bullet : MonoBehaviour
     {
         _timer = lifeTime;
 
-        transform.forward = _from.transform.forward;
+        //transform.forward = _from.transform.forward;
 
         if (muzzleParticle)
         {
-            muzzleParticle = Instantiate(muzzleParticle, transform.position, Quaternion.LookRotation(-_from.transform.forward));
+            muzzleParticle = Instantiate(muzzleParticle, transform.position, Quaternion.LookRotation(-_targetDirection), Parent);
             Destroy(muzzleParticle, 1.5f); // Lifetime of muzzle effect.
         }
     }
@@ -228,6 +236,7 @@ public class Bullet : MonoBehaviour
         _from = shooter;
         _targetPos = end;
         _damage = damage;
+        _targetDirection = direction;
 
         StartBulletLogic(direction, start);
     }

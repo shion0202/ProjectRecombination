@@ -60,7 +60,10 @@ public class LegsBasic : PartBaseLegs
 
     protected IEnumerator CoHandleDash()
     {
-        Destroy(Instantiate(dashEffectPrefab, _owner.transform.position + _owner.transform.forward * skillRange + Vector3.up, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(0.0f, 180.0f, 0.0f))), 2.0f);
+        Vector3 direction = -_owner.DashDirection.normalized;
+        Quaternion effectRotation = Quaternion.LookRotation(direction, Vector3.up);
+        GameObject go = Instantiate(dashEffectPrefab, _owner.transform.position + (Vector3.up * 1.0f) + (direction * -3.0f), effectRotation);
+        Destroy(go, 2.0f);
         ++_currentSkillCount;
 
         yield return new WaitForSeconds(skillTime);

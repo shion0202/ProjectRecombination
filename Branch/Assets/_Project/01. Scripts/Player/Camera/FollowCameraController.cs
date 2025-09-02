@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public enum ECameraState
 {
     Normal = 0,
-    Zoom = 1
+    Zoom = 1,
 }
 
 [ExecuteInEditMode]
@@ -153,9 +153,9 @@ public class FollowCameraController : MonoBehaviour
     // Update에서 매 프레임마다 실행되는 카메라 관련 함수
     public void UpdateFollowCamera()
     {
-        ApplyCameraSettings();
-        HandleRecoil();
+        SmoothChangeCamera();
         ZoomCamera();
+        HandleRecoil();
 
         if (_isLock)
         {
@@ -195,7 +195,12 @@ public class FollowCameraController : MonoBehaviour
 
     public void ResetCamera()
     {
-        _cameraSettings[currentCameraState].cameraDistance = _defaultCameraDistance;
+        //_cameraSettings[currentCameraState].cameraDistance = _defaultCameraDistance;
+
+        if (currentCameraState == ECameraState.Normal)
+            currentCameraState = ECameraState.Zoom;
+        else
+            currentCameraState = ECameraState.Normal;
     }
 
     public void ZoomCamera()
@@ -218,11 +223,6 @@ public class FollowCameraController : MonoBehaviour
     #region Private Methods
     private void ApplyCameraSettings()
     {
-        vcam.m_Lens.FieldOfView = _cameraSettings[currentCameraState].FOV;
-        _cameraBody.m_ScreenX = _cameraSettings[currentCameraState].screenX;
-        _cameraBody.m_ScreenY = _cameraSettings[currentCameraState].screenY;
-        _cameraBody.m_CameraDistance = _cameraSettings[currentCameraState].cameraDistance;
-
         _cameraAim.m_HorizontalAxis.m_MaxValue = _cameraSettings[currentCameraState].maxAimRangeX;
         _cameraAim.m_HorizontalAxis.m_MinValue = _cameraSettings[currentCameraState].minAimRangeX;
         _cameraAim.m_VerticalAxis.m_MaxValue = _cameraSettings[currentCameraState].maxAimRangeY;
@@ -251,8 +251,7 @@ public class FollowCameraController : MonoBehaviour
         _cameraBody.m_BiasY = _cameraSettings[currentCameraState].softZoneOffsetY;
     }
 
-    // 프레임 단위로 노말/줌 카메라로 위치를 전환하는 함수
-    private void HandleZoom()
+    private void SmoothChangeCamera()
     {
         vcam.m_Lens.FieldOfView = Mathf.Lerp(vcam.m_Lens.FieldOfView, _cameraSettings[currentCameraState].FOV, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);
         _cameraBody.m_ScreenX = Mathf.Lerp(_cameraBody.m_ScreenX, _cameraSettings[currentCameraState].screenX, _cameraSettings[currentCameraState].convertSpeed * Time.deltaTime);

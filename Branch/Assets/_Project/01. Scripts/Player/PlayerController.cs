@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private bool _isRightAttackReady = false;
 
     [Header("Movement")]
+    [SerializeField, Range(0.0f, 100.0f)] private float jumpVelocity = 50.0f;
     [SerializeField, Range(0.01f, 100.0f)] private float rotationSpeed = 40.0f;
     private PlayerActions _playerActions;
     private Vector2 _moveInput;
@@ -264,7 +265,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             // 바닥에 있을 때만 점프 실행
             if (_isGrounded || _isOnPlatform)
             {
-                float jumpVelocity = 20.0f;  // 점프 힘, 적절히 조절 가능
                 _fallVelocity.y = jumpVelocity;
 
                 // 점프 상태 갱신
@@ -557,6 +557,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void HandleGravity()
     {
+        // 대시 중이라면 중력 무시
+        if ((_currentPlayerState & EPlayerState.Dashing) != 0)
+        {
+            // 대시 중에는 중력 벡터를 초기화하거나 그대로 유지(중력 영향 없음)
+            _fallVelocity = Vector3.zero;
+            return;
+        }
+
         UpdatePlatformMovement();
 
         if (_currentMovement is LegsHover hoverLegs)
@@ -652,11 +660,15 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             // Slerp로 부드럽게 회전
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
+            if (angleDifference < 10f)
+            {
+                _currentPlayerState &= ~EPlayerState.Rotating;
+            }
+
             // 각도가 충분히 줄면 회전 종료 처리
             if (angleDifference < 1f)  // 1도 이내면 회전 완료
             {
                 transform.rotation = targetRotation;  // 완전히 맞춤
-                _currentPlayerState &= ~EPlayerState.Rotating;
             }
         }
         else
@@ -696,7 +708,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0 && !_isLeftAttackReady)
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(2);
-            if (stateInfo.IsName("Shoot") && stateInfo.normalizedTime >= 0.9f)
+            if (stateInfo.IsName("Shoot") && !animator.IsInTransition(2))
             {
                 _isLeftAttackReady = true;
                 inventory.EquippedItems[EPartType.ArmL].UseAbility();
