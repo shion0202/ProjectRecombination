@@ -41,4 +41,4 @@ MonoBehaviour:
   decelTimeX: 0.1
   accelTimeY: 0.1
   decelTimeY: 0.1
-  convertSpeed: 100
+  convertSpeed: 10

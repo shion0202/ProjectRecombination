@@ -10,6 +10,7 @@ public enum ECameraState
     Zoom = 1,
 }
 
+// 기획자 작업 편의를 위해, 씬에서 SO 값을 변경하여 바로 적용할 수 있도록 ExecuteInEditMode 속성 추가
 [ExecuteInEditMode]
 public class FollowCameraController : MonoBehaviour
 {
@@ -147,6 +148,7 @@ public class FollowCameraController : MonoBehaviour
 
         ApplyCameraSettings();
 
+        // 현재 기획자 편의를 반영하여 Update 단에서 카메라 설정이 적용되고 있으므로, Camera State가 바뀔 때마다 Default 값 변경 필요
         _defaultCameraDistance = _cameraSettings[currentCameraState].cameraDistance;
     }
 
@@ -195,21 +197,16 @@ public class FollowCameraController : MonoBehaviour
 
     public void ResetCamera()
     {
-        //_cameraSettings[currentCameraState].cameraDistance = _defaultCameraDistance;
-
-        if (currentCameraState == ECameraState.Normal)
-            currentCameraState = ECameraState.Zoom;
-        else
-            currentCameraState = ECameraState.Normal;
+        _cameraSettings[currentCameraState].cameraDistance = _defaultCameraDistance;
     }
 
     public void ZoomCamera()
     {
-        if (_scrollY < 0 && _cameraBody.m_CameraDistance <= 0.5f)
+        if (_cameraSettings[currentCameraState].cameraDistance + _scrollY <= 0.5f && _scrollY < 0)
         {
             _cameraSettings[currentCameraState].cameraDistance = 0.5f;
         }
-        else if (_scrollY > 0 && _cameraBody.m_CameraDistance >= 3.0f)
+        else if (_cameraSettings[currentCameraState].cameraDistance + _scrollY >= 3.0f && _scrollY > 0)
         {
             _cameraSettings[currentCameraState].cameraDistance = 3.0f;
         }

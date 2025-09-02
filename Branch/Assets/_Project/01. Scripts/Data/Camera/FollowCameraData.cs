@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,5 +51,5 @@ public class FollowCameraData : ScriptableObject
     [Range(0.0f, 10.0f), Tooltip("카메라 속도가 0이 될 때까지 필요한 시간\n0을 입력하면 마우스 움직임이 끝났을 때 즉시 멈춥니다.")] public float decelTimeY;
 
     [Header("카메라 상태 전환 속도")]
-    [Range(0.01f, 100.0f), Tooltip("다른 카메라 상태에서 현재 카메라 상태로 전환될 때의 카메라가 전환되는 속도\n현재는 사용하지 않습니다.")] public float convertSpeed;
+    [Range(0.01f, 50.0f), Tooltip("다른 카메라 상태에서 현재 카메라 상태로 전환될 때의 카메라가 전환되는 속도")] public float convertSpeed;
 }

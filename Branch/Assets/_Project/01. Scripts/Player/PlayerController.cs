@@ -320,11 +320,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnMouseScroll(InputAction.CallbackContext context)
     {
-        //_playerActions.PlayerActionMap.MouseScroll.performed += x => _followCamera.ScrollY = x.ReadValue<float>() * 0.02f * -1;
         if (context.performed)
         {
+            // 120 또는 -120 (-0.008을 곱하면 1과 근사한 0.96 또는 -0.96)
             float scrollValue = context.ReadValue<float>();
-            _followCamera.ScrollY = scrollValue * -0.001f;
+            _followCamera.ScrollY = scrollValue * -0.008f;
         }
     }
 

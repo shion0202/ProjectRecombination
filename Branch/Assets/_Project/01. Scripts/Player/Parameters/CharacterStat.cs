@@ -178,7 +178,6 @@ public class CharacterStat : MonoBehaviour
         CalculateTotalStats();
 
         _currentPartHealth = MaxPartHealth;
-        Debug.Log($"파츠 교체: Body Hp({_currentBodyHealth}), Part Hp({_currentPartHealth})");
     }
 
     public void AddModifier(StatModifier mod)

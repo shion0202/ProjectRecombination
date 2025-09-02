@@ -5736,7 +5736,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.1, y: -0.1, z: 0}
+  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
 --- !u!114 &2998618804727362388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6149,7 +6149,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6628986874714983563
 Transform:
   m_ObjectHideFlags: 0
@@ -11908,7 +11908,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.7
-  m_Radius: 0.2
+  m_Radius: 0.15
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.01
@@ -11968,7 +11968,8 @@ MonoBehaviour:
   dashBlockMask: 4
   shootBlockMask: 8
   zoomBlockMask: 0
-  rotationSpeed: 5
+  jumpVelocity: 30
+  rotationSpeed: 10
   boxSize: {x: 0.2, y: 0.01, z: 0.2}
   gravityScale: 10
   groundLayerMask:
@@ -27895,7 +27896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1507685177110280069
 Transform:
   m_ObjectHideFlags: 0
@@ -28099,7 +28100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &245654465941965714
 Transform:
   m_ObjectHideFlags: 0
@@ -28239,7 +28240,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.01, y: 0.01, z: 0}
+  m_DefaultVelocity: {x: -0.01, y: -0.01, z: 0}
 --- !u!114 &1351059840144049154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29467,7 +29468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1940463855122047081
 Transform:
   m_ObjectHideFlags: 0
@@ -29560,8 +29561,8 @@ MonoBehaviour:
   staticRotation: {x: 0, y: 0, z: 0}
   skillTime: 0.1
   skillDuration: -1
-  skillCooldown: 3
-  maxSkillCount: 1
+  skillCooldown: 1.5
+  maxSkillCount: 2
   skillRange: 8
   skillDamage: -1
   dashEffectPrefab: {fileID: 6976133296840316091, guid: 4f08b15ad48a7c841ab130f1fef80f5b,
@@ -29706,7 +29707,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.1, y: -0.1, z: 0}
+  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
 --- !u!114 &2894895289288266878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30509,7 +30510,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7901566701417213359
 Transform:
   m_ObjectHideFlags: 0
