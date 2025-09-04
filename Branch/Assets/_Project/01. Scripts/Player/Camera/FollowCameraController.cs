@@ -2,7 +2,6 @@ using Cinemachine;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public enum ECameraState
 {

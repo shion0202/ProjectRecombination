@@ -1,12 +1,10 @@
 using Cinemachine;
 using Managers;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Processors;
 
 [Flags]
 public enum EPlayerState
@@ -19,6 +17,7 @@ public enum EPlayerState
     RightShooting = 1 << 5,
     Zooming = 1 << 6,
     Rotating = 1 << 7,
+    Spawning = 1 << 8,
 
     RotateState = Moving | LeftShooting | RightShooting | Zooming,
     ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
@@ -99,6 +98,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     [Header("Animation")]
     [SerializeField] private List<BaseAnimation> animations = new();
+    [SerializeField] private List<GameObject> aimObjects = new();
     private int _currentAnimationIndex = 0;
 
     private static event Action OnInteractionKeyPressed;
@@ -170,6 +170,15 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         SetOvrrideAnimator(EAnimationType.Base);
 
+        foreach (var obj in aimObjects)
+        {
+            MultiAimConstraint aimObj = obj.GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
+        }
+
         // stats.CurrentHealth = stats.TotalStats[EStatType.MaxHp].Value;
         // GUIManager.instance.SetHpSlider(stats.CurrentHealth, stats.TotalStats[EStatType.MaxHp].Value);
     }
@@ -177,6 +186,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void OnEnable()
     {
         _playerActions.PlayerActionMap.Enable();
+
+        PlayerSpawnAnimation();
     }
 
     private void Start()
@@ -202,6 +213,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void LateUpdate()
     {
+        CheckSpawnAnimationEnd();
+
         HandleMove();
         DashMove();
         HandleGravity();
@@ -321,6 +334,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _isLeftAttackReady = false;  // 상태 초기화
 
             SetOvrrideAnimator(EAnimationType.Base);
+            MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
         }
     }
 
@@ -341,6 +359,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _currentPlayerState &= ~EPlayerState.RightShooting;
 
             SetOvrrideAnimator(EAnimationType.Base);
+            MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
         }
     }
 
@@ -382,6 +405,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         _currentPlayerState &= ~EPlayerState.ActionState;
         _currentPlayerState |= EPlayerState.Dashing;
+
+        animator.SetBool("isDashing", true);
+        animator.SetFloat("dashX", _dashDirection.x);
+        animator.SetFloat("dashY", _dashDirection.z);
     }
 
     public void FinishDash()
@@ -400,6 +427,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             Shoot();
         }
+
+        animator.SetBool("isDashing", false);
 
         _previousState = 0;
         SwitchStateToIdle();
@@ -537,8 +566,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if ((_currentPlayerState & movementBlockMask) != 0) return;
 
         // Lerp 블렌딩 적용 (0.1f는 변화 속도, 필요에 따라 수정)
-        _currentMoveInput = Vector2.Lerp(_currentMoveInput, _moveInput, 0.1f); // 0.1~0.33에서 조정
-        Debug.Log(_currentMoveInput);
+        _currentMoveInput = Vector2.Lerp(_currentMoveInput, _moveInput, 0.1f);
 
         if (_moveInput == null || _moveInput == Vector2.zero)
         {
@@ -615,11 +643,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if ((_isGrounded || _isOnPlatform) && _fallVelocity.y <= 0.0f)
         {
             _currentPlayerState &= ~EPlayerState.Falling;
+            animator.SetBool("isFalling", false);
             _fallVelocity = Vector3.zero;
             _totalDirection += _platformVelocity;
             return;
         }
         _currentPlayerState |= EPlayerState.Falling;
+        animator.SetBool("isFalling", true);
         _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
         _totalDirection += _fallVelocity;
     }
@@ -675,6 +705,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void RotateCharacter()
     {
+        if (!_canMove) return;
+
         if ((_currentPlayerState & EPlayerState.RotateState) == 0)
         {
             _currentPlayerState &= ~EPlayerState.Rotating;
@@ -737,6 +769,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             if (inventory.EquippedItems[EPartType.ArmR].IsAnimating)
             {
                 animator.SetBool("isRightAttack", true);
+                MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
+                if (aimObj != null)
+                {
+                    aimObj.weight = 0.8f;
+                }
             }
             inventory.EquippedItems[EPartType.ArmR].UseAbility();
         }
@@ -751,6 +788,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             if (stateInfo.IsName("Shoot") && !animator.IsInTransition(1))
             {
                 _isLeftAttackReady = true;
+                MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+                if (aimObj != null)
+                {
+                    aimObj.weight = 0.8f;
+                }
+
                 inventory.EquippedItems[EPartType.ArmL].UseAbility();
             }
         }
@@ -763,6 +806,37 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         animator.runtimeAnimatorController = animations[(int)type].overrideController;
         animator.SetBool("isOnlyLoop", animations[(int)type].isOnlyLoop);
         return true;
+    }
+
+    private void PlayerSpawnAnimation()
+    {
+        SetMovable(false);
+        animator.SetBool("isSpawning", true);
+        _currentPlayerState |= EPlayerState.Spawning;
+    }
+
+    private void CheckSpawnAnimationEnd()
+    {
+        if ((_currentPlayerState & EPlayerState.Spawning) == 0) return;
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        // 스폰 애니메이션 이름 또는 해시코드로 비교
+        if (!stateInfo.IsName("Spawn"))
+        {
+            // 스폰 애니메이션이 종료됨
+            SetMovable(true);
+            animator.SetBool("isSpawning", false);
+            _currentPlayerState &= ~EPlayerState.Spawning;
+
+            for (int i = 2; i < aimObjects.Count; ++i)
+            {
+                MultiAimConstraint aimObj = aimObjects[i].GetComponent<MultiAimConstraint>();
+                if (aimObj != null)
+                {
+                    aimObj.weight = 0.5f;
+                }
+            }
+        }
     }
     #endregion
 }

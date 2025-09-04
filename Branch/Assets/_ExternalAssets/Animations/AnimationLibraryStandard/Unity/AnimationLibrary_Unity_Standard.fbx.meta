@@ -1077,7 +1077,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Rig|Spell_Simple_Idle_Loop
+      name: AimLoop
       takeName: Rig|Spell_Simple_Idle_Loop
       internalID: 2353485320335845448
       firstFrame: 0
@@ -1088,7 +1088,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -1106,7 +1106,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Rig|Spell_Simple_Shoot
+      name: AimShoot
       takeName: Rig|Spell_Simple_Shoot
       internalID: -6811081637106142684
       firstFrame: 0
