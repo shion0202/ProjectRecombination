@@ -3,6 +3,7 @@ using Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Processors;
@@ -29,6 +30,22 @@ public enum EHealRange
     All = 0,
     Body = 1,
     Part = 2,
+}
+
+public enum EAnimationType
+{
+    Base = 0,
+    Hover = 1,
+    Roller = 2,
+    Caterpillar = 3,
+    Shooting = 4,
+}
+
+[Serializable]
+public struct BaseAnimation
+{
+    public AnimatorOverrideController overrideController;
+    public bool isOnlyLoop;
 }
 
 public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapActions
@@ -62,6 +79,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Vector3 _totalDirection = Vector3.zero;
     private bool _canMove = true;
     private ILegsMovement _currentMovement;
+    private Vector2 _postMoveInput = Vector2.zero;
+    private Vector2 _currentMoveInput = Vector2.zero;
 
     [Header("Gravity")]
     [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
@@ -77,6 +96,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [Header("Dash")]
     private Vector3 _dashDirection = Vector3.zero;
     private float _dashSpeed = 0.0f;
+
+    [Header("Animation")]
+    [SerializeField] private List<BaseAnimation> animations = new();
+    private int _currentAnimationIndex = 0;
 
     private static event Action OnInteractionKeyPressed;
     #endregion
@@ -144,7 +167,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+
+        SetOvrrideAnimator(EAnimationType.Base);
+
         // stats.CurrentHealth = stats.TotalStats[EStatType.MaxHp].Value;
         // GUIManager.instance.SetHpSlider(stats.CurrentHealth, stats.TotalStats[EStatType.MaxHp].Value);
     }
@@ -197,8 +222,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     #region Input Actions
     void PlayerActions.IPlayerActionMapActions.OnMove(InputAction.CallbackContext context)
     {
-        _moveInput = context.ReadValue<Vector2>();
         if ((_currentPlayerState & movementBlockMask) != 0) return;
+
+        _moveInput = context.ReadValue<Vector2>();
+        if (_moveInput != null && _moveInput != Vector2.zero)
+        {
+            _postMoveInput = _moveInput;
+        }
     }
 
     void PlayerActions.IPlayerActionMapActions.OnDash(InputAction.CallbackContext context)
@@ -289,6 +319,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _previousState &= ~EPlayerState.LeftShooting;
             _currentPlayerState &= ~EPlayerState.LeftShooting;
             _isLeftAttackReady = false;  // 상태 초기화
+
+            SetOvrrideAnimator(EAnimationType.Base);
         }
     }
 
@@ -307,6 +339,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetBool("isRightAttack", false);
             _previousState &= ~EPlayerState.RightShooting;
             _currentPlayerState &= ~EPlayerState.RightShooting;
+
+            SetOvrrideAnimator(EAnimationType.Base);
         }
     }
 
@@ -502,6 +536,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (!_canMove) return;
         if ((_currentPlayerState & movementBlockMask) != 0) return;
 
+        // Lerp 블렌딩 적용 (0.1f는 변화 속도, 필요에 따라 수정)
+        _currentMoveInput = Vector2.Lerp(_currentMoveInput, _moveInput, 0.1f); // 0.1~0.33에서 조정
+        Debug.Log(_currentMoveInput);
+
         if (_moveInput == null || _moveInput == Vector2.zero)
         {
             SwitchStateToIdle();
@@ -515,8 +553,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
         if (inventory.EquippedItems[EPartType.Legs].IsAnimating)
         {
-            animator.SetFloat("moveX", _moveDirection.x);
-            animator.SetFloat("moveY", _moveDirection.z);
+            animator.SetFloat("moveX", _currentMoveInput.x);
+            animator.SetFloat("moveY", _currentMoveInput.y);
             animator.SetFloat("moveMagnitude", _moveDirection.magnitude);
         }
         
@@ -528,8 +566,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _currentPlayerState &= ~EPlayerState.Moving;
         _currentPlayerState |= EPlayerState.Idle;
         _moveDirection = Vector3.zero;
-        animator.SetFloat("moveX", 0.0f);
-        animator.SetFloat("moveY", 0.0f);
+        animator.SetFloat("moveX", _postMoveInput.x);
+        animator.SetFloat("moveY", _postMoveInput.y);
         animator.SetFloat("moveMagnitude", 0.0f);
     }
 
@@ -686,6 +724,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
         {
+            SetOvrrideAnimator(EAnimationType.Shooting);
             if (inventory.EquippedItems[EPartType.ArmL].IsAnimating)
             {
                 animator.SetBool("isLeftAttack", true);
@@ -694,6 +733,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
+            SetOvrrideAnimator(EAnimationType.Shooting);
             if (inventory.EquippedItems[EPartType.ArmR].IsAnimating)
             {
                 animator.SetBool("isRightAttack", true);
@@ -707,13 +747,22 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // Left attack 애니메이션 상태 체크
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0 && !_isLeftAttackReady)
         {
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(2);
-            if (stateInfo.IsName("Shoot") && !animator.IsInTransition(2))
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(1);
+            if (stateInfo.IsName("Shoot") && !animator.IsInTransition(1))
             {
                 _isLeftAttackReady = true;
                 inventory.EquippedItems[EPartType.ArmL].UseAbility();
             }
         }
+    }
+
+    private bool SetOvrrideAnimator(EAnimationType type)
+    {
+        if (animations.Count <= (int)type) return false;
+
+        animator.runtimeAnimatorController = animations[(int)type].overrideController;
+        animator.SetBool("isOnlyLoop", animations[(int)type].isOnlyLoop);
+        return true;
     }
     #endregion
 }
