@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
+using static UnityEngine.UI.GridLayoutGroup;
 
 [Flags]
 public enum EPlayerState
@@ -18,6 +19,7 @@ public enum EPlayerState
     Zooming = 1 << 6,
     Rotating = 1 << 7,
     Spawning = 1 << 8,
+    Dead = 1 << 9,
 
     RotateState = Moving | LeftShooting | RightShooting | Zooming,
     ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     #region Variables
     [Header("Components")]
     [SerializeField] private Animator animator;
+    [SerializeField] private RigBuilder rigBuilder;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private CharacterController characterController;
     [SerializeField] private CharacterStat stats;
@@ -91,6 +94,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Transform _postPlatform;
     private Vector3 _lastPlatformPosition = Vector3.zero;
     private Vector3 _platformVelocity;
+    private float _groundCheckBufferTime = 0.5f;  // 0.1초까지 낙하 감지 지연
+    private float _groundCheckTimer = 0.0f;
 
     [Header("Dash")]
     private Vector3 _dashDirection = Vector3.zero;
@@ -333,6 +338,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _currentPlayerState &= ~EPlayerState.LeftShooting;
             _isLeftAttackReady = false;  // 상태 초기화
 
+            Stats.RemoveModifier(this);
+
             SetOvrrideAnimator(EAnimationType.Base);
             MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
             if (aimObj != null)
@@ -407,8 +414,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _currentPlayerState |= EPlayerState.Dashing;
 
         animator.SetBool("isDashing", true);
-        animator.SetFloat("dashX", _dashDirection.x);
-        animator.SetFloat("dashY", _dashDirection.z);
+
+        if (_moveInput == null || _moveInput == Vector2.zero)
+        {
+            animator.SetFloat("dashX", 0.0f);
+            animator.SetFloat("dashY", 1.0f);
+        }
+        else
+        {
+            animator.SetFloat("dashX", _moveInput.x);
+            animator.SetFloat("dashY", _moveInput.y);
+        }
     }
 
     public void FinishDash()
@@ -490,6 +506,38 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
 
         Debug.Log($"HP: Body({stats.CurrentBodyHealth}), Part({stats.CurrentPartHealth})");
+
+        if (stats.CurrentHealth <= 0)
+        {
+            // 사망 로직
+            _currentPlayerState = 0;
+            _currentPlayerState |= EPlayerState.Dead;
+
+            SetMovable(false);
+
+            animator.SetTrigger("deadTrigger");
+
+            // 사격 중 또는 스킬 시전 중 사망하는 경우 고려
+            inventory.EquippedItems[EPartType.ArmL].UseCancleAbility();
+            animator.SetBool("isLeftAttack", false);
+            _isLeftAttackReady = false;
+            Stats.RemoveModifier(this);
+            SetOvrrideAnimator(EAnimationType.Base);
+            MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
+
+            inventory.EquippedItems[EPartType.ArmR].UseCancleAbility();
+            animator.SetBool("isRightAttack", false);
+            SetOvrrideAnimator(EAnimationType.Base);
+            aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
+        }
     }
 
     public void HealHp(float healAmount, EHealRange healRange = EHealRange.All)
@@ -628,6 +676,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             // 대시 중에는 중력 벡터를 초기화하거나 그대로 유지(중력 영향 없음)
             _fallVelocity = Vector3.zero;
+            _groundCheckTimer = 0.0f;
             return;
         }
 
@@ -646,10 +695,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetBool("isFalling", false);
             _fallVelocity = Vector3.zero;
             _totalDirection += _platformVelocity;
+            _groundCheckTimer = 0.0f;
             return;
         }
-        _currentPlayerState |= EPlayerState.Falling;
-        animator.SetBool("isFalling", true);
+
+        _groundCheckTimer += Time.deltaTime;
+        if (_groundCheckTimer >= _groundCheckBufferTime)
+        {
+            _currentPlayerState |= EPlayerState.Falling;
+            animator.SetBool("isFalling", true);
+        }
+
         _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
         _totalDirection += _fallVelocity;
     }
@@ -761,6 +817,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             {
                 animator.SetBool("isLeftAttack", true);
             }
+            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.5f, this));
         }
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
@@ -772,7 +829,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
                 if (aimObj != null)
                 {
-                    aimObj.weight = 0.8f;
+                    aimObj.weight = 1.0f;
                 }
             }
             inventory.EquippedItems[EPartType.ArmR].UseAbility();
@@ -791,7 +848,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
                 if (aimObj != null)
                 {
-                    aimObj.weight = 0.8f;
+                    aimObj.weight = 1.0f;
                 }
 
                 inventory.EquippedItems[EPartType.ArmL].UseAbility();
@@ -805,6 +862,31 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         animator.runtimeAnimatorController = animations[(int)type].overrideController;
         animator.SetBool("isOnlyLoop", animations[(int)type].isOnlyLoop);
+
+        rigBuilder.enabled = false;
+        rigBuilder.enabled = true;
+
+        MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+        if (aimObj != null)
+        {
+            aimObj.weight = _isLeftAttackReady ? 1.0f : 0.0f;
+        }
+
+        aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+        if (aimObj != null)
+        {
+            aimObj.weight = _isRightAttackReady ? 1.0f : 0.0f;
+        }
+
+        for (int i = 2; i < aimObjects.Count; ++i)
+        {
+            aimObj = aimObjects[i].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.6f;
+            }
+        }
+
         return true;
     }
 
@@ -833,7 +915,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 MultiAimConstraint aimObj = aimObjects[i].GetComponent<MultiAimConstraint>();
                 if (aimObj != null)
                 {
-                    aimObj.weight = 0.5f;
+                    aimObj.weight = 0.6f;
                 }
             }
         }
