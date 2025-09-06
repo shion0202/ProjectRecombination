@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
-using static UnityEngine.UI.GridLayoutGroup;
 
 [Flags]
 public enum EPlayerState
@@ -85,7 +84,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Vector2 _currentMoveInput = Vector2.zero;
 
     [Header("Gravity")]
-    [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.01f, 0.2f);
+    [SerializeField] private Vector3 boxSize = new Vector3(0.2f, 0.1f, 0.2f);
     [SerializeField] private float gravityScale = 2.0f;
     [SerializeField] private LayerMask groundLayerMask;
     private bool _isGrounded = false;
@@ -94,7 +93,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Transform _postPlatform;
     private Vector3 _lastPlatformPosition = Vector3.zero;
     private Vector3 _platformVelocity;
-    private float _groundCheckBufferTime = 0.5f;  // 0.1초까지 낙하 감지 지연
+    private float _groundCheckBufferTime = 0.1f;  // 0.1초까지 낙하 감지 지연
     private float _groundCheckTimer = 0.0f;
 
     [Header("Dash")]
@@ -105,6 +104,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private List<BaseAnimation> animations = new();
     [SerializeField] private List<GameObject> aimObjects = new();
     private int _currentAnimationIndex = 0;
+    private bool _isPlaySpawnAnimation = false;
 
     private static event Action OnInteractionKeyPressed;
     #endregion
@@ -693,9 +693,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             _currentPlayerState &= ~EPlayerState.Falling;
             animator.SetBool("isFalling", false);
-            _fallVelocity = Vector3.zero;
+            _fallVelocity.y = -5.0f * gravityScale * Time.deltaTime; // 약간의 하강력 유지로 땅에 붙어있게 함
             _totalDirection += _platformVelocity;
             _groundCheckTimer = 0.0f;
+
+            _totalDirection += _fallVelocity;
             return;
         }
 
@@ -817,7 +819,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             {
                 animator.SetBool("isLeftAttack", true);
             }
-            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.5f, this));
+            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.3f, this));
         }
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
