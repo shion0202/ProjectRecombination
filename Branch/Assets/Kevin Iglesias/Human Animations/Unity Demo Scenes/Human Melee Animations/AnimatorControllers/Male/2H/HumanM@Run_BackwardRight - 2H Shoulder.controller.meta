@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d62f6b69d10258944b7a55dcf6848c36
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 320526
+  packageName: Human Mega Animations Pack Lite
+  packageVersion: 1.0.1
+  assetPath: Assets/Kevin Iglesias/Human Animations/Unity Demo Scenes/Human Melee
+    Animations/AnimatorControllers/Male/2H/HumanM@Run_BackwardRight - 2H Shoulder.controller
+  uploadId: 762112

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: dbca56a6baa063c40b581c417740e6bc
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 320526
+  packageName: Human Mega Animations Pack Lite
+  packageVersion: 1.0.1
+  assetPath: Assets/Kevin Iglesias/Human Animations/Unity Demo Scenes/Human Melee
+    Animations/AnimatorControllers/Male/1H/HumanM@Walk_BackwardLeft - 1H.controller
+  uploadId: 762112

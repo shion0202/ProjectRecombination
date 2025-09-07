@@ -186,6 +186,13 @@ public class Inventory : MonoBehaviour
 
         // 스탯 반영
         owner.SetPartStat(equipItem);
+
+        PartBaseLegs legs = equipItem as PartBaseLegs;
+        if (legs != null)
+        {
+            // 다리 파츠 (애니메이션 변경)
+            owner.SetOvrrideAnimator(legs.LegsAnimType);
+        }
     }
     #endregion
 

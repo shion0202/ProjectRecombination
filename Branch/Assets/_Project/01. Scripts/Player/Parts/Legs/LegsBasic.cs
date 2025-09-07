@@ -7,6 +7,12 @@ public class LegsBasic : PartBaseLegs
 {
     [SerializeField] protected GameObject dashEffectPrefab;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        _legsAnimType = EAnimationType.Base;
+    }
+
     public override void UseAbility()
     {
         if (_currentSkillCount >= maxSkillCount) return;

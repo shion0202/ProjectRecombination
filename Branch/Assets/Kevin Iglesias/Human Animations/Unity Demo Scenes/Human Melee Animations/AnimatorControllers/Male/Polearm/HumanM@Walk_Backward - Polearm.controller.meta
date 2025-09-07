@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cf2476c33b4f44947b40fdf1785d0876
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 320526
+  packageName: Human Mega Animations Pack Lite
+  packageVersion: 1.0.1
+  assetPath: Assets/Kevin Iglesias/Human Animations/Unity Demo Scenes/Human Melee
+    Animations/AnimatorControllers/Male/Polearm/HumanM@Walk_Backward - Polearm.controller
+  uploadId: 762112

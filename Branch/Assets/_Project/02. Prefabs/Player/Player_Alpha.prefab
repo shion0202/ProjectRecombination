@@ -11990,13 +11990,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.7
+  m_Height: 1.73
   m_Radius: 0.15
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.01
   m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 0.85, z: 0}
+  m_Center: {x: 0, y: 0.86, z: 0}
 --- !u!114 &8968991340754043080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12041,19 +12041,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 8661956576904460434}
+  rigBuilder: {fileID: 76646466660526002}
   groundCheck: {fileID: 3054136372502389328}
   characterController: {fileID: 3264447772112391129}
   stats: {fileID: 6442046761975464386}
   inventory: {fileID: 802525447253279937}
   followCameraPrefab: {fileID: 8765793853822610566, guid: ef3eb5519f6701e4ab90e7fe45bfb5c8,
     type: 3}
-  movementBlockMask: 264
-  dashBlockMask: 260
-  shootBlockMask: 264
-  zoomBlockMask: 256
+  movementBlockMask: 776
+  dashBlockMask: 772
+  shootBlockMask: 776
+  zoomBlockMask: 768
   jumpVelocity: 30
   rotationSpeed: 10
-  boxSize: {x: 0.2, y: 0.01, z: 0.2}
+  boxSize: {x: 0.2, y: 0.1, z: 0.2}
   gravityScale: 10
   groundLayerMask:
     serializedVersion: 2
@@ -12062,7 +12063,7 @@ MonoBehaviour:
   - overrideController: {fileID: 22100000, guid: b7707b82472ce9744b02f3658b037510,
       type: 2}
     isOnlyLoop: 1
-  - overrideController: {fileID: 22100000, guid: fbb0b9e10a61ed142a09485a21a6830f,
+  - overrideController: {fileID: 22100000, guid: 30ae32f1ef7d80e469bde8468681bf6b,
       type: 2}
     isOnlyLoop: 1
   - overrideController: {fileID: 22100000, guid: fbb0b9e10a61ed142a09485a21a6830f,
@@ -12077,6 +12078,8 @@ MonoBehaviour:
   aimObjects:
   - {fileID: 3270325543465042052}
   - {fileID: 9201493904809887784}
+  - {fileID: 6173283035044579637}
+  - {fileID: 8379666353221626009}
 --- !u!114 &6442046761975464386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17930,7 +17933,7 @@ MonoBehaviour:
       m_Length: 1
       m_Item0:
         transform: {fileID: 0}
-        weight: 0.8
+        weight: 1
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -17953,8 +17956,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -90
-    m_MaxLimit: 90
+    m_MinLimit: -30
+    m_MaxLimit: 30
     m_AimAxis: 1
     m_UpAxis: 3
     m_WorldUpType: 0
@@ -29618,7 +29621,7 @@ MonoBehaviour:
       m_Length: 1
       m_Item0:
         transform: {fileID: 0}
-        weight: 0.5
+        weight: 1
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -29641,11 +29644,11 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -30
-    m_MaxLimit: 30
+    m_MinLimit: -60
+    m_MaxLimit: 60
     m_AimAxis: 2
     m_UpAxis: 1
-    m_WorldUpType: 3
+    m_WorldUpType: 0
     m_WorldUpObject: {fileID: 8341757176382947894}
     m_WorldUpAxis: 4
     m_MaintainOffset: 0
@@ -30462,7 +30465,7 @@ MonoBehaviour:
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
-  skillTime: 0.1
+  skillTime: 0.15
   skillDuration: -1
   skillCooldown: 1.5
   maxSkillCount: 2
@@ -30610,7 +30613,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
+  m_DefaultVelocity: {x: -0.1, y: 0.1, z: 0}
 --- !u!114 &2894895289288266878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30759,7 +30762,7 @@ MonoBehaviour:
       m_Length: 1
       m_Item0:
         transform: {fileID: 0}
-        weight: 0.3
+        weight: 1
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -30786,7 +30789,7 @@ MonoBehaviour:
     m_MaxLimit: 30
     m_AimAxis: 2
     m_UpAxis: 1
-    m_WorldUpType: 3
+    m_WorldUpType: 0
     m_WorldUpObject: {fileID: 8341757176382947894}
     m_WorldUpAxis: 4
     m_MaintainOffset: 0
@@ -31379,7 +31382,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.1, y: 0.1, z: 0}
+  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
 --- !u!114 &3898500375037869986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31706,7 +31709,7 @@ MonoBehaviour:
       m_Length: 1
       m_Item0:
         transform: {fileID: 0}
-        weight: 0.8
+        weight: 1
       m_Item1:
         transform: {fileID: 0}
         weight: 0

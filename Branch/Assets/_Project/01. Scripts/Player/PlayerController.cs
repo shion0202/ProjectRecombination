@@ -105,6 +105,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private List<GameObject> aimObjects = new();
     private int _currentAnimationIndex = 0;
     private bool _isPlaySpawnAnimation = false;
+    private EAnimationType _currentAnimType = EAnimationType.Base;
+    private EAnimationType _postAnimType = EAnimationType.Base;
 
     private static event Action OnInteractionKeyPressed;
     #endregion
@@ -146,6 +148,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         get { return _dashSpeed; }
         set { _dashSpeed = value; }
+    }
+
+    public EAnimationType PostAnimType
+    {
+        get { return _postAnimType; }
+        set { _postAnimType = value; }
     }
     #endregion
 
@@ -306,6 +314,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
+    // 테스트용 점프 함수
     void PlayerActions.IPlayerActionMapActions.OnJump(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -340,7 +349,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
             Stats.RemoveModifier(this);
 
-            SetOvrrideAnimator(EAnimationType.Base);
+            SetOvrrideAnimator(_postAnimType);
             MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
             if (aimObj != null)
             {
@@ -364,8 +373,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetBool("isRightAttack", false);
             _previousState &= ~EPlayerState.RightShooting;
             _currentPlayerState &= ~EPlayerState.RightShooting;
+            _isRightAttackReady = false;
 
-            SetOvrrideAnimator(EAnimationType.Base);
+            Stats.RemoveModifier(this);
+
+            SetOvrrideAnimator(_postAnimType);
             MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
             if (aimObj != null)
             {
@@ -522,7 +534,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetBool("isLeftAttack", false);
             _isLeftAttackReady = false;
             Stats.RemoveModifier(this);
-            SetOvrrideAnimator(EAnimationType.Base);
+            SetOvrrideAnimator(_postAnimType);
             MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
             if (aimObj != null)
             {
@@ -531,7 +543,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
             inventory.EquippedItems[EPartType.ArmR].UseCancleAbility();
             animator.SetBool("isRightAttack", false);
-            SetOvrrideAnimator(EAnimationType.Base);
+            SetOvrrideAnimator(_postAnimType);
             aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
             if (aimObj != null)
             {
@@ -604,6 +616,42 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         _fallVelocity.y = jumpVelocity;
         _totalDirection += _fallVelocity;
+    }
+
+    public bool SetOvrrideAnimator(EAnimationType type)
+    {
+        if (animations.Count <= (int)type) return false;
+
+        _currentAnimType = type;
+
+        animator.runtimeAnimatorController = animations[(int)type].overrideController;
+        animator.SetBool("isOnlyLoop", animations[(int)type].isOnlyLoop);
+
+        rigBuilder.enabled = false;
+        rigBuilder.enabled = true;
+
+        MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+        if (aimObj != null)
+        {
+            aimObj.weight = _isLeftAttackReady ? 1.0f : 0.0f;
+        }
+
+        aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+        if (aimObj != null)
+        {
+            aimObj.weight = _isRightAttackReady ? 1.0f : 0.0f;
+        }
+
+        for (int i = 2; i < aimObjects.Count; ++i)
+        {
+            aimObj = aimObjects[i].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.6f;
+            }
+        }
+
+        return true;
     }
     #endregion
 
@@ -814,6 +862,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
         {
+            _postAnimType = _currentAnimType;
             SetOvrrideAnimator(EAnimationType.Shooting);
             if (inventory.EquippedItems[EPartType.ArmL].IsAnimating)
             {
@@ -824,17 +873,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
+            _postAnimType = _currentAnimType;
             SetOvrrideAnimator(EAnimationType.Shooting);
             if (inventory.EquippedItems[EPartType.ArmR].IsAnimating)
             {
                 animator.SetBool("isRightAttack", true);
-                MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
-                if (aimObj != null)
-                {
-                    aimObj.weight = 1.0f;
-                }
             }
-            inventory.EquippedItems[EPartType.ArmR].UseAbility();
+            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.3f, this));
         }
     }
 
@@ -856,40 +901,21 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 inventory.EquippedItems[EPartType.ArmL].UseAbility();
             }
         }
-    }
 
-    private bool SetOvrrideAnimator(EAnimationType type)
-    {
-        if (animations.Count <= (int)type) return false;
-
-        animator.runtimeAnimatorController = animations[(int)type].overrideController;
-        animator.SetBool("isOnlyLoop", animations[(int)type].isOnlyLoop);
-
-        rigBuilder.enabled = false;
-        rigBuilder.enabled = true;
-
-        MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
-        if (aimObj != null)
+        if ((_currentPlayerState & EPlayerState.RightShooting) != 0 && !_isRightAttackReady)
         {
-            aimObj.weight = _isLeftAttackReady ? 1.0f : 0.0f;
-        }
-
-        aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
-        if (aimObj != null)
-        {
-            aimObj.weight = _isRightAttackReady ? 1.0f : 0.0f;
-        }
-
-        for (int i = 2; i < aimObjects.Count; ++i)
-        {
-            aimObj = aimObjects[i].GetComponent<MultiAimConstraint>();
-            if (aimObj != null)
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(2);
+            if (stateInfo.IsName("Shoot") && !animator.IsInTransition(2))
             {
-                aimObj.weight = 0.6f;
+                _isRightAttackReady = true;
+                MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
+                if (aimObj != null)
+                {
+                    aimObj.weight = 1.0f;
+                }
+                inventory.EquippedItems[EPartType.ArmR].UseAbility();
             }
-        }
-
-        return true;
+        }   
     }
 
     private void PlayerSpawnAnimation()

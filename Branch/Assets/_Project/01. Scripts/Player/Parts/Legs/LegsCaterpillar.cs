@@ -14,6 +14,7 @@ public class LegsCaterpillar : PartBaseLegs
     protected override void Awake()
     {
         base.Awake();
+        _legsAnimType = EAnimationType.Caterpillar;
         _isAnimating = false;
     }
 

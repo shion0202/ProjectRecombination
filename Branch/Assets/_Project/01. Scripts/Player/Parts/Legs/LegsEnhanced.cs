@@ -18,6 +18,12 @@ public class LegsEnhanced : PartBaseLegs
     private bool _isCooldown = false;
     private float _currentCooldownTime = 0.0f;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        _legsAnimType = EAnimationType.Roller;
+    }
+
     protected void OnEnable()
     {
         _currentSpeed = 0.0f;

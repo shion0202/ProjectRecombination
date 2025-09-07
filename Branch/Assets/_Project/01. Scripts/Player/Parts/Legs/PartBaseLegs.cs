@@ -13,6 +13,9 @@ public class PartBaseLegs : PartBase, ILegsMovement
     [SerializeField] protected float skillDamage = 0.0f;
     protected int _currentSkillCount = 0;
     protected Coroutine _skillCoroutine = null;
+    protected EAnimationType _legsAnimType = EAnimationType.Base;
+
+    public EAnimationType LegsAnimType => _legsAnimType;
 
     protected virtual void Awake()
     {

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: ece69657dcaf44c4b949c4b885f1bd12
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 320526
+  packageName: Human Mega Animations Pack Lite
+  packageVersion: 1.0.1
+  assetPath: Assets/Kevin Iglesias/Human Animations/Unity Demo Scenes/Human Melee
+    Animations/AnimatorControllers/Male/2H/HumanM@RunStrafe01_Right - 2H Shoulder.controller
+  uploadId: 762112

@@ -31,6 +31,8 @@ public class LegsHover : PartBaseLegs
 
         _partModifiers.Add(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, 0.5f, this));
         _partModifiers.Add(new StatModifier(EStatType.DamageReductionRate, EStatModifierType.PercentMul, 0.7f, this));
+
+        _legsAnimType = EAnimationType.Hover;
     }
 
     protected void OnEnable()

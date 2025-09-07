@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: cd2ed060468cf274f9680223791d5bf7
 ModelImporter:
-  serializedVersion: 20101
+  serializedVersion: 22200
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
@@ -26,6 +26,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -62,7 +63,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
@@ -211,10 +212,12 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -226,6 +229,7 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -236,6 +240,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -843,7 +848,8 @@ ModelImporter:
     - name: Prop_L
       parentName: Hand_L
       position: {x: -0.000000019073486, y: -0.000000038146972, z: 0.000000009536743}
-      rotation: {x: -0.00000005029142, y: -0.000000016763803, z: -0.000000059604645, w: 1}
+      rotation: {x: -0.00000005029142, y: -0.000000016763803, z: -0.000000059604645,
+        w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Lower_Arm_L_twist_00
       parentName: Lower_Arm_L
@@ -983,7 +989,8 @@ ModelImporter:
     - name: Prop_R
       parentName: Hand_R
       position: {x: 0.000000019073486, y: -0.000000038146972, z: 0}
-      rotation: {x: -0.00000009965152, y: -0.000000036321563, z: -0.00000010430811, w: 1}
+      rotation: {x: -0.00000009965152, y: -0.000000036321563, z: -0.00000010430811,
+        w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Lower_Arm_R_twist_00
       parentName: Lower_Arm_R
@@ -1083,12 +1090,14 @@ ModelImporter:
     - name: Hair_DownTwinTail_R_01
       parentName: Hair_DownTwinTail_R_00
       position: {x: -0.19392444, y: -0.00017490386, z: -0.000000009536743}
-      rotation: {x: -0.0000000055879354, y: 0.000000007450581, z: -0.000000014901161, w: 1}
+      rotation: {x: -0.0000000055879354, y: 0.000000007450581, z: -0.000000014901161,
+        w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Hair_DownTwinTail_R_02
       parentName: Hair_DownTwinTail_R_01
       position: {x: -0.2196582, y: -0.00015594481, z: 0.000000028610229}
-      rotation: {x: -0.0000000055879354, y: 0.000000007450581, z: -0.000000014901161, w: 1}
+      rotation: {x: -0.0000000055879354, y: 0.000000007450581, z: -0.000000014901161,
+        w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Hair_Front_00
       parentName: Head
@@ -1513,7 +1522,8 @@ ModelImporter:
     - name: MsakGuide_HaonsSDKohaku-Chanz_add-bone_Allset
       parentName: Root_Dummy_Meshs
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.000000043711392, y: 0.000000043711385, z: -0.000000043711392, w: 1}
+      rotation: {x: 0.000000043711392, y: 0.000000043711385, z: -0.000000043711392,
+        w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: MsakGuide_HaonsSDKohaku-Chanz_add-bone_DefaultSet
       parentName: Root_Dummy_Meshs
@@ -1537,6 +1547,9 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
