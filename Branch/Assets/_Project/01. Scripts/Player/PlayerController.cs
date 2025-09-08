@@ -2,6 +2,7 @@ using Cinemachine;
 using Managers;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
@@ -23,6 +24,7 @@ public enum EPlayerState
     RotateState = Moving | LeftShooting | RightShooting | Zooming,
     ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
     ShootState = LeftShooting | RightShooting,
+    UnmanipulableState = Spawning | Dead,
 }
 
 public enum EHealRange
@@ -38,7 +40,10 @@ public enum EAnimationType
     Hover = 1,
     Roller = 2,
     Caterpillar = 3,
-    Shooting = 4,
+    ShootingBase = 4,
+    ShootingHover = 5,
+    ShootingRoller = 6,
+    ShootingCaterpillar = 7,
 }
 
 [Serializable]
@@ -317,6 +322,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     // 테스트용 점프 함수
     void PlayerActions.IPlayerActionMapActions.OnJump(InputAction.CallbackContext context)
     {
+        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
         if (context.started)
         {
             // 바닥에 있을 때만 점프 실행
@@ -332,6 +339,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnLeftAttack(InputAction.CallbackContext context)
     {
+        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
         if (context.started)
         {
             _currentPlayerState |= EPlayerState.LeftShooting;
@@ -340,26 +349,15 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.canceled)
         {
-            inventory.EquippedItems[EPartType.ArmL].UseCancleAbility();
-
-            animator.SetBool("isLeftAttack", false);
-            _previousState &= ~EPlayerState.LeftShooting;
-            _currentPlayerState &= ~EPlayerState.LeftShooting;
-            _isLeftAttackReady = false;  // 상태 초기화
-
-            Stats.RemoveModifier(this);
-
-            SetOvrrideAnimator(_postAnimType);
-            MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
-            if (aimObj != null)
-            {
-                aimObj.weight = 0.0f;
-            }
+            CancleAttack(true);
         }
     }
 
     void PlayerActions.IPlayerActionMapActions.OnRightAttack(InputAction.CallbackContext context)
     {
+        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+        if (!inventory.EquippedItems[EPartType.ArmR].IsAnimating) return;
+
         if (context.started)
         {
             _currentPlayerState |= EPlayerState.RightShooting;
@@ -368,26 +366,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.canceled)
         {
-            inventory.EquippedItems[EPartType.ArmR].UseCancleAbility();
-
-            animator.SetBool("isRightAttack", false);
-            _previousState &= ~EPlayerState.RightShooting;
-            _currentPlayerState &= ~EPlayerState.RightShooting;
-            _isRightAttackReady = false;
-
-            Stats.RemoveModifier(this);
-
-            SetOvrrideAnimator(_postAnimType);
-            MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
-            if (aimObj != null)
-            {
-                aimObj.weight = 0.0f;
-            }
+            CancleAttack(false);
         }
     }
 
     void PlayerActions.IPlayerActionMapActions.OnInteraction(InputAction.CallbackContext context)
     {
+        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
         if (context.started)
         {
             OnInteractionKeyPressed?.Invoke();
@@ -396,6 +382,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnMouseScroll(InputAction.CallbackContext context)
     {
+        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
         if (context.performed)
         {
             // 120 또는 -120 (-0.008을 곱하면 1과 근사한 0.96 또는 -0.96)
@@ -863,7 +851,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
         {
             _postAnimType = _currentAnimType;
-            SetOvrrideAnimator(EAnimationType.Shooting);
+            SetOvrrideAnimator(_postAnimType + 4);
             if (inventory.EquippedItems[EPartType.ArmL].IsAnimating)
             {
                 animator.SetBool("isLeftAttack", true);
@@ -873,12 +861,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
-            _postAnimType = _currentAnimType;
-            SetOvrrideAnimator(EAnimationType.Shooting);
             if (inventory.EquippedItems[EPartType.ArmR].IsAnimating)
             {
                 animator.SetBool("isRightAttack", true);
             }
+
+            _postAnimType = _currentAnimType;
+            SetOvrrideAnimator(_postAnimType + 4);
             stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.3f, this));
         }
     }
@@ -946,6 +935,46 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                     aimObj.weight = 0.6f;
                 }
             }
+        }
+    }
+
+    private void CancleAttack(bool isLeft)
+    {
+        if (isLeft)
+        {
+            inventory.EquippedItems[EPartType.ArmL].UseCancleAbility();
+
+            animator.SetBool("isLeftAttack", false);
+            _previousState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
+            _isLeftAttackReady = false;  // 상태 초기화
+
+            MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
+        }
+        else
+        {
+            inventory.EquippedItems[EPartType.ArmR].UseCancleAbility();
+
+            animator.SetBool("isRightAttack", false);
+            _previousState &= ~EPlayerState.RightShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
+            _isRightAttackReady = false;
+
+            MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
+        }
+
+        if ((_currentPlayerState & EPlayerState.ShootState) == 0)
+        {
+            Stats.RemoveModifier(this);
+            SetOvrrideAnimator(_postAnimType);
         }
     }
     #endregion

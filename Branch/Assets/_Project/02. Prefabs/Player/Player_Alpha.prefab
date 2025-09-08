@@ -267,7 +267,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166452862250747045}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 
@@ -12065,14 +12065,23 @@ MonoBehaviour:
     isOnlyLoop: 1
   - overrideController: {fileID: 22100000, guid: 30ae32f1ef7d80e469bde8468681bf6b,
       type: 2}
+    isOnlyLoop: 0
+  - overrideController: {fileID: 22100000, guid: 2628139626b20a54690608fa1059805f,
+      type: 2}
     isOnlyLoop: 1
-  - overrideController: {fileID: 22100000, guid: fbb0b9e10a61ed142a09485a21a6830f,
+  - overrideController: {fileID: 22100000, guid: 34fb72bf2a228ee448605c2b786cb0a4,
       type: 2}
     isOnlyLoop: 1
   - overrideController: {fileID: 22100000, guid: fbb0b9e10a61ed142a09485a21a6830f,
       type: 2}
     isOnlyLoop: 1
-  - overrideController: {fileID: 22100000, guid: fbb0b9e10a61ed142a09485a21a6830f,
+  - overrideController: {fileID: 22100000, guid: 4f68dc97ac9bb9845bab9240ae8f2a1e,
+      type: 2}
+    isOnlyLoop: 0
+  - overrideController: {fileID: 22100000, guid: ce61da918022c3e4d8bf5394109e6569,
+      type: 2}
+    isOnlyLoop: 1
+  - overrideController: {fileID: 22100000, guid: cadc066377b653f4bad76fd452ad76c3,
       type: 2}
     isOnlyLoop: 1
   aimObjects:
@@ -12620,7 +12629,7 @@ MonoBehaviour:
   baseTransform: {fileID: 0}
   Hips: {fileID: 3564488252642883003}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.9814365
+  finalScaleReference: 0.98143566
   finalScaleReferenceSqrt: 0.1
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -17956,16 +17965,16 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -30
-    m_MaxLimit: 30
+    m_MinLimit: -90
+    m_MaxLimit: 90
     m_AimAxis: 1
     m_UpAxis: 3
-    m_WorldUpType: 0
+    m_WorldUpType: 3
     m_WorldUpObject: {fileID: 8341757176382947894}
     m_WorldUpAxis: 4
     m_MaintainOffset: 0
     m_ConstrainedAxes:
-      x: 0
+      x: 1
       y: 1
       z: 1
 --- !u!1 &3284409741553353841
@@ -29060,7 +29069,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.01, y: 0.01, z: 0}
+  m_DefaultVelocity: {x: -0.01, y: -0.01, z: 0}
 --- !u!114 &1351059840144049154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29621,7 +29630,7 @@ MonoBehaviour:
       m_Length: 1
       m_Item0:
         transform: {fileID: 0}
-        weight: 1
+        weight: 0.5
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -29644,8 +29653,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -60
-    m_MaxLimit: 60
+    m_MinLimit: 30
+    m_MaxLimit: 30
     m_AimAxis: 2
     m_UpAxis: 1
     m_WorldUpType: 0
@@ -31736,12 +31745,12 @@ MonoBehaviour:
     m_MaxLimit: 90
     m_AimAxis: 1
     m_UpAxis: 3
-    m_WorldUpType: 0
+    m_WorldUpType: 3
     m_WorldUpObject: {fileID: 8341757176382947894}
     m_WorldUpAxis: 4
     m_MaintainOffset: 0
     m_ConstrainedAxes:
-      x: 0
+      x: 1
       y: 1
       z: 1
 --- !u!1 &9203465691256700602
@@ -31936,4 +31945,5 @@ MonoBehaviour:
   hoverHeight: 0.5
   hoverRange: 0.2
   hoverSpeed: 2
+  hoverDownSpeed: 4
   largeGroundYChangeThreshold: 0.3

@@ -1,6 +1,7 @@
 using _Project.Scripts.VisualScripting;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
@@ -17,6 +18,7 @@ public class LegsHover : PartBaseLegs
     [SerializeField] protected float hoverHeight = 1.5f;
     [SerializeField] protected float hoverRange = 0.2f;
     [SerializeField] protected float hoverSpeed = 2.0f;
+    [SerializeField] protected float hoverDownSpeed = 4.0f;
     protected GameObject _currentBarrier = null;                // 현재 활성화된 보호막
     protected Vector3 _currentMoveDirection = Vector3.zero;
     protected float groundY = 0.0f;
@@ -84,7 +86,7 @@ public class LegsHover : PartBaseLegs
     {
         RaycastHit hit;
         Vector3 rayOrigin = _owner.transform.position + Vector3.up * 0.5f;
-        if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 10f))
+        if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 50f))
         {
             groundY = hit.point.y;
         }
@@ -93,6 +95,7 @@ public class LegsHover : PartBaseLegs
             if (!isInit)
             {
                 groundY = _owner.transform.position.y;
+                previousGroundY = groundY;
                 isInit = true;
             }
         }
@@ -102,7 +105,9 @@ public class LegsHover : PartBaseLegs
 
         // groundY 변화량이 임계치를 초과하면 호버링 오프셋 0으로 처리
         float hoverOffset = 0f;
-        if (groundYChange < largeGroundYChangeThreshold)
+        bool isFalling = groundYChange >= largeGroundYChangeThreshold;
+
+        if (!isFalling)
         {
             hoverOffset = Mathf.Sin(Time.time * hoverSpeed) * hoverRange;
         }
@@ -112,9 +117,10 @@ public class LegsHover : PartBaseLegs
             hoverOffset = 0f;
         }
 
+        float speed = isFalling ? hoverDownSpeed : hoverSpeed;
         float targetY = groundY + hoverHeight + hoverOffset;
         Vector3 moveDelta = Vector3.zero;
-        moveDelta.y = targetY - (_owner.transform.localPosition.y);
+        moveDelta.y = (targetY - (_owner.transform.localPosition.y)) * speed;
 
         return moveDelta;
     }
