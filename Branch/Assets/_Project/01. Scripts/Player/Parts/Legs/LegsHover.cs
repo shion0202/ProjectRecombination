@@ -135,7 +135,7 @@ public class LegsHover : PartBaseLegs
     IEnumerator CoCreateBarrier()
     {
         // 스킬 사용 시 보호막 생성
-        _currentBarrier = Instantiate(barrierPrefab, barrierSpawnPoint.position, Quaternion.identity, transform);
+        _currentBarrier = Instantiate(barrierPrefab, barrierSpawnPoint.position - new Vector3(0.0f, 0.2f, 0.0f), Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f)), transform);
         HoverBarrier barrier = _currentBarrier.GetComponent<HoverBarrier>();
         if (barrier != null)
         {

@@ -58,7 +58,7 @@ public class LegsEnhanced : PartBaseLegs
         // 점프 연출 이후 실행
         Instantiate(jumpEffectPrefab, _owner.transform.position + Vector3.up * 2.0f, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f)));
 
-        GameObject go = Instantiate(RapidPlayerPrefab, _owner.transform.position, _owner.transform.rotation);
+        GameObject go = Instantiate(RapidPlayerPrefab, _owner.transform.position, Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f)));
         RapidPlayer rapidPlayer = go.GetComponent<RapidPlayer>();
         if (rapidPlayer != null)
         {

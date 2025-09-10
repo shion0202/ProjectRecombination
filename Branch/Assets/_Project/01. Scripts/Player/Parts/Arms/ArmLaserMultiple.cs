@@ -159,7 +159,7 @@ public class ArmLaserMultiple : PartBaseArm
 
     protected void SpawnBullet(Vector3 direction)
     {
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(direction.normalized));
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {

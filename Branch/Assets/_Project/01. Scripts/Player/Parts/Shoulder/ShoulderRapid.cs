@@ -106,7 +106,6 @@ public class ShoulderRapid : PartBaseShoulder
         List<TargetPoint> targets = FindValidTargets(mask, 100.0f);
         if (targets.Count > maxTargetCount)
             targets = targets.GetRange(0, maxTargetCount);
-        Debug.Log(targets.Count);
 
         // 4. 타겟마다 targetingPrefab 생성(시각적 타겟 표시)
         foreach (var enemy in targets)
@@ -116,7 +115,7 @@ public class ShoulderRapid : PartBaseShoulder
             GameObject targeting = Instantiate(targetingPrefab, targetPoint, Quaternion.identity, enemy.transform);
             targetingInstances.Add(targeting);
 
-            ParticleSystem ps = targeting.GetComponent<ParticleSystem>();
+            ParticleSystem ps = targeting.GetComponentInChildren<ParticleSystem>();
             if (ps != null)
             {
                 StartCoroutine(StopParticleAfterDelay(ps));
@@ -180,6 +179,6 @@ public class ShoulderRapid : PartBaseShoulder
     private IEnumerator StopParticleAfterDelay(ParticleSystem ps)
     {
         yield return new WaitForSeconds(particleStopDelay);
-        ps.Simulate(0, true, true);
+        ps.Pause();
     }
 }
