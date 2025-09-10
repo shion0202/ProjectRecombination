@@ -10,6 +10,7 @@ public class ArmLaserMultiple : PartBaseArm
     [SerializeField] protected float spreadAngle = 10.0f;
     [SerializeField] protected float maxCastTime = 1.0f;
     [SerializeField] protected int bulletPerShot = 3;
+    [SerializeField] private float particleStopDelay = 0.9f;  // Inspector에서 조절 가능
     protected Transform currentTarget = null;          // 현재 타겟
     protected float targetingProgress = 0f;             // 타겟팅 진행도 (0~maxCastTime)
     protected GameObject currentTargetIndicator = null;
@@ -28,45 +29,31 @@ public class ArmLaserMultiple : PartBaseArm
             currentTarget = null;
             return;
         }
-
         _currentShootTime += Time.deltaTime;
-
-        // 매 프레임 새로운 타겟 찾기
         Transform newTarget = FindTargetInView();
-
         if (newTarget != currentTarget)
         {
-            // 타겟이 바뀌면 타겟 표시 초기화 및 진행도 초기화
             currentTarget = newTarget;
             ClearTargetIndicator();
-
-            if (currentTarget != null)
-            {
-                CreateTargetIndicator();
-                targetingProgress = 0f;
-            }
+            targetingProgress = 0f; // 진행도 초기화
         }
         else
         {
-            if (currentTarget == null)
-            {
-                // 타겟이 없으면 진행도 초기화
-                targetingProgress = 0f;
-                return;
-            }
-
-            if (!IsTargetValid(currentTarget))
+            if (currentTarget == null || !IsTargetValid(currentTarget))
             {
                 ClearTargetIndicator();
                 currentTarget = null;
                 targetingProgress = 0f;
                 return;
             }
-
             targetingProgress += Time.deltaTime;
             targetingProgress = Mathf.Min(targetingProgress, maxCastTime);
 
-            UpdateTargetIndicatorPositionAndColor();
+            // 변경된 부분: 진행이 완료된 후에만 생성
+            if (targetingProgress >= maxCastTime && currentTargetIndicator == null)
+            {
+                CreateTargetIndicator();
+            }
         }
     }
 
@@ -99,11 +86,15 @@ public class ArmLaserMultiple : PartBaseArm
     {
         if (targetPrefab != null && currentTarget != null)
         {
-            Vector3 startPos = (currentTarget.position + Vector3.up) + targetIndicatorStartPosOffset;
-            currentTargetIndicator = Instantiate(targetPrefab, startPos, Quaternion.identity, currentTarget);
-            currentTargetIndicator.transform.localScale = Vector3.one * (0.1f / currentTarget.transform.localScale.x);
+            Vector3 fixedPos = currentTarget.position + Vector3.up;
+            currentTargetIndicator = Instantiate(targetPrefab, fixedPos, Quaternion.identity, currentTarget);
 
-            SetTargetIndicatorColor(targetingInProgressColor);
+            // 파티클 시스템 참조
+            ParticleSystem ps = currentTargetIndicator.GetComponentInChildren<ParticleSystem>();
+            if (ps != null)
+            {
+                StartCoroutine(StopParticleAfterDelay(ps));
+            }
         }
     }
 
@@ -236,4 +227,10 @@ public class ArmLaserMultiple : PartBaseArm
 
         return bestTarget;
     }
+
+    private IEnumerator StopParticleAfterDelay(ParticleSystem ps)
+    {
+        yield return new WaitForSeconds(particleStopDelay);
+        ps.Pause(); // 파티클 재생 중지
+    }   
 }

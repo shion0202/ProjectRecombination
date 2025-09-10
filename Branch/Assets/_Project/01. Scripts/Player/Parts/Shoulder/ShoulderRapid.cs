@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Monster;
+using Monster.AI.Blackboard;
 
 public class ShoulderRapid : PartBaseShoulder
 {
     [SerializeField] protected GameObject missilePrefab;
     [SerializeField] protected GameObject targetingPrefab; // 타겟팅 표시용 프리팹
     [SerializeField] protected int maxTargetCount = 12;
+    [SerializeField] private float particleStopDelay = 0.9f;  // Inspector에서 조절 가능
     private Coroutine _skillCoroutine = null;
     private List<GameObject> targetingInstances = new List<GameObject>();
 
@@ -38,11 +40,11 @@ public class ShoulderRapid : PartBaseShoulder
             _owner.transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 
-    List<MonsterBase> FindValidTargets(LayerMask obstacleMask, float maxRange)
+    List<TargetPoint> FindValidTargets(LayerMask obstacleMask, float maxRange)
     {
         Camera cam = Camera.main;
-        List<MonsterBase> result = new List<MonsterBase>();
-        MonsterBase[] allEnemies = FindObjectsOfType<MonsterBase>();
+        List<TargetPoint> result = new List<TargetPoint>();
+        TargetPoint[] allEnemies = FindObjectsOfType<TargetPoint>();
 
         foreach (var enemy in allEnemies)
         {
@@ -73,7 +75,7 @@ public class ShoulderRapid : PartBaseShoulder
         if (Physics.Raycast(cam.transform.position, direction, out RaycastHit hit, distance, obstacleMask))
         {
             // 장애물이 적 앞에 있음
-            if (hit.transform != enemyTransform)
+            if (!hit.transform.GetComponentInChildren<TargetPoint>())
                 return false;
         }
         return true;
@@ -100,30 +102,25 @@ public class ShoulderRapid : PartBaseShoulder
 
         // 3. 화면 내의 적을 감지(카메라 시야각/범위 외 적 제외)
         LayerMask mask = 0;
-        mask &= (1 << LayerMask.NameToLayer("Ignore Raycast"));
-        List<MonsterBase> targets = FindValidTargets(mask, 100.0f);
+        mask |= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+        List<TargetPoint> targets = FindValidTargets(mask, 100.0f);
         if (targets.Count > maxTargetCount)
             targets = targets.GetRange(0, maxTargetCount);
+        Debug.Log(targets.Count);
 
         // 4. 타겟마다 targetingPrefab 생성(시각적 타겟 표시)
         foreach (var enemy in targets)
         {
-            Vector3 targetPoint = enemy.transform.position + Vector3.up; // 실제 몬스터 위치+머리 위
-            Vector3 startPoint = targetPoint + Vector3.up * 3.0f;        // 더 위쪽에서 시작
+            Vector3 targetPoint = enemy.transform.position; // 실제 몬스터 위치+머리 위
 
-            GameObject targeting = Instantiate(targetingPrefab, startPoint, Quaternion.identity);
+            GameObject targeting = Instantiate(targetingPrefab, targetPoint, Quaternion.identity, enemy.transform);
             targetingInstances.Add(targeting);
 
-            // 0.2초 내로 하강 연출 (Lerp로 이동)
-            float duration = 0.2f;
-            float elapsed = 0f;
-            while (elapsed < duration)
+            ParticleSystem ps = targeting.GetComponent<ParticleSystem>();
+            if (ps != null)
             {
-                targeting.transform.position = Vector3.Lerp(startPoint, targetPoint, elapsed / duration);
-                elapsed += Time.deltaTime;
-                yield return null;
+                StartCoroutine(StopParticleAfterDelay(ps));
             }
-            targeting.transform.position = targetPoint;
 
             // 도착 후 잠깐 멈춤
             yield return new WaitForSeconds(0.2f);
@@ -147,11 +144,11 @@ public class ShoulderRapid : PartBaseShoulder
         {
             int missilesToFire = missilesPerTarget + (i < remainder ? 1 : 0); // 나머지는 앞 타겟에 1개씩 분배
 
-            MonsterBase enemy = targets[i];
+            TargetPoint enemy = targets[i];
 
             for (int j = 0; j < missilesToFire; j++)
             {
-                Vector3 targetPoint = enemy.transform.position + Vector3.up;
+                Vector3 targetPoint = enemy.transform.position;
                 Vector3 camShootDirection = (targetPoint - transform.position).normalized;
                 Vector3 randomDir = GetRandomDirection(camShootDirection);
 
@@ -178,5 +175,11 @@ public class ShoulderRapid : PartBaseShoulder
 
         Debug.Log("쿨타임 종료");
         _skillCoroutine = null;
+    }
+
+    private IEnumerator StopParticleAfterDelay(ParticleSystem ps)
+    {
+        yield return new WaitForSeconds(particleStopDelay);
+        ps.Simulate(0, true, true);
     }
 }
