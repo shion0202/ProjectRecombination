@@ -5357,7 +5357,7 @@ MonoBehaviour:
   maxSkillCount: 1
   skillRange: 6
   skillDamage: 150
-  RapidPlayerPrefab: {fileID: 8820006985737929240, guid: 1ee90b2c6b49cf2478c647751a3a5c59,
+  RapidPlayerPrefab: {fileID: 8520783737001524864, guid: 7d78290c5a0a7ab4d8af518670be5868,
     type: 3}
   jumpEffectPrefab: {fileID: 6976133296840316091, guid: a5161cd459dbc4244992b9cbe6737df6,
     type: 3}
@@ -5818,7 +5818,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.1, y: -0.1, z: 0}
+  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
 --- !u!114 &2998618804727362388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5850,11 +5850,11 @@ MonoBehaviour:
   shootingRange: 100
   recoilX: 4
   recoilY: 2
-  targetPrefab: {fileID: 5935870820068878259, guid: 74e4314ed44209242931552312968e35,
-    type: 3}
+  targetPrefab: {fileID: 139102, guid: cbaa59446f1724f28867412922390459, type: 3}
   spreadAngle: 30
-  maxCastTime: 1
+  maxCastTime: 0
   bulletPerShot: 10
+  particleStopDelay: 0.9
   targetingInProgressColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   targetingCompleteColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1035394343279307557
@@ -6682,6 +6682,8 @@ MonoBehaviour:
   shootingRange: 100
   recoilX: 4
   recoilY: 7
+  laserPrefab: {fileID: 1962479828434100, guid: a8fc40961f0745142a828fd724d7e5bd,
+    type: 3}
   chargeEffectPrefab: {fileID: 3641452039621646166}
   maxChargeTime: 2
 --- !u!1 &1983567462202783836
@@ -6855,9 +6857,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   missilePrefab: {fileID: 152452, guid: d153344d8c1dfb249a74761cf5fbd67c, type: 3}
-  targetingPrefab: {fileID: 5935870820068878259, guid: 74e4314ed44209242931552312968e35,
-    type: 3}
+  targetingPrefab: {fileID: 139102, guid: cbaa59446f1724f28867412922390459, type: 3}
   maxTargetCount: 12
+  particleStopDelay: 0.9
   maxYawAngle: 45
   maxPitchAngle: 10
 --- !u!1 &2200786702467594401
@@ -12629,7 +12631,7 @@ MonoBehaviour:
   baseTransform: {fileID: 0}
   Hips: {fileID: 3564488252642883003}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.98143566
+  finalScaleReference: 0.9814365
   finalScaleReferenceSqrt: 0.1
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -29069,7 +29071,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.01, y: -0.01, z: 0}
+  m_DefaultVelocity: {x: 0.01, y: -0.01, z: 0}
 --- !u!114 &1351059840144049154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29829,7 +29831,7 @@ Transform:
   m_GameObject: {fileID: 6319086022400347395}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30474,7 +30476,7 @@ MonoBehaviour:
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
-  skillTime: 0.15
+  skillTime: 0.2
   skillDuration: -1
   skillCooldown: 1.5
   maxSkillCount: 2
@@ -31391,7 +31393,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
+  m_DefaultVelocity: {x: 0.1, y: -0.1, z: 0}
 --- !u!114 &3898500375037869986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31937,7 +31939,7 @@ MonoBehaviour:
   skillDamage: -1
   barrierPrefab: {fileID: 3292751394904765131, guid: 23f6b8aac39c0ec419e15ec5d4f991a5,
     type: 3}
-  barrierSpawnPoint: {fileID: 8341757176382947894}
+  barrierSpawnPoint: {fileID: 4298061233556764642}
   barrierDamage: 200
   barrierPushForce: 100
   acceleration: 10

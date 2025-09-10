@@ -63,7 +63,15 @@ public class ArmLaserMultiple : PartBaseArm
 
         if (targetingProgress >= maxCastTime && currentTarget != null)
         {
-            ShootAtTarget(currentTarget);
+            TargetPoint targetPos = currentTarget.GetComponentInChildren<TargetPoint>();
+            if (targetPos != null)
+            {
+                ShootAtTarget(targetPos.transform);
+            }
+            else
+            {
+                ShootAtTarget(currentTarget);
+            }
         }
 
         _currentShootTime = 0.0f;
@@ -86,7 +94,13 @@ public class ArmLaserMultiple : PartBaseArm
     {
         if (targetPrefab != null && currentTarget != null)
         {
-            Vector3 fixedPos = currentTarget.position + Vector3.up;
+            TargetPoint targetPos = currentTarget.GetComponentInChildren<TargetPoint>();
+            Vector3 fixedPos = currentTarget.transform.position;
+            if (targetPos != null)
+            {
+                fixedPos = targetPos.transform.position;
+            }
+
             currentTargetIndicator = Instantiate(targetPrefab, fixedPos, Quaternion.identity, currentTarget);
 
             // 파티클 시스템 참조

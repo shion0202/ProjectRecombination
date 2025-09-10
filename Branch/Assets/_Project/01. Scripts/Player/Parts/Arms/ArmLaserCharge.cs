@@ -61,29 +61,32 @@ public class ArmLaserCharge : PartBaseArm
         _currentChargeTime = _currentShootTime / maxChargeTime;
         RaycastHit[] hits;
         Vector3 targetPoint = GetTargetPoint(out hits);
-
         if (currentLaser == null) return;
 
-        currentLaser.SetPosition(0, bulletSpawnPoint.position);
-
-        if (hits.Length > 0)
-        {
-            currentLaser.SetPosition(1, targetPoint);
-        }
-        else
-        {
-            Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
-            currentLaser.SetPosition(1, bulletSpawnPoint.position + camShootDirection * shootingRange);
-        }
-
+        // 레이저 오브젝트 먼저 활성화
         currentLaserObject.gameObject.SetActive(true);
+
+        // 활성화된 상태에서 위치 설정
+        currentLaser.transform.position = bulletSpawnPoint.position;
+        //currentLaser.SetPosition(0, bulletSpawnPoint.position);
+
+        Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
+        currentLaser.transform.rotation = Quaternion.LookRotation(camShootDirection);
+        //if (hits.Length > 0)
+        //{
+        //    currentLaser.SetPosition(1, targetPoint);
+        //}
+        //else
+        //{
+        //    currentLaser.SetPosition(1, bulletSpawnPoint.position + camShootDirection * shootingRange);
+        //}
 
         if (fadeCoroutine != null)
         {
             StopCoroutine(fadeCoroutine);
             fadeCoroutine = null;
         }
-        fadeCoroutine = StartCoroutine(CoFadeOutLaser());
+        fadeCoroutine = StartCoroutine(CoDestroyLaser());
 
         if (hits.Length > 0)
         {
@@ -100,10 +103,19 @@ public class ArmLaserCharge : PartBaseArm
 
     protected IEnumerator CoDestroyLaser()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
 
-        Destroy(currentLaserObject);
+        var laser = currentLaserObject.GetComponent<Hovl_Laser>();
+        if (laser != null)
+        {
+            laser.DisablePrepare();
+        }
+
         currentLaser = null;
         currentLaserObject = null;
+
+        yield return new WaitForSeconds(0.5f);
+
+        Destroy(laser.gameObject);
     }
 }

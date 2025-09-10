@@ -3,10 +3,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public enum ECameraState
 {
     Normal = 0,
-    Zoom = 1,
+    Hover = 1,
+    Roller = 2,
+    Caterpillar = 3,
+    Zoom = 4,
+    HoverZoom = 5,
+    RollerZoom = 6,
+    CaterpillarZoom = 7,
 }
 
 // 기획자 작업 편의를 위해, 씬에서 SO 값을 변경하여 바로 적용할 수 있도록 ExecuteInEditMode 속성 추가
@@ -39,7 +46,19 @@ public class FollowCameraController : MonoBehaviour
     #endregion
 
     #region Properties
-    public ECameraState CurrentCameraState => currentCameraState;
+    public ECameraState CurrentCameraState
+    {
+        get { return currentCameraState; }
+        set
+        {
+            if (currentCameraState != value)
+            {
+                currentCameraState = value;
+                //ApplyCameraSettings();
+            }
+        }
+    }
+
     public Transform CameraTarget => _cameraTarget;
 
     public bool IsBeforeZoom

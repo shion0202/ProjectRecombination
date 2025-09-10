@@ -99,42 +99,60 @@ public class Inventory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            if (partIndex == 0) return;
+
             partIndex = 0;
             EquipItem(_items[EPartType.Shoulder][partIndex]);
             EquipItem(_items[EPartType.ArmL][partIndex]);
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
             EquipItem(_items[EPartType.Back][partIndex]);
+
+            // 임시로 파츠 전체 교체 시 특정 파츠 카메라로 변경
+            // To-do: R&D가 필요하나, 캐릭터 콜라이더 크기에 따라 카메라 위치를 조정하는 등의 조치 필요
+            owner.FollowCamera.CurrentCameraState = ECameraState.Normal;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            if (partIndex == 1) return;
+
             partIndex = 1;
             EquipItem(_items[EPartType.Shoulder][partIndex]);
             EquipItem(_items[EPartType.ArmL][partIndex]);
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
             EquipItem(_items[EPartType.Back][partIndex]);
+
+            owner.FollowCamera.CurrentCameraState = ECameraState.Hover;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            if (partIndex == 2) return;
+
             partIndex = 2;
             EquipItem(_items[EPartType.Shoulder][partIndex]);
             EquipItem(_items[EPartType.ArmL][partIndex]);
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
             EquipItem(_items[EPartType.Back][partIndex]);
+
+            owner.FollowCamera.CurrentCameraState = ECameraState.Roller;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
+            if (partIndex == 3) return;
+
             partIndex = 3;
             EquipItem(_items[EPartType.Shoulder][partIndex]);
             EquipItem(_items[EPartType.ArmL][partIndex]);
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
             EquipItem(_items[EPartType.Back][partIndex]);
+
+            owner.FollowCamera.CurrentCameraState = ECameraState.Caterpillar;
         }
 
         // GUI 갱신 스크립트

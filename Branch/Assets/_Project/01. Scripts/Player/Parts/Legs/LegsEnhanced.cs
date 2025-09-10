@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Monster;
 using UnityEngine.InputSystem;
+using Monster.AI;
 
 public class LegsEnhanced : PartBaseLegs
 {
@@ -81,17 +82,17 @@ public class LegsEnhanced : PartBaseLegs
                 rb.AddExplosionForce(10.0f, transform.position, skillRange);
             }
 
-            MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
+            AIController monster = hit.transform.GetComponent<AIController>();
             if (monster != null)
             {
-                monster.TakeDamage((int)skillDamage);
+                monster.OnHit(skillDamage);
             }
             else
             {
-                monster = hit.transform.GetComponentInParent<MonsterBase>();
+                monster = hit.transform.GetComponentInParent<AIController>();
                 if (monster != null)
                 {
-                    monster.TakeDamage((int)skillDamage);
+                    monster.OnHit(skillDamage);
                 }
             }
         }

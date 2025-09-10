@@ -110,7 +110,12 @@ public class ShoulderRapid : PartBaseShoulder
         // 4. 타겟마다 targetingPrefab 생성(시각적 타겟 표시)
         foreach (var enemy in targets)
         {
-            Vector3 targetPoint = enemy.transform.position; // 실제 몬스터 위치+머리 위
+            TargetPoint targetPos = enemy.GetComponentInChildren<TargetPoint>();
+            Vector3 targetPoint = enemy.transform.position;
+            if (targetPos != null)
+            {
+                targetPoint = targetPos.transform.position;
+            }
 
             GameObject targeting = Instantiate(targetingPrefab, targetPoint, Quaternion.identity, enemy.transform);
             targetingInstances.Add(targeting);

@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43e2ea5c0442f748867a8854283f923, type: 3}
   m_Name: FollowCameraData_Zoom
   m_EditorClassIdentifier: 
-  FOV: 80
-  screenX: 0.45
-  screenY: 0.7
-  cameraDistance: 3
+  FOV: 60
+  screenX: 0.3
+  screenY: 0.6
+  cameraDistance: 2
   trackedOffset: {x: 0, y: 0, z: 0}
-  lookaheadTime: 0
-  lookaheadSmoothing: 0
+  lookaheadTime: 0.01
+  lookaheadSmoothing: 3
   ignoreLookaheadY: 1
   dampingX: 0
   dampingY: 0
@@ -31,8 +31,8 @@ MonoBehaviour:
   softZoneHeight: 0
   softZoneOffsetX: 0
   softZoneOffsetY: 0
-  sensitivityX: 3
-  sensitivityY: 1
+  sensitivityX: 1.5
+  sensitivityY: 0.5
   maxAimRangeX: 180
   minAimRangeX: -180
   maxAimRangeY: 70

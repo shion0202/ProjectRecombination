@@ -2,7 +2,6 @@ using Cinemachine;
 using Managers;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
@@ -382,22 +381,22 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnMouseScroll(InputAction.CallbackContext context)
     {
-        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+        //if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
 
-        if (context.performed)
-        {
-            // 120 또는 -120 (-0.008을 곱하면 1과 근사한 0.96 또는 -0.96)
-            float scrollValue = context.ReadValue<float>();
-            _followCamera.ScrollY = scrollValue * -0.008f;
-        }
+        //if (context.performed)
+        //{
+        //    // 120 또는 -120 (-0.008을 곱하면 1과 근사한 0.96 또는 -0.96)
+        //    float scrollValue = context.ReadValue<float>();
+        //    _followCamera.ScrollY = scrollValue * -0.008f;
+        //}
     }
 
     void PlayerActions.IPlayerActionMapActions.OnResetCamera(InputAction.CallbackContext context)
     {
-        if (context.started)
-        {
-            _followCamera.ResetCamera();
-        }
+        //if (context.started)
+        //{
+        //    _followCamera.ResetCamera();
+        //}
     }
     #endregion
 
@@ -857,6 +856,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 animator.SetBool("isLeftAttack", true);
             }
             stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.3f, this));
+
+            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
@@ -869,6 +870,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _postAnimType = _currentAnimType;
             SetOvrrideAnimator(_postAnimType + 4);
             stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.3f, this));
+
+            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
     }
 
@@ -975,6 +978,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             Stats.RemoveModifier(this);
             SetOvrrideAnimator(_postAnimType);
+            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
     }
     #endregion

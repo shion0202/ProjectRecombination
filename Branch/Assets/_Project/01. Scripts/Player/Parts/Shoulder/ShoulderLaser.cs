@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Monster;
+using Monster.AI.Blackboard;
+using Monster.AI;
 
 public class ShoulderLaser : PartBaseShoulder
 {
@@ -73,24 +75,24 @@ public class ShoulderLaser : PartBaseShoulder
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 targetPoint = Vector3.zero;
 
-        targetPoint = transform.position + (Vector3.up * 1.0f) + ray.direction * 100.0f;
+        targetPoint = transform.position + (Vector3.up * 1.0f) + ray.direction * 10.0f;
         hits = Physics.CapsuleCastAll(transform.position + (Vector3.up * 1.0f), targetPoint, 1.0f, ray.direction, 100.0f);
 
         foreach (RaycastHit hit in hits)
         {
-            MonsterBase monster = hit.transform.GetComponent<MonsterBase>();
+            AIController monster = hit.transform.GetComponent<AIController>();
             if (monster != null)
             {
                 // 이런 식으로 레이저를 틱 데미지로 처리하려면 TakeDamage가 float 타입이어야 함
                 // 아마 최신 버전에선 수정되었던 걸로 기억
-                monster.TakeDamage((int)(100.0f));
+                monster.OnHit(100.0f);
             }
             else
             {
-                monster = hit.transform.GetComponentInParent<MonsterBase>();
+                monster = hit.transform.GetComponentInParent<AIController>();
                 if (monster != null)
                 {
-                    monster.TakeDamage((int)(100.0f));
+                    monster.OnHit(100.0f);
                 }
             }
 
