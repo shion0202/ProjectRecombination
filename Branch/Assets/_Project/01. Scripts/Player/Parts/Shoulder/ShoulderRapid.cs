@@ -184,6 +184,10 @@ public class ShoulderRapid : PartBaseShoulder
     private IEnumerator StopParticleAfterDelay(ParticleSystem ps)
     {
         yield return new WaitForSeconds(particleStopDelay);
-        ps.Pause();
+
+        if (ps != null)
+        {
+            ps.Pause();
+        }
     }
 }

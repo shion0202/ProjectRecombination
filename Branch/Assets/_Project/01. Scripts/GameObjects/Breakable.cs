@@ -7,13 +7,13 @@ public class Breakable : MonoBehaviour
     [SerializeField] private float explosionForce = 500.0f;
     [SerializeField] private Vector3 explosionPosition;
     [SerializeField] private float explosionRadius = 5.0f;
-    [SerializeField] private float upwardsModifier = 0.0f;
+    [SerializeField] private float upwardsModifier;
     [SerializeField] private ForceMode forceMode = ForceMode.Force;
 
-    private List<Vector3> originalPositions = new List<Vector3>();
-    private List<Quaternion> originalRotations = new List<Quaternion>();
-    private List<Rigidbody> rigidbodies = new List<Rigidbody>();
-    private Coroutine Coroutine = null;
+    private List<Vector3> originalPositions = new();
+    private List<Quaternion> originalRotations = new();
+    private List<Rigidbody> rigidbodies = new();
+    private Coroutine Coroutine;
 
     private void Start()
     {

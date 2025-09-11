@@ -245,6 +245,10 @@ public class ArmLaserMultiple : PartBaseArm
     private IEnumerator StopParticleAfterDelay(ParticleSystem ps)
     {
         yield return new WaitForSeconds(particleStopDelay);
-        ps.Pause(); // 파티클 재생 중지
+
+        if (ps != null)
+        {
+            ps.Pause(); // 파티클 재생 중지
+        }
     }   
 }

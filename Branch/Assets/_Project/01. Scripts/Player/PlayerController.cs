@@ -472,7 +472,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (stats.CurrentHealth <= 0) return;
 
         var damage = (takeDamage - (stats.TotalStats[EStatType.Defence].value + stats.TotalStats[EStatType.AddDefence].value)) * stats.TotalStats[EStatType.DamageReductionRate].value;
-        Debug.Log($"Player에게 {damage} 데미지! 효과는 굉장했다!");
+        // Debug.Log($"Player에게 {damage} 데미지! 효과는 굉장했다!");
 
         if (damage > 0)
         {
@@ -504,7 +504,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             // TODO: 데미지가 음수일때 어떻게 처리할 것인지 논의 필요 (힐을 시킬 것인지 무시할 것인지)
         }
 
-        Debug.Log($"HP: Body({stats.CurrentBodyHealth}), Part({stats.CurrentPartHealth})");
+        // Debug.Log($"HP: Body({stats.CurrentBodyHealth}), Part({stats.CurrentPartHealth})");
 
         if (stats.CurrentHealth <= 0)
         {

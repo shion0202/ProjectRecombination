@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using Monster.AI;
+using Managers;
 
 public class Bullet : MonoBehaviour
 {
@@ -66,10 +67,12 @@ public class Bullet : MonoBehaviour
     {
         _timer = lifeTime;
 
+
         //transform.forward = _from.transform.forward;
 
         if (muzzleParticle)
         {
+
             muzzleParticle = Instantiate(muzzleParticle, transform.position, Quaternion.LookRotation(-_targetDirection), Parent);
             Destroy(muzzleParticle, 1.5f); // Lifetime of muzzle effect.
         }
@@ -116,18 +119,11 @@ public class Bullet : MonoBehaviour
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
             Quaternion rotation = Quaternion.LookRotation(effectDirection);
-            if (impactParticle)
-            {
-                GameObject impactP = Instantiate(
-                impactParticle,
-                contactPoint, // 접점 위치
-                Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
-            );
-                Destroy(impactP, 5.0f);
-            }
-
+            
+            DestroyBullet();
+            
             TakeDamage(other.transform);
-            Destroy(gameObject); // 총알 파괴
+            
             return;
         }
         
@@ -137,23 +133,12 @@ public class Bullet : MonoBehaviour
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
             Quaternion rotation = Quaternion.LookRotation(effectDirection);
-            if (impactParticle)
-            {
-                GameObject impactP = Instantiate(
-                impactParticle,
-                contactPoint, // 접점 위치
-                Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
-            );
-                Destroy(impactP, 5.0f);
-            }
+            
+            DestroyBullet();
 
-            var player = other.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                player.TakeDamage(_damage);
-                Destroy(gameObject); // 총알 파괴
-            }
-
+            PlayerController player = other.GetComponent<PlayerController>();
+            player?.TakeDamage(_damage);
+            
             return;
         }
         
@@ -164,17 +149,7 @@ public class Bullet : MonoBehaviour
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
             Quaternion rotation = Quaternion.LookRotation(effectDirection);
 
-            if (impactParticle)
-            {
-                GameObject impactP = Instantiate(
-                impactParticle,
-                contactPoint, // 접점 위치
-                Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
-            );
-                Destroy(impactP, 5.0f);
-            }
-
-            Destroy(gameObject); // 총알 파괴
+            DestroyBullet();
             return;
         }
 
@@ -183,15 +158,8 @@ public class Bullet : MonoBehaviour
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
             Quaternion rotation = Quaternion.LookRotation(effectDirection);
-            if (impactParticle)
-            {
-                GameObject impactP = Instantiate(
-                impactParticle,
-                contactPoint, // 접점 위치
-                Quaternion.LookRotation(effectDirection) // 추정 방향 정렬
-            );
-                Destroy(impactP, 5.0f);
-            }
+            
+            DestroyBullet();
 
             foreach (Transform child in other.transform)
             {
@@ -210,7 +178,6 @@ public class Bullet : MonoBehaviour
                 }
             }
 
-            Destroy(gameObject);
         }
     }
 
@@ -248,7 +215,21 @@ public class Bullet : MonoBehaviour
 
     protected virtual void DestroyBullet()
     {
-        Destroy(gameObject);
+        // 풀링 전 총알의 상태를 초기화
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        _timer = lifeTime;
+        if (impactParticle)
+        {
+            GameObject impactP = Instantiate(
+                impactParticle,
+                transform.position, // 접점 위치
+                Quaternion.LookRotation(-transform.forward) // 추정 방향 정렬
+            );
+            Destroy(impactP, 5.0f);
+        }
+        
+        PoolManager.Instance.ReleaseObject(gameObject);
     }
 
     protected virtual void Explode()
@@ -257,6 +238,6 @@ public class Bullet : MonoBehaviour
         {
             Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
         }
-        Destroy(gameObject);
+        PoolManager.Instance.ReleaseObject(gameObject);
     }
 }

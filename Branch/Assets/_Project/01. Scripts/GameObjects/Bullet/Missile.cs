@@ -1,3 +1,4 @@
+using Managers;
 using Monster;
 using System.Collections;
 using System.Collections.Generic;
@@ -66,7 +67,7 @@ public class Missile : Bullet
             Destroy(Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
         }
 
-        Destroy(gameObject);
+        PoolManager.Instance.ReleaseObject(gameObject);
     }
 
     IEnumerator CoMissileRoutine(Vector3 initialDir, Vector3 fromPos)

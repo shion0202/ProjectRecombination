@@ -1,7 +1,9 @@
+using Managers;
+using Monster;
+using Monster.AI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Monster;
 
 public class ProjectileBlade : MonoBehaviour
 {
@@ -27,7 +29,7 @@ public class ProjectileBlade : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= lifeTime)
         {
-            Destroy(gameObject);
+            PoolManager.Instance.ReleaseObject(gameObject);
         }
     }
 
@@ -39,7 +41,7 @@ public class ProjectileBlade : MonoBehaviour
         if (_from.CompareTag("Player") && other.CompareTag("Enemy"))
         {
             TakeDamage(other.transform);
-            Destroy(gameObject); // 총알 파괴
+            PoolManager.Instance.ReleaseObject(gameObject);
             return;
         }
 
@@ -50,7 +52,7 @@ public class ProjectileBlade : MonoBehaviour
             if (player != null)
             {
                 player.TakeDamage(_damage);
-                Destroy(gameObject); // 총알 파괴
+                PoolManager.Instance.ReleaseObject(gameObject);
             }
 
             return;
@@ -66,17 +68,17 @@ public class ProjectileBlade : MonoBehaviour
 
     public void TakeDamage(Transform target, float coefficient = 1.0f)
     {
-        MonsterBase monster = target.GetComponent<MonsterBase>();
+        AIController monster = target.GetComponent<AIController>();
         if (monster != null)
         {
-            monster.TakeDamage((int)(_damage * coefficient));
+            monster.OnHit(_damage * coefficient);
         }
         else
         {
-            monster = target.transform.GetComponentInParent<MonsterBase>();
+            monster = target.transform.GetComponentInParent<AIController>();
             if (monster != null)
             {
-                monster.TakeDamage((int)(_damage * coefficient));
+                monster.OnHit(_damage * coefficient);
             }
         }
     }

@@ -5818,7 +5818,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
+  m_DefaultVelocity: {x: -0.1, y: 0.1, z: 0}
 --- !u!114 &2998618804727362388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29071,7 +29071,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.01, y: -0.01, z: 0}
+  m_DefaultVelocity: {x: -0.01, y: 0.01, z: 0}
 --- !u!114 &1351059840144049154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29248,7 +29248,9 @@ MonoBehaviour:
   skillDamage: 300
   impactEffectPrefab: {fileID: 2593114353627363549, guid: 572b6b5e5bc599f4eadc61d436e2be3a,
     type: 3}
+  caterpillarMaterial: {fileID: 2100000, guid: 5bc723bfd58fcee47a1f5e30b4034e73, type: 2}
   turnSpeed: 120
+  animSpeed: {x: 0, y: 1}
 --- !u!1 &5463061181310177336
 GameObject:
   m_ObjectHideFlags: 0

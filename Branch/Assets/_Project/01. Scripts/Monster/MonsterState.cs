@@ -10,5 +10,6 @@ namespace Monster
         Hit = 5,
         Death = 6,
         Wander = 7,
+        Evasion     // È¸ÇÇ
     }
 }

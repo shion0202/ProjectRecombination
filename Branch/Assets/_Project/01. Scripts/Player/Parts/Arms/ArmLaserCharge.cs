@@ -20,7 +20,7 @@ public class ArmLaserCharge : PartBaseArm
         base.Awake();
 
         defaultImpulseValue = impulseSource.m_DefaultVelocity;
-        originalColor = laserLineRenderer.material.color;
+        //originalColor = laserLineRenderer.material.color;
     }
 
     protected override void Update()

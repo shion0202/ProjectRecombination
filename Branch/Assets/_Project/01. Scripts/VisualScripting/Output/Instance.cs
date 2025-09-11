@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -37,9 +39,15 @@ namespace _Project.Scripts.VisualScripting
 
                 Vector3 randomPosition = transform.position + new Vector3(randomX, randomY, randomZ);
 
-                GameObject obj = Instantiate(instancePrefab, transform);
-                obj.transform.position = randomPosition;
-
+                // GameObject obj = Instantiate(instancePrefab, transform);
+                GameObject obj = PoolManager.Instance.GetObject(instancePrefab);
+                // obj.transform.position = randomPosition;
+                
+                // 네비매시 에이전트가 있을 경우 Warp 사용
+                NavMeshAgent agent = obj.GetComponentInChildren<NavMeshAgent>();
+                if (agent is not null) agent.Warp(randomPosition);
+                else obj.transform.position = randomPosition;
+                
                 destroyTrigger?.AddObject(obj.GetComponent<GlobalGameObject>());
             }
             IsOn = true;

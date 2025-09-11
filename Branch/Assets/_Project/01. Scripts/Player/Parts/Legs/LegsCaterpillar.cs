@@ -8,7 +8,9 @@ public class LegsCaterpillar : PartBaseLegs
 {
     [Header("캐터필러 설정")]
     [SerializeField] protected GameObject impactEffectPrefab;
+    [SerializeField] protected Material caterpillarMaterial;
     [SerializeField] private float turnSpeed = 120.0f;
+    [SerializeField] protected Vector2 animSpeed = Vector2.zero;
     private Vector3 _currentMoveDirection = Vector3.forward;
 
     protected override void Awake()
@@ -47,7 +49,15 @@ public class LegsCaterpillar : PartBaseLegs
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
     {
-        if (moveInput == Vector2.zero) return Vector3.zero;
+        if (moveInput == Vector2.zero)
+        {
+            if (caterpillarMaterial != null)
+            {
+                caterpillarMaterial.SetVector("_AnimSpeed", Vector2.zero);
+            }
+
+            return Vector3.zero;
+        }
 
         // 카메라 기준 목표 이동 방향 설정
         Vector3 camForward = cameraTransform.forward;
@@ -66,6 +76,11 @@ public class LegsCaterpillar : PartBaseLegs
             0f);
 
         HandleCylinderDirection(_currentMoveDirection);
+
+        if (caterpillarMaterial != null)
+        {
+            caterpillarMaterial.SetVector("_AnimSpeed", animSpeed);
+        }
 
         return _currentMoveDirection * (_owner.Stats.TotalStats[EStatType.WalkSpeed].value + _owner.Stats.TotalStats[EStatType.AddMoveSpeed].value); // 좌우가 서서히 꺾이는 이동방향
     }

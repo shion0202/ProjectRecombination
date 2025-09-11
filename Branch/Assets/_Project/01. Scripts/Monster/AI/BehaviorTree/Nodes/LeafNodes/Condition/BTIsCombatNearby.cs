@@ -10,12 +10,26 @@ namespace Monster.AI.BehaviorTree.Nodes
         protected override bool CheckCondition(NodeContext context)
         {
             Blackboard.Blackboard blackboard = context.Blackboard;
-            
-            if (blackboard.TryGet(new BBKey<float>("detectionRange"), out float detectionRange))
+
+            if (!blackboard.TryGet(new BBKey<float>("maxDetectionRange"), out float detectionRange)) return false;
+
+            // Debug.Log($"Checking for nearby combat...{detectionRange}");
+            GameObject[] monsterControllers = MonsterManager.Instance.GetBattleMonsters();
+
+            if (monsterControllers is null || monsterControllers.Length == 0) return false;
+                
+            Vector3 standardPosition = blackboard.Agent.transform.position;
+
+            foreach (GameObject controller in monsterControllers)
             {
-                // 근처에서 싸움이 벌어졌는지 메니저를 통해 확인
-                // 현재 에이전트의 위치와 감지 범위를 사용하여 근처에 몬스터 전투가 있는지 확인
-                return MonsterManager.Instance.IsNearMonsterBattle(blackboard.Agent, detectionRange);
+                var agent = controller.GetComponentInChildren<Blackboard.Blackboard>().Agent;
+                if (agent is null || agent == blackboard.Agent) continue; // null 체크 및 자기 자신 제외
+                var otherPosition = agent.transform.position;
+                if (Vector3.Distance(standardPosition, otherPosition) <= detectionRange)
+                {
+                    Debug.Log("Nearby combat detected!");
+                    return true; // 근처에 전투 중인 몬스터가 있음
+                }
             }
 
             return false;

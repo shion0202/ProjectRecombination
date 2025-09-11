@@ -18,24 +18,6 @@ namespace Monster.AI
             Enqueue = enqueue;
         }
     }
-    // TODO블랙보드에 직접 접근해서 현재 사용중인 스킬 데이터를 저장하는게 아닌 우선순위 큐에 명령어와 함께 스킬 데이터를 전달하는 방식으로 변경
-    // - 명령과 함께 사용할 데이터를 묶은 CommandContext 구조체를 모든 AICommand를 사용하는 곳에 사용하는 것이 옳는 것인가?
-    // - 현재 공격 명령에만 RowData가 필요한데 이 경우 객체를 생성할 때 RowData를 인자로 전달 받을 수 있도록 생성자를 따로 정의해 주는 것이 더 나을 것 같은데
-    // public readonly struct CommandContext
-    // {
-    //     public readonly AICommand Command;
-    //     // public readonly Blackboard.Blackboard Blackboard;
-    //     public readonly RowData RowData;
-    //     // public readonly Action OnComplete;
-    //     
-    //     public CommandContext(AICommand command, /* Blackboard.Blackboard blackboard,*/ RowData skillRowData = null /*, Action onComplete = null*/)
-    //     {
-    //         Command = command;
-    //         // Blackboard = blackboard;
-    //         RowData = skillRowData;
-    //         // OnComplete = onComplete;
-    //     }
-    // }
     
     public sealed class AIController : MonoBehaviour
     {
@@ -49,8 +31,9 @@ namespace Monster.AI
         private PriorityQueue<AICommand> _queue;
         
         private int _currentPriority = -999; // 현재 실행 중인 명령어의 우선순위(초기값은 매우 낮게 설정)
+        private Coroutine _currentCoroutine;
         
-        private bool _isInit = false;
+        private bool _isInit;
         
         public Blackboard.Blackboard Blackboard => blackboard;
 
@@ -59,7 +42,7 @@ namespace Monster.AI
         public void EnqueueCommand(AICommand command, int priority = 0)
         {
             if (command == null) return;
-            _queue.Enqueue(command, priority);
+            _queue?.Enqueue(command, priority);
         }
         
         public (AICommand item, int priority) DequeueCommand()
@@ -75,13 +58,20 @@ namespace Monster.AI
         {
             // 초기화
             Init();
-            MonsterManager.Instance.AddMonster(gameObject);
+            // MonsterManager.Instance.AddMonster(gameObject);
         }
 
         private void OnEnable()
         {
             // 폴리싱을 위해 AIController가 활성화될 때 초기화 작업을 수행
             Init();
+            MonsterManager.Instance.AddMonster(gameObject);
+        }
+        
+        // TODO: PoolManager에 릴리즈 후 다시 활성화 될 때 몬스터가 동작하지 않는 문제 발생 (이전에 몬스터 사망 처리 후 재활성화 되는 경우)
+        private void OnDisable()
+        {
+            _isInit = false;
         }
         
         private void Start() => tree?.Init();
@@ -113,7 +103,6 @@ namespace Monster.AI
             {
                 // Gizmos의 색상을 설정
                 Gizmos.color = Color.red;
-                // TODO: 
                 Gizmos.DrawWireSphere(blackboard.Agent.transform.position, detectionRange);
             }
 
@@ -179,11 +168,13 @@ namespace Monster.AI
                 Debug.LogError("Blackboard component is missing on the AIController.");
                 return;
             }
-            blackboard.InitMonsterStatsByID();
-            blackboard.Target = MonsterManager.Instance.Player;
+            
+            blackboard.Init();
+            
             _queue?.Clear();
             _queue = PriorityQueue<AICommand>.CreateMinPriorityQueue();
             _isInit = true;
+            // Debug.Log($"{this.ToString()}");
         }
         
         /// <summary>
@@ -222,12 +213,41 @@ namespace Monster.AI
             (AICommand command, int priority) = DequeueCommand();
             // Debug.Log(command + $"{priority}");
 
+            // 현재 실행할 명령어가 DeathCommand인 경우
+            if (command is DeathCommand)
+            {
+                if (blackboard.State is MonsterState.Death) return;
+                
+                // 즉시 DeathCommand 실행
+                _currentCoroutine = StartCoroutine(command.Execute(blackboard, () =>
+                {
+                    // Debug.Log("DeathCommand completed. Releasing to PoolManager.");
+                    _currentPriority = -999;
+                    
+                    // 비활성화될 때 몬스터 매니저에서 제거
+                    MonsterManager.Instance.RemoveMonster(gameObject);
+                    
+                    // 사망 애니메이션이 끝난 후 오브젝트 풀에 반환
+                    PoolManager.Instance.ReleaseObject(gameObject);
+                }));
+                // 명령어 실행 후 큐 청소
+                _queue.CleanUp();
+                return;
+            }
+            
             if (_currentPriority < priority)
             {
                 _currentPriority = priority;    // 현재 우선순위를 업데이트(다른 명령어가 더 높은 우선순위를 가질 때만 업데이트)
                 
+                // 현재 실행 중인 코루틴이 있으면 중지
+                if (_currentCoroutine != null)
+                {
+                    StopCoroutine(_currentCoroutine);
+                    _currentCoroutine = null;
+                }
+                
                 // 명령어를 실행
-                StartCoroutine(command?.Execute(blackboard, () =>
+                _currentCoroutine = StartCoroutine(command?.Execute(blackboard, () =>
                 {
                     _currentPriority = -999;
                 }));
@@ -251,6 +271,19 @@ namespace Monster.AI
                 EnqueueCommand(command, priority);
             else
                 EnqueueCommand(new HitCommand(), 100); // 피격 명령어를 높은 우선순위로 큐에 추가
+        }
+
+        public override string ToString()
+        {
+            string result = "AIController State:\n";
+            result += $"- Name: {gameObject.name}\n";
+            result += $"- Current Health: {blackboard?.CurrentHealth}/{blackboard?.MaxHealth}\n";
+            result += $"- Current State: {blackboard?.State}\n";
+            result += $"- Queue Count: {_queue?.Count}\n";
+            result += $"- Current Priority: {_currentPriority}\n";
+            result += $"- Blackboard: {blackboard}\n";
+            result += $"- Queue: {_queue}\n";
+            return result;
         }
         
         #endregion

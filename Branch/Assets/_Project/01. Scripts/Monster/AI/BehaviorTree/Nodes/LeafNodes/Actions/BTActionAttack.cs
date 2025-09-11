@@ -23,8 +23,6 @@ namespace Monster.AI.BehaviorTree.Nodes
                 return NodeState.Failure;
             }
             
-            // blackboard.CurrentUsingSkillData = skillData; // 블랙 보드에서 어떤 스킬을 사용중인지 모르는데 무슨 근거로 skillData를 넣는거지?
-            
             // 공격 명령을 행동 대기열에 추가
             // CommandContext commandContext = new CommandContext( new AttackCommand(), skillData);
             context.Enqueue(new AttackCommand(skillData), priority);

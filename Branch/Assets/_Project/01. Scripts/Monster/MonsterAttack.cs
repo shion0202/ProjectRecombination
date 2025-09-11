@@ -1,3 +1,4 @@
+using Managers;
 using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -7,17 +8,24 @@ namespace Monster.AI.Command
     [Serializable]
     public class MonsterAttack
     {
-        public GameObject bulletPrefab;
+        public GameObject[] bulletPrefab;
         public Transform firePoint;
 
-        public void Fire(GameObject shooter, Vector3 start, Vector3 end, Vector3 direction, float damage)
+        public void Fire(int bulletType, GameObject shooter, Vector3 start, Vector3 end, Vector3 direction, float damage)
         {
-            if (bulletPrefab == null || firePoint == null)
+            if (bulletPrefab == null || firePoint is null || bulletType < 0 || bulletType >= bulletPrefab.Length)
             {
                 Debug.LogWarning("Bullet prefab or fire point is not assigned.");
                 return;
             }
-            GameObject bullet = Object.Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            // GameObject bullet = Object.Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            if (bulletPrefab[bulletType] is null)
+            {
+                Debug.LogWarning("Bullet prefab is not assigned.");
+                return;
+            }
+            
+            GameObject bullet = PoolManager.Instance.GetObject(bulletPrefab[bulletType], firePoint.position, firePoint.rotation);
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
             if (bulletComponent != null)
             {

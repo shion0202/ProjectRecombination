@@ -166,6 +166,8 @@ MonoBehaviour:
   index: 1002
   navMeshAgent: {fileID: 8819038037566998691}
   agent: {fileID: 8591210948995409777}
+  agentCollider: {fileID: 6451787403469062711}
+  agentRigidbody: {fileID: 7965426937125304490}
   animator: {fileID: 0}
   target: {fileID: 0}
   deathEffect: {fileID: 3774612617644432307}
@@ -179,8 +181,8 @@ MonoBehaviour:
     wanderAreaCenter: {x: 0, y: 0, z: 0}
     wanderAreaRadius: 0
   attackInfo:
-    bulletPrefab: {fileID: 914363595772914150, guid: a3ba8d7c3b7c34eaf8f1d979a0319c54,
-      type: 3}
+    bulletPrefab:
+    - {fileID: 196044, guid: 3762a5ec8feb04b7f8a3d403b9b745c3, type: 3}
     firePoint: {fileID: 4056701872373169496}
 --- !u!1 &1101450169775349580
 GameObject:
@@ -491,6 +493,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b096cf7d1389b4598b20a9d62a0f85f3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 360f0329d55f14e118554829545f4348, type: 2}
     - target: {fileID: 919132149155446097, guid: b096cf7d1389b4598b20a9d62a0f85f3,
         type: 3}
       propertyPath: m_Name

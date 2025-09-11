@@ -502,7 +502,7 @@ Material:
     - _Main3rdTex_UVMode: 0
     - _MainColorPower: 0
     - _MainGradationStrength: 0
-    - _MatCap: 1
+    - _MatCap: 0
     - _MatCap2ndApplyTransparency: 1
     - _MatCap2ndBackfaceMask: 0
     - _MatCap2ndBlend: 1
@@ -689,6 +689,7 @@ Material:
     - _UDIMDiscardRow3_2: 0
     - _UDIMDiscardRow3_3: 0
     - _UDIMDiscardUV: 0
+    - _UVAnim: 0
     - _UVSec: 0
     - _UseAnisotropy: 0
     - _UseAudioLink: 0
@@ -723,6 +724,7 @@ Material:
     - _lilShadowCasterBias: 0
     - _lilToonVersion: 45
     m_Colors:
+    - _AnimSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _AudioLinkDefaultValue: {r: 0, g: 0, b: 2, a: 0.75}
     - _AudioLinkLocalMapParams: {r: 120, g: 1, b: 0, a: 0}
     - _AudioLinkMask_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}

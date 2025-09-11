@@ -1,3 +1,4 @@
+using Managers;
 using Monster;
 using System;
 using System.Collections;
@@ -29,14 +30,14 @@ namespace Monster.AI.Command
                 return false;
             }
 
-            _collider = blackboard.Agent.GetComponent<Collider>();
+            _collider = blackboard.AgentCollider;
             if (_collider is null)
             {
                 Debug.LogError("Collider is null. Cannot execute DeathCommand.");
                 return false;
             }
             
-            _rigidbody = blackboard.Agent.GetComponent<Rigidbody>();
+            _rigidbody = blackboard.AgentRigidbody;
             if (_rigidbody is null)
             {
                 Debug.LogError("Rigidbody is null. Cannot execute DeathCommand.");
@@ -74,14 +75,15 @@ namespace Monster.AI.Command
                 yield return new WaitForSeconds(animationLength); // 애니메이션 재생 시간 대기 (예: 2초)
             }
             
-            // blackboard.Agent.SetActive(false);  // 오브젝트 풀링 사용 시 별도 처리 필요
             blackboard.DeathEffect.SetActive(true);
             yield return new WaitForSeconds(2.0f);
+            blackboard.DeathEffect.SetActive(false);
+            
+            blackboard.State = MonsterState.Death;
+            yield return null;
             
             // 명령어 완료 콜백 호출
             onComplete?.Invoke();
-            
-            blackboard.State = MonsterState.Death;
         }
     }
 }

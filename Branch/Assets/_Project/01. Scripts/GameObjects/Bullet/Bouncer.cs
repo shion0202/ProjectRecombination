@@ -1,3 +1,4 @@
+using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,7 +41,7 @@ public class Bouncer : Bullet
             // 충돌 횟수 초과 시 투사체 파괴
             if (bounceCount >= maxBounces)
             {
-                Destroy(gameObject);
+                PoolManager.Instance.ReleaseObject(gameObject);
             }
             return;
         }
@@ -65,7 +66,7 @@ public class Bouncer : Bullet
 
             if (bounceCount >= maxBounces)
             {
-                Destroy(gameObject);
+                PoolManager.Instance.ReleaseObject(gameObject);
             }
             return;
         }
@@ -84,7 +85,7 @@ public class Bouncer : Bullet
 
             if (bounceCount >= maxBounces)
             {
-                Destroy(gameObject);
+                PoolManager.Instance.ReleaseObject(gameObject);
             }
             return;
         }
@@ -100,7 +101,7 @@ public class Bouncer : Bullet
 
         if (bounceCount >= maxBounces)
         {
-            Destroy(gameObject);
+            PoolManager.Instance.ReleaseObject(gameObject);
         }
     }
 }

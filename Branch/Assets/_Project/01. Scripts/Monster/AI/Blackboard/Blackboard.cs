@@ -16,6 +16,8 @@ namespace Monster.AI.Blackboard
         [Header("Dependency")] // 의존성 주입
         [SerializeField] private NavMeshAgent navMeshAgent;
         [SerializeField] private GameObject agent;          // AI 에이전트 (몬스터)
+        [SerializeField] private Collider agentCollider;
+        [SerializeField] private Rigidbody agentRigidbody;
         [SerializeField] private Animator animator;
         [SerializeField] private GameObject target;
         [SerializeField] private GameObject deathEffect;    // 몬스터 사망 이펙트 프리팹
@@ -52,6 +54,18 @@ namespace Monster.AI.Blackboard
         {
             get => agent;
             set => agent = value;
+        }
+        
+        public Collider AgentCollider
+        {
+            get => agentCollider;
+            set => agentCollider = value;
+        }
+        
+        public Rigidbody AgentRigidbody
+        {
+            get => agentRigidbody;
+            set => agentRigidbody = value;
         }
         
         public Animator Animator
@@ -176,15 +190,21 @@ namespace Monster.AI.Blackboard
                     if (skillRow != null)
                     {
                         Skills[id] = skillRow;
-                        // Debug.Log($"Skill ID: {id}, Data: {skillRow}");
                     }
-                    // else
-                    // {
-                    //     Debug.LogWarning($"Skill data not found for ID: {id}");
-                    // }
                 }
-                
             }
+        }
+
+        public void Init()
+        {
+            InitMonsterStatsByID();
+            agentCollider.enabled = true;
+            agentRigidbody.isKinematic = false;
+            NavMeshAgent.isStopped = false;
+            NavMeshAgent.ResetPath();
+            CurrentHealth = MaxHealth;
+            State = MonsterState.Idle;
+            Target = MonsterManager.Instance.Player;
         }
 
         public void Clear()

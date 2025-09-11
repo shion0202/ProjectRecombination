@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9feb5e4ab7074492693efbd2e4ef07b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 1
+  state: 0
   name: Skill B Condition
   guid: c3901e46-dfa3-4811-991e-1315ffc783d0
   position: {x: 790, y: 806.9999}
@@ -184,7 +184,7 @@ MonoBehaviour:
   input: {fileID: 4031874631692929751}
   outputs: []
   priority: 5
-  skillId: 4002
+  skillId: 4001
 --- !u!114 &-4662484622183757789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9feb5e4ab7074492693efbd2e4ef07b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Death
   guid: 269d8dcd-ea16-4b84-a0f1-424c91b48e80
   position: {x: 289, y: 16}
@@ -244,9 +244,9 @@ MonoBehaviour:
   input: {fileID: -6492461697236824350}
   outputs: []
   children:
-  - {fileID: -8303093160293175895}
-  - {fileID: 6511417830426688992}
   - {fileID: 1484239777875789110}
+  - {fileID: 6511417830426688992}
+  - {fileID: -8303093160293175895}
 --- !u!114 &-571442912595166345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +265,7 @@ MonoBehaviour:
   position: {x: 959, y: 566}
   input: {fileID: -8002046786588908349}
   outputs: []
-  skillId: 4004
+  skillId: 4002
 --- !u!114 &-213376956405467711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616c9982a36a84367a90b9cdb7bd90c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Is Death
   guid: 82a83b26-832b-4466-b51b-78ae40f42807
   position: {x: 436, y: -23}
@@ -357,7 +357,7 @@ MonoBehaviour:
   position: {x: 959, y: 465}
   input: {fileID: -8002046786588908349}
   outputs: []
-  skillId: 4004
+  skillId: 4002
 --- !u!114 &1484239777875789110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,7 +412,7 @@ MonoBehaviour:
   position: {x: 959, y: 775}
   input: {fileID: -6052899094770472606}
   outputs: []
-  skillId: 4002
+  skillId: 4001
 --- !u!114 &3017741543212304988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,13 +425,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b78809f67c1648caa6116a99c36a653f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 1
+  state: 0
   name: Is In Skill Cooldown
   guid: 761acfa7-e813-4a27-b4da-5fe2ccf7c766
   position: {x: 959, y: 876.00006}
   input: {fileID: -6052899094770472606}
   outputs: []
-  skillId: 4002
+  skillId: 4001
 --- !u!114 &3256888038535417448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,7 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22a1557f55b324ec68df07a4533485c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Root
   guid: 2a4105af-a7fb-436c-9bf2-2736a3985cc0
   position: {x: 170, y: 319}
@@ -483,7 +483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9feb5e4ab7074492693efbd2e4ef07b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 1
+  state: 0
   name: UseSkill B
   guid: b2895ed5-3e71-4a7f-9fe9-aee4621fcc0a
   position: {x: 636, y: 852}
@@ -511,7 +511,7 @@ MonoBehaviour:
   input: {fileID: -213376956405467711}
   outputs: []
   priority: 10
-  skillId: 4004
+  skillId: 4002
 --- !u!114 &5149726945982545104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -542,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b12971c6d6d94e3ea591865b5db1b75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: IsHit
   guid: 34c3cbdd-d83f-4e6a-a518-d94d6f748f17
   position: {x: 787, y: 331}

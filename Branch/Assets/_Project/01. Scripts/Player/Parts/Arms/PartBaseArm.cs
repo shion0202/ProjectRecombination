@@ -66,13 +66,13 @@ public class PartBaseArm : PartBase
         _isShooting = false;
         _currentShootTime = 0.0f;
 
-        if (fadeCoroutine != null)
-        {
-            StopCoroutine(fadeCoroutine);
-            fadeCoroutine = null;
+        //if (fadeCoroutine != null)
+        //{
+        //    StopCoroutine(fadeCoroutine);
+        //    fadeCoroutine = null;
 
-            laserLineRenderer.enabled = false;
-        }
+        //    laserLineRenderer.enabled = false;
+        //}
         
     }
 
