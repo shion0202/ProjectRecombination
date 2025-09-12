@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: HeavyLegsBoneData
   m_EditorClassIdentifier: 
   boneNames:
-  - Bip001 R Thigh
-  - Bip001 L Thigh
+  - Bip001 Pelvis

@@ -19,6 +19,8 @@ namespace _Project.Scripts.VisualScripting
         [FormerlySerializedAs("_destroyTrigger")]
         [Tooltip("생성한 객체가 파괴 되었음을 감지할 객체")]
         [SerializeField] private IsDestroy destroyTrigger;
+        [Tooltip("생성한 객체가 비활성화 되었음을 감지할 객체")]
+        [SerializeField] private IsDisable disableTrigger;
 
         public override void Execute()
         {
@@ -49,6 +51,7 @@ namespace _Project.Scripts.VisualScripting
                 else obj.transform.position = randomPosition;
                 
                 destroyTrigger?.AddObject(obj.GetComponent<GlobalGameObject>());
+                disableTrigger?.AddObject(obj.GetComponent<GlobalGameObject>());
             }
             IsOn = true;
         }

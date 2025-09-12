@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private PlayerController owner;
     [SerializeField] private List<PartBase> baseParts = new List<PartBase>();
     private Dictionary<EPartType, List<PartBase>> _items = new Dictionary<EPartType, List<PartBase>>();
-    private Dictionary<EPartType, PartBase> _equippedItems = new Dictionary<EPartType, PartBase>();
+    private Dictionary<EPartType, List<PartBase>> _equippedItems = new();
     private int partIndex = 0;
 
     [Header("Mesh and Bone Data")]
@@ -21,6 +21,10 @@ public class Inventory : MonoBehaviour
     private Dictionary<string, PartBase> _parts = new();    // Mesh Root에 자식으로 있는 모든 파츠
     private Dictionary<EPartType, List<string>> _boneList = new();
     private Dictionary<EPartType, Dictionary<string, Transform>> _boneMap = new();
+    private Dictionary<EPartType, List<string>> _laserBoneList = new();
+    private Dictionary<EPartType, Dictionary<string, Transform>> _laserBoneMap = new();
+    private Dictionary<EPartType, List<string>> _rapidBoneList = new();
+    private Dictionary<EPartType, Dictionary<string, Transform>> _rapidBoneMap = new();
     private Dictionary<EPartType, List<string>> _heavyBoneList = new();
     private Dictionary<EPartType, Dictionary<string, Transform>> _heavyBoneMap = new();
     #endregion
@@ -31,7 +35,7 @@ public class Inventory : MonoBehaviour
         get { return _items; }
     }
 
-    public Dictionary<EPartType, PartBase> EquippedItems
+    public Dictionary<EPartType, List<PartBase>> EquippedItems
     {
         get { return _equippedItems; }
     }
@@ -40,11 +44,20 @@ public class Inventory : MonoBehaviour
     #region Unity Methods
     private void Awake()
     {
+        foreach (EPartType partType in Enum.GetValues(typeof(EPartType)))
+        {
+            _equippedItems.Add(partType, new List<PartBase>());
+        }
+
         for (int i = 0; i < Enum.GetNames(typeof(EPartType)).Length; ++i)
         {
             _items.Add((EPartType)(1 << i), new List<PartBase>());
             _boneList.Add((EPartType)(1 << i), new List<string>());
             _boneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
+            _laserBoneList.Add((EPartType)(1 << i), new List<string>());
+            _laserBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
+            _rapidBoneList.Add((EPartType)(1 << i), new List<string>());
+            _rapidBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
             _heavyBoneList.Add((EPartType)(1 << i), new List<string>());
             _heavyBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
         }
@@ -52,6 +65,8 @@ public class Inventory : MonoBehaviour
         foreach (EPartType partType in Enum.GetValues(typeof(EPartType)))
         {
             _boneList[partType] = Resources.Load<CharacterBoneData>($"Bone/Player{partType.ToString()}BoneData").boneNames;
+            _laserBoneList[partType] = Resources.Load<CharacterBoneData>($"Bone/Laser{partType.ToString()}BoneData").boneNames;
+            _rapidBoneList[partType] = Resources.Load<CharacterBoneData>($"Bone/Rapid{partType.ToString()}BoneData").boneNames;
             _heavyBoneList[partType] = Resources.Load<CharacterBoneData>($"Bone/Heavy{partType.ToString()}BoneData").boneNames;
 
             foreach (Transform bone in boneRoot.GetComponentsInChildren<Transform>())
@@ -59,6 +74,16 @@ public class Inventory : MonoBehaviour
                 if (_boneList[partType].Contains(bone.name))
                 {
                     _boneMap[partType].Add(bone.name, bone);
+                }
+
+                if (_laserBoneList[partType].Contains(bone.name))
+                {
+                    _laserBoneMap[partType].Add(bone.name, bone);
+                }
+
+                if (_rapidBoneList[partType].Contains(bone.name))
+                {
+                    _rapidBoneMap[partType].Add(bone.name, bone);
                 }
 
                 if (_heavyBoneList[partType].Contains(bone.name))
@@ -107,6 +132,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
             EquipItem(_items[EPartType.Back][partIndex]);
+            EquipItem(_items[EPartType.Mask][partIndex]);
 
             // 임시로 파츠 전체 교체 시 특정 파츠 카메라로 변경
             // To-do: R&D가 필요하나, 캐릭터 콜라이더 크기에 따라 카메라 위치를 조정하는 등의 조치 필요
@@ -123,6 +149,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
             EquipItem(_items[EPartType.Back][partIndex]);
+            EquipItem(_items[EPartType.Mask][partIndex]);
 
             owner.FollowCamera.CurrentCameraState = ECameraState.Hover;
         }
@@ -137,6 +164,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
             EquipItem(_items[EPartType.Back][partIndex]);
+            EquipItem(_items[EPartType.Mask][partIndex]);
 
             owner.FollowCamera.CurrentCameraState = ECameraState.Roller;
         }
@@ -151,6 +179,7 @@ public class Inventory : MonoBehaviour
             EquipItem(_items[EPartType.ArmR][partIndex]);
             EquipItem(_items[EPartType.Legs][partIndex]);
             EquipItem(_items[EPartType.Back][partIndex]);
+            EquipItem(_items[EPartType.Mask][partIndex]);
 
             owner.FollowCamera.CurrentCameraState = ECameraState.Caterpillar;
         }
@@ -181,31 +210,29 @@ public class Inventory : MonoBehaviour
     {
         if (!_items[equipItem.PartType].Contains(equipItem)) return;
 
-        PartBase postEquipment = null;
-        PartBase currentEquipment = _parts[equipItem.name];
-        if (!_equippedItems.ContainsKey(equipItem.PartType))
+        foreach (var part in _equippedItems[equipItem.PartType])
         {
-            // For base parts
-            _equippedItems.Add(equipItem.PartType, currentEquipment);
+            part.FinishActionForced();
+            owner.Stats.RemoveModifier(part);
+            part.gameObject.SetActive(false);
         }
-        else
-        {
-            postEquipment = _equippedItems[equipItem.PartType];
-            _equippedItems[equipItem.PartType] = currentEquipment;
-        }
+        _equippedItems[equipItem.PartType].Clear();
 
-        if (postEquipment != null)
-        {
-            postEquipment.FinishActionForced();
-            owner.Stats.RemoveModifier(postEquipment);
-            postEquipment.gameObject.SetActive(false);
-        }
-        currentEquipment.gameObject.SetActive(true);
+        // 동시 장착할 파츠들 찾기 (이름에 따라 필터링 가능)
+        var sameTypeParts = _items[equipItem.PartType]
+            .Where(x => x.AttackType == equipItem.AttackType)   // 예시: GroupKey로 분류, 필요에 따라 본인의 기준으로 변경
+            .ToList();
 
-        // 스탯 반영
         owner.SetPartStat(equipItem);
 
-        PartBaseLegs legs = equipItem as PartBaseLegs;
+        // 여러 파츠 모두 장착
+        foreach (var part in sameTypeParts)
+        {
+            part.gameObject.SetActive(true);
+            _equippedItems[equipItem.PartType].Add(part);
+        }
+
+        PartBaseLegs legs = sameTypeParts.OfType<PartBaseLegs>().FirstOrDefault();
         if (legs != null)
         {
             // 다리 파츠 (애니메이션 변경)
@@ -244,6 +271,20 @@ public class Inventory : MonoBehaviour
             for (int i = 0; i < smr.bones.Length; ++i)
             {
                 meshTransforms.Add(_heavyBoneMap[part.PartType][_heavyBoneList[part.PartType][i]]);
+            }
+        }
+        else if (part.gameObject.name.Contains("Laser"))
+        {
+            for (int i = 0; i < smr.bones.Length; ++i)
+            {
+                meshTransforms.Add(_laserBoneMap[part.PartType][_laserBoneList[part.PartType][i]]);
+            }
+        }
+        else if (part.gameObject.name.Contains("Rapid"))
+        {
+            for (int i = 0; i < smr.bones.Length; ++i)
+            {
+                meshTransforms.Add(_rapidBoneMap[part.PartType][_rapidBoneList[part.PartType][i]]);
             }
         }
         else

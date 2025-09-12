@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boneNames:
   - Bip001 L UpperArm
+  - Bip001 L Clavicle
   - Bip001 R UpperArm
+  - Bip001 R Clavicle

@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: PlayerBackBoneData
   m_EditorClassIdentifier: 
   boneNames:
-  - Bip001 L UpperArm
-  - Bip001 R UpperArm
+  - CenterBone2

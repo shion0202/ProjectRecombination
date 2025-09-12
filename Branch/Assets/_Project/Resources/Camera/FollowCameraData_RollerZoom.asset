@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43e2ea5c0442f748867a8854283f923, type: 3}
   m_Name: FollowCameraData_RollerZoom
   m_EditorClassIdentifier: 
-  FOV: 60
+  FOV: 65
   screenX: 0.3
-  screenY: 0.6
-  cameraDistance: 2
+  screenY: 0.625
+  cameraDistance: 1.75
   trackedOffset: {x: 0, y: 0, z: 0}
   lookaheadTime: 0.01
   lookaheadSmoothing: 3

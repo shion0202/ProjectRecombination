@@ -26,6 +26,7 @@ public class IsDestroy : ProcessBase
         {
             if (item is null) continue;
             item.OnObjectDestroyed += Execute;
+            _count++;
         }
     }
     

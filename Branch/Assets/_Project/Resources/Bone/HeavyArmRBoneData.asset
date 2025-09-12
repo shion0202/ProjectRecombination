@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: HeavyArmRBoneData
   m_EditorClassIdentifier: 
   boneNames:
-  - Bip001 R UpperArm
+  - Bip001 R Forearm

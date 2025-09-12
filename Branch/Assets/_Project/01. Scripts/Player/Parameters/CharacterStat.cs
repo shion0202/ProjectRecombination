@@ -115,7 +115,18 @@ public class CharacterStat : MonoBehaviour
 
     public float MaxHealth => MaxBodyHealth + MaxPartHealth;            // 최대 체력 (몸통 + 파츠)
     public float MaxBodyHealth => _totalStats[EStatType.MaxHp].value;
-    public float MaxPartHealth => _totalStats[EStatType.AddHp].value;
+    public float MaxPartHealth
+    {
+        get
+        {
+            if (_totalStats.Contains(EStatType.MaxHp))
+            {
+                return _totalStats[EStatType.AddHp].value;
+            }
+
+            return 0.0f;
+        }
+    }
     #endregion
 
     #region Unity Methods

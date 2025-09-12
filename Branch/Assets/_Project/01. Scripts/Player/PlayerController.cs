@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void Start()
     {
-        ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs] as ILegsMovement;
+        ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs][0] as ILegsMovement;
         _currentMovement = legsMovement;
     }
 
@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 _dashDirection = CalculateInputDirection();
             }
 
-            inventory.EquippedItems[EPartType.Legs].UseAbility();
+            inventory.EquippedItems[EPartType.Legs][0].UseAbility();
         }
     }
 
@@ -288,7 +288,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             if ((_currentPlayerState & dashBlockMask) != 0) return;
 
-            inventory.EquippedItems[EPartType.Shoulder].UseAbility();
+            inventory.EquippedItems[EPartType.Shoulder][0].UseAbility();
         }
     }
 
@@ -355,7 +355,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     void PlayerActions.IPlayerActionMapActions.OnRightAttack(InputAction.CallbackContext context)
     {
         if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
-        if (!inventory.EquippedItems[EPartType.ArmR].IsAnimating) return;
+        if (!inventory.EquippedItems[EPartType.ArmR][0].IsAnimating) return;
 
         if (context.started)
         {
@@ -517,7 +517,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetTrigger("deadTrigger");
 
             // 사격 중 또는 스킬 시전 중 사망하는 경우 고려
-            inventory.EquippedItems[EPartType.ArmL].UseCancleAbility();
+            inventory.EquippedItems[EPartType.ArmL][0].UseCancleAbility();
             animator.SetBool("isLeftAttack", false);
             _isLeftAttackReady = false;
             Stats.RemoveModifier(this);
@@ -528,7 +528,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 aimObj.weight = 0.0f;
             }
 
-            inventory.EquippedItems[EPartType.ArmR].UseCancleAbility();
+            inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
             animator.SetBool("isRightAttack", false);
             SetOvrrideAnimator(_postAnimType);
             aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
@@ -586,7 +586,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public PartBase GetCurrentLegsPart()
     {
-        return inventory.EquippedItems[EPartType.Legs];
+        return inventory.EquippedItems[EPartType.Legs][0];
     }
 
     // Ball Legs를 위한 임시 함수들
@@ -662,7 +662,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
 
         _moveDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
-        if (inventory.EquippedItems[EPartType.Legs].IsAnimating)
+        if (inventory.EquippedItems[EPartType.Legs][0].IsAnimating)
         {
             animator.SetFloat("moveX", _currentMoveInput.x);
             animator.SetFloat("moveY", _currentMoveInput.y);
@@ -851,7 +851,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             _postAnimType = _currentAnimType;
             SetOvrrideAnimator(_postAnimType + 4);
-            if (inventory.EquippedItems[EPartType.ArmL].IsAnimating)
+            if (inventory.EquippedItems[EPartType.ArmL][0].IsAnimating)
             {
                 animator.SetBool("isLeftAttack", true);
             }
@@ -862,7 +862,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
-            if (inventory.EquippedItems[EPartType.ArmR].IsAnimating)
+            if (inventory.EquippedItems[EPartType.ArmR][0].IsAnimating)
             {
                 animator.SetBool("isRightAttack", true);
             }
@@ -890,7 +890,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                     aimObj.weight = 1.0f;
                 }
 
-                inventory.EquippedItems[EPartType.ArmL].UseAbility();
+                inventory.EquippedItems[EPartType.ArmL][0].UseAbility();
             }
         }
 
@@ -905,7 +905,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 {
                     aimObj.weight = 1.0f;
                 }
-                inventory.EquippedItems[EPartType.ArmR].UseAbility();
+                inventory.EquippedItems[EPartType.ArmR][0].UseAbility();
             }
         }   
     }
@@ -945,7 +945,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         if (isLeft)
         {
-            inventory.EquippedItems[EPartType.ArmL].UseCancleAbility();
+            inventory.EquippedItems[EPartType.ArmL][0].UseCancleAbility();
 
             animator.SetBool("isLeftAttack", false);
             _previousState &= ~EPlayerState.LeftShooting;
@@ -960,7 +960,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
         else
         {
-            inventory.EquippedItems[EPartType.ArmR].UseCancleAbility();
+            inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
 
             animator.SetBool("isRightAttack", false);
             _previousState &= ~EPlayerState.RightShooting;

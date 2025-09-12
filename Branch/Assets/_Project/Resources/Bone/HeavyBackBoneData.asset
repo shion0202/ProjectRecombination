@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: HeavyBackBoneData
   m_EditorClassIdentifier: 
   boneNames:
+  - Heavy_Back_Bone_C
+  - Heavy_Back_Bone_B
+  - Heavy_Back_Bone_A
   - Bip001 Spine1
+  - Bip001 Spine

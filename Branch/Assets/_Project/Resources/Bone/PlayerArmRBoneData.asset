@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: PlayerArmRBoneData
   m_EditorClassIdentifier: 
   boneNames:
-  - Bip001 R UpperArm
   - Bip001 R Forearm
-  - Bip001 R ForeTwist1
+  - Bip001 R UpperArm

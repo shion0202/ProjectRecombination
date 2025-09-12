@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43e2ea5c0442f748867a8854283f923, type: 3}
   m_Name: FollowCameraData_HoverZoom
   m_EditorClassIdentifier: 
-  FOV: 60
+  FOV: 65
   screenX: 0.3
   screenY: 0.6
   cameraDistance: 2

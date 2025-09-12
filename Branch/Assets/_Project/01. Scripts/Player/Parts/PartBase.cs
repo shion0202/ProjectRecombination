@@ -14,6 +14,15 @@ public enum EPartType
     Legs = 1 << 2,
     Shoulder = 1 << 3,
     Back = 1 << 4,
+    Mask = 1 << 5,
+}
+
+public enum EAttackType
+{
+    Basic,
+    Laser,
+    Rapid,
+    Heavy,
 }
 
 // 파츠 연결을 위한 메시 종류 Enum
@@ -29,6 +38,7 @@ public abstract class PartBase : MonoBehaviour
     [Header("파츠 기본 설정")]
     [SerializeField] protected int partId = 2000;
     [SerializeField] protected EPartType partType;
+    [SerializeField] protected EAttackType attackType;
     [SerializeField] protected EPartMeshType meshType;
     [SerializeField] protected Vector3 staticOffset = Vector3.zero;
     [SerializeField] protected Vector3 staticRotation = Vector3.zero;
@@ -40,6 +50,7 @@ public abstract class PartBase : MonoBehaviour
     protected bool _isAnimating = true;
 
     public EPartType PartType => partType;
+    public EAttackType AttackType => attackType;
     public EPartMeshType MeshType => meshType;
     public StatDictionary Stats => _stats;
     public List<StatModifier> PartModifiers => _partModifiers;
