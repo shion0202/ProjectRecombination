@@ -165,8 +165,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3235722916767231628}
-  - component: {fileID: 1145764440979232643}
-  - component: {fileID: 6081599545822989982}
   m_Layer: 0
   m_Name: MonsterA
   m_TagString: Untagged
@@ -191,33 +189,6 @@ Transform:
   - {fileID: 8217320455735917532}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1145764440979232643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1292388438603544177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a9af89a3855492791d1dfee711fc65a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blackboard: {fileID: 2012745755202891609}
---- !u!114 &6081599545822989982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1292388438603544177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2e596d8cb3be1748b90d7d7ae18652a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tree: {fileID: 11400000, guid: 21a951a38a2ef874d846e4581463a988, type: 2}
-  aiController: {fileID: 1145764440979232643}
 --- !u!1 &8563480837061051896
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +198,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8217320455735917532}
-  - component: {fileID: 2012745755202891609}
   m_Layer: 0
   m_Name: Blackboard
   m_TagString: Untagged
@@ -250,41 +220,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3235722916767231628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2012745755202891609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8563480837061051896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a6706afd624d40902cccf03950f697, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  state: 1
-  navMeshAgent: {fileID: 6544767964886789777}
-  agent: {fileID: 701639474520099993}
-  target: {fileID: 0}
-  defaultStats: {fileID: 11400000, guid: 298a93e9440d840308321dd4ae934eda, type: 2}
-  patrolInfo:
-    minPatrolTime: 2
-    maxPatrolTime: 5
-    wayPoints:
-    - {x: -10, y: 0, z: 0}
-    - {x: 10, y: 0, z: 0}
-    - {x: 0, y: 0, z: 10}
-    - {x: 0, y: 0, z: -10}
-    startPatrolTime: 0
-    currentPatrolTime: 0
-    isPatrolling: 0
-    currentWayPointIndex: 0
-  wanderInfo:
-    minWanderTime: 2
-    maxWanderTime: 5
-    wanderAreaCenter: {x: -7.86, y: 0, z: 0}
-    wanderAreaRadius: 15
-    currentWanderPoint: {x: 0, y: 0, z: 0}
-    currentWanderTime: 0
-    startWanderTime: 0
-    isWandering: 0

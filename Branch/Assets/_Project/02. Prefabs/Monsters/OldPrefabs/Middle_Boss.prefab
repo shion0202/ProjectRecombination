@@ -3917,7 +3917,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 21935215420719357}
-  - component: {fileID: 6413192397856341653}
   - component: {fileID: 3547458750260222594}
   m_Layer: 0
   m_Name: Middle_Boss
@@ -3942,34 +3941,6 @@ Transform:
   - {fileID: 8379616368807291953}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6413192397856341653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5159354264152561804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd9e81bce65b421db90913eff14da90c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSettings:
-    walkSpeed: 6
-    runSpeed: 8
-  combatSettings:
-    lookAtRange: 20
-    attackRange: 2
-    attackCooldown: 1
-    maxHealth: 4000
-    damage: 10
-  state: 0
-  currentHealth: 0
-  target: {fileID: 0}
-  agent: {fileID: 4708998110132286483}
-  animator: {fileID: 2559960702827667942}
-  rigid: {fileID: 5396875187765706065}
-  coll: {fileID: 615946402168495609}
 --- !u!114 &3547458750260222594
 MonoBehaviour:
   m_ObjectHideFlags: 0

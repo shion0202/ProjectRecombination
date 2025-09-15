@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// AnimCheck 스크립트 연동
+// AnimCheck 스크립트와 연동하여 오브젝트 애니메이션을 재생하는 Output
 public class PlayAnimation : ProcessBase
 {
     [SerializeField] private List<AnimCheck> objects = new();

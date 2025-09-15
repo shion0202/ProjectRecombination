@@ -219,7 +219,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             Application.Quit();
         }
-        
+
         // Debug.Log("Player HP: " + stats.CurrentHealth);
         // GUI HP 바 갱신
         // TODO: Null Reference

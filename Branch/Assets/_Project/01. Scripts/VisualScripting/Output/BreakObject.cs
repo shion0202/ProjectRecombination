@@ -14,11 +14,13 @@ public struct BreakableData
     public ForceMode forceMode;
 }
 
+// 오브젝트를 물리적으로 파괴하는 연출 Output
 public class BreakObject : ProcessBase
 {
     [SerializeField] private GameObject breakableObject;
     [SerializeField] private BreakableData data;
-    private Coroutine Coroutine = null;
+    [SerializeField] private float lapseTime = 5.0f;
+    private Coroutine _breakRoutine = null;
 
     public override void Execute()
     {
@@ -45,19 +47,17 @@ public class BreakObject : ProcessBase
             }
         }
 
-        if (Coroutine == null)
+        if (_breakRoutine == null)
         {
-            Coroutine = StartCoroutine(CoWallDisable());
+            _breakRoutine = StartCoroutine(CoWallDisable());
         }
     }
 
     private IEnumerator CoWallDisable()
     {
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(lapseTime);
 
-        foreach (Transform child in breakableObject.transform)
-        {
-            child.gameObject.SetActive(false);
-        }
+        // 현재는 그냥 삭제하며, 추후 로직 변경 가능
+        Destroy(breakableObject);
     }
 }

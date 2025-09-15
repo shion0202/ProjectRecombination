@@ -4,7 +4,7 @@ using UnityEngine;
 // 선택한 게임오브젝트의 Bone 데이터를 스크립터블 오브젝트로 저장하는 에디터 스크립트
 public class BoneLoader : MonoBehaviour
 {
-    [MenuItem("Tools/Save Bone Data To Scriptable Object", priority = 100)]
+    [MenuItem("GameObject/Utility/Save Bone Data To Scriptable Object", priority = 100)]
     public static void SaveBoneDataToSO()
     {
         Object selectedObj = Selection.activeObject;

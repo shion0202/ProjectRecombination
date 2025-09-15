@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 402126}
   - component: {fileID: 3302126}
   - component: {fileID: 2302126}
-  - component: {fileID: 11402124}
   m_Layer: 0
   m_Name: Sun_A
   m_TagString: Untagged
@@ -84,25 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &11402124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 102126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfaa4ad0a900da94ab84fe2f1826c605, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TurnX: 0
-  TurnY: 0
-  TurnZ: 1.7
-  MoveX: 0
-  MoveY: 0
-  MoveZ: 0
-  World: 0
 --- !u!1 &111988
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +188,6 @@ GameObject:
   - component: {fileID: 424024}
   - component: {fileID: 3324024}
   - component: {fileID: 2324024}
-  - component: {fileID: 11424024}
   m_Layer: 0
   m_Name: Sun_B
   m_TagString: Untagged
@@ -281,25 +260,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &11424024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 124024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfaa4ad0a900da94ab84fe2f1826c605, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TurnX: 0
-  TurnY: 0
-  TurnZ: -1.5
-  MoveX: 0
-  MoveY: 0
-  MoveZ: 0
-  World: 0
 --- !u!1 &136376
 GameObject:
   m_ObjectHideFlags: 0

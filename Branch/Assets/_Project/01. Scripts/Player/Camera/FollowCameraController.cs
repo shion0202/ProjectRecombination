@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum ECameraState
 {
     Normal = 0,
