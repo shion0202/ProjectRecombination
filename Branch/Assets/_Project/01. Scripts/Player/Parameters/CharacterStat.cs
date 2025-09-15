@@ -322,15 +322,15 @@ public class CharacterStat : MonoBehaviour
         {
             float finalValue = stat.value;
 
-            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.Flat))
+            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.Flat))
             {
                 finalValue += mod.value;
             }
-            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.PercentAdd))
+            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentAdd))
             {
                 finalValue += stat.value * mod.value;
             }
-            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.PercentMul))
+            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
             {
                 if (stat.statType == EStatType.DamageReductionRate)
                 {
@@ -349,15 +349,15 @@ public class CharacterStat : MonoBehaviour
             {
                 float finalValue = stat.value;
 
-                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.Flat))
+                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.Flat))
                 {
                     finalValue += mod.value;
                 }
-                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.PercentAdd))
+                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentAdd))
                 {
                     finalValue += stat.value * mod.value;
                 }
-                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStatModifierType.PercentMul))
+                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
                 {
                     finalValue *= (1 + mod.value);
                 }

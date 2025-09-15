@@ -83,3 +83,7 @@ crashlytics-build.properties
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
+
+# High Capacity Resource files
+/Assets/_ExternalAssets/Arts/_Creepy_Cat/3D Cartoon_Explosions_Pack_Vol_2/_Showroom/Textures/Hard_Surface_01_Metal.tif
+/Assets/_ExternalAssets/VFX/EffectCore

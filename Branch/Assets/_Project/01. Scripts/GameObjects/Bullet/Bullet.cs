@@ -8,7 +8,7 @@ using Managers;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] protected Rigidbody rb;
+    [SerializeField] protected Rigidbody _rb;
 
     [SerializeField] protected float bulletSpeed = 30.0f;
     [SerializeField] protected bool isCheckCollisionByBullet = true;
@@ -60,13 +60,16 @@ public class Bullet : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody>();
+        if (_rb == null)
+        {
+            _rb = GetComponentInChildren<Rigidbody>();
+        }
     }
 
     protected virtual void Start()
     {
         _timer = lifeTime;
-
 
         //transform.forward = _from.transform.forward;
 
@@ -210,14 +213,14 @@ public class Bullet : MonoBehaviour
 
     protected virtual void StartBulletLogic(Vector3 direction, Vector3 start)
     {
-        rb.velocity = direction * bulletSpeed;
+        _rb.velocity = direction * bulletSpeed;
     }
 
     protected virtual void DestroyBullet()
     {
         // 풀링 전 총알의 상태를 초기화
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        _rb.velocity = Vector3.zero;
+        _rb.angularVelocity = Vector3.zero;
         _timer = lifeTime;
         if (impactParticle)
         {

@@ -13,12 +13,12 @@ public class PlayAnimation : ProcessBase
         if (IsOn) return;
         if (CheckNull()) return;
 
+        IsOn = true;
+
         foreach (AnimCheck obj in objects)
         {
             obj.Play();
         }
-
-        IsOn = true;
     }
 
     private bool CheckNull()

@@ -134,7 +134,7 @@ public class LegsCaterpillar : PartBaseLegs
         }
 
         // 파츠 HP 모두 회복
-        _owner.HealHp(9999, EHealRange.Part);
+        _owner.HealHp(100.0f, EHealType.Percentage, EHealRange.Part);
         Debug.Log("캐터필러 스킬 효과: 파츠 Hp 모두 회복");
 
         // 이동 불가 적용

@@ -10,3 +10,10 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 26903
+  packageName: Planets
+  packageVersion: 1.54
+  assetPath: Assets/FORGE3D/HelpMenu/Editor/F3DHelpMenu.cs
+  uploadId: 638821

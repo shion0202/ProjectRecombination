@@ -19,10 +19,10 @@ public class Bouncer : Bullet
         Vector3 normal = collision.contacts[0].normal;
 
         // 현재 속도 반사 방향 계산
-        Vector3 reflectedVelocity = Vector3.Reflect(rb.velocity, normal);
+        Vector3 reflectedVelocity = Vector3.Reflect(_rb.velocity, normal);
 
         // 튕길 때 속도 감소 적용
-        rb.velocity = reflectedVelocity * bounceFactor;
+        _rb.velocity = reflectedVelocity * bounceFactor;
 
         // 플레이어가 발사한 총알
         if (from.CompareTag("Player") && collision.transform.CompareTag("Enemy"))

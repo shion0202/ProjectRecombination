@@ -12,7 +12,7 @@ namespace _Project.Scripts.VisualScripting
         {
             IsOn = true;
 
-            // PlayerController와 의존성을 가지므로 추후 Event Manager 등으로 분리
+            // To-do: PlayerController와 의존성을 가지므로 추후 Event Manager 등으로 분리
             PlayerController.RegisterEvent(nextInput.Execute);
         }
     }

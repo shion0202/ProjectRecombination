@@ -45,6 +45,12 @@ public enum EAnimationType
     ShootingCaterpillar = 7,
 }
 
+public enum EHealType
+{
+    Flat = 0,
+    Percentage = 1,
+}
+
 [Serializable]
 public struct BaseAnimation
 {
@@ -539,12 +545,21 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
-    public void HealHp(float healAmount, EHealRange healRange = EHealRange.All)
+    public void HealHp(float healAmount, EHealType healType, EHealRange healRange = EHealRange.All)
     {
         if (healAmount <= 0.0f) return;
         if (stats.CurrentHealth <= 0) return;
 
-        float amount = healAmount;
+        float amount = 0;
+        switch (healType)
+        {
+            case EHealType.Flat:
+                amount = healAmount;
+                break;
+            case EHealType.Percentage:
+                amount = stats.MaxHealth * healAmount * 0.01f;
+                break;
+        }
 
         if (healRange != EHealRange.Part)
         {
@@ -855,7 +870,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             {
                 animator.SetBool("isLeftAttack", true);
             }
-            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.3f, this));
+            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, -0.3f, this));
 
             _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
@@ -869,7 +884,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
             _postAnimType = _currentAnimType;
             SetOvrrideAnimator(_postAnimType + 4);
-            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStatModifierType.PercentMul, -0.3f, this));
+            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, -0.3f, this));
 
             _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
