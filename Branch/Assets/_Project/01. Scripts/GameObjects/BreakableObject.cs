@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class BreakableObject : MonoBehaviour
 {
-    [SerializeField] private float explosionForce = 500.0f;
-    [SerializeField] private Vector3 explosionPosition;
-    [SerializeField] private float explosionRadius = 5.0f;
-    [SerializeField] private float upwardsModifier;
-    [SerializeField] private ForceMode forceMode = ForceMode.Force;
+    [SerializeField] private BreakableData data;
+    [SerializeField] private float lapseTime = 5.0f;
+    [SerializeField] private LayerMask obstacleLayers; // 파괴된 오브젝트와 충돌하지 않을 레이어
 
-    private List<Vector3> originalPositions = new();
-    private List<Quaternion> originalRotations = new();
-    private List<Rigidbody> rigidbodies = new();
-    private Coroutine Coroutine;
+    private List<Rigidbody> _rigidbodies = new();
+    private List<Vector3> _originalPositions = new();
+    private List<Quaternion> _originalRotations = new();
+    private Coroutine _breakRoutine;
 
-    private void Start()
+    private void Awake()
     {
         // 초기 위치, 회전, Rigidbody 저장
         foreach (Transform child in transform)
@@ -23,10 +21,20 @@ public class BreakableObject : MonoBehaviour
             Rigidbody rb = child.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rigidbodies.Add(rb);
-                originalPositions.Add(child.position);
-                originalRotations.Add(child.rotation);
+                _rigidbodies.Add(rb);
+                _originalPositions.Add(child.position);
+                _originalRotations.Add(child.rotation);
             }
+        }
+
+        // Force 값이 0일 경우, 즉 Break 값이 할당되지 않았을 경우 기본값 설정
+        if (data.explosionForce == 0.0f)
+        {
+            data.explosionForce = 500.0f;
+            data.explosionPosition = Vector3.zero;
+            data.explosionRadius = 5.0f;
+            data.upwardsModifier = 0.0f;
+            data.forceMode = ForceMode.Impulse;
         }
     }
 
@@ -45,48 +53,48 @@ public class BreakableObject : MonoBehaviour
 
     public void BreakWall()
     {
-        foreach (Transform child in transform)
+        foreach (Rigidbody rb in _rigidbodies)
         {
-            Rigidbody rb = child.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddExplosionForce(explosionForce, transform.position + explosionPosition, explosionRadius, upwardsModifier, forceMode);
-            }
+            rb.isKinematic = false;
+            rb.AddExplosionForce(data.explosionForce, transform.position + data.explosionPosition, data.explosionRadius, data.upwardsModifier, data.forceMode);
 
-            MeshCollider mc = child.GetComponent<MeshCollider>();
+            MeshCollider mc = rb.gameObject.GetComponent<MeshCollider>();
             if (mc != null)
             {
-                mc.excludeLayers |= (1 << LayerMask.NameToLayer("Player"));
+                // 플레이어 이동을 방해하지 않도록 Player 레이어 제외
+                // 폐쇄된 공간에서 파괴 연출이 정상적으로 보이도록 Breakable 레이어도 제외
+                mc.excludeLayers = obstacleLayers;
             }
         }
 
-        if (Coroutine != null)
+        if (_breakRoutine != null)
         {
-            StopCoroutine(Coroutine);
+            StopCoroutine(_breakRoutine);
+            _breakRoutine = null;
         }
-        Coroutine = StartCoroutine(CoWallDisable());
+        _breakRoutine = StartCoroutine(CoWallDisable());
     }
 
     public void ResetWall()
     {
-        if (Coroutine != null)
+        if (_breakRoutine != null)
         {
-            StopCoroutine(Coroutine);
+            StopCoroutine(_breakRoutine);
+            _breakRoutine = null;
         }
 
-        for (int i = 0; i < rigidbodies.Count; i++)
+        for (int i = 0; i < _rigidbodies.Count; i++)
         {
-            Rigidbody rb = rigidbodies[i];
+            Rigidbody rb = _rigidbodies[i];
             rb.isKinematic = true; // 물리 일시 정지
             rb.gameObject.SetActive(true);
 
-            rb.transform.position = originalPositions[i];
-            rb.transform.rotation = originalRotations[i];
+            rb.transform.position = _originalPositions[i];
+            rb.transform.rotation = _originalRotations[i];
 
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-
-            rb.isKinematic = false; // 물리 다시 활성화
+            //rb.isKinematic = false; // 물리 다시 활성화
 
             MeshCollider mc = rb.gameObject.GetComponent<MeshCollider>();
             if (mc != null)
@@ -98,11 +106,11 @@ public class BreakableObject : MonoBehaviour
 
     private IEnumerator CoWallDisable()
     {
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(lapseTime);
 
-        for (int i = 0; i < rigidbodies.Count; i++)
+        for (int i = 0; i < _rigidbodies.Count; i++)
         {
-            Rigidbody rb = rigidbodies[i];
+            Rigidbody rb = _rigidbodies[i];
             rb.gameObject.SetActive(false);
         }
     }

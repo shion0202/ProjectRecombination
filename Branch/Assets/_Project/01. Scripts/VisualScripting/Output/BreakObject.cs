@@ -20,6 +20,7 @@ public class BreakObject : ProcessBase
     [SerializeField] private GameObject breakableObject;
     [SerializeField] private BreakableData data;
     [SerializeField] private float lapseTime = 5.0f;
+    [SerializeField] private LayerMask obstacleLayers; // 파괴된 오브젝트와 충돌하지 않을 레이어
     private Coroutine _breakRoutine = null;
 
     public override void Execute()
@@ -37,13 +38,14 @@ public class BreakObject : ProcessBase
             Rigidbody rb = child.GetComponent<Rigidbody>();
             if (rb != null)
             {
+                rb.isKinematic = false;
                 rb.AddExplosionForce(data.explosionForce, child.position + data.explosionPosition, data.explosionRadius, data.upwardsModifier, data.forceMode);
             }
 
             MeshCollider mc = child.GetComponent<MeshCollider>();
             if (mc != null)
             {
-                mc.excludeLayers |= (1 << LayerMask.NameToLayer("Player"));
+                mc.excludeLayers = obstacleLayers;
             }
         }
 

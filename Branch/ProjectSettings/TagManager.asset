@@ -4,12 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
+  - FX
+  - World
+  - Target
   - Wall
-  - Obstacle
-  - Bullet
-  - Platform
   - Breakable
+  - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -17,10 +18,10 @@ TagManager:
   - 
   - Water
   - UI
-  - Face
-  - Hair
-  - Outline
-  - Player
+  - drivable
+  - carbody
+  - SphereRB
+  - Breakable
   - 
   - 
   - 
