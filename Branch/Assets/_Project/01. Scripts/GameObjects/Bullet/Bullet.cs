@@ -11,22 +11,20 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected Rigidbody _rb;
 
     [SerializeField] protected float bulletSpeed = 30.0f;
-    [SerializeField] protected bool isCheckCollisionByBullet = true;
     private float _damage;
     private GameObject _from; // 발사 주체
-    protected Transform _parent;
+    protected Transform _parent; // Spawn Point (Muzzle Flash 등 Position을 위한 변수)
     protected Vector3 _targetDirection;
     protected Vector3 _targetPos;
 
     [SerializeField] private float lifeTime = 5f; // 총알의 생명 시간
     private float _timer;
 
+    [SerializeField] protected GameObject muzzleParticle;
+    [SerializeField] protected GameObject impactParticle;
     [SerializeField] protected GameObject explosionEffectPrefab;
     [SerializeField] protected float explosionRange = 1.0f;
     [SerializeField] protected float explosionRadius = 2.0f;
-
-    [SerializeField] protected GameObject muzzleParticle;
-    [SerializeField] protected GameObject impactParticle;
 
     protected float LifeTime
     {
@@ -40,13 +38,13 @@ public class Bullet : MonoBehaviour
         set => _timer = value;
     }
 
-    public float damage
+    public float Damage
     {
         get => _damage;
         set => _damage = value;
     }
 
-    public GameObject from
+    public GameObject From
     {
         get => _from;
         set => _from = value;
@@ -70,14 +68,15 @@ public class Bullet : MonoBehaviour
     protected virtual void Start()
     {
         _timer = lifeTime;
+    }
 
-        //transform.forward = _from.transform.forward;
-
+    protected void OnEnable()
+    {
         if (muzzleParticle)
         {
-
+            // 필요할 경우 Pooling
             muzzleParticle = Instantiate(muzzleParticle, transform.position, Quaternion.LookRotation(-_targetDirection), Parent);
-            Destroy(muzzleParticle, 1.5f); // Lifetime of muzzle effect.
+            Destroy(muzzleParticle, 2.0f); // Lifetime of muzzle effect.
         }
     }
 
@@ -93,6 +92,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
@@ -104,20 +104,17 @@ public class Bullet : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, explosionRadius);
         }
     }
+#endif
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (!isCheckCollisionByBullet) return;
-
         // 총알의 규칙
         // 1. 플레이어가 발사한 총알은 적에게만 데미지를 입힌다.
         // 2. 적이 발사한 총알은 플레이어에게만 데미지를 입힌다.
         // 3. 총알은 벽(또는 기타 오브젝트)에 닿으면 파괴된다.
 
-        if (other == null) return;
-
         // 플레이어가 발사한 총알
-        if (from.CompareTag("Player") && other.CompareTag("Enemy"))
+        if (From.CompareTag("Player") && other.CompareTag("Enemy"))
         {
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
@@ -131,7 +128,7 @@ public class Bullet : MonoBehaviour
         }
         
         // 적이 발사한 총알
-        if (from.CompareTag("Enemy") && other.CompareTag("Player"))
+        if (From.CompareTag("Enemy") && other.CompareTag("Player"))
         {
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
@@ -154,33 +151,6 @@ public class Bullet : MonoBehaviour
 
             DestroyBullet();
             return;
-        }
-
-        if (other.CompareTag("Breakable"))
-        {
-            Vector3 contactPoint = other.ClosestPoint(transform.position);
-            Vector3 effectDirection = (contactPoint - GetComponent<Collider>().transform.position).normalized;
-            Quaternion rotation = Quaternion.LookRotation(effectDirection);
-            
-            DestroyBullet();
-
-            foreach (Transform child in other.transform)
-            {
-
-                MeshCollider mCollider = child.GetComponent<MeshCollider>();
-                if (mCollider != null)
-                {
-                    mCollider.enabled = true; // 충돌을 비활성화
-                }
-
-                Rigidbody orb = other.GetComponent<Rigidbody>();
-                if (orb != null)
-                {
-                    orb.useGravity = true;
-                    orb.AddExplosionForce(200.0f, transform.position, 20.0f);
-                }
-            }
-
         }
     }
 
@@ -208,12 +178,13 @@ public class Bullet : MonoBehaviour
         _damage = damage;
         _targetDirection = direction;
 
-        StartBulletLogic(direction, start);
+        SetBulletLogic(direction, start);
     }
 
-    protected virtual void StartBulletLogic(Vector3 direction, Vector3 start)
+    protected virtual void SetBulletLogic(Vector3 direction, Vector3 start)
     {
-        _rb.velocity = direction * bulletSpeed;
+        //_rb.velocity = direction * bulletSpeed;
+        _rb.AddForce(direction * bulletSpeed);
     }
 
     protected virtual void DestroyBullet()
@@ -224,12 +195,9 @@ public class Bullet : MonoBehaviour
         _timer = lifeTime;
         if (impactParticle)
         {
-            GameObject impactP = Instantiate(
-                impactParticle,
-                transform.position, // 접점 위치
-                Quaternion.LookRotation(-transform.forward) // 추정 방향 정렬
-            );
-            Destroy(impactP, 5.0f);
+            // 필요할 경우 Pooling
+            GameObject impactP = Instantiate(impactParticle, transform.position, Quaternion.LookRotation(-transform.forward));
+            Destroy(impactP, 2.0f);
         }
         
         PoolManager.Instance.ReleaseObject(gameObject);
@@ -237,10 +205,12 @@ public class Bullet : MonoBehaviour
 
     protected virtual void Explode()
     {
-        if (explosionEffectPrefab != null)
+        if (explosionEffectPrefab)
         {
+            // 필요할 경우 Pooling
             Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
         }
+
         PoolManager.Instance.ReleaseObject(gameObject);
     }
 }

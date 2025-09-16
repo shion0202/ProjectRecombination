@@ -236,6 +236,9 @@
         },
         {
             "m_Id": "7b6d64a20d294dfc848ac55fd139a5de"
+        },
+        {
+            "m_Id": "945f66be7ddb47f6a93dfbb91fc67342"
         }
     ],
     "m_GroupDatas": [
@@ -601,20 +604,6 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "7642e36a0a72449389dd11d1d29de199"
-                },
-                "m_SlotId": 4
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "a5ff51bbefcb460ebaef220cf1a5efab"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
                     "m_Id": "7b6d64a20d294dfc848ac55fd139a5de"
                 },
                 "m_SlotId": 1
@@ -930,6 +919,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "6b5d5c6b3814443d9e1926c09427001a"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "bc131e30343d4a1fb198daae4d0cc080"
+                },
+                "m_SlotId": 2
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "a5ff51bbefcb460ebaef220cf1a5efab"
                 },
                 "m_SlotId": 0
             }
@@ -4049,7 +4052,7 @@
     "m_ObjectId": "5f6195aa271b47eb9d187478e2f939d8",
     "m_Title": "SDF (Youtube)",
     "m_Position": {
-        "x": -1851.0,
+        "x": -1960.0,
         "y": -1675.0
     }
 }
@@ -4555,6 +4558,29 @@
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
+    "m_ObjectId": "6971691ffd384ad683012741db4b3477",
+    "m_Id": 1,
+    "m_DisplayName": "Direction",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Direction",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
     "m_Labels": []
 }
 
@@ -5264,6 +5290,29 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
+    "m_ObjectId": "862dd352c7ab4944812203c0a5b75b08",
+    "m_Id": 0,
+    "m_DisplayName": "Color",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Color",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "880da73990584ce0a364498c4f2c4659",
     "m_Id": 2,
@@ -5480,6 +5529,49 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.CustomFunctionNode",
+    "m_ObjectId": "945f66be7ddb47f6a93dfbb91fc67342",
+    "m_Group": {
+        "m_Id": "5f6195aa271b47eb9d187478e2f939d8"
+    },
+    "m_Name": "GetMainLight (Custom Function)",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -1935.0001220703125,
+            "y": -1363.0,
+            "width": 231.0,
+            "height": 302.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "862dd352c7ab4944812203c0a5b75b08"
+        },
+        {
+            "m_Id": "6971691ffd384ad683012741db4b3477"
+        }
+    ],
+    "synonyms": [
+        "code",
+        "HLSL"
+    ],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SourceType": 1,
+    "m_FunctionName": "GetMainLight",
+    "m_FunctionSource": "",
+    "m_FunctionBody": "#ifdef SHADERGRAPH_PREVIEW\n Color = float3(1,1,1);\n Direction = float3(0,0,0);\n#else\n Light light = GetMainLight();\n Color = light.color;\n Direction = light.direction;\n#endif"
 }
 
 {
@@ -7522,7 +7614,7 @@
     "hlslDeclarationOverride": 2,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"dbe2f5948a6d6544db8b0be38ad34984\",\"type\":3}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,

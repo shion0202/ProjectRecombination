@@ -11,6 +11,8 @@ TagManager:
   - Breakable
   - Enemy
   - Bullet
+  - Obstacle
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -26,7 +28,7 @@ TagManager:
   - carbody
   - SphereRB
   - Breakable
-  - 
+  - PlayerMesh
   - 
   - 
   - 

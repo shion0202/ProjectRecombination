@@ -11,8 +11,6 @@ public class Bouncer : Bullet
 
     protected void OnCollisionEnter(Collision collision)
     {
-        if (!isCheckCollisionByBullet) return;
-
         bounceCount++;
 
         // 충돌한 표면의 법선 벡터 얻기
@@ -25,7 +23,7 @@ public class Bouncer : Bullet
         _rb.velocity = reflectedVelocity * bounceFactor;
 
         // 플레이어가 발사한 총알
-        if (from.CompareTag("Player") && collision.transform.CompareTag("Enemy"))
+        if (From.CompareTag("Player") && collision.transform.CompareTag("Enemy"))
         {
             Vector3 contactPoint = collision.contacts[0].point;
             Vector3 contactNormal = collision.contacts[0].normal;
@@ -47,7 +45,7 @@ public class Bouncer : Bullet
         }
 
         // 적이 발사한 총알
-        if (from.CompareTag("Enemy") && collision.transform.CompareTag("Player"))
+        if (From.CompareTag("Enemy") && collision.transform.CompareTag("Player"))
         {
             Vector3 contactPoint = collision.contacts[0].point;
             Vector3 contactNormal = collision.contacts[0].normal;
@@ -61,7 +59,7 @@ public class Bouncer : Bullet
             var player = collision.transform.GetComponent<PlayerController>();
             if (player != null)
             {
-                player.TakeDamage(damage);
+                player.TakeDamage(Damage);
             }
 
             if (bounceCount >= maxBounces)

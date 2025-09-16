@@ -5337,6 +5337,29 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
+    "m_ObjectId": "2418f21f0537424e81c623bc08b0aee5",
+    "m_Id": 1,
+    "m_DisplayName": "Direction",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Direction",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "2478bdcc476c4282a7c2996bb25fbe4f",
     "m_Id": 2,
@@ -10949,7 +10972,7 @@
     "m_Group": {
         "m_Id": "f4c7d787daa947c4bbddc2cdd91c97dc"
     },
-    "m_Name": "GetLightIntensity (Custom Function)",
+    "m_Name": "GetMainLight (Custom Function)",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -10963,6 +10986,9 @@
     "m_Slots": [
         {
             "m_Id": "02065c9a607b4962bba09ce234e84b12"
+        },
+        {
+            "m_Id": "2418f21f0537424e81c623bc08b0aee5"
         }
     ],
     "synonyms": [
@@ -10977,9 +11003,9 @@
         "m_SerializableColors": []
     },
     "m_SourceType": 1,
-    "m_FunctionName": "GetLightIntensity",
+    "m_FunctionName": "GetMainLight",
     "m_FunctionSource": "",
-    "m_FunctionBody": "#ifdef SHADERGRAPH_PREVIEW\n Color = float3(1,1,1);\n#else\n Light light = GetMainLight();\n Color = light.color;\n#endif"
+    "m_FunctionBody": "#ifdef SHADERGRAPH_PREVIEW\n Color = float3(1,1,1);\n#else\n Light light = GetMainLight();\n Color = light.color;\n Direction = light.direction;\n\n#endif"
 }
 
 {

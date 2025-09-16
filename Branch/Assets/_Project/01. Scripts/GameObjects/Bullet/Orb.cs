@@ -15,42 +15,43 @@ public class Orb : Bullet
     protected override void Start()
     {
         base.Start();
-        bladeTimer = bladeInterval;
+        bladeTimer = 0.0f;
     }
 
     protected override void Update()
     {
         base.Update();
 
-        bladeTimer += Time.deltaTime;
-
         // 주기적으로 랜덤 방향 칼날 발사
-        if (bladeTimer >= bladeInterval)
+        if (bladeTimer > 0)
         {
-            bladeTimer = 0f;
+            bladeTimer -= Time.deltaTime;
+        }
+        else
+        {
+            bladeTimer = bladeInterval;
             FireRandomBlade();
         }
     }
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (!isCheckCollisionByBullet) return;
         if (other == null) return;
 
         // 플레이어가 발사한 총알
-        if (from.CompareTag("Player") && other.CompareTag("Enemy"))
+        if (From.CompareTag("Player") && other.CompareTag("Enemy"))
         {
             TakeDamage(other.transform);
             return;
         }
 
         // 적이 발사한 총알
-        if (from.CompareTag("Enemy") && other.CompareTag("Player"))
+        if (From.CompareTag("Enemy") && other.CompareTag("Player"))
         {
             var player = other.GetComponent<PlayerController>();
             if (player != null)
             {
-                player.TakeDamage(damage);
+                player.TakeDamage(Damage);
             }
             return;
         }
@@ -73,7 +74,7 @@ public class Orb : Bullet
         ProjectileBlade bladeComp = blade.GetComponent<ProjectileBlade>();
         if (bladeComp != null)
         {
-            bladeComp.Init(direction, bladeSpeed, from);
+            bladeComp.Init(direction, bladeSpeed, From);
         }
     }
 
@@ -102,7 +103,7 @@ public class Orb : Bullet
             ProjectileBlade bladeComp = blade.GetComponent<ProjectileBlade>();
             if (bladeComp != null)
             {
-                bladeComp.Init(direction, bladeSpeed, from);
+                bladeComp.Init(direction, bladeSpeed, From);
             }
         }
     }

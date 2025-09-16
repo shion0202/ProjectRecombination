@@ -14,17 +14,15 @@ public class Missile : Bullet
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (!isCheckCollisionByBullet) return;
-
         // 플레이어가 발사한 총알
-        if (from.CompareTag("Player") && other.CompareTag("Enemy"))
+        if (From.CompareTag("Player") && other.CompareTag("Enemy"))
         {
             DestroyBullet();
             return;
         }
 
         // 적이 발사한 총알
-        if (from.CompareTag("Enemy") && other.CompareTag("Player"))
+        if (From.CompareTag("Enemy") && other.CompareTag("Player"))
         {
             DestroyBullet();
             return;
@@ -47,7 +45,7 @@ public class Missile : Bullet
         Explode();
     }
 
-    protected override void StartBulletLogic(Vector3 direction, Vector3 start)
+    protected override void SetBulletLogic(Vector3 direction, Vector3 start)
     {
         _projectileCoroutine = StartCoroutine(CoMissileRoutine(direction, start));
     }
