@@ -73,7 +73,7 @@ public class Missile : Bullet
         float elapsed = 0f;
         transform.forward = initialDir;
 
-        float distance = Vector3.Distance(fromPos, _targetPos);     // 목표까지 거리
+        float distance = Vector3.Distance(fromPos, _to);     // 목표까지 거리
         float straightDistance = distance * 0.3f;                   // 직선 비행 거리: 거리의 절반 사용
         float initialFlightTime = straightDistance / bulletSpeed;   // 직선 비행 시간 = 거리 / 속도
 
@@ -89,7 +89,7 @@ public class Missile : Bullet
         bool reached = false;
         while (!reached)
         {
-            Vector3 dirToTarget = (_targetPos - transform.position).normalized;
+            Vector3 dirToTarget = (_to - transform.position).normalized;
             transform.forward = Vector3.RotateTowards(
                 transform.forward,
                 dirToTarget,
@@ -99,7 +99,7 @@ public class Missile : Bullet
 
             transform.position += transform.forward * bulletSpeed * Time.deltaTime;
 
-            if (Vector3.Distance(transform.position, _targetPos) < 1.0f)
+            if (Vector3.Distance(transform.position, _to) < 1.0f)
             {
                 Explode();
                 reached = true;

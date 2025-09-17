@@ -3,13 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EStackType
-{
-    Flat,           // 고정값 (+10 + 10)
-    PercentAdd,     // 합연산 (+10% + 10%)
-    PercentMul      // 곱연산 (×1.1 × 1.1)
-}
-
 [Serializable]
 public class StatModifier
 {

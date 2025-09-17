@@ -6,51 +6,6 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
 
-[Flags]
-public enum EPlayerState
-{
-    Idle = 1 << 0,
-    Moving = 1 << 1,
-    Falling = 1 << 2,
-    Dashing = 1 << 3,
-    LeftShooting = 1 << 4,
-    RightShooting = 1 << 5,
-    Zooming = 1 << 6,
-    Rotating = 1 << 7,
-    Spawning = 1 << 8,
-    Dead = 1 << 9,
-
-    RotateState = Moving | LeftShooting | RightShooting | Zooming,
-    ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
-    ShootState = LeftShooting | RightShooting,
-    UnmanipulableState = Spawning | Dead,
-}
-
-public enum EHealRange
-{
-    All = 0,
-    Body = 1,
-    Part = 2,
-}
-
-public enum EAnimationType
-{
-    Base = 0,
-    Hover = 1,
-    Roller = 2,
-    Caterpillar = 3,
-    ShootingBase = 4,
-    ShootingHover = 5,
-    ShootingRoller = 6,
-    ShootingCaterpillar = 7,
-}
-
-public enum EHealType
-{
-    Flat = 0,
-    Percentage = 1,
-}
-
 [Serializable]
 public struct BaseAnimation
 {

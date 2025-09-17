@@ -76,7 +76,6 @@ public class PartBaseArm : PartBase
         
     }
 
-    // Update를 통해 호출되는 사격 함수
     protected virtual void Shoot()
     {
         Vector3 targetPoint = GetTargetPoint(out RaycastHit hit);

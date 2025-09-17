@@ -5,34 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 파츠 부위 Enum
-[System.Flags]
-public enum EPartType
-{
-    ArmL = 1 << 0,
-    ArmR = 1 << 1,
-    Legs = 1 << 2,
-    Shoulder = 1 << 3,
-    Back = 1 << 4,
-    Mask = 1 << 5,
-}
-
-public enum EAttackType
-{
-    Basic,
-    Laser,
-    Rapid,
-    Heavy,
-}
-
-// 파츠 연결을 위한 메시 종류 Enum
-// Skinned Mesh Renderer를 사용하더라도 캐터필러처럼 움직이는 방식이 다르다면 Static을 사용
-public enum EPartMeshType
-{
-    Skinned,
-    Static
-}
-
 public abstract class PartBase : MonoBehaviour
 {
     [Header("파츠 기본 설정")]

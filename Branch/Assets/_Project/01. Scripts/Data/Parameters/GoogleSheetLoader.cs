@@ -9,12 +9,6 @@ using UnityEditor;
 using Unity.EditorCoroutines.Editor;
 #endif
 
-public enum EValueType
-{
-    Float,
-    Int,
-}
-
 [System.Serializable]
 public struct SheetInfo
 {
@@ -112,22 +106,6 @@ public class RowData
         _isDirty = true;
     }
     
-    // TODO: 문자열로 Stat 저장, 불러오기
-    // public void SetStatString(EStatType key, string value)
-    // {
-    //     var idx = statEntries.FindIndex(e => e.key == key);
-    //     var newData = new StatData(key, value);
-    //     
-    //     if (Enum.TryParse(value, true, out EStatType statType))
-    //     {
-    //         SetStat(key, (float)statType);
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning($"[RowData] '{key}'에 대한 값 '{value}'이(가) 유효하지 않습니다.");
-    //     }
-    // }
-    
     // 문자열로 출력하는 메서드
     public override string ToString()
     {
@@ -144,6 +122,7 @@ public class RowData
 [CreateAssetMenu(fileName = "ParamDatas", menuName = "Scriptable Object/Parameter Datas", order = 21)]
 public class GoogleSheetLoader : ScriptableObject
 {
+    // Stat Type Enum과 String을 매핑
     private static readonly Dictionary<string, EStatType> headerToStatType =
         new(StringComparer.OrdinalIgnoreCase)
         {
