@@ -6,100 +6,72 @@ using UnityEngine;
 public class Bouncer : Bullet
 {
     [SerializeField] protected int maxBounces = 3;          // 충돌 최대 횟수
-    [SerializeField] protected float bounceFactor = 0.8f;   // 튕길 때 속도 감소율 (1.0은 완전 반사)
-    private int bounceCount = 0;
+    [SerializeField] protected float bounceFactor = 0.9f;   // 튕길 때 속도 감소율 (1.0은 완전 반사)
+    private int _bounceCount = 0;
+    private float _minBounceSpeed = 5.0f;
 
-    protected void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
-        bounceCount++;
+        _bounceCount++;
 
-        // 충돌한 표면의 법선 벡터 얻기
-        Vector3 normal = collision.contacts[0].normal;
+        base.OnCollisionEnter(collision);
+        Vector3 normal = collision.contacts[0].normal;   // 충돌면 법선 구하기
 
-        // 현재 속도 반사 방향 계산
-        Vector3 reflectedVelocity = Vector3.Reflect(_rb.velocity, normal);
+        // 중력 성분을 속도에서 빼고 반사 계산 후 다시 더하기
+        Vector3 velocityWithoutGravity = _rb.velocity - Physics.gravity * Time.fixedDeltaTime;
+        Vector3 reflectedVelocity = Vector3.Reflect(velocityWithoutGravity, normal);
 
-        // 튕길 때 속도 감소 적용
-        _rb.velocity = reflectedVelocity * bounceFactor;
+        // 반사 속도에 튕김 세기를 곱해 최종 속도 계산
+        Vector3 newVelocity = reflectedVelocity * bounceFactor + Physics.gravity * Time.fixedDeltaTime;
 
-        // 플레이어가 발사한 총알
-        if (From.CompareTag("Player") && collision.transform.CompareTag("Enemy"))
+        // 최소 튕김 속도 적용(너무 느리면 속도 보정)
+        if (newVelocity.magnitude < _minBounceSpeed)
         {
-            Vector3 contactPoint = collision.contacts[0].point;
-            Vector3 contactNormal = collision.contacts[0].normal;
-            GameObject impactP = Instantiate(
-                impactParticle,
-                contactPoint,
-                Quaternion.FromToRotation(Vector3.up, contactNormal)
-            );
-            Destroy(impactP, 5.0f);
+            newVelocity = newVelocity.normalized * _minBounceSpeed;
+        }
 
-            TakeDamage(collision.transform);
+        _rb.velocity = newVelocity;
 
+        CreateImpaceEffect(collision);
+        CheckBounceCount();
+    }
+
+    protected override void ShootByPlayer(Collision collision)
+    {
+        CreateImpaceEffect(collision);
+        TakeDamage(collision.transform);
+
+        CheckBounceCount();
+    }
+
+    protected override void ShootByEnemy(Collision collision)
+    {
+        CreateImpaceEffect(collision);
+        var player = collision.transform.GetComponent<PlayerController>();
+        if (player != null)
+        {
+            player.TakeDamage(Damage);
+        }
+
+        CheckBounceCount();
+    }
+
+    protected override void ImpactObstacle(Collision collision)
+    {
+        CreateImpaceEffect(collision);
+        CheckBounceCount();
+    }
+
+    protected bool CheckBounceCount()
+    {
+        if (_bounceCount >= maxBounces)
+        {
             // 충돌 횟수 초과 시 투사체 파괴
-            if (bounceCount >= maxBounces)
-            {
-                PoolManager.Instance.ReleaseObject(gameObject);
-            }
-            return;
+            _bounceCount = 0;
+            DestroyBullet();
+            return true;
         }
 
-        // 적이 발사한 총알
-        if (From.CompareTag("Enemy") && collision.transform.CompareTag("Player"))
-        {
-            Vector3 contactPoint = collision.contacts[0].point;
-            Vector3 contactNormal = collision.contacts[0].normal;
-            GameObject impactP = Instantiate(
-                impactParticle,
-                contactPoint,
-                Quaternion.FromToRotation(Vector3.up, contactNormal)
-            );
-            Destroy(impactP, 5.0f);
-
-            var player = collision.transform.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                player.TakeDamage(Damage);
-            }
-
-            if (bounceCount >= maxBounces)
-            {
-                PoolManager.Instance.ReleaseObject(gameObject);
-            }
-            return;
-        }
-
-        // 벽(또는 기타 오브젝트)에 닿은 경우
-        if (collision.transform.CompareTag("Wall") || collision.transform.CompareTag("Obstacle"))
-        {
-            Vector3 contactPoint = collision.contacts[0].point;
-            Vector3 contactNormal = collision.contacts[0].normal;
-            GameObject impactP = Instantiate(
-                impactParticle,
-                contactPoint,
-                Quaternion.FromToRotation(Vector3.up, contactNormal)
-            );
-            Destroy(impactP, 5.0f);
-
-            if (bounceCount >= maxBounces)
-            {
-                PoolManager.Instance.ReleaseObject(gameObject);
-            }
-            return;
-        }
-
-        Vector3 contactP = collision.contacts[0].point;
-        Vector3 contactN = collision.contacts[0].normal;
-        GameObject iP = Instantiate(
-            impactParticle,
-            contactP,
-            Quaternion.FromToRotation(Vector3.up, contactN)
-        );
-        Destroy(iP, 5.0f);
-
-        if (bounceCount >= maxBounces)
-        {
-            PoolManager.Instance.ReleaseObject(gameObject);
-        }
+        return false;
     }
 }

@@ -111,6 +111,35 @@ public class Bullet : MonoBehaviour
         }
     }
 
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        // 총알의 규칙
+        // 1. 플레이어가 발사한 총알은 적에게만 데미지를 입힌다.
+        // 2. 적이 발사한 총알은 플레이어에게만 데미지를 입힌다.
+        // 3. 총알은 벽(또는 기타 오브젝트)에 닿으면 파괴된다.
+
+        // 플레이어가 발사한 총알
+        if (From.CompareTag("Player") && collision.gameObject.CompareTag("Enemy"))
+        {
+            ShootByPlayer(collision);
+            return;
+        }
+
+        // 적이 발사한 총알
+        if (From.CompareTag("Enemy") && collision.gameObject.CompareTag("Player"))
+        {
+            ShootByEnemy(collision);
+            return;
+        }
+
+        // 벽(또는 기타 오브젝트)에 닿은 경우
+        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Obstacle"))
+        {
+            ImpactObstacle(collision);
+            return;
+        }
+    }
+
 #if UNITY_EDITOR
     protected void OnDrawGizmos()
     {
@@ -164,6 +193,28 @@ public class Bullet : MonoBehaviour
         DestroyBullet();
     }
 
+    protected virtual void ShootByPlayer(Collision collision)
+    {
+        DestroyBullet();
+        TakeDamage(collision.transform);
+    }
+
+    protected virtual void ShootByEnemy(Collision collision)
+    {
+        DestroyBullet();
+
+        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+        if (player != null)
+        {
+            player.TakeDamage(_damage);
+        }
+    }
+
+    protected virtual void ImpactObstacle(Collision collision)
+    {
+        DestroyBullet();
+    }
+
     protected virtual void SetBulletLogic(Vector3 direction, Vector3 start)
     {
         _rb.velocity = direction * bulletSpeed;
@@ -178,9 +229,7 @@ public class Bullet : MonoBehaviour
 
         if (impactParticle)
         {
-            // 필요할 경우 Pooling
-            GameObject impactP = Instantiate(impactParticle, transform.position, Quaternion.LookRotation(-transform.forward));
-            Destroy(impactP, 2.0f);
+            CreateImpaceEffect();
         }
         else if (explosionEffectPrefab)
         {
@@ -188,6 +237,22 @@ public class Bullet : MonoBehaviour
         }
 
         PoolManager.Instance.ReleaseObject(gameObject);
+    }
+
+    protected virtual void CreateImpaceEffect()
+    {
+        // 필요할 경우 Pooling
+        GameObject impactP = Instantiate(impactParticle, transform.position, Quaternion.LookRotation(-transform.forward));
+        Destroy(impactP, 2.0f);
+    }
+
+    protected virtual void CreateImpaceEffect(Collision collision)
+    {
+        // 필요할 경우 Pooling
+        Vector3 contactP = collision.contacts[0].point;
+        Vector3 contactN = collision.contacts[0].normal;
+        GameObject iP = Instantiate(impactParticle, contactP, Quaternion.FromToRotation(Vector3.up, contactN));
+        Destroy(iP, 5.0f);
     }
 
     protected virtual void Explode()

@@ -9818,12 +9818,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a45f9fe1b584274b65a063dceb6ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: -8192409540983828068}
+  _rb: {fileID: 0}
   bulletSpeed: 40
-  isCheckCollisionByBullet: 1
   lifeTime: 5
+  muzzleParticle: {fileID: 150096, guid: 9cd6ac71e1191a44fb66645bc89b9879, type: 3}
+  impactParticle: {fileID: 162022, guid: e863b67a78ba926499aa78af47b294df, type: 3}
   explosionEffectPrefab: {fileID: 0}
   explosionRange: 1
   explosionRadius: 2
-  muzzleParticle: {fileID: 150096, guid: 9cd6ac71e1191a44fb66645bc89b9879, type: 3}
-  impactParticle: {fileID: 162022, guid: e863b67a78ba926499aa78af47b294df, type: 3}

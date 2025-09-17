@@ -9768,7 +9768,7 @@ GameObject:
   - component: {fileID: 8590510150724655498}
   - component: {fileID: 8590510150716306982}
   - component: {fileID: 7497136724398382319}
-  - component: {fileID: -1185581861022193839}
+  - component: {fileID: 7495626161658764604}
   - component: {fileID: -559900127261131413}
   m_Layer: 0
   m_Name: Vfx_Bullet_LaserCircle
@@ -9807,7 +9807,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b5450f65d1e443840a4388b7e2da2ba2, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.75
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -14680,20 +14680,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a45f9fe1b584274b65a063dceb6ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: -559900127261131413}
-  bulletSpeed: 5
-  isCheckCollisionByBullet: 1
+  _rb: {fileID: 0}
+  bulletSpeed: 10
   lifeTime: 5
-  explosionEffectPrefab: {fileID: 7890783640856150600, guid: 0cd6d5b7f00bde74eb68ed47003804ac,
-    type: 3}
-  explosionRange: 1
-  explosionRadius: 2
   muzzleParticle: {fileID: 3000391901840267600, guid: 870431c7ffd0e8e458d7f9c3b74e96ef,
     type: 3}
   impactParticle: {fileID: 7890783640856150600, guid: 0cd6d5b7f00bde74eb68ed47003804ac,
     type: 3}
---- !u!135 &-1185581861022193839
-SphereCollider:
+  explosionEffectPrefab: {fileID: 0}
+  explosionRange: 1
+  explosionRadius: 2
+--- !u!136 &7495626161658764604
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -14707,11 +14705,13 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 1.5
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &-559900127261131413
 Rigidbody:

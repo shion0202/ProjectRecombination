@@ -14689,7 +14689,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182230}
   serializedVersion: 4
-  m_Mass: 5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -14720,17 +14720,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c966d3f381b805546ae0ecaef0588afd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: -72059657509982153}
+  _rb: {fileID: 0}
   bulletSpeed: 20
-  isCheckCollisionByBullet: 1
   lifeTime: 5
+  muzzleParticle: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
+  impactParticle: {fileID: 106912, guid: 8827a814494c0bf4f8a182bf2b7f1a43, type: 3}
   explosionEffectPrefab: {fileID: 0}
   explosionRange: 1
   explosionRadius: 2
-  muzzleParticle: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
-  impactParticle: {fileID: 106912, guid: 8827a814494c0bf4f8a182bf2b7f1a43, type: 3}
-  maxBounces: 3
-  bounceFactor: 0.9
+  maxBounces: 5
+  bounceFactor: 0.98
 --- !u!1 &188910
 GameObject:
   m_ObjectHideFlags: 0

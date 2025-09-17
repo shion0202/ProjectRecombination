@@ -16,8 +16,7 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
-      human bone 'Head' not found\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -25,43 +24,14 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Take 001
-      takeName: Take 001
-      internalID: 1827226128182048838
-      firstFrame: 0
-      lastFrame: 15
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -112,137 +82,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton:
-    - name: LaserBackOverlap(Clone)
-      parentName: 
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: CenterBone
-      parentName: LaserBackOverlap(Clone)
-      position: {x: -0.000000005853994, y: 0.37219483, z: -0.050514534}
-      rotation: {x: 0.5000002, y: 0.49999982, z: -0.4999999, w: 0.5000001}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 1/4
-      parentName: CenterBone
-      position: {x: -0.050514534, y: -0.0000076866145, z: -0.00000015258789}
-      rotation: {x: -0.16988744, y: -0.6872537, z: 0.16924219, w: 0.685695}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 1/3
-      parentName: 1/4
-      position: {x: -0.24306375, y: 4.388935e-10, z: 0.0013671336}
-      rotation: {x: 0.75881785, y: -0.29416406, z: 0.06271378, w: 0.5776937}
-      scale: {x: 1.0000001, y: 1.0000004, z: 1}
-    - name: 1/2
-      parentName: 1/3
-      position: {x: -0.122297816, y: 0.000000030395277, z: -0.0000016801829}
-      rotation: {x: -0.8793857, y: 0.41250017, z: -0.044932876, w: -0.23346394}
-      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
-    - name: 1/1
-      parentName: 1/2
-      position: {x: -0.11436133, y: 0.00000888414, z: 0.0000018221797}
-      rotation: {x: 0.75398344, y: -0.65689343, z: 0.00000040159586, w: 0.0000003498826}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 4/4
-      parentName: CenterBone
-      position: {x: -0.050514534, y: -0.0000076866145, z: -0.00000015258789}
-      rotation: {x: 0.27059788, y: -0.65328157, z: -0.27059788, w: 0.65328157}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 4/3
-      parentName: 4/4
-      position: {x: -0.24306375, y: 4.388935e-10, z: 0.0013671336}
-      rotation: {x: 0.55687535, y: -0.4357647, z: 0.43576363, w: 0.55687433}
-      scale: {x: 1.0000001, y: 1.0000004, z: 1}
-    - name: 4/2
-      parentName: 4/3
-      position: {x: -0.122297816, y: 0.000000030395277, z: -0.0000016801829}
-      rotation: {x: -0.18897268, y: 0.98198235, z: 0.00000008724556, w: -0.0000009659984}
-      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
-    - name: 4/1
-      parentName: 4/2
-      position: {x: -0.11436133, y: 0.00000888414, z: 0.0000018221797}
-      rotation: {x: 0.75398344, y: -0.65689343, z: 0.00000040159586, w: 0.0000003498826}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 5/4
-      parentName: CenterBone
-      position: {x: -0.050514534, y: -0.0000076866145, z: -0.00000015258789}
-      rotation: {x: 0.5000001, y: -0.5000001, z: -0.49999976, w: 0.50000006}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 5/3
-      parentName: 5/4
-      position: {x: -0.24306375, y: 4.388935e-10, z: 0.0013671336}
-      rotation: {x: 0.55687535, y: -0.4357647, z: 0.43576363, w: 0.55687433}
-      scale: {x: 1.0000001, y: 1.0000004, z: 1}
-    - name: 5/2
-      parentName: 5/3
-      position: {x: -0.122297816, y: 0.000000030395277, z: -0.0000016801829}
-      rotation: {x: -0.18897268, y: 0.98198235, z: 0.00000008724556, w: -0.0000009659984}
-      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
-    - name: 5/1
-      parentName: 5/2
-      position: {x: -0.11436133, y: 0.00000888414, z: 0.0000018221797}
-      rotation: {x: 0.75398344, y: -0.65689343, z: 0.00000040159586, w: 0.0000003498826}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 6/4
-      parentName: CenterBone
-      position: {x: -0.050514534, y: -0.0000076866145, z: -0.00000015258789}
-      rotation: {x: 0.7030822, y: -0.059362106, z: -0.7060175, w: 0.06075394}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 6/3
-      parentName: 6/4
-      position: {x: -0.24306375, y: 4.388935e-10, z: 0.0013671336}
-      rotation: {x: 0.72994334, y: -0.21315104, z: 0.10030649, w: 0.6416292}
-      scale: {x: 1.0000001, y: 1.0000004, z: 1}
-    - name: 6/2
-      parentName: 6/3
-      position: {x: -0.122297816, y: 0.000000030395277, z: -0.0000016801829}
-      rotation: {x: -0.52625954, y: 0.7659021, z: 0.28442577, w: -0.2356838}
-      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
-    - name: 6/1
-      parentName: 6/2
-      position: {x: -0.11436133, y: 0.00000888414, z: 0.0000018221797}
-      rotation: {x: 0.75398344, y: -0.65689343, z: 0.00000040159586, w: 0.0000003498826}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 3/4
-      parentName: CenterBone
-      position: {x: -0.050514534, y: -0.0000076866145, z: -0.00000015258789}
-      rotation: {x: 0.70308226, y: 0.059362195, z: -0.7060175, w: -0.060753558}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 3/3
-      parentName: 3/4
-      position: {x: -0.24306375, y: 4.388935e-10, z: 0.0013671336}
-      rotation: {x: 0.6416347, y: -0.1002972, z: 0.21315701, w: 0.72993803}
-      scale: {x: 1.0000001, y: 1.0000004, z: 1}
-    - name: 3/2
-      parentName: 3/3
-      position: {x: -0.122297816, y: 0.000000030395277, z: -0.0000016801829}
-      rotation: {x: -0.5262601, y: 0.76589644, z: -0.28443798, w: 0.23568621}
-      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
-    - name: 3/1
-      parentName: 3/2
-      position: {x: -0.11436133, y: 0.00000888414, z: 0.0000018221797}
-      rotation: {x: 0.75398344, y: -0.65689343, z: 0.00000040159586, w: 0.0000003498826}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 2/4
-      parentName: CenterBone
-      position: {x: -0.050514534, y: -0.0000076866145, z: -0.00000015258789}
-      rotation: {x: 0.49999988, y: 0.5000001, z: -0.5000001, w: -0.49999988}
-      scale: {x: 1, y: 1, z: 1}
-    - name: 2/3
-      parentName: 2/4
-      position: {x: -0.24306375, y: 4.388935e-10, z: 0.0013671336}
-      rotation: {x: 0.55687535, y: -0.4357647, z: 0.43576363, w: 0.55687433}
-      scale: {x: 1.0000001, y: 1.0000004, z: 1}
-    - name: 2/2
-      parentName: 2/3
-      position: {x: -0.122297816, y: 0.000000030395277, z: -0.0000016801829}
-      rotation: {x: -0.18897268, y: 0.98198235, z: 0.00000008724556, w: -0.0000009659984}
-      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
-    - name: 2/1
-      parentName: 2/2
-      position: {x: -0.11436133, y: 0.00000888414, z: 0.0000018221797}
-      rotation: {x: 0.75398344, y: -0.65689343, z: 0.00000040159586, w: 0.0000003498826}
-      scale: {x: 1, y: 1, z: 1}
+    skeleton: []
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -253,7 +93,7 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 1
+    hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1

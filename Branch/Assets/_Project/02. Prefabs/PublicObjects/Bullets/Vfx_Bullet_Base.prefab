@@ -9816,16 +9816,16 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.3
+  m_Height: 2.5
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: -1}
 --- !u!54 &-4830170890156966244
 Rigidbody:
   m_ObjectHideFlags: 0
