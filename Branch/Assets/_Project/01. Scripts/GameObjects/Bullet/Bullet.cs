@@ -8,9 +8,14 @@ using Managers;
 
 public class Bullet : MonoBehaviour
 {
+    #region Variables
+    [Header("Components")]
     [SerializeField] protected Rigidbody _rb;
 
+    [Header("Bullet Information")]
     [SerializeField] protected float bulletSpeed = 30.0f;
+    [SerializeField] protected float explosionRange = 1.0f;
+    [SerializeField] protected float explosionRadius = 2.0f;
     private float _damage;
     private GameObject _from; // 발사 주체
     protected Vector3 _to; // 타겟 위치
@@ -20,12 +25,14 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float lifeTime = 5f; // 총알의 생명 시간
     private float _timer;
 
-    [SerializeField] protected GameObject muzzleParticle;
+    [Header("Effects")]
+    [SerializeField] protected GameObject muzzleParticlePrefab;
+    protected GameObject muzzleParticle;
     [SerializeField] protected GameObject impactParticle;
     [SerializeField] protected GameObject explosionEffectPrefab;
-    [SerializeField] protected float explosionRange = 1.0f;
-    [SerializeField] protected float explosionRadius = 2.0f;
+    #endregion
 
+    #region Properties
     protected float LifeTime
     {
         get => lifeTime;
@@ -55,7 +62,9 @@ public class Bullet : MonoBehaviour
         get => _parent;
         set => _parent = value;
     }
+    #endregion
 
+    #region Unity Methods
     protected void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -143,6 +152,7 @@ public class Bullet : MonoBehaviour
 #if UNITY_EDITOR
     protected void OnDrawGizmos()
     {
+        // Explosion이 존재할 경우 폭발 범위를 표시
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(_to, explosionRange);
 
@@ -153,7 +163,9 @@ public class Bullet : MonoBehaviour
         }
     }
 #endif
+    #endregion
 
+    #region Public Methods
     public void Init(GameObject shooter, Vector3 start, Vector3 end, Vector3 direction, float damage)
     {
         _from = shooter;
@@ -161,66 +173,69 @@ public class Bullet : MonoBehaviour
         _targetDirection = direction;
         _damage = damage;
 
-        if (muzzleParticle)
+        if (muzzleParticlePrefab)
         {
             // 필요할 경우 Pooling
-            muzzleParticle = Instantiate(muzzleParticle, transform.position, Quaternion.LookRotation(-_targetDirection), Parent);
+            muzzleParticle = Instantiate(muzzleParticlePrefab, transform.position, Quaternion.LookRotation(-_targetDirection), Parent);
             Destroy(muzzleParticle, 2.0f); // Lifetime of muzzle effect.
         }
 
         SetBulletLogic(direction, start);
     }
+    #endregion
 
-    protected virtual void ShootByPlayer(Collider other)
-    {
-        DestroyBullet();
-        TakeDamage(other.transform);
-    }
-
-    protected virtual void ShootByEnemy(Collider other)
-    {
-        DestroyBullet();
-
-        PlayerController player = other.GetComponent<PlayerController>();
-        if (player != null)
-        {
-            player.TakeDamage(_damage);
-        }
-    }
-
-    protected virtual void ImpactObstacle(Collider other)
-    {
-        DestroyBullet();
-    }
-
-    protected virtual void ShootByPlayer(Collision collision)
-    {
-        DestroyBullet();
-        TakeDamage(collision.transform);
-    }
-
-    protected virtual void ShootByEnemy(Collision collision)
-    {
-        DestroyBullet();
-
-        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-        if (player != null)
-        {
-            player.TakeDamage(_damage);
-        }
-    }
-
-    protected virtual void ImpactObstacle(Collision collision)
-    {
-        DestroyBullet();
-    }
-
+    #region Private Methods
     protected virtual void SetBulletLogic(Vector3 direction, Vector3 start)
     {
         _rb.velocity = direction * bulletSpeed;
     }
 
-    protected virtual void DestroyBullet()
+    // Trigger용 함수와 Collision용 함수를 분리
+    protected virtual void ShootByPlayer(Collider other)
+    {
+        TakeDamage(other.transform);
+        DestroyBullet(other.transform);
+    }
+
+    protected virtual void ShootByEnemy(Collider other)
+    {
+        PlayerController player = other.GetComponent<PlayerController>();
+        if (player != null)
+        {
+            player.TakeDamage(_damage);
+        }
+
+        DestroyBullet(other.transform);
+    }
+
+    protected virtual void ImpactObstacle(Collider other)
+    {
+        DestroyBullet(other.transform);
+    }
+
+    protected virtual void ShootByPlayer(Collision collision)
+    {
+        TakeDamage(collision.transform);
+        DestroyBullet(collision);
+    }
+
+    protected virtual void ShootByEnemy(Collision collision)
+    {
+        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+        if (player != null)
+        {
+            player.TakeDamage(_damage);
+        }
+
+        DestroyBullet(collision);
+    }
+
+    protected virtual void ImpactObstacle(Collision collision)
+    {
+        DestroyBullet(collision);
+    }
+
+    protected virtual void DestroyBullet(Transform parent = null)
     {
         // 풀링 전 총알의 상태를 초기화
         _rb.velocity = Vector3.zero;
@@ -229,7 +244,7 @@ public class Bullet : MonoBehaviour
 
         if (impactParticle)
         {
-            CreateImpaceEffect();
+            CreateImpaceEffect(parent);
         }
         else if (explosionEffectPrefab)
         {
@@ -239,10 +254,29 @@ public class Bullet : MonoBehaviour
         PoolManager.Instance.ReleaseObject(gameObject);
     }
 
-    protected virtual void CreateImpaceEffect()
+    protected virtual void DestroyBullet(Collision collision)
+    {
+        // 풀링 전 총알의 상태를 초기화
+        _rb.velocity = Vector3.zero;
+        _rb.angularVelocity = Vector3.zero;
+        _timer = lifeTime;
+
+        if (impactParticle)
+        {
+            CreateImpaceEffect(collision);
+        }
+        else if (explosionEffectPrefab)
+        {
+            Explode();
+        }
+
+        PoolManager.Instance.ReleaseObject(gameObject);
+    }
+
+    protected virtual void CreateImpaceEffect(Transform parent = null)
     {
         // 필요할 경우 Pooling
-        GameObject impactP = Instantiate(impactParticle, transform.position, Quaternion.LookRotation(-transform.forward));
+        GameObject impactP = Instantiate(impactParticle, transform.position, Quaternion.LookRotation(-transform.forward), parent);
         Destroy(impactP, 2.0f);
     }
 
@@ -251,7 +285,7 @@ public class Bullet : MonoBehaviour
         // 필요할 경우 Pooling
         Vector3 contactP = collision.contacts[0].point;
         Vector3 contactN = collision.contacts[0].normal;
-        GameObject iP = Instantiate(impactParticle, contactP, Quaternion.FromToRotation(Vector3.up, contactN));
+        GameObject iP = Instantiate(impactParticle, contactP, Quaternion.FromToRotation(Vector3.up, contactN), collision.transform);
         Destroy(iP, 5.0f);
     }
 
@@ -262,8 +296,6 @@ public class Bullet : MonoBehaviour
             // 필요할 경우 Pooling
             Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
         }
-
-        //PoolManager.Instance.ReleaseObject(gameObject);
     }
 
     protected void TakeDamage(Transform target, float coefficient = 1.0f)
@@ -282,4 +314,5 @@ public class Bullet : MonoBehaviour
             }
         }
     }
+    #endregion
 }

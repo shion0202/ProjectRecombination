@@ -35,5 +35,23 @@ namespace Managers
             // GameScene 다시 로드
             SceneManager.LoadScene("GameScene");
         }
+
+        // 플레이어, 카메라, 몬스터 등 일부 오브젝트들을 정지시켜야할 때 사용
+        public void PauseObjects()
+        {
+            // 플레이어 캐릭터와 카메라 Pause
+            player.FollowCamera.SetCameraRotatable(false);
+            player.SetMovable(false);
+
+            // 현재 존재하는 모든 몬스터 Pause
+            MonsterManager.Instance.PauseMonsters();
+        }
+
+        public void UnpauseObjects()
+        {
+            player.FollowCamera.SetCameraRotatable(true);
+            player.SetMovable(true);
+            MonsterManager.Instance.UnpauseMonsters();
+        }
     }
 }

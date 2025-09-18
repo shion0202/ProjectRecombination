@@ -94,7 +94,7 @@ public class ShoulderRapid : PartBaseShoulder
     private IEnumerator CoLaunchTargetMissiles()
     {
         // 1. 스킬 시전 중 플레이어와 카메라 조작 불가
-        _owner.FollowCamera.LockCameraRotation(true);
+        _owner.FollowCamera.SetCameraRotatable(false);
         _owner.SetMovable(false);
 
         // 2. 플레이어가 카메라 방향 바라봄
@@ -134,7 +134,7 @@ public class ShoulderRapid : PartBaseShoulder
         int targetCount = targets.Count;
         if (targetCount <= 0)
         {
-            _owner.FollowCamera.LockCameraRotation(false);
+            _owner.FollowCamera.SetCameraRotatable(true);
             _owner.SetMovable(true);
             _skillCoroutine = null;
 
@@ -172,7 +172,7 @@ public class ShoulderRapid : PartBaseShoulder
         }
 
         // 7. 플레이어와 카메라의 조작 재개
-        _owner.FollowCamera.LockCameraRotation(false);
+        _owner.FollowCamera.SetCameraRotatable(true);
         _owner.SetMovable(true);
 
         yield return new WaitForSeconds(5.0f); // 쿨타임 임시 처리

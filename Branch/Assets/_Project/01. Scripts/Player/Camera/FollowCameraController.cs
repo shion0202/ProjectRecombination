@@ -195,9 +195,9 @@ public class FollowCameraController : MonoBehaviour
         source.GenerateImpulse();
     }
 
-    public void LockCameraRotation(bool lockState)
+    public void SetCameraRotatable(bool lockState)
     {
-        _isLock = lockState;
+        _isLock = !lockState;
     }
 
     public void ResetCamera()

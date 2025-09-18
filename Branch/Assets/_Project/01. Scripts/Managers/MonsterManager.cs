@@ -45,5 +45,16 @@ namespace Managers
             }
             return battleMonsters.ToArray();
         }
+
+        public void PauseMonsters()
+        {
+            // To-do: Monster AI를 정지시키는 로직 (카메라 컷씬 등 필요한 상황에서 Game Manager에 의해 호출되는 함수)
+        }
+
+        public void UnpauseMonsters()
+        {
+            // To-do: Monster AI를 다시 실행시키는 로직
+            // 함수 2개 쓰는 게 불편하다면 bool 등으로 함수 하나로 통일하고 Game Manager 쪽만 수정해주시면 됩니다
+        }
     }
 }

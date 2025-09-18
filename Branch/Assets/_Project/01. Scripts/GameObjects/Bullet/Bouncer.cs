@@ -33,7 +33,7 @@ public class Bouncer : Bullet
         _rb.velocity = newVelocity;
 
         CreateImpaceEffect(collision);
-        CheckBounceCount();
+        CheckBounceCount(collision);
     }
 
     protected override void ShootByPlayer(Collision collision)
@@ -41,7 +41,7 @@ public class Bouncer : Bullet
         CreateImpaceEffect(collision);
         TakeDamage(collision.transform);
 
-        CheckBounceCount();
+        CheckBounceCount(collision);
     }
 
     protected override void ShootByEnemy(Collision collision)
@@ -53,22 +53,22 @@ public class Bouncer : Bullet
             player.TakeDamage(Damage);
         }
 
-        CheckBounceCount();
+        CheckBounceCount(collision);
     }
 
     protected override void ImpactObstacle(Collision collision)
     {
         CreateImpaceEffect(collision);
-        CheckBounceCount();
+        CheckBounceCount(collision);
     }
 
-    protected bool CheckBounceCount()
+    protected bool CheckBounceCount(Collision collision)
     {
         if (_bounceCount >= maxBounces)
         {
             // 충돌 횟수 초과 시 투사체 파괴
             _bounceCount = 0;
-            DestroyBullet();
+            DestroyBullet(collision);
             return true;
         }
 

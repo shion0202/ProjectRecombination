@@ -12,60 +12,46 @@ public class Missile : Bullet
     [SerializeField] protected float turnSpeed = 120f; // 초당 회전 속도 (deg/s)
     protected Coroutine _projectileCoroutine = null;
 
-    protected override void OnTriggerEnter(Collider other)
-    {
-        // 플레이어가 발사한 총알
-        if (From.CompareTag("Player") && other.CompareTag("Enemy"))
-        {
-            DestroyBullet();
-            return;
-        }
-
-        // 적이 발사한 총알
-        if (From.CompareTag("Enemy") && other.CompareTag("Player"))
-        {
-            DestroyBullet();
-            return;
-        }
-
-        // 벽(또는 기타 오브젝트)에 닿은 경우
-        if (other.CompareTag("Wall") || other.CompareTag("Obstacle"))
-        {
-            DestroyBullet();
-            return;
-        }
-    }
-
-    protected override void DestroyBullet()
-    {
-        if (_projectileCoroutine != null)
-        {
-            StopCoroutine(_projectileCoroutine);
-        }
-        Explode();
-    }
-
     protected override void SetBulletLogic(Vector3 direction, Vector3 start)
     {
         _projectileCoroutine = StartCoroutine(CoMissileRoutine(direction, start));
     }
 
+    protected override void ShootByPlayer(Collider other)
+    {
+        DestroyBullet(other.transform);
+    }
+
+    protected override void ShootByEnemy(Collider other)
+    {
+        DestroyBullet(other.transform);
+    }
+
+    protected override void ImpactObstacle(Collider other)
+    {
+        DestroyBullet(other.transform);
+    }
+
+    protected override void DestroyBullet(Transform parent = null)
+    {
+        if (_projectileCoroutine != null)
+        {
+            StopCoroutine(_projectileCoroutine);
+        }
+        
+        base.DestroyBullet(parent);
+    }
+
     protected override void Explode()
     {
-        if (explosionEffectPrefab != null)
-        {
-            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
-        }
+        base.Explode();
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider collider in colliders)
         {
             TakeDamage(collider.transform);
-
             Destroy(Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
         }
-
-        PoolManager.Instance.ReleaseObject(gameObject);
     }
 
     IEnumerator CoMissileRoutine(Vector3 initialDir, Vector3 fromPos)
@@ -101,7 +87,7 @@ public class Missile : Bullet
 
             if (Vector3.Distance(transform.position, _to) < 1.0f)
             {
-                Explode();
+                DestroyBullet();
                 reached = true;
             }
 

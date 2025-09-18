@@ -54,7 +54,7 @@ public class ShoulderLaser : PartBaseShoulder
         RaycastHit[] hits;
         _targetPoint = GetTargetPoint(out hits);
 
-        _owner.FollowCamera.LockCameraRotation(true);
+        _owner.FollowCamera.SetCameraRotatable(false);
         _owner.SetMovable(false);
         _isShooting = true;
         _skillCoroutine = StartCoroutine(CoStopAndCooldown());
@@ -131,7 +131,7 @@ public class ShoulderLaser : PartBaseShoulder
         Destroy(beamStart);
         Destroy(beamEnd);
         Destroy(beam);
-        _owner.FollowCamera.LockCameraRotation(false);
+        _owner.FollowCamera.SetCameraRotatable(true);
         _owner.SetMovable(true);
 
         yield return new WaitForSeconds(beamCooldown);

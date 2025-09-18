@@ -30,7 +30,7 @@ public class ShoulderHeavy : PartBaseShoulder
 
     protected IEnumerator CoShootOrb()
     {
-        _owner.FollowCamera.LockCameraRotation(true);
+        _owner.FollowCamera.SetCameraRotatable(false);
         _owner.SetMovable(false);
         LookCameraDirection();
 
@@ -47,7 +47,7 @@ public class ShoulderHeavy : PartBaseShoulder
             orbComp.Init(_owner.gameObject, transform.position + _owner.transform.forward * 1.0f + Vector3.up, Vector3.zero, _owner.transform.forward, 50.0f);
         }
 
-        _owner.FollowCamera.LockCameraRotation(false);
+        _owner.FollowCamera.SetCameraRotatable(true);
         _owner.SetMovable(true);
 
         yield return new WaitForSeconds(5.0f); // 쿨타임

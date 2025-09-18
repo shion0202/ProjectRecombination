@@ -9,7 +9,6 @@ public class Orb : Bullet
     [SerializeField] private float bladeInterval = 0.5f;  // 칼날 발사 주기
     [SerializeField] private int bladesOnDeath = 10;    // 소멸 시 발사 칼날 수
     [SerializeField] private float bladeSpeed = 15f;    // 칼날 속도
-
     private float bladeTimer = 0f;
 
     protected override void Start()
@@ -30,63 +29,46 @@ public class Orb : Bullet
         else
         {
             bladeTimer = bladeInterval;
-            FireRandomBlade();
+            FireBladeProjectile();
         }
     }
 
-    protected override void OnTriggerEnter(Collider other)
+    protected override void ShootByPlayer(Collider other)
     {
-        if (other == null) return;
-
-        // 플레이어가 발사한 총알
-        if (From.CompareTag("Player") && other.CompareTag("Enemy"))
-        {
-            TakeDamage(other.transform);
-            return;
-        }
-
-        // 적이 발사한 총알
-        if (From.CompareTag("Enemy") && other.CompareTag("Player"))
-        {
-            var player = other.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                player.TakeDamage(Damage);
-            }
-            return;
-        }
-
-        // 벽(또는 기타 오브젝트)에 닿은 경우
-        if (other.CompareTag("Wall") || other.CompareTag("Obstacle"))
-        {
-            DestroyBullet();
-            return;
-        }
+        TakeDamage(other.transform);
     }
 
-    private void FireRandomBlade()
+    protected override void ShootByEnemy(Collider other)
     {
-        // 랜덤 방향 (평면 기준)
-        float angle = Random.Range(0f, 360f);
-        Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.forward;
-
-        GameObject blade = Instantiate(bladePrefab, transform.position, Quaternion.LookRotation(direction));
-        ProjectileBlade bladeComp = blade.GetComponent<ProjectileBlade>();
-        if (bladeComp != null)
+        var player = other.GetComponent<PlayerController>();
+        if (player != null)
         {
-            bladeComp.Init(direction, bladeSpeed, From);
+            player.TakeDamage(Damage);
         }
     }
 
-    protected override void DestroyBullet()
+    protected override void ImpactObstacle(Collider other)
+    {
+        DestroyBullet();
+    }
+
+    protected override void DestroyBullet(Transform parent = null)
     {
         ExplodeBlades();
-        base.DestroyBullet();
+        base.DestroyBullet(parent);
+    }
+
+    protected override void Explode()
+    {
+        if (explosionEffectPrefab)
+        {
+            // 필요할 경우 Pooling
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f)));
+        }
     }
 
     private void ExplodeBlades()
     {
-        Destroy(Instantiate(explosionEffectPrefab, transform.position, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))), 3.0f);
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider collider in colliders)
         {
@@ -97,14 +79,30 @@ public class Orb : Bullet
         // 구체 소멸 시 다방향 칼날 일제 발사
         for (int i = 0; i < bladesOnDeath; i++)
         {
-            float angle = 360f / bladesOnDeath * i;
-            Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.forward;
-            GameObject blade = Instantiate(bladePrefab, transform.position, Quaternion.LookRotation(direction));
-            ProjectileBlade bladeComp = blade.GetComponent<ProjectileBlade>();
-            if (bladeComp != null)
-            {
-                bladeComp.Init(direction, bladeSpeed, From);
-            }
+            FireBladeProjectile(i);
+        }
+    }
+
+    private void FireBladeProjectile(int count = 1)
+    {
+        float angle = 0;
+
+        // 랜덤 방향 (평면 기준)
+        if (count > 1)
+        {
+            angle = 360f / bladesOnDeath * count;
+        }
+        else
+        {
+            angle = Random.Range(0f, 360f);
+        }
+        Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+
+        GameObject blade = Instantiate(bladePrefab, transform.position, Quaternion.LookRotation(direction));
+        ProjectileBlade bladeComp = blade.GetComponent<ProjectileBlade>();
+        if (bladeComp != null)
+        {
+            bladeComp.Init(gameObject, transform.position, Vector3.zero, direction, Damage * 0.5f);
         }
     }
 }
