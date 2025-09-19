@@ -194,9 +194,10 @@ public class ArmLaserMultiple : PartBaseArm
         float halfAngle = spreadAngle / 2f;
         float randomYaw = Random.Range(-halfAngle, halfAngle);   // 좌우 회전
         float randomPitch = Random.Range(-halfAngle, halfAngle); // 상하 회전
+        float randomRoll = Random.Range(-halfAngle, halfAngle);
 
         // yaw, pitch 회전을 기준 방향에 적용
-        Quaternion rotation = Quaternion.Euler(randomPitch, randomYaw, 0);
+        Quaternion rotation = Quaternion.Euler(randomPitch, randomYaw, randomRoll);
         Vector3 randomizedDirection = rotation * baseDirection;
 
         return randomizedDirection.normalized;

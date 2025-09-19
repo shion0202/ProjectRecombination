@@ -4876,14 +4876,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca8d399b5b1e684a80c0861bff2ded2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 6022039817454698780, guid: e2c5b745768bd6a4fb0fe1e70c63e02e, type: 3}
+  _rb: {fileID: 0}
   bulletSpeed: 20
-  isCheckCollisionByBullet: 1
-  lifeTime: 3
-  explosionEffectPrefab: {fileID: 6337632206232331454, guid: c5a4acf4f9230c9499752be436b89fed,
-    type: 3}
   explosionRange: 1
   explosionRadius: 2
+  lifeTime: 3
+  muzzleParticlePrefab: {fileID: 146450, guid: 189837baf0e34034881c61044f6b2aaa, type: 3}
+  impactParticle: {fileID: 0}
+  explosionEffectPrefab: {fileID: 134280, guid: 926257f238277da43934f0a7e6122c82,
+    type: 3}
   collisionBulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
     type: 3}
   turnSpeed: 120

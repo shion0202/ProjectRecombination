@@ -14722,12 +14722,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
   bulletSpeed: 20
-  lifeTime: 5
-  muzzleParticle: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
-  impactParticle: {fileID: 106912, guid: 8827a814494c0bf4f8a182bf2b7f1a43, type: 3}
-  explosionEffectPrefab: {fileID: 0}
   explosionRange: 1
   explosionRadius: 2
+  lifeTime: 5
+  muzzleParticlePrefab: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
+  impactParticle: {fileID: 106912, guid: 8827a814494c0bf4f8a182bf2b7f1a43, type: 3}
+  explosionEffectPrefab: {fileID: 0}
   maxBounces: 5
   bounceFactor: 0.98
 --- !u!1 &188910

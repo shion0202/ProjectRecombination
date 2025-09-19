@@ -9820,9 +9820,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
   bulletSpeed: 40
-  lifeTime: 5
-  muzzleParticle: {fileID: 150096, guid: 9cd6ac71e1191a44fb66645bc89b9879, type: 3}
-  impactParticle: {fileID: 162022, guid: e863b67a78ba926499aa78af47b294df, type: 3}
-  explosionEffectPrefab: {fileID: 0}
   explosionRange: 1
   explosionRadius: 2
+  lifeTime: 5
+  muzzleParticlePrefab: {fileID: 150096, guid: 9cd6ac71e1191a44fb66645bc89b9879, type: 3}
+  impactParticle: {fileID: 162022, guid: e863b67a78ba926499aa78af47b294df, type: 3}
+  explosionEffectPrefab: {fileID: 0}

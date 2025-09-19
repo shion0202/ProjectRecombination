@@ -274,10 +274,17 @@ public class Bullet : MonoBehaviour
     }
 
     protected virtual void CreateImpaceEffect(Transform parent = null)
-    {
+    {   
         // 필요할 경우 Pooling
+        // Pooling 할 경우 Scale 초기화 할 것
         GameObject impactP = Instantiate(impactParticle, transform.position, Quaternion.LookRotation(-transform.forward), parent);
         Destroy(impactP, 2.0f);
+
+        if (parent != null && parent.transform.localScale != Vector3.one)
+        {
+            // Scale이 1이 아닐 경우 이펙트의 Scale 문제가 발생할 수 있음
+            impactP.transform.localScale /= parent.transform.localScale.z;
+        }
     }
 
     protected virtual void CreateImpaceEffect(Collision collision)
@@ -285,8 +292,14 @@ public class Bullet : MonoBehaviour
         // 필요할 경우 Pooling
         Vector3 contactP = collision.contacts[0].point;
         Vector3 contactN = collision.contacts[0].normal;
-        GameObject iP = Instantiate(impactParticle, contactP, Quaternion.FromToRotation(Vector3.up, contactN), collision.transform);
-        Destroy(iP, 5.0f);
+        GameObject impactP = Instantiate(impactParticle, contactP, Quaternion.FromToRotation(Vector3.up, contactN), collision.transform);
+        Destroy(impactP, 5.0f);
+
+        if (collision != null && collision.transform.localScale != Vector3.one)
+        {
+            // Scale이 1이 아닐 경우 이펙트의 Scale 문제가 발생할 수 있음
+            impactP.transform.localScale /= collision.transform.localScale.z;
+        }
     }
 
     protected virtual void Explode()

@@ -14625,16 +14625,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca8d399b5b1e684a80c0861bff2ded2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: -3627786488238690130}
+  _rb: {fileID: 0}
   bulletSpeed: 15
-  isCheckCollisionByBullet: 1
-  lifeTime: 5
-  explosionEffectPrefab: {fileID: 134082, guid: 2b9e3bdfae9517545b64fcf374d8c9ce,
-    type: 3}
   explosionRange: 5
   explosionRadius: 5
-  muzzleParticle: {fileID: 149380, guid: 53c30ebb87785c14cae987788d86994e, type: 3}
-  impactParticle: {fileID: 134082, guid: 2b9e3bdfae9517545b64fcf374d8c9ce, type: 3}
+  lifeTime: 5
+  muzzleParticlePrefab: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
+  impactParticle: {fileID: 0}
+  explosionEffectPrefab: {fileID: 134082, guid: 2b9e3bdfae9517545b64fcf374d8c9ce,
+    type: 3}
   collisionBulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
     type: 3}
   turnSpeed: 120

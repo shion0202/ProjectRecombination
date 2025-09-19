@@ -14682,14 +14682,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
   bulletSpeed: 10
+  explosionRange: 1
+  explosionRadius: 2
   lifeTime: 5
-  muzzleParticle: {fileID: 3000391901840267600, guid: 870431c7ffd0e8e458d7f9c3b74e96ef,
+  muzzleParticlePrefab: {fileID: 3000391901840267600, guid: 870431c7ffd0e8e458d7f9c3b74e96ef,
     type: 3}
   impactParticle: {fileID: 7890783640856150600, guid: 0cd6d5b7f00bde74eb68ed47003804ac,
     type: 3}
   explosionEffectPrefab: {fileID: 0}
-  explosionRange: 1
-  explosionRadius: 2
 --- !u!136 &7495626161658764604
 CapsuleCollider:
   m_ObjectHideFlags: 0
