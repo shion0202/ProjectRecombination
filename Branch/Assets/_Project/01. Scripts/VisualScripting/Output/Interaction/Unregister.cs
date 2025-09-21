@@ -11,8 +11,7 @@ namespace _Project.Scripts.VisualScripting
         {
             IsOn = true;
 
-            // To-do: PlayerController와 의존성을 가지므로 추후 Event Manager 등으로 분리
-            PlayerController.UnregisterEvent(nextInput.Execute);
+            EventManager.Instance.RemoveEvent(EEventType.Interaction);
         }
     }
 }

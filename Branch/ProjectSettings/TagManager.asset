@@ -13,6 +13,7 @@ TagManager:
   - Bullet
   - Obstacle
   - Platform
+  - PlatformEnd
   layers:
   - Default
   - TransparentFX
@@ -30,8 +31,8 @@ TagManager:
   - Breakable
   - PlayerMesh
   - Bullet
-  - 
-  - 
+  - Platform
+  - Minimap
   - 
   - 
   - 

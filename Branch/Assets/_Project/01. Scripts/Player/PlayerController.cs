@@ -53,13 +53,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private float gravityScale = 2.0f;
     [SerializeField] private LayerMask groundLayerMask;
     private bool _isGrounded = false;
-    private bool _isOnPlatform = false;
     private Vector3 _fallVelocity;
-    private Transform _postPlatform;
-    private Vector3 _lastPlatformPosition = Vector3.zero;
-    private Vector3 _platformVelocity;
     private float _groundCheckBufferTime = 0.1f;  // 0.1초까지 낙하 감지 지연
     private float _groundCheckTimer = 0.0f;
+    private bool _isOnPlatform = false;
+    private bool _isPlatformEnd = false;
+    private Transform _postPlatform = null;
+    private Vector3 _lastPlatformPosition = Vector3.zero;
+    private Vector3 _platformVelocity = Vector3.zero;
 
     [Header("Dash")]
     private Vector3 _dashDirection = Vector3.zero;
@@ -72,8 +73,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private bool _isPlaySpawnAnimation = false;
     private EAnimationType _currentAnimType = EAnimationType.Base;
     private EAnimationType _postAnimType = EAnimationType.Base;
-
-    private static event Action OnInteractionKeyPressed;
     #endregion
 
     #region Properties
@@ -202,6 +201,29 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         characterController.Move(_totalDirection * Time.deltaTime);
         _totalDirection = Vector3.zero;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (_isPlatformEnd) return;
+
+        if (hit.gameObject.CompareTag("PlatformEnd"))
+        {
+            _isPlatformEnd = true;
+
+            _isOnPlatform = false;
+            _postPlatform = null;
+            _platformVelocity = Vector3.zero;
+            return;
+        }
+
+        if (hit.gameObject.CompareTag("Platform"))
+        {
+            _isOnPlatform = true;
+            _postPlatform = hit.transform;
+            _lastPlatformPosition = _postPlatform.position;
+            return;
+        }
     }
 
     private void OnDisable()
@@ -336,7 +358,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.started)
         {
-            OnInteractionKeyPressed?.Invoke();
+            EventManager.Instance.PostNotification(EEventType.Interaction, this, null);
         }
     }
 
@@ -538,17 +560,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
-    public static void RegisterEvent(Action action)
-    {
-        OnInteractionKeyPressed -= action;
-        OnInteractionKeyPressed += action;
-    }
-
-    public static void UnregisterEvent(Action action)
-    {
-        OnInteractionKeyPressed -= action;
-    }
-
     public void SetMovable(bool canMove)
     {
         _canMove = canMove;
@@ -685,8 +696,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             return;
         }
 
-        UpdatePlatformMovement();
-
         if (_currentMovement is LegsHover hoverLegs)
         {
             Vector3 hoverDelta = hoverLegs.CalculateHoverDeltaY();
@@ -694,14 +703,26 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             return;
         }
 
-        if ((_isGrounded || _isOnPlatform) && _fallVelocity.y <= 0.0f)
+        if (_isOnPlatform)
+        {
+            Vector3 platformDelta = (_postPlatform.position - _lastPlatformPosition);
+            _lastPlatformPosition = _postPlatform.position;
+
+            platformDelta.x = 0.0f;
+            platformDelta.z = 0.0f;
+            _platformVelocity = platformDelta;
+            characterController.Move(_platformVelocity);
+            return;
+        }
+
+        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
+        if (_isGrounded && _fallVelocity.y <= 0.0f)
         {
             _currentPlayerState &= ~EPlayerState.Falling;
             animator.SetBool("isFalling", false);
-            _fallVelocity.y = -5.0f * gravityScale * Time.deltaTime; // 약간의 하강력 유지로 땅에 붙어있게 함
-            _totalDirection += _platformVelocity;
             _groundCheckTimer = 0.0f;
 
+            _fallVelocity.y = -5.0f * gravityScale * Time.deltaTime; // 약간의 하강력 유지로 땅에 붙어있게 함
             _totalDirection += _fallVelocity;
             return;
         }
@@ -715,35 +736,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
         _totalDirection += _fallVelocity;
-    }
-
-    private void UpdatePlatformMovement()
-    {
-        _isGrounded = Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, groundLayerMask);
-        _isOnPlatform = IsOnMovingPlatform(out Transform platform);
-
-        if (_isOnPlatform)
-        {
-            if (_postPlatform != platform)
-            {
-                _postPlatform = platform;
-                _lastPlatformPosition = platform.position;
-            }
-
-            if (_lastPlatformPosition == Vector3.zero)
-            {
-                _lastPlatformPosition = platform.position;
-            }
-
-            Vector3 platformDelta = platform.position - _lastPlatformPosition;
-            _platformVelocity = platformDelta / Time.deltaTime;
-            _lastPlatformPosition = platform.position;
-        }
-        else
-        {
-            _platformVelocity = Vector3.zero;
-            _lastPlatformPosition = Vector3.zero;
-        }
     }
 
     private bool IsOnMovingPlatform(out Transform platform)

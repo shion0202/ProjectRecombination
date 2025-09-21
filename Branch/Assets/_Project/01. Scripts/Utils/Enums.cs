@@ -1,5 +1,71 @@
 using System;
 
+public enum EEventType
+{
+    Interaction,
+}
+
+
+// Unit(플레이어, 몬스터) 스탯 종류
+public enum EStatType
+{
+    ID,
+    Name,
+    MaxHp,
+    Damage,
+    WalkSpeed,
+    RunSpeed,
+    Defence,
+    MaxDetectiveRange,                  // 범위 (예: 적을 인식하는 거리)
+    MinDetectiveRange,
+    PartType,               // 파츠 타입 (예: 등/어깨, 팔, 다리)
+    IntervalBetweenShots,   // 탄 발사 간격 시간값
+    AddHp,
+    AddDefence,
+    AddMoveSpeed,
+    DamageReductionRate,    // 피해 감소 값 (%)
+    CooldownReduction,      // 쿨타임 감소 값
+    StatusEffectType,       // 상태이상 타입 (예: 중독, 기절 등)
+
+    // 몬스터 스킬
+    SkillType,            // 스킬 타입 (예: 근거리 공격, 원거리 공격, 방어 등)
+    CooldownTime,         // 스킬 쿨타임
+    AnimSpeed,            // 애니메이션 속도
+    Range,                // 스킬 사거리
+
+    IdArray,             // ID 배열 (예: 아이템을 장착할 때 사용)
+    // TODO: 스킬은 다시 정의해야함
+    // SkillDamage,
+    // SkillSpeed,
+    // SkillCount,
+    // SkillCooldown,
+    // CooldownDecrease,
+    // Ailment,
+}
+
+// 스탯 연산 방식
+public enum EStackType
+{
+    Flat,           // 고정값 (+10 + 10)
+    PercentAdd,     // 합연산 (+10% + 10%)
+    PercentMul      // 곱연산 (×1.1 × 1.1)
+}
+
+// 회복 범위
+public enum EHealRange
+{
+    All = 0,
+    Body = 1,
+    Part = 2,
+}
+
+// 회복 연산 방식
+public enum EHealType
+{
+    Flat = 0,
+    Percentage = 1,
+}
+
 // 캐릭터 상태
 [Flags]
 public enum EPlayerState
@@ -74,64 +140,4 @@ public enum ECameraState
     HoverZoom = 5,
     RollerZoom = 6,
     CaterpillarZoom = 7,
-}
-
-// Unit(플레이어, 몬스터) 스탯 종류
-public enum EStatType
-{
-    ID,
-    Name,
-    MaxHp,
-    Damage,
-    WalkSpeed,
-    RunSpeed,
-    Defence,
-    MaxDetectiveRange,                  // 범위 (예: 적을 인식하는 거리)
-    MinDetectiveRange,
-    PartType,               // 파츠 타입 (예: 등/어깨, 팔, 다리)
-    IntervalBetweenShots,   // 탄 발사 간격 시간값
-    AddHp,
-    AddDefence,
-    AddMoveSpeed,
-    DamageReductionRate,    // 피해 감소 값 (%)
-    CooldownReduction,      // 쿨타임 감소 값
-    StatusEffectType,       // 상태이상 타입 (예: 중독, 기절 등)
-
-    // 몬스터 스킬
-    SkillType,            // 스킬 타입 (예: 근거리 공격, 원거리 공격, 방어 등)
-    CooldownTime,         // 스킬 쿨타임
-    AnimSpeed,            // 애니메이션 속도
-    Range,                // 스킬 사거리
-
-    IdArray,             // ID 배열 (예: 아이템을 장착할 때 사용)
-    // TODO: 스킬은 다시 정의해야함
-    // SkillDamage,
-    // SkillSpeed,
-    // SkillCount,
-    // SkillCooldown,
-    // CooldownDecrease,
-    // Ailment,
-}
-
-// 스탯 연산 방식
-public enum EStackType
-{
-    Flat,           // 고정값 (+10 + 10)
-    PercentAdd,     // 합연산 (+10% + 10%)
-    PercentMul      // 곱연산 (×1.1 × 1.1)
-}
-
-// 회복 범위
-public enum EHealRange
-{
-    All = 0,
-    Body = 1,
-    Part = 2,
-}
-
-// 회복 연산 방식
-public enum EHealType
-{
-    Flat = 0,
-    Percentage = 1,
 }

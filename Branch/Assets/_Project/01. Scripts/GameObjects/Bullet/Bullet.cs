@@ -29,6 +29,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected GameObject muzzleParticlePrefab;
     protected GameObject muzzleParticle;
     [SerializeField] protected GameObject impactParticle;
+    protected GameObject impactP = null;
     [SerializeField] protected GameObject explosionEffectPrefab;
     #endregion
 
@@ -166,7 +167,7 @@ public class Bullet : MonoBehaviour
     #endregion
 
     #region Public Methods
-    public void Init(GameObject shooter, Vector3 start, Vector3 end, Vector3 direction, float damage)
+    public void Init(GameObject shooter, Transform target, Vector3 start, Vector3 end, Vector3 direction, float damage)
     {
         _from = shooter;
         _to = end;
@@ -180,12 +181,12 @@ public class Bullet : MonoBehaviour
             Destroy(muzzleParticle, 2.0f); // Lifetime of muzzle effect.
         }
 
-        SetBulletLogic(direction, start);
+        SetBulletLogic(target, direction, start);
     }
     #endregion
 
     #region Private Methods
-    protected virtual void SetBulletLogic(Vector3 direction, Vector3 start)
+    protected virtual void SetBulletLogic(Transform target, Vector3 direction, Vector3 start)
     {
         _rb.velocity = direction * bulletSpeed;
     }
@@ -242,13 +243,13 @@ public class Bullet : MonoBehaviour
         _rb.angularVelocity = Vector3.zero;
         _timer = lifeTime;
 
+        if (explosionEffectPrefab)
+        {
+            Explode();
+        }
         if (impactParticle)
         {
             CreateImpaceEffect(parent);
-        }
-        else if (explosionEffectPrefab)
-        {
-            Explode();
         }
 
         PoolManager.Instance.ReleaseObject(gameObject);
@@ -261,13 +262,13 @@ public class Bullet : MonoBehaviour
         _rb.angularVelocity = Vector3.zero;
         _timer = lifeTime;
 
+        if (explosionEffectPrefab)
+        {
+            Explode();
+        }
         if (impactParticle)
         {
             CreateImpaceEffect(collision);
-        }
-        else if (explosionEffectPrefab)
-        {
-            Explode();
         }
 
         PoolManager.Instance.ReleaseObject(gameObject);
@@ -277,7 +278,7 @@ public class Bullet : MonoBehaviour
     {   
         // 필요할 경우 Pooling
         // Pooling 할 경우 Scale 초기화 할 것
-        GameObject impactP = Instantiate(impactParticle, transform.position, Quaternion.LookRotation(-transform.forward), parent);
+        impactP = Instantiate(impactParticle, transform.position, Quaternion.LookRotation(-transform.forward), parent);
         Destroy(impactP, 2.0f);
 
         if (parent != null && parent.transform.localScale != Vector3.one)
@@ -292,7 +293,7 @@ public class Bullet : MonoBehaviour
         // 필요할 경우 Pooling
         Vector3 contactP = collision.contacts[0].point;
         Vector3 contactN = collision.contacts[0].normal;
-        GameObject impactP = Instantiate(impactParticle, contactP, Quaternion.FromToRotation(Vector3.up, contactN), collision.transform);
+        impactP = Instantiate(impactParticle, contactP, Quaternion.FromToRotation(Vector3.up, contactN), collision.transform);
         Destroy(impactP, 5.0f);
 
         if (collision != null && collision.transform.localScale != Vector3.one)

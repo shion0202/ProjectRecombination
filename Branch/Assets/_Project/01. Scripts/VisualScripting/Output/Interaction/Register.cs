@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace _Project.Scripts.VisualScripting
 {
@@ -12,8 +13,12 @@ namespace _Project.Scripts.VisualScripting
         {
             IsOn = true;
 
-            // To-do: PlayerController와 의존성을 가지므로 추후 Event Manager 등으로 분리
-            PlayerController.RegisterEvent(nextInput.Execute);
+            EventManager.Instance.AddListener(EEventType.Interaction, OnRegister);
+        }
+
+        private void OnRegister(EEventType eventType, Component sender, object param = null)
+        {
+            nextInput.Execute();
         }
     }
 }

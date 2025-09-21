@@ -44,7 +44,7 @@ public class ShoulderHeavy : PartBaseShoulder
         Bullet orbComp = orb.GetComponent<Bullet>();
         if (orbComp != null)
         {
-            orbComp.Init(_owner.gameObject, transform.position + _owner.transform.forward * 1.0f + Vector3.up, Vector3.zero, _owner.transform.forward, 50.0f);
+            orbComp.Init(_owner.gameObject, null, transform.position + _owner.transform.forward * 1.0f + Vector3.up, Vector3.zero, _owner.transform.forward, 50.0f);
         }
 
         _owner.FollowCamera.SetCameraRotatable(true);

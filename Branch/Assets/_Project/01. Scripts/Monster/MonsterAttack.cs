@@ -29,7 +29,7 @@ namespace Monster.AI.Command
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
             if (bulletComponent != null)
             {
-                bulletComponent.Init(shooter, start, end, direction, damage);
+                bulletComponent.Init(shooter, null, start, end, direction, damage);
             }
             else
             {

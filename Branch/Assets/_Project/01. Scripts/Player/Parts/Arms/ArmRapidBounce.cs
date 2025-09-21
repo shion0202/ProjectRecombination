@@ -20,7 +20,7 @@ public class ArmRapidBounce : PartBaseArm
         Bullet bulletComp = bullet.GetComponent<Bullet>();
         if (bulletComp != null)
         {
-            bulletComp.Init(_owner.gameObject, bulletSpawnPoint.position, targetPoint, camShootDirection,
+            bulletComp.Init(_owner.gameObject, null,bulletSpawnPoint.position, targetPoint, camShootDirection,
                 (int)_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value);
         }
 

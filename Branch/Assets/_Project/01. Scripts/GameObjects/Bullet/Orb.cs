@@ -102,7 +102,7 @@ public class Orb : Bullet
         ProjectileBlade bladeComp = blade.GetComponent<ProjectileBlade>();
         if (bladeComp != null)
         {
-            bladeComp.Init(gameObject, transform.position, Vector3.zero, direction, Damage * 0.5f);
+            bladeComp.Init(gameObject, null, transform.position, Vector3.zero, direction, Damage * 0.5f);
         }
     }
 }

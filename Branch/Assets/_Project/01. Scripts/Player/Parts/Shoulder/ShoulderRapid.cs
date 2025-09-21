@@ -156,11 +156,11 @@ public class ShoulderRapid : PartBaseShoulder
                 Vector3 camShootDirection = (targetPoint - transform.position).normalized;
                 Vector3 randomDir = GetRandomDirection(camShootDirection);
 
-                GameObject missile = Instantiate(missilePrefab, _owner.transform.position, Quaternion.identity);
+                GameObject missile = Instantiate(missilePrefab, _owner.transform.position, Quaternion.LookRotation(randomDir));
                 var missileComp = missile.GetComponent<Missile>();
                 if (missileComp != null)
                 {
-                    missileComp.Init(_owner.gameObject, transform.position, targetPoint, randomDir, 100.0f);
+                    missileComp.Init(_owner.gameObject, enemy.transform, transform.position, targetPoint, randomDir, 100.0f);
                 }
             }
         }

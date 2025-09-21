@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GravityBullet : Bullet
 { 
-    //protected override void DestroyBullet() => Explode();
+    //protected override void DestroyBullet(Transform parent = null) => Explode();
 
     //protected override void SetBulletLogic(Vector3 direction, Vector3 start) => _rb.velocity = direction * bulletSpeed;
 
@@ -13,7 +13,7 @@ public class GravityBullet : Bullet
     //    {
     //        Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
     //    }
-        
+
     //    PoolManager.Instance.ReleaseObject(gameObject);
     //}
 }

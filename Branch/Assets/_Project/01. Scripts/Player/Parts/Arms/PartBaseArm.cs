@@ -85,7 +85,7 @@ public class PartBaseArm : PartBase
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {
-            bulletComponent.Init(_owner.gameObject, bulletSpawnPoint.position, Vector3.zero, camShootDirection.normalized, (int)_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value);
+            bulletComponent.Init(_owner.gameObject, null, bulletSpawnPoint.position, Vector3.zero, camShootDirection.normalized, (int)_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value);
             bulletComponent.Parent = bulletSpawnPoint;
         }
 

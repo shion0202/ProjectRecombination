@@ -179,6 +179,7 @@ public class ArmLaserMultiple : PartBaseArm
         {
             bulletComponent.Init(
                 _owner.gameObject,
+                null,
                 bulletSpawnPoint.position,
                 Vector3.zero,
                 direction,
