@@ -14667,13 +14667,13 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182230}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5104a08dba052e1488fa9daa29ae689a, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 516
+    m_Bits: 33284
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -14722,14 +14722,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
   bulletSpeed: 20
-  explosionRange: 1
   explosionRadius: 2
   lifeTime: 5
   muzzleParticlePrefab: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
   impactParticle: {fileID: 106912, guid: 8827a814494c0bf4f8a182bf2b7f1a43, type: 3}
   explosionEffectPrefab: {fileID: 0}
-  maxBounces: 5
-  bounceFactor: 0.98
+  maxBounces: 10
 --- !u!1 &188910
 GameObject:
   m_ObjectHideFlags: 0

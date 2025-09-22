@@ -63,7 +63,7 @@ Material:
     - _BUILTIN_QueueControl: -1
     - _BUILTIN_QueueOffset: 0
     - _Fade: 1
-    - _Flicker: 0.264
+    - _Flicker: 0
     - _FresMult: 1.04
     - _FresMultOut: 5.88
     - _FresPow: 7.24

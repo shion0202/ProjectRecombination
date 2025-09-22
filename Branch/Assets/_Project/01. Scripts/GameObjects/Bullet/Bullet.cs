@@ -14,7 +14,6 @@ public class Bullet : MonoBehaviour
 
     [Header("Bullet Information")]
     [SerializeField] protected float bulletSpeed = 30.0f;
-    [SerializeField] protected float explosionRange = 1.0f;
     [SerializeField] protected float explosionRadius = 2.0f;
     private float _damage;
     private GameObject _from; // 발사 주체
@@ -155,13 +154,7 @@ public class Bullet : MonoBehaviour
     {
         // Explosion이 존재할 경우 폭발 범위를 표시
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(_to, explosionRange);
-
-        if (explosionEffectPrefab != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, explosionRadius);
-        }
+        Gizmos.DrawWireSphere(_to, explosionRadius);
     }
 #endif
     #endregion
