@@ -21,14 +21,29 @@ public class ArmLaserMultiple : PartBaseArm
 
     protected override void Update()
     {
-        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
         if (!_isShooting)
         {
             targetingProgress = 0f;
             ClearTargetIndicator();
             currentTarget = null;
+
+            if (_currentAmmo >= maxAmmo) return;
+
+            _currentReloadTime -= Time.deltaTime;
+            if (_currentReloadTime > 0.0f) return;
+
+            _currentAmmo = Mathf.Clamp(_currentAmmo + 1, 0, maxAmmo);
+            _currentReloadTime = reloadTime;
+            if (_currentAmmo >= maxAmmo)
+            {
+                _isOverheat = false;
+            }
+
             return;
         }
+        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
+        if (_currentAmmo <= 0) return;
+
         _currentShootTime += Time.deltaTime;
         Transform newTarget = FindTargetInView();
         if (newTarget != currentTarget)
@@ -169,6 +184,13 @@ public class ArmLaserMultiple : PartBaseArm
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
+
+        _currentAmmo = Mathf.Clamp(_currentAmmo - 1, 0, maxAmmo);
+        if (_currentAmmo <= 0)
+        {
+            //CancleShootState(partType == EPartType.ArmL ? true : false);
+            _isOverheat = true;
+        }
     }
 
     protected void SpawnBullet(Vector3 direction)

@@ -325,6 +325,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.started)
         {
+            PartBaseArm weapon = inventory.EquippedItems[EPartType.ArmL][0].GetComponent<PartBaseArm>();
+            if (weapon && weapon.IsOverheat) return;
+
             _currentPlayerState |= EPlayerState.LeftShooting;
             Shoot();
         }
@@ -338,10 +341,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     void PlayerActions.IPlayerActionMapActions.OnRightAttack(InputAction.CallbackContext context)
     {
         if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
-        if (!inventory.EquippedItems[EPartType.ArmR][0].IsAnimating) return;
 
         if (context.started)
         {
+            if (!inventory.EquippedItems[EPartType.ArmR][0].IsAnimating) return;
+            PartBaseArm weapon = inventory.EquippedItems[EPartType.ArmR][0].GetComponent<PartBaseArm>();
+            if (weapon && weapon.IsOverheat) return;
+
             _currentPlayerState |= EPlayerState.RightShooting;
             Shoot();
         }
@@ -620,6 +626,47 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
 
         return true;
+    }
+
+    public void CancleAttack(bool isLeft)
+    {
+        if (isLeft)
+        {
+            inventory.EquippedItems[EPartType.ArmL][0].UseCancleAbility();
+
+            animator.SetBool("isLeftAttack", false);
+            _previousState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
+            _isLeftAttackReady = false;  // 상태 초기화
+
+            MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
+        }
+        else
+        {
+            inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
+
+            animator.SetBool("isRightAttack", false);
+            _previousState &= ~EPlayerState.RightShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
+            _isRightAttackReady = false;
+
+            MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
+            if (aimObj != null)
+            {
+                aimObj.weight = 0.0f;
+            }
+        }
+
+        if ((_currentPlayerState & EPlayerState.ShootState) == 0)
+        {
+            Stats.RemoveModifier(this);
+            SetOvrrideAnimator(_postAnimType);
+            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
+        }
     }
     #endregion
 
@@ -900,47 +947,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                     aimObj.weight = 0.6f;
                 }
             }
-        }
-    }
-
-    private void CancleAttack(bool isLeft)
-    {
-        if (isLeft)
-        {
-            inventory.EquippedItems[EPartType.ArmL][0].UseCancleAbility();
-
-            animator.SetBool("isLeftAttack", false);
-            _previousState &= ~EPlayerState.LeftShooting;
-            _currentPlayerState &= ~EPlayerState.LeftShooting;
-            _isLeftAttackReady = false;  // 상태 초기화
-
-            MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
-            if (aimObj != null)
-            {
-                aimObj.weight = 0.0f;
-            }
-        }
-        else
-        {
-            inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
-
-            animator.SetBool("isRightAttack", false);
-            _previousState &= ~EPlayerState.RightShooting;
-            _currentPlayerState &= ~EPlayerState.RightShooting;
-            _isRightAttackReady = false;
-
-            MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
-            if (aimObj != null)
-            {
-                aimObj.weight = 0.0f;
-            }
-        }
-
-        if ((_currentPlayerState & EPlayerState.ShootState) == 0)
-        {
-            Stats.RemoveModifier(this);
-            SetOvrrideAnimator(_postAnimType);
-            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
     }
     #endregion

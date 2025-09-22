@@ -56,6 +56,13 @@ public class ArmHeavyShotgun : PartBaseArm
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
+
+        _currentAmmo = Mathf.Clamp(_currentAmmo - 1, 0, maxAmmo);
+        if (_currentAmmo <= 0)
+        {
+            CancleShootState(partType == EPartType.ArmL ? true : false);
+            _isOverheat = true;
+        }
     }
 
     private Vector3 GetRandomConeDirection(Vector3 axis, float angle)

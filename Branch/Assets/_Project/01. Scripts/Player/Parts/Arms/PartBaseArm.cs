@@ -10,8 +10,13 @@ public class PartBaseArm : PartBase
     [SerializeField] protected Transform bulletSpawnPoint;
     [SerializeField] protected CinemachineImpulseSource impulseSource;
     [SerializeField] protected LayerMask ignoreMask = 0;
+    [SerializeField] protected int maxAmmo;
+    [SerializeField] protected float reloadTime;
     protected float _currentShootTime = 0.0f;
     protected bool _isShooting = false;
+    protected int _currentAmmo = 0;
+    protected float _currentReloadTime = 0.0f;
+    protected bool _isOverheat = false;
 
     [Header("이펙트")]
     [SerializeField] protected GameObject muzzleFlashEffectPrefab;
@@ -27,6 +32,8 @@ public class PartBaseArm : PartBase
     [SerializeField] protected float recoilX = 4.0f;
     [SerializeField] protected float recoilY = 2.0f;
 
+    public bool IsOverheat => _isOverheat;
+
     protected virtual void Awake()
     {
         if (ignoreMask == 0)
@@ -36,14 +43,34 @@ public class PartBaseArm : PartBase
             ignoreMask &= ~(1 << LayerMask.NameToLayer("Outline"));
             ignoreMask &= ~(1 << LayerMask.NameToLayer("Player"));
         }
+
+        _currentAmmo = maxAmmo;
+        _currentReloadTime = reloadTime;
     }
 
     protected virtual void Update()
     {
         _currentShootTime -= Time.deltaTime;
-        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
-        if (!_isShooting) return;
 
+        if (!_isShooting)
+        {
+            if (_currentAmmo >= maxAmmo) return;
+
+            _currentReloadTime -= Time.deltaTime;
+            if (_currentReloadTime > 0.0f) return;
+
+            _currentAmmo = Mathf.Clamp(_currentAmmo + 1, 0, maxAmmo);
+            _currentReloadTime = reloadTime;
+            if (_currentAmmo >= maxAmmo)
+            {
+                _isOverheat = false;
+            }
+
+            return;
+        }
+        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
+
+        if (_currentAmmo <= 0) return;
         if (_currentShootTime <= 0.0f)
         {
             Shoot();
@@ -73,7 +100,6 @@ public class PartBaseArm : PartBase
 
         //    laserLineRenderer.enabled = false;
         //}
-        
     }
 
     protected virtual void Shoot()
@@ -90,6 +116,13 @@ public class PartBaseArm : PartBase
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
+
+        _currentAmmo = Mathf.Clamp(_currentAmmo - 1, 0, maxAmmo);
+        if (_currentAmmo <= 0)
+        {
+            CancleShootState(partType == EPartType.ArmL ? true : false);
+            _isOverheat = true;
+        }
     }
 
     // 카메라 기준 사격 방향을 결정하는 함수
@@ -128,6 +161,11 @@ public class PartBaseArm : PartBase
         }
 
         return targetPoint;
+    }
+
+    protected void CancleShootState(bool isLeft)
+    {
+        _owner.CancleAttack(isLeft);
     }
 
     protected IEnumerator CoFadeOutLaser()

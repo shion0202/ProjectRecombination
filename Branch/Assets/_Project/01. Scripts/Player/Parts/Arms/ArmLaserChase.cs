@@ -19,6 +19,7 @@ public class ArmLaserChase : PartBaseArm
         _currentShootTime -= Time.deltaTime;
         if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
         if (!_isShooting) return;
+        if (_currentAmmo <= 0) return;
 
         Shoot();
     }

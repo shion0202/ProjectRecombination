@@ -25,6 +25,13 @@ public class ArmRapidBounce : PartBaseArm
         }
 
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
+
+        _currentAmmo = Mathf.Clamp(_currentAmmo - 1, 0, maxAmmo);
+        if (_currentAmmo <= 0)
+        {
+            CancleShootState(partType == EPartType.ArmL ? true : false);
+            _isOverheat = true;
+        }
     }
 
     protected Vector3 GetRandomDirection(Vector3 forward)

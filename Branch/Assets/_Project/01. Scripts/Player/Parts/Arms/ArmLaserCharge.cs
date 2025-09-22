@@ -25,14 +25,31 @@ public class ArmLaserCharge : PartBaseArm
 
     protected override void Update()
     {
+        if (!_isShooting)
+        {
+            if (_currentAmmo >= maxAmmo) return;
+            _currentReloadTime -= Time.deltaTime;
+
+            if (_currentReloadTime > 0.0f) return;
+            _currentAmmo = Mathf.Clamp(_currentAmmo + 1, 0, maxAmmo);
+            _currentReloadTime = reloadTime;
+
+            if (_currentAmmo >= maxAmmo)
+            {
+                _isOverheat = false;
+            }
+
+            return;
+        }
         if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
-        if (!_isShooting) return;
 
         _currentShootTime += Time.deltaTime;
     }
 
     public override void UseAbility()
     {
+        if (_currentAmmo <= 0) return;
+
         base.UseAbility();
         if (currentLaserObject == null)
         {
@@ -44,6 +61,8 @@ public class ArmLaserCharge : PartBaseArm
 
     public override void UseCancleAbility()
     {
+        if (!_isShooting || _currentAmmo <= 0) return;
+
         base.UseCancleAbility();
         chargeEffectPrefab.SetActive(false);
 
@@ -99,6 +118,13 @@ public class ArmLaserCharge : PartBaseArm
 
         impulseSource.m_DefaultVelocity = defaultImpulseValue * _currentChargeTime;
         _owner.ApplyRecoil(impulseSource, recoilX * _currentChargeTime, recoilY * _currentChargeTime);
+
+        _currentAmmo = Mathf.Clamp(_currentAmmo - 1, 0, maxAmmo);
+        if (_currentAmmo <= 0)
+        {
+            //CancleShootState(partType == EPartType.ArmL ? true : false);
+            _isOverheat = true;
+        }
     }
 
     protected IEnumerator CoDestroyLaser()
