@@ -25,7 +25,8 @@ namespace Managers
                 // 게임 오버 처리
                 Debug.Log("Player is Death");
                 GUIManager.Instance.OnGameOverPanel();
-                StartCoroutine(SceneClear());
+                //StartCoroutine(SceneClear());
+                StartCoroutine(RebirthGame());
             }
         }
 
@@ -34,6 +35,16 @@ namespace Managers
             yield return new WaitForSeconds(5);
             // GameScene 다시 로드
             SceneManager.LoadScene("GameScene");
+        }
+
+        private IEnumerator RebirthGame()
+        {
+            yield return new WaitForSeconds(5.0f);
+
+            GUIManager.Instance.CloseGameOverPanel();
+            player.Stats.CurrentBodyHealth = player.Stats.MaxBodyHealth;
+            player.Stats.CurrentPartHealth = player.Stats.MaxPartHealth;
+            player.PlayerSpawnAnimation();
         }
 
         // 플레이어, 카메라, 몬스터 등 일부 오브젝트들을 정지시켜야할 때 사용

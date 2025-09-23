@@ -163,14 +163,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void OnEnable()
     {
         _playerActions.PlayerActionMap.Enable();
-
-        PlayerSpawnAnimation();
     }
 
     private void Start()
     {
         ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs][0] as ILegsMovement;
         _currentMovement = legsMovement;
+
+        PlayerSpawnAnimation();
     }
 
     private void Update()
@@ -458,6 +458,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // 현재 HP의 값을 데미지 만큼 처리
         // stats.CurrentHealth = takeDamage;
 
+        if ((_currentPlayerState & EPlayerState.Spawning) != 0) return;
         if (stats.CurrentHealth <= 0) return;
 
         var damage = (takeDamage - (stats.TotalStats[EStatType.Defence].value + stats.TotalStats[EStatType.AddDefence].value)) * stats.TotalStats[EStatType.DamageReductionRate].value;
@@ -668,6 +669,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
     }
+
+    public void PlayerSpawnAnimation()
+    {
+        SetMovable(false);
+        animator.SetBool("isSpawning", true);
+        _currentPlayerState &= ~(EPlayerState.Dead);
+        _currentPlayerState |= EPlayerState.Spawning;
+    }
     #endregion
 
     #region Private Methods
@@ -743,6 +752,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             return;
         }
 
+        // 호버링 중이라면 따로 중력 로직 적용
         if (_currentMovement is LegsHover hoverLegs)
         {
             Vector3 hoverDelta = hoverLegs.CalculateHoverDeltaY();
@@ -917,13 +927,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 inventory.EquippedItems[EPartType.ArmR][0].UseAbility();
             }
         }   
-    }
-
-    private void PlayerSpawnAnimation()
-    {
-        SetMovable(false);
-        animator.SetBool("isSpawning", true);
-        _currentPlayerState |= EPlayerState.Spawning;
     }
 
     private void CheckSpawnAnimationEnd()

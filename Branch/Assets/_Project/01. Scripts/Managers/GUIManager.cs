@@ -59,6 +59,11 @@ namespace Managers
             testGameOverPanel.enabled = true;
         }
 
+        public void CloseGameOverPanel()
+        {
+            testGameOverPanel.enabled = false;
+        }
+
         #region Fade In/Out
 
         private IEnumerator CoroutineFadeInOut(float startAlpha, float targetAlpha, float duration = 1f)

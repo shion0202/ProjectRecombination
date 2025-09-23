@@ -68,4 +68,10 @@ public class AnimCheck : MonoBehaviour
             animObject.SetActive(isPlay);
         }
     }
+
+    private string ToString()
+    {
+        string log = $"Anim Check: ";
+        return log;
+    }
 }
