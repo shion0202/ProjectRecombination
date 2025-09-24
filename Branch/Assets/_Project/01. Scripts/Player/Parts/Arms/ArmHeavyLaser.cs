@@ -11,7 +11,7 @@ public class ArmHeavyLaser : PartBaseArm
     protected override void Awake()
     {
         base.Awake();
-        originalColor = laserLineRenderer.material.color;
+        //originalColor = laserLineRenderer.material.color;
     }
 
     protected override void Shoot()
@@ -27,7 +27,7 @@ public class ArmHeavyLaser : PartBaseArm
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
         // 라인 시작점
-        laserLineRenderer.SetPosition(0, startPos);
+        //laserLineRenderer.SetPosition(0, startPos);
 
         int hitCount = 0;
         Vector3 endPosition = startPos + direction * shootingRange;
@@ -48,8 +48,8 @@ public class ArmHeavyLaser : PartBaseArm
         }
 
         // 라인 최종 길이 반영
-        laserLineRenderer.SetPosition(1, endPosition);
-        laserLineRenderer.enabled = true;
+        //laserLineRenderer.SetPosition(1, endPosition);
+        //laserLineRenderer.enabled = true;
 
         if (fadeCoroutine != null)
         {

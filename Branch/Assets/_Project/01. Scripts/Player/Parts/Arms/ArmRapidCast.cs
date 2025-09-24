@@ -62,20 +62,20 @@ public class ArmRapidCast : PartBaseArm
 
         RaycastHit hit;
         Vector3 targetPoint = GetTargetPoint(out hit);
-        laserLineRenderer.SetPosition(0, bulletSpawnPoint.position);
+        //laserLineRenderer.SetPosition(0, bulletSpawnPoint.position);
 
         if (hit.collider != null)
         {
-            laserLineRenderer.SetPosition(1, hit.point);
+            //laserLineRenderer.SetPosition(1, hit.point);
         }
         else
         {
             Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
-            laserLineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * 100.0f);
+            //laserLineRenderer.SetPosition(1, bulletSpawnPoint.position + camShootDirection * 100.0f);
         }
 
-        laserLineRenderer.enabled = true;
-
+        //laserLineRenderer.enabled = true;
+        
         if (fadeCoroutine != null)
         {
             StopCoroutine(fadeCoroutine);

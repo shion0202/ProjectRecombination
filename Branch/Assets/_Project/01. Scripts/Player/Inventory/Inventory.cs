@@ -223,14 +223,14 @@ public class Inventory : MonoBehaviour
             .Where(x => x.AttackType == equipItem.AttackType)   // 예시: GroupKey로 분류, 필요에 따라 본인의 기준으로 변경
             .ToList();
 
-        owner.SetPartStat(equipItem);
-
         // 여러 파츠 모두 장착
         foreach (var part in sameTypeParts)
         {
             part.gameObject.SetActive(true);
             _equippedItems[equipItem.PartType].Add(part);
         }
+
+        owner.SetPartStat(equipItem);
 
         PartBaseLegs legs = sameTypeParts.OfType<PartBaseLegs>().FirstOrDefault();
         if (legs != null)

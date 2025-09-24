@@ -12,7 +12,7 @@ public class ArmLaserCharge : PartBaseArm
     protected float _currentChargeTime = 0.0f;
     private GameObject currentLaserObject;
     private LineRenderer currentLaser;
-
+    private GameObject chargeEffect;
     protected Vector3 defaultImpulseValue;
 
     protected override void Awake()
@@ -56,7 +56,11 @@ public class ArmLaserCharge : PartBaseArm
             currentLaserObject = Instantiate(laserPrefab);
             currentLaser = currentLaserObject.GetComponent<LineRenderer>();
         }
-        chargeEffectPrefab.SetActive(true);
+
+        if (chargeEffectPrefab)
+        {
+            chargeEffect = Instantiate(chargeEffectPrefab, bulletSpawnPoint.position, Quaternion.identity, _owner.transform);
+        }
     }
 
     public override void UseCancleAbility()
@@ -64,11 +68,25 @@ public class ArmLaserCharge : PartBaseArm
         if (!_isShooting || _currentAmmo <= 0) return;
 
         base.UseCancleAbility();
-        chargeEffectPrefab.SetActive(false);
+
+        if (chargeEffect)
+        {
+            Destroy(chargeEffect);
+        }
 
         Shoot();
 
         _currentShootTime = 0.0f;
+    }
+
+    public override void FinishActionForced()
+    {
+        base.FinishActionForced();
+
+        if (chargeEffect)
+        {
+            Destroy(chargeEffect);
+        }
     }
 
     protected override void Shoot()

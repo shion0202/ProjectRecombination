@@ -20,7 +20,6 @@ public class PartBaseArm : PartBase
 
     [Header("이펙트")]
     [SerializeField] protected GameObject muzzleFlashEffectPrefab;
-    [SerializeField] protected LineRenderer laserLineRenderer;
     [SerializeField] protected GameObject hitEffectPrefab;
     [SerializeField] protected GameObject projectileEffectPrefab;
     protected Color originalColor = Color.white;
@@ -93,13 +92,11 @@ public class PartBaseArm : PartBase
         _isShooting = false;
         _currentShootTime = 0.0f;
 
-        //if (fadeCoroutine != null)
-        //{
-        //    StopCoroutine(fadeCoroutine);
-        //    fadeCoroutine = null;
-
-        //    laserLineRenderer.enabled = false;
-        //}
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+            fadeCoroutine = null;
+        }
     }
 
     protected virtual void Shoot()
@@ -170,22 +167,24 @@ public class PartBaseArm : PartBase
 
     protected IEnumerator CoFadeOutLaser()
     {
-        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
-        laserLineRenderer.GetPropertyBlock(propertyBlock);
-        Color c = originalColor;
+        //MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+        //laserLineRenderer.GetPropertyBlock(propertyBlock);
+        //Color c = originalColor;
 
-        while (c.a > 0.0f)
-        {
-            propertyBlock.SetColor("_Color", Color.red);
-            laserLineRenderer.SetPropertyBlock(propertyBlock);
+        //while (c.a > 0.0f)
+        //{
+        //    propertyBlock.SetColor("_Color", Color.red);
+        //    laserLineRenderer.SetPropertyBlock(propertyBlock);
 
-            c.a -= Time.deltaTime;
-            if (c.a <= 0.0f) c.a = 0.0f;
+        //    c.a -= Time.deltaTime;
+        //    if (c.a <= 0.0f) c.a = 0.0f;
 
-            yield return null;
-        }
+        //    yield return null;
+        //}
 
-        laserLineRenderer.enabled = false;
-        fadeCoroutine = null;
+        //laserLineRenderer.enabled = false;
+        //fadeCoroutine = null;
+
+        yield break;
     }
 }

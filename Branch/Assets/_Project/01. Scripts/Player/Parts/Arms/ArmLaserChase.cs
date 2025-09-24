@@ -27,13 +27,13 @@ public class ArmLaserChase : PartBaseArm
     public override void UseAbility()
     {
         base.UseAbility();
-        laserLineRenderer.gameObject.SetActive(true);
+        //laserLineRenderer.gameObject.SetActive(true);
     }
 
     public override void UseCancleAbility()
     {
         base.UseCancleAbility();
-        laserLineRenderer.gameObject.SetActive(false);
+        //laserLineRenderer.gameObject.SetActive(false);
     }
 
     // Update에서 실행
@@ -86,7 +86,7 @@ public class ArmLaserChase : PartBaseArm
         else
         {
             // 빔 비활성화 등(옵션)
-            laserLineRenderer.positionCount = 0;
+            //laserLineRenderer.positionCount = 0;
         }
     }
 
@@ -148,7 +148,7 @@ public class ArmLaserChase : PartBaseArm
         Vector3 midPoint = (p0 + p2) * 0.5f + Vector3.up * upOffset + cameraRight * appliedSideOffset;
 
         int segmentCount = 20;
-        laserLineRenderer.positionCount = segmentCount + 1;
+        //laserLineRenderer.positionCount = segmentCount + 1;
         for (int i = 0; i <= segmentCount; i++)
         {
             float t = i / (float)segmentCount;
@@ -156,7 +156,7 @@ public class ArmLaserChase : PartBaseArm
                 Mathf.Pow(1 - t, 2) * p0
                 + 2 * (1 - t) * t * midPoint
                 + Mathf.Pow(t, 2) * p2;
-            laserLineRenderer.SetPosition(i, bezierPoint);
+            //laserLineRenderer.SetPosition(i, bezierPoint);
         }
     }
 }

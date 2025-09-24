@@ -8,6 +8,7 @@ namespace Managers
     public class GameManager : Singleton<GameManager>
     {
         [SerializeField] private PlayerController player;
+        private Coroutine _rebirthRoutine = null;
 
         private void Start()
         {
@@ -19,6 +20,8 @@ namespace Managers
 
         private void Update()
         {
+            if (_rebirthRoutine != null) return;
+
             var hp = player.Stats.CurrentHealth;
             if (hp <= 0f)
             {
@@ -26,7 +29,7 @@ namespace Managers
                 Debug.Log("Player is Death");
                 GUIManager.Instance.OnGameOverPanel();
                 //StartCoroutine(SceneClear());
-                StartCoroutine(RebirthGame());
+                _rebirthRoutine = StartCoroutine(RebirthGame());
             }
         }
 
@@ -45,6 +48,8 @@ namespace Managers
             player.Stats.CurrentBodyHealth = player.Stats.MaxBodyHealth;
             player.Stats.CurrentPartHealth = player.Stats.MaxPartHealth;
             player.PlayerSpawnAnimation();
+
+            _rebirthRoutine = null;
         }
 
         // 플레이어, 카메라, 몬스터 등 일부 오브젝트들을 정지시켜야할 때 사용
