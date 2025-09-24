@@ -32,4 +32,11 @@ public class HealCharacter : ProcessBase
             Debug.Log("Can't find player by monster manager.");
         }
     }
+
+    public override string ToString()
+    {
+        string objectName = gameObject.name;
+        string log = $"[{objectName} ({GetType().Name})] IsOn: {IsOn}, HealAmount: {healAmount}, HealType: {healType.ToString()}, HealRange: {healType.ToString()}";
+        return log;
+    }
 }

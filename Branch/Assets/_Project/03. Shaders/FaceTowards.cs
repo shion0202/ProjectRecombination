@@ -21,4 +21,13 @@ public class FaceTowards : MonoBehaviour
             faceMaterial.SetVector("_FaceRightDirection", targetTransform.right);
         }
     }
+
+    public override string ToString()
+    {
+        string targetName = targetTransform != null ? targetTransform.name : "None";
+        string materialName = faceMaterial != null ? faceMaterial.name : "None";
+
+        string log = $"[{gameObject.name} ({GetType().Name})] Target: {(targetName)}, Material: {(materialName)}";
+        return log;
+    }
 }

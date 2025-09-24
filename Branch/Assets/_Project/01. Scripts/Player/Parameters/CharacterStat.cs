@@ -255,6 +255,27 @@ public class CharacterStat : MonoBehaviour
 
         CalculateTotalStats();
     }
+
+    public override string ToString()
+    {
+        string baseStatsStr = _baseStats != null ? _baseStats.ToString() : "Null";
+        string totalStatsStr = _totalStats != null ? _totalStats.ToString() : "Null";
+
+        string partStatsSummary = string.Join(", ", _partStats.Select(kvp =>
+        {
+            string stats = kvp.Value != null ? kvp.Value.ToString() : "Null";
+            return $"{kvp.Key}: {stats}";
+        }));
+
+        string modifiersSummary = string.Join(", ", _modifiers.Select(m => $"{m.statType}({m.modifierType}): {m.value:F2}"));
+
+        return $"CharacterStat:" +
+               $"\n  CurrentHealth: {CurrentHealth:F2} / MaxHealth: {MaxHealth:F2}" +
+               $"\n  BaseStats: {baseStatsStr}" +
+               $"\n  TotalStats: {totalStatsStr}" +
+               $"\n  PartStats: [{partStatsSummary}]" +
+               $"\n  Modifiers: [{modifiersSummary}]";
+    }
     #endregion
 
     #region Private Methods

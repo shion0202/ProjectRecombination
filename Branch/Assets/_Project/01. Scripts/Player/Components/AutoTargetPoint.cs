@@ -8,7 +8,7 @@ public class AutoTargetPoint : MonoBehaviour
     // 따라갈 플레이어 Transform
     [SerializeField] private Transform target;
     [SerializeField] private Vector3 positionOffset;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private float moveSpeed = 1.0f;
 
     private void Awake()
     {
@@ -29,7 +29,7 @@ public class AutoTargetPoint : MonoBehaviour
 
     public override string ToString()
     {
-        string toString = $"[Target: {target.name}] Current Position({transform.position}) → Target Position({target.transform.position})";
-        return toString;
+        string log = $"[{gameObject.name} ({GetType().Name})] Target: {target.name}, Current Position({transform.position}), Target Position({target.transform.position})";
+        return log;
     }
 }

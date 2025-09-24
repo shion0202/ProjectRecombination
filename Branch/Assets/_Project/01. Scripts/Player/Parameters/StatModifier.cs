@@ -18,4 +18,11 @@ public class StatModifier
         this.value = value;
         this.source = source;
     }
+
+    public override string ToString()
+    {
+        string sourceStr = source != null ? source.ToString() : "null";
+        string log = $"[{GetType().Name}] Stat Type: {statType}, Modifier Type: {modifierType}, Value: {value:F2}, Source: {sourceStr}";
+        return log;
+    }
 }

@@ -3,7 +3,6 @@ using FIMSpace.FProceduralAnimation;
 using Managers;
 using System;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
@@ -22,11 +21,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private Animator animator;
     [SerializeField] private RigBuilder rigBuilder;
     [SerializeField] private LegsAnimator legsAnimator;
-    [SerializeField] private Transform groundCheck;
     [SerializeField] private CharacterController characterController;
+
+    [Header("Scripts")]
     [SerializeField] private CharacterStat stats;
     [SerializeField] private Inventory inventory;
     [SerializeField] private RigAimController rigAimController;
+    [SerializeField] private Transform groundCheck;
     [SerializeField] private GameObject followCameraPrefab;
     private FollowCameraController _followCamera;
 
@@ -125,10 +126,36 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     #region Unity Methods
     private void Awake()
     {
+        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
+        rigBuilder = GetComponent<RigBuilder>();
+        if (rigBuilder == null)
+        {
+            rigBuilder = GetComponentInChildren<RigBuilder>();
+        }
+        legsAnimator = GetComponent<LegsAnimator>();
+        if (legsAnimator == null)
+        {
+            legsAnimator = GetComponentInChildren<LegsAnimator>();
+        }
+        characterController = GetComponent<CharacterController>();
+        if (characterController == null)
+        {
+            characterController = GetComponentInChildren<CharacterController>();
+        }
+
+        stats = GetComponent<CharacterStat>();
+        inventory = GetComponent<Inventory>();
         rigAimController = GetComponent<RigAimController>();
 
-        _playerActions = new PlayerActions();
-        _playerActions.PlayerActionMap.SetCallbacks(this);
+        GroundCheck gc = GetComponentInChildren<GroundCheck>();
+        if (gc != null)
+        {
+            groundCheck = gc.transform;
+        }
 
         _followCamera = FindFirstObjectByType<FollowCameraController>();
         if (_followCamera == null)
@@ -138,17 +165,31 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
         _followCamera.InitFollowCamera(gameObject);
-        
+
         // 비트 마스크 방식으로 레이케스트를 관리할 레이어를 설정
-        groundLayerMask = ~0;
-        groundLayerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
-        groundLayerMask &= ~(1 << LayerMask.NameToLayer("Outline"));
-        groundLayerMask &= ~(1 << LayerMask.NameToLayer("Player"));
+        // 마스크 값이 비어있다면 기본 값(모든 레이어 - 일부 레이어)로 설정
+        if (groundLayerMask == 0)
+        {
+            groundLayerMask = ~0;
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("TransparentFX"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("UI"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("Face"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("Hair"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("Outline"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("Player"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("PlayerMesh"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("Bullet"));
+            groundLayerMask &= ~(1 << LayerMask.NameToLayer("Minimap"));
+        }
+
+        _playerActions = new PlayerActions();
+        _playerActions.PlayerActionMap.SetCallbacks(this);
+
+        SetOvrrideAnimator(EAnimationType.Base);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        SetOvrrideAnimator(EAnimationType.Base);
 
         // stats.CurrentHealth = stats.TotalStats[EStatType.MaxHp].Value;
         // GUIManager.instance.SetHpSlider(stats.CurrentHealth, stats.TotalStats[EStatType.MaxHp].Value);
@@ -161,10 +202,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void Start()
     {
-        ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs][0] as ILegsMovement;
-        _currentMovement = legsMovement;
+        //ILegsMovement legsMovement = inventory.EquippedItems[EPartType.Legs][0] as ILegsMovement;
+        //_currentMovement = legsMovement;
 
-        PlayerSpawnAnimation();
+        Spawn();
     }
 
     private void Update()
@@ -174,16 +215,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             Application.Quit();
         }
 
+        AnimCheckShoot();
+
         // Debug.Log("Player HP: " + stats.CurrentHealth);
         // GUI HP 바 갱신
         // TODO: Null Reference
         GUIManager.Instance.SetHpSlider(stats.CurrentHealth, stats.MaxHealth);
-
-        AnimCheckShoot();
     }
 
     private void LateUpdate()
     {
+        // To-do: 애니메이션 이벤트로 변경할 것
         CheckSpawnAnimationEnd();
 
         HandleMove();
@@ -197,6 +239,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _totalDirection = Vector3.zero;
     }
 
+    // To-do: 호버링을 고려하여 콜라이더 방식으로 변경할 것
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (_isPlatformEnd) return;
@@ -238,6 +281,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
+    // 이름은 Dash이나 실제로는 Legs 파츠 스킬을 사용
     void PlayerActions.IPlayerActionMapActions.OnDash(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -269,49 +313,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
-    // 현재 사용 X
-    void PlayerActions.IPlayerActionMapActions.OnZoom(InputAction.CallbackContext context)
-    {
-        if ((_currentPlayerState & zoomBlockMask) != 0) return;
-
-        if (context.started)
-        {
-            _currentPlayerState &= ~EPlayerState.LeftShooting;
-            _currentPlayerState &= ~EPlayerState.RightShooting;
-            _currentPlayerState |= EPlayerState.Zooming;
-            _followCamera.IsBeforeZoom = true;
-            _followCamera.IsZoomed = true;
-            animator.SetBool("isAim", true);
-        }
-
-        if (context.canceled)
-        {
-            _currentPlayerState &= ~EPlayerState.LeftShooting;
-            _currentPlayerState &= ~EPlayerState.RightShooting;
-            _currentPlayerState &= ~EPlayerState.Zooming;
-            _followCamera.IsBeforeZoom = false;
-            _followCamera.IsZoomed = false;
-            animator.SetBool("isAim", false);
-        }
-    }
-
-    // 테스트용 점프 함수
-    void PlayerActions.IPlayerActionMapActions.OnJump(InputAction.CallbackContext context)
-    {
-        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
-
-        if (context.started)
-        {
-            // 바닥에 있을 때만 점프 실행
-            if (_isGrounded || _isOnPlatform)
-            {
-                _fallVelocity.y = jumpVelocity;
-
-                // 점프 상태 갱신
-                _currentPlayerState |= EPlayerState.Falling;
-            }
-        }
-    }
 
     void PlayerActions.IPlayerActionMapActions.OnLeftAttack(InputAction.CallbackContext context)
     {
@@ -320,7 +321,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (context.started)
         {
             PartBaseArm weapon = inventory.EquippedItems[EPartType.ArmL][0].GetComponent<PartBaseArm>();
-            if (weapon && weapon.IsOverheat) return;
+            if (weapon && (weapon.IsOverheat || !weapon.IsAnimating)) return;
 
             _currentPlayerState |= EPlayerState.LeftShooting;
             Shoot();
@@ -338,9 +339,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.started)
         {
-            if (!inventory.EquippedItems[EPartType.ArmR][0].IsAnimating) return;
             PartBaseArm weapon = inventory.EquippedItems[EPartType.ArmR][0].GetComponent<PartBaseArm>();
-            if (weapon && weapon.IsOverheat) return;
+            if (weapon && (weapon.IsOverheat || !weapon.IsAnimating)) return;
 
             _currentPlayerState |= EPlayerState.RightShooting;
             Shoot();
@@ -362,28 +362,141 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
-    void PlayerActions.IPlayerActionMapActions.OnMouseScroll(InputAction.CallbackContext context)
+    // 우클릭을 통해 사격을 위한 줌을 준비하는 기능
+    // 양팔 파츠로 변경되면서 줌 기능이 삭제되어 현재는 사용 X
+    void PlayerActions.IPlayerActionMapActions.OnZoom(InputAction.CallbackContext context)
     {
-        //if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+        if ((_currentPlayerState & zoomBlockMask) != 0) return;
 
-        //if (context.performed)
+        //if (context.started)
         //{
-        //    // 120 또는 -120 (-0.008을 곱하면 1과 근사한 0.96 또는 -0.96)
-        //    float scrollValue = context.ReadValue<float>();
-        //    _followCamera.ScrollY = scrollValue * -0.008f;
+        //    _currentPlayerState &= ~EPlayerState.LeftShooting;
+        //    _currentPlayerState &= ~EPlayerState.RightShooting;
+        //    _currentPlayerState |= EPlayerState.Zooming;
+        //    _followCamera.IsBeforeZoom = true;
+        //    _followCamera.IsZoomed = true;
+        //    animator.SetBool("isAim", true);
+        //}
+
+        //if (context.canceled)
+        //{
+        //    _currentPlayerState &= ~EPlayerState.LeftShooting;
+        //    _currentPlayerState &= ~EPlayerState.RightShooting;
+        //    _currentPlayerState &= ~EPlayerState.Zooming;
+        //    _followCamera.IsBeforeZoom = false;
+        //    _followCamera.IsZoomed = false;
+        //    animator.SetBool("isAim", false);
         //}
     }
 
+    // 디버그용 점프 함수
+    // 정식 빌드에서는 삭제될 예정
+    void PlayerActions.IPlayerActionMapActions.OnJump(InputAction.CallbackContext context)
+    {
+        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
+        if (context.started)
+        {
+            // 바닥에 있을 때만 점프 실행
+            if (_isGrounded || _isOnPlatform)
+            {
+                _fallVelocity.y = jumpVelocity;
+
+                // 점프 상태 갱신
+                _currentPlayerState |= EPlayerState.Falling;
+            }
+        }
+    }
+
+    // 마우스 휠을 통한 줌 기능 (임시)
+    // To-do: 파츠 별 카메라를 고려하지 않은 상태이므로 사용한다면 추후 수정 필요
+    void PlayerActions.IPlayerActionMapActions.OnMouseScroll(InputAction.CallbackContext context)
+    {
+        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
+        if (context.performed)
+        {
+            // 120 또는 -120 (-0.008을 곱하면 1과 근사한 0.96 또는 -0.96)
+            float scrollValue = context.ReadValue<float>();
+            //_followCamera.ScrollY = scrollValue * -0.008f;
+        }
+    }
+
+    // 마우스 휠 줌 상태를 초기화하는 기능 (임시)
+    // 추후 적용한다면 입력 뿐만이 아니라 캐릭터가 대기 상태가 아닐 때에도 적용되도록 변경할 것
     void PlayerActions.IPlayerActionMapActions.OnResetCamera(InputAction.CallbackContext context)
     {
-        //if (context.started)
-        //{
-        //    _followCamera.ResetCamera();
-        //}
+        if (context.started)
+        {
+            //_followCamera.ResetCamera();
+        }
     }
     #endregion
 
     #region Public Methods
+    public void Spawn()
+    {
+        // Spawn은 게임 시작 또는 리스폰 시에만 호출
+        _currentPlayerState &= ~(EPlayerState.Dead);
+        _currentPlayerState |= EPlayerState.Spawning;
+        animator.SetBool("isDead", false);
+        animator.SetTrigger("spawnTrigger");
+
+        SetMovable(false);
+    }
+
+    public void Die()
+    {
+        // 사망 로직
+        _currentPlayerState = 0;
+        _currentPlayerState |= EPlayerState.Dead;
+
+        animator.SetTrigger("deadTrigger");
+
+        SetMovable(false);
+
+        rigAimController.IsAim = false;
+        rigAimController.SetAllWeight(0.0f);
+
+        // 사격 중 또는 스킬 시전 중 사망하는 경우 고려
+        // 거의 없는 상황이지만 공중에 있을 떄 사망하는 경우도 고려할 것
+        // 스킬 등이 사용 중일 경우 모두 초기화
+        // 버프, 디버프도 마찬가지
+        inventory.EquippedItems[EPartType.ArmL][0].UseCancleAbility();
+        animator.SetBool("isLeftAttack", false);
+        _isLeftAttackReady = false;
+        Stats.RemoveModifier(this);
+        SetOvrrideAnimator(_postAnimType);
+
+        inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
+        animator.SetBool("isRightAttack", false);
+        SetOvrrideAnimator(_postAnimType);
+    }
+
+    // To-do: 추후 애니메이션 이벤트로 변경할 것
+    public void CheckSpawnAnimationEnd()
+    {
+        if ((_currentPlayerState & EPlayerState.Spawning) == 0) return;
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        // 스폰 애니메이션 이름 또는 해시코드로 비교
+        if (!stateInfo.IsName("Spawn"))
+        {
+            // 스폰 애니메이션이 종료됨
+            _currentPlayerState &= ~EPlayerState.Spawning;
+
+            SetMovable(true);
+
+            rigAimController.IsAim = true;
+            rigAimController.SmoothChangeBaseWeight(true);
+        }
+    }
+
+    public void SetMovable(bool canMove)
+    {
+        _canMove = canMove;
+    }
+
     public void Dash(float dashSpeed)
     {
         legsAnimator.enabled = false;
@@ -440,37 +553,36 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         SwitchStateToIdle();
     }
 
-    public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY)
+    public void CancleAttack(bool isLeft)
     {
-        _followCamera.ApplyRecoil(source, recoilX, recoilY);
-    }
+        if ((_currentPlayerState & EPlayerState.ShootState) == 0) return;
 
-    public void SetPartStat(PartBase part)
-    {
-        stats.SetPartStats(part);
-
-        // 사격 등 상태 중지
-        // 추후 따로 분리 필요
-        //if (part.PartType == EPartType.ArmL)
-        //{
-        //    CancleAttack(true);
-        //}
-        //else if (part.PartType == EPartType.ArmR)
-        //{
-        //    CancleAttack(false);
-        //}
-
-        if (part.PartType == EPartType.Legs)
+        if (isLeft)
         {
-            _currentMovement = part as ILegsMovement;
-            if (_currentMovement is LegsHover || _currentMovement is LegsCaterpillar)
-            {
-                legsAnimator.enabled = false;
-            }
-            else
-            {
-                legsAnimator.enabled = true;
-            }
+            inventory.EquippedItems[EPartType.ArmL][0].UseCancleAbility();
+
+            animator.SetBool("isLeftAttack", false);
+            _previousState &= ~EPlayerState.LeftShooting;
+            _currentPlayerState &= ~EPlayerState.LeftShooting;
+            _isLeftAttackReady = false;  // 상태 초기화
+            rigAimController.SmoothChangeWeight("ArmLAim", false);
+        }
+        else
+        {
+            inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
+
+            animator.SetBool("isRightAttack", false);
+            _previousState &= ~EPlayerState.RightShooting;
+            _currentPlayerState &= ~EPlayerState.RightShooting;
+            _isRightAttackReady = false;
+            rigAimController.SmoothChangeWeight("ArmRAim", false);
+        }
+
+        if ((_currentPlayerState & EPlayerState.ShootState) == 0)
+        {
+            Stats.RemoveModifier(this);
+            SetOvrrideAnimator(_postAnimType);
+            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
     }
 
@@ -515,32 +627,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             // TODO: 데미지가 음수일때 어떻게 처리할 것인지 논의 필요 (힐을 시킬 것인지 무시할 것인지)
         }
 
-        // Debug.Log($"HP: Body({stats.CurrentBodyHealth}), Part({stats.CurrentPartHealth})");
-
         if (stats.CurrentHealth <= 0)
         {
-            // 사망 로직
-            _currentPlayerState = 0;
-            _currentPlayerState |= EPlayerState.Dead;
-
-            SetMovable(false);
-
-            animator.SetTrigger("deadTrigger");
-            animator.SetBool("isDead", true);
-
-            // 사격 중 또는 스킬 시전 중 사망하는 경우 고려
-            inventory.EquippedItems[EPartType.ArmL][0].UseCancleAbility();
-            animator.SetBool("isLeftAttack", false);
-            _isLeftAttackReady = false;
-            Stats.RemoveModifier(this);
-            SetOvrrideAnimator(_postAnimType);
-
-            inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
-            animator.SetBool("isRightAttack", false);
-            SetOvrrideAnimator(_postAnimType);
-
-            rigAimController.IsAim = false;
-            rigAimController.SetAllWeight(0.0f);
+            Die();
         }
     }
 
@@ -582,17 +671,65 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
-    public void SetMovable(bool canMove)
+    public bool SetOvrrideAnimator(EAnimationType type)
     {
-        _canMove = canMove;
+        if (animations.Count <= (int)type) return false;
+
+        _currentAnimType = type;
+
+        animator.runtimeAnimatorController = animations[(int)type].overrideController;
+        animator.SetBool("isOnlyLoop", animations[(int)type].isOnlyLoop);
+
+        rigBuilder.enabled = false;
+        rigBuilder.enabled = true;
+        rigAimController.SmoothChangeBaseWeight(true);
+
+        // 사격 중 파츠 교체 시 취소하도록 (하체 파츠에 의존하는데 사격이 변경되지 않는 경우도 있지 않나?)
+        //MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+        //if (aimObj != null)
+        //{
+        //    aimObj.weight = _isLeftAttackReady ? 1.0f : 0.0f;
+        //}
+
+        //aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
+        //if (aimObj != null)
+        //{
+        //    aimObj.weight = _isRightAttackReady ? 1.0f : 0.0f;
+        //}
+
+        SwitchStateToIdle();
+
+        return true;
     }
 
-    public PartBase GetCurrentLegsPart()
+
+    public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY)
     {
-        return inventory.EquippedItems[EPartType.Legs][0];
+        _followCamera.ApplyRecoil(source, recoilX, recoilY);
     }
 
-    // Ball Legs를 위한 임시 함수들
+    public void SetPartStat(PartBase part)
+    {
+        stats.SetPartStats(part);
+
+        // 사격 중 파츠 교체하면 사격 취소
+        // 스킬 중에는 파츠 교체 불가능하도록 반영
+
+        if (part.PartType == EPartType.Legs)
+        {
+            _currentMovement = part as ILegsMovement;
+            if (_currentMovement is LegsHover || _currentMovement is LegsCaterpillar)
+            {
+                legsAnimator.enabled = false;
+            }
+            else
+            {
+                legsAnimator.enabled = true;
+            }
+        }
+    }
+
+    // Ball Legs를 위한 임시 점프 함수
     public void PartJump(float jumpVelocity)
     {
         if (!_isGrounded) return;
@@ -606,99 +743,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         _fallVelocity.y = jumpVelocity;
         _totalDirection += _fallVelocity;
-    }
-
-    public bool SetOvrrideAnimator(EAnimationType type)
-    {
-        if (animations.Count <= (int)type) return false;
-
-        _currentAnimType = type;
-
-        animator.runtimeAnimatorController = animations[(int)type].overrideController;
-        animator.SetBool("isOnlyLoop", animations[(int)type].isOnlyLoop);
-
-        rigBuilder.enabled = false;
-        rigBuilder.enabled = true;
-
-        //MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
-        //if (aimObj != null)
-        //{
-        //    aimObj.weight = _isLeftAttackReady ? 1.0f : 0.0f;
-        //}
-
-        //aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
-        //if (aimObj != null)
-        //{
-        //    aimObj.weight = _isRightAttackReady ? 1.0f : 0.0f;
-        //}
-
-        //for (int i = 2; i < aimObjects.Count; ++i)
-        //{
-        //    aimObj = aimObjects[i].GetComponent<MultiAimConstraint>();
-        //    if (aimObj != null)
-        //    {
-        //        aimObj.weight = 1.0f;
-        //    }
-        //}
-
-        SwitchStateToIdle();
-
-        return true;
-    }
-
-    public void CancleAttack(bool isLeft)
-    {
-        if (isLeft)
-        {
-            inventory.EquippedItems[EPartType.ArmL][0].UseCancleAbility();
-
-            animator.SetBool("isLeftAttack", false);
-            _previousState &= ~EPlayerState.LeftShooting;
-            _currentPlayerState &= ~EPlayerState.LeftShooting;
-            _isLeftAttackReady = false;  // 상태 초기화
-
-            //MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
-            //if (aimObj != null)
-            //{
-            //    aimObj.weight = 0.0f;
-            //}
-        }
-        else
-        {
-            inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
-
-            animator.SetBool("isRightAttack", false);
-            _previousState &= ~EPlayerState.RightShooting;
-            _currentPlayerState &= ~EPlayerState.RightShooting;
-            _isRightAttackReady = false;
-
-            //MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
-            //if (aimObj != null)
-            //{
-            //    aimObj.weight = 0.0f;
-            //}
-        }
-
-        if ((_currentPlayerState & EPlayerState.ShootState) == 0)
-        {
-            Stats.RemoveModifier(this);
-            SetOvrrideAnimator(_postAnimType);
-            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
-        }
-    }
-
-    public void Spawn()
-    {
-
-    }
-
-    public void PlayerSpawnAnimation()
-    {
-        SetMovable(false);
-        animator.SetBool("isDead", false);
-        animator.SetTrigger("spawnTrigger");
-        _currentPlayerState &= ~(EPlayerState.Dead);
-        _currentPlayerState |= EPlayerState.Spawning;
     }
     #endregion
 
@@ -792,6 +836,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             platformDelta.z = 0.0f;
             _platformVelocity = platformDelta;
             characterController.Move(_platformVelocity);
+            _groundCheckTimer = 0.0f;
             return;
         }
 
@@ -812,30 +857,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             _currentPlayerState |= EPlayerState.Falling;
             animator.SetBool("isFalling", true);
+
+            _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
+            _totalDirection += _fallVelocity;
         }
-
-        _fallVelocity.y += -9.8f * gravityScale * Time.deltaTime;
-        _totalDirection += _fallVelocity;
-    }
-
-    private bool IsOnMovingPlatform(out Transform platform)
-    {
-        platform = null;
-        // 캐릭터 중심에서 하단으로 BoxCast 진행
-        RaycastHit hit;
-        Vector3 boxCastOrigin = groundCheck.position;
-        float castDistance = 0.3f; // 짧게 설정
-
-        if (Physics.BoxCast(boxCastOrigin, boxSize, Vector3.down, out hit, Quaternion.identity, castDistance))
-        {
-            // 플랫폼 판정: 'Platform' 태그를 가진 경우만
-            if (hit.collider.CompareTag("Platform"))
-            {
-                platform = hit.collider.transform;
-                return true;
-            }
-        }
-        return false;
     }
 
     private void RotateCharacter()
@@ -889,17 +914,23 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _isLeftAttackReady = false;
         _isRightAttackReady = false;
 
-        if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
+        // Shoot State가 아닐 경우, 즉 왼팔 사격이나 오른팔 사격만을 하는 경우
+        // 특정 로직의 중복 실행을 막기 위함이며 Shoot 함수가 실행될 떄 사격 상태가 아닌 경우는 없으므로 그 부분은 고려하지 않았음
+        if ((_currentPlayerState & EPlayerState.ShootState) != EPlayerState.ShootState)
         {
             _postAnimType = _currentAnimType;
             SetOvrrideAnimator(_postAnimType + 4);
+            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
+            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, -0.3f, this));
+            Debug.Log("한 쪽만 발사 중");
+        }
+
+        if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
+        {
             if (inventory.EquippedItems[EPartType.ArmL][0].IsAnimating)
             {
                 animator.SetBool("isLeftAttack", true);
             }
-            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, -0.3f, this));
-
-            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
@@ -908,12 +939,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             {
                 animator.SetBool("isRightAttack", true);
             }
-
-            _postAnimType = _currentAnimType;
-            SetOvrrideAnimator(_postAnimType + 4);
-            stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, -0.3f, this));
-
-            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
     }
 
@@ -926,12 +951,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             if (stateInfo.IsName("Shoot") && !animator.IsInTransition(1))
             {
                 _isLeftAttackReady = true;
-                //MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
-                //if (aimObj != null)
-                //{
-                //    aimObj.weight = 1.0f;
-                //}
-
+                rigAimController.SmoothChangeWeight("ArmLAim", true);
                 inventory.EquippedItems[EPartType.ArmL][0].UseAbility();
             }
         }
@@ -942,31 +962,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             if (stateInfo.IsName("Shoot") && !animator.IsInTransition(2))
             {
                 _isRightAttackReady = true;
-                //MultiAimConstraint aimObj = aimObjects[1].GetComponent<MultiAimConstraint>();
-                //if (aimObj != null)
-                //{
-                //    aimObj.weight = 1.0f;
-                //}
+                rigAimController.SmoothChangeWeight("ArmRAim", true);
                 inventory.EquippedItems[EPartType.ArmR][0].UseAbility();
             }
         }   
-    }
-
-    private void CheckSpawnAnimationEnd()
-    {
-        if ((_currentPlayerState & EPlayerState.Spawning) == 0) return;
-
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        // 스폰 애니메이션 이름 또는 해시코드로 비교
-        if (!stateInfo.IsName("Spawn"))
-        {
-            // 스폰 애니메이션이 종료됨
-            SetMovable(true);
-            _currentPlayerState &= ~EPlayerState.Spawning;
-
-            rigAimController.IsAim = true;
-            rigAimController.SmoothChangeBaseWeight(true);
-        }
     }
     #endregion
 }

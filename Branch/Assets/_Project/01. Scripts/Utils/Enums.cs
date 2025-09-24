@@ -5,7 +5,6 @@ public enum EEventType
     Interaction,
 }
 
-
 // Unit(플레이어, 몬스터) 스탯 종류
 public enum EStatType
 {

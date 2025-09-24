@@ -25,4 +25,21 @@ public class PlayAnimation : ProcessBase
     {
         return objects.Count <= 0;
     }
+
+    public override string ToString()
+    {
+        string objectName = gameObject.name;
+        string animNames = "";
+        foreach (AnimCheck obj in objects)
+        {
+            if (animNames != "")
+            {
+                animNames += ", ";
+            }
+            animNames += (obj != null ? obj.name : "Null");
+        }
+
+        string log = $"[{objectName} ({GetType().Name})] IsOn: {IsOn}, Anim Check Objects: ({animNames})";
+        return log;
+    }
 }

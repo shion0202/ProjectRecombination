@@ -62,4 +62,16 @@ public class BreakObject : ProcessBase
         // 현재는 그냥 삭제하며, 추후 로직 변경 가능
         Destroy(breakableObject);
     }
+
+    public override string ToString()
+    {
+        string objectName = gameObject.name;
+        string breakableObjectName = breakableObject != null ? breakableObject.name : "null";
+        string breakData = $"Force: {data.explosionForce:F2}, Position: {data.explosionPosition}, Radius: {data.explosionRadius:F2}, UpwardsMod: {data.upwardsModifier:F2}, ForceMode: {data.forceMode}";
+        string layerData = LayerMask.LayerToName(obstacleLayers);
+        string routineState = (_breakRoutine != null) ? "Running" : "Stopped";
+
+        string log = $"[{objectName} ({GetType().Name})] IsOn: {IsOn}, breakableObject: {breakableObjectName}, BreakableData: ({breakData}), ObstacleLayer: ({layerData}), LapseTime: {lapseTime:F2}, BreakRoutine: {routineState}";
+        return log;
+    }
 }

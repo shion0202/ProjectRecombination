@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// GOS의 BreakObject(오브젝트 붕괴)를 테스트하기 위한 스크립트
 public class BreakableObject : MonoBehaviour
 {
     [SerializeField] private BreakableData data;

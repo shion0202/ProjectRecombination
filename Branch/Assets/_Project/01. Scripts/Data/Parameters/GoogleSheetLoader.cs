@@ -109,10 +109,12 @@ public class RowData
     // 문자열로 출력하는 메서드
     public override string ToString()
     {
+        // 각 StatEntry를 key: value 형태로 나열
         string result = "{ ";
         foreach (var entry in statEntries)
         {
-            result += $"{entry.key}: {entry.value.value}, ";
+            string valStr = !string.IsNullOrEmpty(entry.value.stringValue) ? entry.value.stringValue : entry.value.value.ToString("F2");
+            result += $"{entry.key}: {valStr}, ";
         }
         result = result.TrimEnd(',', ' ') + " }";
         return result;
@@ -354,8 +356,25 @@ public class GoogleSheetLoader : ScriptableObject
             {
                 Debug.LogError($"[GoogleSheetLoader] '{sheet.sheetKey}' 로드 실패: {www.error}");
             }
+        }
     }
-}
+
+    public override string ToString()
+    {
+        string result = $"GoogleSheetLoader '{name}':\n";
+        foreach (var sheet in sheetDatas)
+        {
+            result += $"- Sheet '{sheet.sheetKey}' ({sheet.rows.Count} rows)\n";
+            // 너무 길어지면 한두 개의 RowData만 출력하도록 조절 가능
+            for (int i = 0; i < Mathf.Min(sheet.rows.Count, 3); i++)
+            {
+                result += $"  Row {i}: {sheet.rows[i]}\n"; // RowData.ToString() 호출
+            }
+            if (sheet.rows.Count > 3)
+                result += $"  ...and {sheet.rows.Count - 3} more rows\n";
+        }
+        return result;
+    }
 }
 
 #if UNITY_EDITOR

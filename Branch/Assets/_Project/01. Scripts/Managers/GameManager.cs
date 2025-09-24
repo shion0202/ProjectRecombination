@@ -47,7 +47,7 @@ namespace Managers
             GUIManager.Instance.CloseGameOverPanel();
             player.Stats.CurrentBodyHealth = player.Stats.MaxBodyHealth;
             player.Stats.CurrentPartHealth = player.Stats.MaxPartHealth;
-            player.PlayerSpawnAnimation();
+            player.Spawn();
 
             _rebirthRoutine = null;
         }

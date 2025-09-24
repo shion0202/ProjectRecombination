@@ -7,5 +7,5 @@ using UnityEngine;
 
 public class ProjectileBlade : Bullet
 {
-
+    
 }

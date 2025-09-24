@@ -220,6 +220,26 @@ public class FollowCameraController : MonoBehaviour
             _cameraSettings[currentCameraState].cameraDistance += _scrollY;
         }
     }
+
+    public override string ToString()
+    {
+        string ownerName = _owner != null ? _owner.name : "Null";
+        string targetName = _cameraTarget != null ? _cameraTarget.name : "Null";
+
+        FollowCameraData currentSetting = null;
+        if (_cameraSettings != null && _cameraSettings.TryGetValue(currentCameraState, out var setting))
+        {
+            currentSetting = setting;
+        }
+
+        // 일부 주요 정보만 표시
+        string settingInfo = currentSetting != null
+            ? $"Distance: {currentSetting.cameraDistance:F2}, FOV: {currentSetting.FOV:F2}, DeadZone: ({currentSetting.deadZoneWidth:F2}, " +
+            $"{currentSetting.deadZoneHeight:F2}), SoftZone: ({currentSetting.softZoneWidth:F2}, {currentSetting.softZoneHeight:F2})" : "Null";
+
+        return $"[{gameObject.name} ({GetType().Name})] State: {currentCameraState}, Owner: {ownerName}, Target: {targetName}, IsLock: {_isLock}, " +
+               $"ScrollY: {_scrollY:F2}, CurrentRecoilX: {_currentRecoilX:F2}, CurrentRecoilY: {_currentRecoilY:F2}, CameraSetting: [{settingInfo}]";
+    }
     #endregion
 
     #region Private Methods

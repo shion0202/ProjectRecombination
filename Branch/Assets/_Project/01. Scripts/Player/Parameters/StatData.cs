@@ -66,4 +66,11 @@ public class StatData
     {
         return new StatData(statType, value, stringValue, minValue, maxValue);
     }
+
+    public override string ToString()
+    {
+        string valStr = !string.IsNullOrEmpty(stringValue) ? $"\"{stringValue}\"" : value.ToString("F2");
+        string log = $"[{GetType().Name}] Stat Type: {statType}, Value: {valStr}, Min Value: {minValue:F2}, Max Value: {maxValue:F2}";
+        return log;
+    }
 }

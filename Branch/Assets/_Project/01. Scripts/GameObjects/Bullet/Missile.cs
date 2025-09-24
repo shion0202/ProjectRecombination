@@ -102,6 +102,15 @@ public class Missile : Bullet
         return -1;
     }
 
+    public override string ToString()
+    {
+        string baseLog = base.ToString();
+        string targetName = _target != null ? _target.name : "None";
+
+        string log = $"{baseLog}\n" + $"Target: {targetName}, Predicted Hit Position: {_hitPos}, Bullet Velocity: {velocity}, Bullet Align Speed: {alignSpeed}";
+        return log;
+    }
+
     //IEnumerator CoMissileRoutine(Vector3 initialDir, Vector3 fromPos)
     //{
     //    float elapsed = 0f;

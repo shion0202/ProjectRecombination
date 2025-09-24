@@ -27,6 +27,8 @@ public class Inventory : MonoBehaviour
     private Dictionary<EPartType, Dictionary<string, Transform>> _rapidBoneMap = new();
     private Dictionary<EPartType, List<string>> _heavyBoneList = new();
     private Dictionary<EPartType, Dictionary<string, Transform>> _heavyBoneMap = new();
+    private Dictionary<EPartType, List<string>> _subBoneList = new();
+    private Dictionary<EPartType, Dictionary<string, Transform>> _subBoneMap = new();
     #endregion
 
     #region Properties
@@ -60,6 +62,8 @@ public class Inventory : MonoBehaviour
             _rapidBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
             _heavyBoneList.Add((EPartType)(1 << i), new List<string>());
             _heavyBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
+            _subBoneList.Add((EPartType)(1 << i), new List<string>());
+            _subBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
         }
 
         foreach (EPartType partType in Enum.GetValues(typeof(EPartType)))
@@ -89,6 +93,19 @@ public class Inventory : MonoBehaviour
                 if (_heavyBoneList[partType].Contains(bone.name))
                 {
                     _heavyBoneMap[partType].Add(bone.name, bone);
+                }
+            }
+
+            CharacterBoneData subBoneData = Resources.Load<CharacterBoneData>($"Bone/Sub{partType.ToString()}BoneData");
+            if (subBoneData)
+            {
+                _subBoneList[partType] = subBoneData.boneNames;
+                foreach (Transform bone in boneRoot.GetComponentsInChildren<Transform>())
+                {
+                    if (_subBoneList[partType].Contains(bone.name))
+                    {
+                        _subBoneMap[partType].Add(bone.name, bone);
+                    }
                 }
             }
         }
@@ -239,6 +256,26 @@ public class Inventory : MonoBehaviour
             owner.SetOvrrideAnimator(legs.LegsAnimType);
         }
     }
+
+    public override string ToString()
+    {
+        string ownerName = owner != null ? owner.name : "Null";
+        string basePartsNames = baseParts != null && baseParts.Count > 0
+            ? string.Join(", ", baseParts.ConvertAll(p => p.name))
+            : "None";
+
+        string itemsSummary = string.Join(", ", _items.Select(kvp =>
+            $"{kvp.Key}: [{string.Join(", ", kvp.Value.ConvertAll(p => p.name))}]"));
+
+        string equippedSummary = string.Join(", ", _equippedItems.Select(kvp =>
+            $"{kvp.Key}: [{string.Join(", ", kvp.Value.ConvertAll(p => p.name))}]"));
+
+        return $"Inventory:\n" +
+               $"  Owner: {ownerName}\n" +
+               $"  BaseParts: [{basePartsNames}]\n" +
+               $"  Items:\n    {itemsSummary.Replace(", ", "\n    ")}\n" +
+               $"  EquippedItems:\n    {equippedSummary.Replace(", ", "\n    ")}";
+    }
     #endregion
 
     #region Private Methods
@@ -266,7 +303,14 @@ public class Inventory : MonoBehaviour
         }
 
         List<Transform> meshTransforms = new List<Transform>();
-        if (part.gameObject.name.Contains("Heavy"))
+        if (part.gameObject.name.Contains("Sub"))
+        {
+            for (int i = 0; i < smr.bones.Length; ++i)
+            {
+                meshTransforms.Add(_subBoneMap[part.PartType][_subBoneList[part.PartType][i]]);
+            }
+        }
+        else if (part.gameObject.name.Contains("Heavy"))
         {
             for (int i = 0; i < smr.bones.Length; ++i)
             {

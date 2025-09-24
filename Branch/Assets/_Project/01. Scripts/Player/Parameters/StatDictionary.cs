@@ -45,4 +45,21 @@ public class StatDictionary
     public bool Contains(EStatType type) => _statDict.ContainsKey(type);
 
     public bool IsEmpty() => _statDict.Count == 0;
+
+    public override string ToString()
+    {
+        if (_statDict.Count == 0)
+        {
+            return "[StatDictionary] Dictionary is Empty.";
+        }
+            
+        string statsStr = "";
+        foreach (var stat in _statDict.Values)
+        {
+            statsStr += $"{stat.statType}: {(!string.IsNullOrEmpty(stat.stringValue) ? $"\"{stat.stringValue}\"" : stat.value.ToString("F2"))}, ";
+        }
+        statsStr = statsStr.TrimEnd(',', ' ');
+
+        return $"[{GetType().Name}] {{ {statsStr} }}";
+    }
 }

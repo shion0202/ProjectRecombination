@@ -176,6 +176,17 @@ public class Bullet : MonoBehaviour
 
         SetBulletLogic(target, direction, start);
     }
+
+    public override string ToString()
+    {
+        string fromName = _from != null ? _from.name : "Null";
+        string parentName = _parent != null ? _parent.name : "Null";
+
+        string log = $"[{gameObject.name} ({GetType().Name})] From(Shooter): {fromName}, Target Position: {_to}, " +
+            $"Bullet Direction: {_targetDirection}, Parent(Muzzle Flash): {_parent}, Damage: {_damage:F2}, Bullet Speed: {bulletSpeed:F2}, " +
+            $"Explosion Radius: {explosionRadius:F2}, Max Life Time: {lifeTime:F2}, Current Life Time: {_timer:F2}";
+        return log;
+    }
     #endregion
 
     #region Private Methods

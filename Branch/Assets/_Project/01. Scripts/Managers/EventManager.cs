@@ -108,4 +108,20 @@ public class EventManager : MonoBehaviour
             RemoveEvent(eventType);
         }
     }
+
+    public override string ToString()
+    {
+        if (listeners == null || listeners.Count == 0)
+        {
+            return "[Event Manager] No listeners registered.";
+        }
+
+        string log = "[Event Manager] Listeners:\n";
+        foreach (var kvp in listeners)
+        {
+            int count = kvp.Value?.GetInvocationList().Length ?? 0;
+            log += $"- Event: {kvp.Key}, Listeners: {count}\n";
+        }
+        return log;
+    }
 }

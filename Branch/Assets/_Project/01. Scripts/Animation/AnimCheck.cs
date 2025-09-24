@@ -69,9 +69,14 @@ public class AnimCheck : MonoBehaviour
         }
     }
 
-    private string ToString()
+    public override string ToString()
     {
-        string log = $"Anim Check: ";
+        string objectName = gameObject.name;
+        string clipName = animationClip != null ? animationClip.name : "None";
+        string defaultObjectState = defaultObject != null ? defaultObject.activeSelf.ToString() : "null";
+        string animObjectState = animObject != null ? animObject.activeSelf.ToString() : "null";
+
+        string log = $"[{objectName} ({GetType().Name})] Clip: {clipName}, Speed: {animSpeed:F2}, isPlay: {isPlay}, DefaultObjActive: {defaultObjectState}, AnimObjActive: {animObjectState}";
         return log;
     }
 }

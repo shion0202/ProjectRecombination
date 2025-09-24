@@ -105,4 +105,11 @@ public class Orb : Bullet
             bladeComp.Init(gameObject, null, transform.position, Vector3.zero, direction, Damage * 0.5f);
         }
     }
+
+    public override string ToString()
+    {
+        string baseLog = base.ToString();
+        string log = $"{baseLog}\n" + $"Blade Interval: {bladeInterval}, Blades On Death: {bladesOnDeath}, Blade Speed: {bladeSpeed}, Blade Timer: {bladeTimer}";
+        return log;
+    }
 }

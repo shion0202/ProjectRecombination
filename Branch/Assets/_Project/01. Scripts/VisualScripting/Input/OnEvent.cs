@@ -12,5 +12,12 @@ namespace _Project.Scripts.VisualScripting
         {
             IsOn = true;
         }
+
+        public override string ToString()
+        {
+            string objectName = gameObject.name;
+            string log = $"[{objectName} ({GetType().Name})] IsOn: {IsOn}";
+            return log;
+        }
     }
 }

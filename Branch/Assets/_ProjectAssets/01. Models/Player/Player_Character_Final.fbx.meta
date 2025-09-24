@@ -93,7 +93,7 @@ ModelImporter:
     - boneName: Bip001 L Thigh
       humanName: LeftUpperLeg
       limit:
-        min: {x: -60, y: -60, z: -60}
+        min: {x: -60, y: -60, z: -90}
         max: {x: 60, y: 60, z: 50}
         value: {x: 0, y: 0, z: 0}
         length: 0
@@ -101,7 +101,7 @@ ModelImporter:
     - boneName: Bip001 R Thigh
       humanName: RightUpperLeg
       limit:
-        min: {x: -60, y: -60, z: -60}
+        min: {x: -60, y: -60, z: -90}
         max: {x: 60, y: 60, z: 50}
         value: {x: 0, y: 0, z: 0}
         length: 0

@@ -55,4 +55,11 @@ public class Bouncer : Bullet
 
         return false;
     }
+
+    public override string ToString()
+    {
+        string baseLog = base.ToString();
+        string log = $"{baseLog}\n" + $"Max Bounces: {maxBounces}, Current Bounces: {_bounceCount}";
+        return log;
+    }
 }

@@ -13,5 +13,14 @@ namespace _Project.Scripts.VisualScripting
 
             EventManager.Instance.RemoveEvent(EEventType.Interaction);
         }
+
+        public override string ToString()
+        {
+            string objectName = gameObject.name;
+            string nextInputName = (nextInput != null) ? nextInput.GetType().Name : "None";
+
+            string log = $"[{objectName} ({GetType().Name})] IsOn: {IsOn}, Next: {nextInputName}";
+            return log;
+        }
     }
 }
