@@ -14627,7 +14627,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
   bulletSpeed: 15
-  explosionRange: 5
   explosionRadius: 5
   lifeTime: 5
   muzzleParticlePrefab: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
@@ -14636,9 +14635,8 @@ MonoBehaviour:
     type: 3}
   collisionBulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
     type: 3}
-  turnSpeed: 120
   velocity: 30
-  alignSpeed: 5
+  alignSpeed: 10
 --- !u!1 &185690
 GameObject:
   m_ObjectHideFlags: 0

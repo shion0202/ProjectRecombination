@@ -28,10 +28,10 @@ public class Bouncer : Bullet
     protected override void ShootByEnemy(Collision collision)
     {
         CreateImpaceEffect(collision);
-        var player = collision.transform.GetComponent<PlayerController>();
-        if (player != null)
+        IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
+        if (damagable != null)
         {
-            player.TakeDamage(Damage);
+            damagable.ApplyDamage(Damage);
         }
 
         CheckBounceCount(collision);

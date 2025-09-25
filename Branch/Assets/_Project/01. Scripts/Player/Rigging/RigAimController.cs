@@ -122,6 +122,19 @@ public class RigAimController : MonoBehaviour
         }
     }
 
+    public void ClearWeight(float inWeight)
+    {
+        foreach (var routine in _changeRoutines.Values)
+        {
+            if (routine != null)
+            {
+                StopCoroutine(routine);
+            }
+        }
+
+        SetAllWeight(inWeight);
+    }
+
     private IEnumerator CoSmoothChangeWeight(string key, bool isIncreasing, float changeSpeed)
     {
         float value = _constraints[key].weight;

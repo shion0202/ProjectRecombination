@@ -102,10 +102,10 @@ public class LegsCaterpillar : PartBaseLegs
         targetRot = targetRot * Quaternion.Euler(0.0f, 0.0f, 90.0f);
 
         // 현재 회전과 보간해서 부드럽게 회전 처리
-        gameObject.transform.rotation = Quaternion.Slerp(
-            gameObject.transform.rotation,
-            targetRot,
-            Time.deltaTime * 10f);
+        //gameObject.transform.rotation = Quaternion.Slerp(
+        //    gameObject.transform.rotation,
+        //    targetRot,
+        //    Time.deltaTime * 10f);
     }
 
     protected IEnumerator CoImpartRoutine()
@@ -116,18 +116,18 @@ public class LegsCaterpillar : PartBaseLegs
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, skillRange);
         foreach (Collider hit in hitColliders)
         {
-            AIController monster = hit.transform.GetComponent<AIController>();
+            IDamagable monster = hit.transform.GetComponent<IDamagable>();
             if (monster != null)
             {
-                monster.OnHit(skillDamage);
+                monster.ApplyDamage(skillDamage);
                 // TODO: 적 기절 (2초)
             }
             else
             {
-                monster = hit.transform.GetComponentInParent<AIController>();
+                monster = hit.transform.GetComponentInParent<IDamagable>();
                 if (monster != null)
                 {
-                    monster.OnHit(skillDamage);
+                    monster.ApplyDamage(skillDamage);
                     // TODO: 적 기절 (2초)
                 }
             }

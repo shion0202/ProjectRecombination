@@ -82,17 +82,17 @@ public class LegsEnhanced : PartBaseLegs
                 rb.AddExplosionForce(10.0f, transform.position, skillRange);
             }
 
-            AIController monster = hit.transform.GetComponent<AIController>();
+            IDamagable monster = hit.transform.GetComponent<IDamagable>();
             if (monster != null)
             {
-                monster.OnHit(skillDamage);
+                monster.ApplyDamage(skillDamage);
             }
             else
             {
-                monster = hit.transform.GetComponentInParent<AIController>();
+                monster = hit.transform.GetComponentInParent<IDamagable>();
                 if (monster != null)
                 {
-                    monster.OnHit(skillDamage);
+                    monster.ApplyDamage(skillDamage);
                 }
             }
         }

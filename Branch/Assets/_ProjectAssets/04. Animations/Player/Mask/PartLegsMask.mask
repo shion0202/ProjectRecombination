@@ -7,7 +7,7 @@ AvatarMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PartLegsMask
-  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Mask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   m_Elements:
   - m_Path: 
     m_Weight: 1
@@ -28,13 +28,13 @@ AvatarMask:
   - m_Path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
     m_Weight: 0
   - m_Path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf/Bip001 L Foot
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf/Bip001 L Foot/Bip001
       L Toe0
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf/Bip001 L Foot/Bip001
       L Toe0/Bip001 L Toe0Nub
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 LCalfTwist
     m_Weight: 0
   - m_Path: Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 LCalfTwist/Bip001 LCalfTwist1

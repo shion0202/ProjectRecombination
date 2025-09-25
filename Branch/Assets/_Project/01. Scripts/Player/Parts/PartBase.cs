@@ -73,17 +73,17 @@ public abstract class PartBase : MonoBehaviour
 
     public void TakeDamage(Transform target, float coefficient = 1.0f)
     {
-        AIController monster = target.GetComponent<AIController>();
+        IDamagable monster = target.GetComponent<IDamagable>();
         if (monster != null)
         {
-            monster.OnHit((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
+            monster.ApplyDamage((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
         }
         else
         {
-            monster = target.transform.GetComponentInParent<AIController>();
+            monster = target.transform.GetComponentInParent<IDamagable>();
             if (monster != null)
             {
-                monster.OnHit((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
+                monster.ApplyDamage((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
             }
         }
     }

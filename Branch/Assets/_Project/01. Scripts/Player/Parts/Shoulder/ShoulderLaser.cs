@@ -80,19 +80,17 @@ public class ShoulderLaser : PartBaseShoulder
 
         foreach (RaycastHit hit in hits)
         {
-            AIController monster = hit.transform.GetComponent<AIController>();
+            IDamagable monster = hit.transform.GetComponent<IDamagable>();
             if (monster != null)
             {
-                // 이런 식으로 레이저를 틱 데미지로 처리하려면 TakeDamage가 float 타입이어야 함
-                // 아마 최신 버전에선 수정되었던 걸로 기억
-                monster.OnHit(100.0f);
+                monster.ApplyDamage(100.0f);
             }
             else
             {
-                monster = hit.transform.GetComponentInParent<AIController>();
+                monster = hit.transform.GetComponentInParent<IDamagable>();
                 if (monster != null)
                 {
-                    monster.OnHit(100.0f);
+                    monster.ApplyDamage(100.0f);
                 }
             }
 

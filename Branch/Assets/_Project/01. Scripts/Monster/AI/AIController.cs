@@ -19,7 +19,7 @@ namespace Monster.AI
         }
     }
     
-    public sealed class AIController : MonoBehaviour
+    public sealed class AIController : MonoBehaviour, IDamagable
     {
         [SerializeField] private Blackboard.Blackboard blackboard;
         [SerializeField] private BehaviorTree.BehaviorTree tree;
@@ -257,10 +257,14 @@ namespace Monster.AI
         }
 
         #endregion
-        
+
         #region Public Methods
-        
         // 피격 이벤트 처리
+        public void ApplyDamage(float inDamage)
+        {
+            OnHit(inDamage);
+        }
+
         public void OnHit(float damage, AICommand command = null, int priority = 0)
         {
             if (blackboard == null) return;
@@ -285,7 +289,6 @@ namespace Monster.AI
             result += $"- Queue: {_queue}\n";
             return result;
         }
-        
         #endregion
     }
 }

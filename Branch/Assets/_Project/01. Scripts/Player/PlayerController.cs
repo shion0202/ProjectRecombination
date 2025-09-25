@@ -14,7 +14,7 @@ public struct BaseAnimation
     public bool isOnlyLoop;
 }
 
-public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapActions
+public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapActions, IDamagable
 {
     #region Variables
     [Header("Components")]
@@ -442,6 +442,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         animator.SetBool("isDead", false);
         animator.SetTrigger("spawnTrigger");
 
+        rigAimController.ClearWeight(0.0f);
+
         SetMovable(false);
     }
 
@@ -586,6 +588,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
+    public void ApplyDamage(float inDamage)
+    {
+        TakeDamage(inDamage);
+    }
+
     public void TakeDamage(float takeDamage)
     {
         // 현재 HP의 값을 데미지 만큼 처리
@@ -682,7 +689,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         rigBuilder.enabled = false;
         rigBuilder.enabled = true;
-        rigAimController.SmoothChangeBaseWeight(true);
+
+        if ((_currentPlayerState & EPlayerState.Spawning) == 0)
+        {
+            rigAimController.SmoothChangeBaseWeight(true);
+        }
 
         // 사격 중 파츠 교체 시 취소하도록 (하체 파츠에 의존하는데 사격이 변경되지 않는 경우도 있지 않나?)
         //MultiAimConstraint aimObj = aimObjects[0].GetComponent<MultiAimConstraint>();
@@ -922,7 +933,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             SetOvrrideAnimator(_postAnimType + 4);
             _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
             stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, -0.3f, this));
-            Debug.Log("한 쪽만 발사 중");
         }
 
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)

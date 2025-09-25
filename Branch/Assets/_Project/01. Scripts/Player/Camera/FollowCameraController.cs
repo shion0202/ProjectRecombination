@@ -178,21 +178,21 @@ public class FollowCameraController : MonoBehaviour
         }
     }
 
-    public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY)
+    public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY, float force = 1.0f)
     {
         _currentRecoilX = 0.0f;
         _currentRecoilY = 0.0f;
 
         _currentRecoilX += recoilX * (UnityEngine.Random.value > 0.5f ? 1 : -1);
         _currentRecoilY += recoilY;
-        ApplyShake(source);
+        ApplyShake(source, force);
     }
 
-    public void ApplyShake(CinemachineImpulseSource source)
+    public void ApplyShake(CinemachineImpulseSource source, float force = 1.0f)
     {
         source.m_DefaultVelocity.x = source.m_DefaultVelocity.x * (UnityEngine.Random.value > 0.5f ? 1 : -1);
         source.m_DefaultVelocity.y = source.m_DefaultVelocity.y * (UnityEngine.Random.value > 0.5f ? 1 : -1);
-        source.GenerateImpulse();
+        source.GenerateImpulseWithForce(force);
     }
 
     public void SetCameraRotatable(bool lockState)

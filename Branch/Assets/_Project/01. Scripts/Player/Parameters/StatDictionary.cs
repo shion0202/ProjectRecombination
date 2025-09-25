@@ -38,6 +38,11 @@ public class StatDictionary
         return clone;
     }
 
+    public void Clear()
+    {
+        _statDict.Clear();
+    }
+
     public IEnumerable<StatData> GetAllStats() => _statDict.Values;
 
     public void RemoveStat(EStatType type) => _statDict.Remove(type);

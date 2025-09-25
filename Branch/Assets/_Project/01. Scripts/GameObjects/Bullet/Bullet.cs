@@ -204,10 +204,10 @@ public class Bullet : MonoBehaviour
 
     protected virtual void ShootByEnemy(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
-        if (player != null)
+        IDamagable damagable = other.gameObject.GetComponent<IDamagable>();
+        if (damagable != null)
         {
-            player.TakeDamage(_damage);
+            damagable.ApplyDamage(_damage);
         }
 
         DestroyBullet(other.transform);
@@ -226,10 +226,10 @@ public class Bullet : MonoBehaviour
 
     protected virtual void ShootByEnemy(Collision collision)
     {
-        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-        if (player != null)
+        IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
+        if (damagable != null)
         {
-            player.TakeDamage(_damage);
+            damagable.ApplyDamage(_damage);
         }
 
         DestroyBullet(collision);
@@ -318,17 +318,17 @@ public class Bullet : MonoBehaviour
 
     protected void TakeDamage(Transform target, float coefficient = 1.0f)
     {
-        AIController monster = target.GetComponent<AIController>();
+        IDamagable monster = target.GetComponent<IDamagable>();
         if (monster != null)
         {
-            monster.OnHit(_damage * coefficient);
+            monster.ApplyDamage(_damage * coefficient);
         }
         else
         {
-            monster = target.transform.GetComponentInParent<AIController>();
+            monster = target.transform.GetComponentInParent<IDamagable>();
             if (monster != null)
             {
-                monster.OnHit(_damage * coefficient);
+                monster.ApplyDamage(_damage * coefficient);
             }
         }
     }

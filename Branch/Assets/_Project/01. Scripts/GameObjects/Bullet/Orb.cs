@@ -40,10 +40,10 @@ public class Orb : Bullet
 
     protected override void ShootByEnemy(Collider other)
     {
-        var player = other.GetComponent<PlayerController>();
-        if (player != null)
+        IDamagable damagable = other.gameObject.GetComponent<IDamagable>();
+        if (damagable != null)
         {
-            player.TakeDamage(Damage);
+            damagable.ApplyDamage(Damage);
         }
     }
 
