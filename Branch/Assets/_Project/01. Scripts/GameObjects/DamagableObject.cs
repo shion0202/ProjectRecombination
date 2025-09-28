@@ -49,6 +49,11 @@ public class DamagableObject : MonoBehaviour, IDamagable
         if (IsDead) return;
 
         float damage = (inDamage - (_stats[EStatType.Defence].value + _stats[EStatType.AddDefence].value)) * (1 - _stats[EStatType.DamageReductionRate].value);
+        if (damage <= 0.0f)
+        {
+            damage = 1.0f;  // 최소 데미지
+        }
+
         _currentHp -= damage;
         if (_currentHp <= 0)
         {

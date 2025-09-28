@@ -51,14 +51,14 @@ public class ArmLaserChase : PartBaseArm
             AIController monster = currentTarget.GetComponent<AIController>();
             if (monster != null)
             {
-                isDie = (monster.Blackboard.State == Monster.MonsterState.Death);
+                isDie = monster.Blackboard.State.HasState("Death");
             }
             else
             {
                 monster = currentTarget.GetComponentInParent<AIController>();
                 if (monster != null)
                 {
-                    isDie = (monster.Blackboard.State == Monster.MonsterState.Death);
+                    isDie = monster.Blackboard.State.HasState("Death");
                 }
             }
 

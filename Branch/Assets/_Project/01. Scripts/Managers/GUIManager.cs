@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -25,6 +26,16 @@ namespace Managers
         private Image testGameOverPanel;
 
         private Coroutine _runningFadeCoroutine; // 카메라 연출 코루틴 저장
+
+        [Header("Test Crosshair UI")]
+        [SerializeField] private Slider ammoLeftBar;
+        [SerializeField] private Slider ammoRightBar;
+
+        [Header("Test Skill UI")]
+        [SerializeField] private Image legsSkillCooldownImage;
+        [SerializeField] private Image backSkillCooldownImage;
+        [SerializeField] private TextMeshProUGUI legsSkillCooldownText;
+        [SerializeField] private TextMeshProUGUI backSkillCooldownText;
 
         public void ToggleCrosshead()
         {
@@ -62,6 +73,79 @@ namespace Managers
         public void CloseGameOverPanel()
         {
             testGameOverPanel.enabled = false;
+        }
+
+        public void SetAmmoLeftSlider(float current, float max)
+        {
+            float rate = current / max;
+            ammoLeftBar.value = rate;
+        }
+
+        public void SetAmmoRightSlider(float current, float max)
+        {
+            float rate = current / max;
+            ammoRightBar.value = rate;
+        }
+
+        public void SetAmmoColor(EPartType type, bool isOverheat)
+        {
+            Image image = null;
+            if (type == EPartType.ArmL)
+            {
+                image = ammoLeftBar.GetComponentInChildren<Image>();
+            }
+            else
+            {
+                image = ammoRightBar.GetComponentInChildren<Image>();
+            }
+            if (image == null) return;
+
+            if (isOverheat)
+            {
+                image.color = Color.white;
+            }
+            else
+            {
+                image.color = Color.black;
+            }
+        }
+
+        public void SetLegsSkillIcon(bool isOn)
+        {
+            legsSkillCooldownImage.gameObject.SetActive(isOn);
+        }
+
+        public void SetLegsSkillCooldown(bool isOn)
+        {
+            legsSkillCooldownText.gameObject.SetActive(isOn);
+        }
+
+        public void SetBackSkillIcon(bool isOn)
+        {
+            backSkillCooldownImage.gameObject.SetActive(isOn);
+        }
+
+        public void SetBackSkillCooldown(bool isOn)
+        {
+            backSkillCooldownText.gameObject.SetActive(isOn);
+        }
+
+        public void SetLegsSkillCooldown(float cooldownTime)
+        {
+            legsSkillCooldownText.text = cooldownTime.ToString("F0");
+        }
+
+        public void SetBackSkillCooldown(float cooldownTime)
+        {
+            backSkillCooldownText.text = cooldownTime.ToString("F0");
+        }
+
+        public void ResetSkillCooldown()
+        {
+            SetLegsSkillIcon(false);
+            SetLegsSkillCooldown(false);
+            SetBackSkillIcon(false);
+            SetBackSkillCooldown(false);
         }
 
         #region Fade In/Out

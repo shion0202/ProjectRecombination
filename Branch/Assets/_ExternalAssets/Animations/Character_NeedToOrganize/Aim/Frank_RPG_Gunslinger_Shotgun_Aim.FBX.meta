@@ -562,7 +562,7 @@ ModelImporter:
       : position error = 2.802980 mm\n\t'thigh_r' : position error = 1.344974 mm\n\t'upperarm_l'
       : position error = 1.373489 mm\n\t'hand_l' : position error = 3.384120 mm\n\t'middle_02_l'
       : position error = 1.134813 mm\n\t'ring_02_l' : position error = 1.424898 mm\n\t'hand_r'
-      : position error = 3.646522 mm\n\t'middle_02_r' : position error = 1.204111
+      : position error = 3.646512 mm\n\t'middle_02_r' : position error = 1.204113
       mm\n\t'ring_02_r' : position error = 1.314726 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
@@ -599,7 +599,7 @@ ModelImporter:
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
-      mirror: 0
+      mirror: 1
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []

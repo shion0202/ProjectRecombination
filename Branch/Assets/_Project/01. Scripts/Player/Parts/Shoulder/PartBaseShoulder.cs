@@ -1,3 +1,4 @@
+using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class PartBaseShoulder : PartBase
 
     public override void FinishActionForced()
     {
-        
+        GUIManager.Instance.ResetSkillCooldown();
     }
 
     public override void UseAbility()

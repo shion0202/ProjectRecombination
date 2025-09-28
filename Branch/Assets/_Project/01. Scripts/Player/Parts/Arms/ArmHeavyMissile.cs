@@ -1,3 +1,4 @@
+using Managers;
 using Monster;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,6 +43,7 @@ public class ArmHeavyMissile : PartBaseArm
         {
             CancleShootState(partType == EPartType.ArmL ? true : false);
             _isOverheat = true;
+            GUIManager.Instance.SetAmmoColor(partType, true);
         }
     }
 

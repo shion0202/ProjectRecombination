@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 2090e53029d63594aaf1a45d6899e548
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 22200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -562,7 +562,7 @@ ModelImporter:
       : position error = 2.802980 mm\n\t'thigh_r' : position error = 1.344981 mm\n\t'upperarm_l'
       : position error = 1.373489 mm\n\t'hand_l' : position error = 3.384164 mm\n\t'middle_02_l'
       : position error = 1.134765 mm\n\t'ring_02_l' : position error = 1.424938 mm\n\t'hand_r'
-      : position error = 3.646522 mm\n\t'middle_02_r' : position error = 1.204111
+      : position error = 3.646512 mm\n\t'middle_02_r' : position error = 1.204113
       mm\n\t'ring_02_r' : position error = 1.314726 mm\n"
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
@@ -614,10 +614,26 @@ ModelImporter:
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
-      mirror: 0
+      mirror: 1
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: FireBullet
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 60b1c5e3f54f4e63a4492bf33fbaeab0,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: AnimationEvent_Fire
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: f249a284add941eb8891fbf5eabc1deb,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -822,6 +838,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -849,6 +866,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -1781,6 +1799,8 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

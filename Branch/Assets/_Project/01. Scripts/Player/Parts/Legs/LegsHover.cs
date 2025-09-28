@@ -1,4 +1,5 @@
 using _Project.Scripts.VisualScripting;
+using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -58,6 +59,9 @@ public class LegsHover : PartBaseLegs
             _currentBarrier = null;
         }
         _owner.Stats.RemoveModifier(this);
+
+        GUIManager.Instance.SetLegsSkillIcon(false);
+        GUIManager.Instance.SetLegsSkillCooldown(false);
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
@@ -128,11 +132,11 @@ public class LegsHover : PartBaseLegs
     {
         if (_skillCoroutine != null) return;
         _skillCoroutine = StartCoroutine(CoCreateBarrier());
-        
     }
 
     IEnumerator CoCreateBarrier()
     {
+        GUIManager.Instance.SetLegsSkillIcon(true);
         // 스킬 사용 시 보호막 생성
         _currentBarrier = Instantiate(barrierPrefab, barrierSpawnPoint.position - new Vector3(0.0f, 0.2f, 0.0f), Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f)), transform);
         HoverBarrier barrier = _currentBarrier.GetComponent<HoverBarrier>();
@@ -159,8 +163,24 @@ public class LegsHover : PartBaseLegs
 
         _owner.Stats.RemoveModifier(this);
 
-        yield return new WaitForSeconds(skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value);
+        float time = skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value;
+        GUIManager.Instance.SetLegsSkillCooldown(true);
+        GUIManager.Instance.SetLegsSkillCooldown(time);
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            time -= 0.1f;
+            GUIManager.Instance.SetLegsSkillCooldown(time);
+            if (time <= 0.0f)
+            {
+                break;
+            }
+        }
+
         Debug.Log("호버링 쿨타임 초기화");
+        GUIManager.Instance.SetLegsSkillIcon(false);
+        GUIManager.Instance.SetLegsSkillCooldown(false);
         _skillCoroutine = null;
     }
 }

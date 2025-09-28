@@ -1,4 +1,4 @@
-﻿using Assets.Agoston_R.Simple_Laser.Scripts.Dto;
+using Assets.Agoston_R.Simple_Laser.Scripts.Dto;
 using Assets.Agoston_R.Simple_Laser.Scripts.Raycaster;
 using UnityEngine;
 
@@ -14,6 +14,8 @@ namespace Controller
         private static readonly int WidthConstant = Shader.PropertyToID("_widthConstant");
         private static readonly int ColorConstant = Shader.PropertyToID("_Color");
         private readonly Vector3[] linePositionsLocalSpace = new Vector3[2];
+
+        [SerializeField] private float damagePerSecond = 100.0f;
 
         [Header("Setup")]
         [Tooltip("Switch to activate or deactivate the laser.")]
@@ -188,6 +190,11 @@ namespace Controller
             }
 
             throw new MissingComponentException($"Laser object {name}: line renderer or its material is missing.");
+        }
+
+        private void TakeDamage(Transform target, float damage)
+        {
+            //global:: IDamagable damagable = target.GetComponent<global::IDamagable>();
         }
     }
 

@@ -1,11 +1,15 @@
+using Managers;
+using Monster.AI.BehaviorTree.Nodes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class LegsBasic : PartBaseLegs
 {
     [SerializeField] protected GameObject dashEffectPrefab;
+    private bool _isCooldown = false;
 
     protected override void Awake()
     {
@@ -22,7 +26,13 @@ public class LegsBasic : PartBaseLegs
     public override void FinishActionForced()
     {
         base.FinishActionForced();
+
         _owner.FinishDash();
+        GUIManager.Instance.SetLegsSkillIcon(false);
+        GUIManager.Instance.SetLegsSkillCooldown(false);
+        _currentSkillCount = 0;
+        _isCooldown = false;
+        _skillCoroutine = null;
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
@@ -44,6 +54,8 @@ public class LegsBasic : PartBaseLegs
 
     protected void Dash()
     {
+        if (_isCooldown) return;
+
         if (_skillCoroutine != null)
         {
             StopCoroutine(_skillCoroutine);
@@ -71,14 +83,36 @@ public class LegsBasic : PartBaseLegs
         GameObject go = Instantiate(dashEffectPrefab, _owner.transform.position + (Vector3.up * 1.0f) + (direction * -3.0f), effectRotation);
         Destroy(go, 2.0f);
         ++_currentSkillCount;
+        if (_currentSkillCount >= maxSkillCount)
+        {
+            GUIManager.Instance.SetLegsSkillIcon(true);
+        }
 
         yield return new WaitForSeconds(skillTime);
 
+        _isCooldown = true;
         _owner.FinishDash();
+        GUIManager.Instance.SetLegsSkillIcon(true);
 
-        yield return new WaitForSeconds((skillCooldown * (_currentSkillCount)) - _owner.Stats.TotalStats[EStatType.CooldownReduction].value);
+        float time = (skillCooldown * (_currentSkillCount)) - _owner.Stats.TotalStats[EStatType.CooldownReduction].value;
+        GUIManager.Instance.SetLegsSkillCooldown(true);
+        GUIManager.Instance.SetLegsSkillCooldown(time);
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
 
+            time -= 0.1f;
+            GUIManager.Instance.SetLegsSkillCooldown(time);
+            if (time <= 0.0f)
+            {
+                break;
+            }
+        }
+
+        GUIManager.Instance.SetLegsSkillIcon(false);
+        GUIManager.Instance.SetLegsSkillCooldown(false);
         _currentSkillCount = 0;
+        _isCooldown = false;
         _skillCoroutine = null;
     }
 }

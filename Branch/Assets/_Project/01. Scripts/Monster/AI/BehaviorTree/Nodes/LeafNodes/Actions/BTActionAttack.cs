@@ -25,7 +25,7 @@ namespace Monster.AI.BehaviorTree.Nodes
             
             // 공격 명령을 행동 대기열에 추가
             // CommandContext commandContext = new CommandContext( new AttackCommand(), skillData);
-            context.Enqueue(new AttackCommand(skillData), priority);
+            context.Enqueue(new AttackCommand(context.Blackboard, skillData), priority);
             
             return state = NodeState.Success;
         }

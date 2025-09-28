@@ -1,3 +1,4 @@
+using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,15 @@ public class ArmRapidCastProjectile : PartBaseArm
 
     protected override void Update()
     {
+        if (partType == EPartType.ArmL)
+        {
+            GUIManager.Instance.SetAmmoLeftSlider(_currentAmmo, maxAmmo);
+        }
+        else
+        {
+            GUIManager.Instance.SetAmmoRightSlider(_currentAmmo, maxAmmo);
+        }
+
         _currentShootTime -= Time.deltaTime;
 
         if (!_isShooting)
@@ -28,6 +38,7 @@ public class ArmRapidCastProjectile : PartBaseArm
             if (_currentAmmo >= maxAmmo)
             {
                 _isOverheat = false;
+                GUIManager.Instance.SetAmmoColor(partType, false);
             }
 
             return;
@@ -90,6 +101,7 @@ public class ArmRapidCastProjectile : PartBaseArm
         {
             CancleShootState(partType == EPartType.ArmL ? true : false);
             _isOverheat = true;
+            GUIManager.Instance.SetAmmoColor(partType, true);
         }
     }
 }

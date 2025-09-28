@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Monster;
 using Monster.AI.Blackboard;
+using Managers;
 
 public class ShoulderRapid : PartBaseShoulder
 {
@@ -93,6 +94,7 @@ public class ShoulderRapid : PartBaseShoulder
 
     private IEnumerator CoLaunchTargetMissiles()
     {
+        GUIManager.Instance.SetBackSkillIcon(true);
         // 1. 스킬 시전 중 플레이어와 카메라 조작 불가
         _owner.FollowCamera.SetCameraRotatable(false);
         _owner.SetMovable(false);
@@ -138,6 +140,8 @@ public class ShoulderRapid : PartBaseShoulder
             _owner.SetMovable(true);
             _skillCoroutine = null;
 
+            GUIManager.Instance.SetBackSkillIcon(false);
+            GUIManager.Instance.SetBackSkillCooldown(false);
             yield break;
         }
 
@@ -175,8 +179,23 @@ public class ShoulderRapid : PartBaseShoulder
         _owner.FollowCamera.SetCameraRotatable(true);
         _owner.SetMovable(true);
 
-        yield return new WaitForSeconds(5.0f); // 쿨타임 임시 처리
+        float time = 5.0f;
+        GUIManager.Instance.SetBackSkillCooldown(true);
+        GUIManager.Instance.SetBackSkillCooldown(time);
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
 
+            time -= 0.1f;
+            GUIManager.Instance.SetBackSkillCooldown(time);
+            if (time <= 0.0f)
+            {
+                break;
+            }
+        }
+
+        GUIManager.Instance.SetBackSkillIcon(false);
+        GUIManager.Instance.SetBackSkillCooldown(false);
         Debug.Log("쿨타임 종료");
         _skillCoroutine = null;
     }

@@ -78,6 +78,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     #endregion
 
     #region Properties
+    public Animator PlayerAnimator
+    {
+        get => animator;
+    }
+
     public CharacterStat Stats
     {
         get => stats;
@@ -120,6 +125,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         get { return _postAnimType; }
         set { _postAnimType = value; }
+    }
+
+    public bool IsGrounded
+    {
+        get { return _isGrounded; }
     }
     #endregion
 
@@ -239,26 +249,20 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _totalDirection = Vector3.zero;
     }
 
-    // To-do: 호버링을 고려하여 콜라이더 방식으로 변경할 것
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    private void OnTriggerEnter(Collider other)
     {
-        if (_isPlatformEnd) return;
-
-        if (hit.gameObject.CompareTag("PlatformEnd"))
+        if (other.gameObject.CompareTag("PlatformIn"))
         {
-            _isPlatformEnd = true;
+            var comp = other.GetComponent<PlatformCheck>();
+            if (comp != null)
+            {
+                _isOnPlatform = true;
+                _postPlatform = comp.Platform;
+                _lastPlatformPosition = _postPlatform.position;
 
-            _isOnPlatform = false;
-            _postPlatform = null;
-            _platformVelocity = Vector3.zero;
-            return;
-        }
+                legsAnimator.enabled = false;
+            }
 
-        if (hit.gameObject.CompareTag("Platform"))
-        {
-            _isOnPlatform = true;
-            _postPlatform = hit.transform;
-            _lastPlatformPosition = _postPlatform.position;
             return;
         }
     }
@@ -755,6 +759,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _fallVelocity.y = jumpVelocity;
         _totalDirection += _fallVelocity;
     }
+
+    public void TriggerPlatformEnd()
+    {
+        _isPlatformEnd = true;
+
+        _isOnPlatform = false;
+        _postPlatform = null;
+        _platformVelocity = Vector3.zero;
+
+        legsAnimator.enabled = true;
+    }
     #endregion
 
     #region Private Methods
@@ -858,7 +873,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             animator.SetBool("isFalling", false);
             _groundCheckTimer = 0.0f;
 
-            _fallVelocity.y = -5.0f * gravityScale * Time.deltaTime; // 약간의 하강력 유지로 땅에 붙어있게 함
+            _fallVelocity.y = -20.0f * gravityScale * Time.deltaTime; // 약간의 하강력 유지로 땅에 붙어있게 함
             _totalDirection += _fallVelocity;
             return;
         }

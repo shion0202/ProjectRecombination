@@ -7,33 +7,52 @@ namespace Monster.AI.Command
 {
     public class IdleCommand : AICommand
     {
-        public override IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        public override void OnEnter(Blackboard.Blackboard blackboard, Action processError = null)
         {
-            if (blackboard == null)
+            base.OnEnter(blackboard, processError);
+            if (blackboard is null)
             {
-                Debug.LogError("Blackboard is null. Cannot execute IdleCommand.");
-                yield break;
+                Debug.LogError("Blackboard is null. Cannot enter IdleCommand.");
+                processError?.Invoke();
+                return;
             }
-            // Idle 상태 처리
-            if (blackboard.State == MonsterState.Idle)
-            {
-                Debug.Log("AI is already idle.");
-                yield break;
-            }
+
+            Debug.Log("Entering IdleCommand.");
             // NavMeshAgent를 정지시키고, 이동을 중지
-            if (blackboard.NavMeshAgent != null)
+            if (blackboard.NavMeshAgent is not null)
             {
                 blackboard.NavMeshAgent.isStopped = true;
                 blackboard.NavMeshAgent.ResetPath();
                 Debug.Log("AI has stopped moving.");
             }
             
-            // Idle 상태로 전환
-            blackboard.State = MonsterState.Idle;
-            // Debug.Log("AI is now idle.");
-            
+            var animatorSetter = blackboard.AnimatorParameterSetter;
+            if (animatorSetter is not null && animatorSetter.Animator is not null)
+            // 대기 애니메이션 재생
+            // if (blackboard.Animator is not null)
+            {
+                animatorSetter.Animator.SetBool("IsRun", false);
+                animatorSetter.Animator.SetBool("IsWalk", false);
+                animatorSetter.Animator.SetBool("IsFire", false);
+            }
+        }
+
+        public override void Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        {
+            if (blackboard is null)
+            {
+                Debug.LogError("Blackboard is null. Cannot execute IdleCommand.");
+            }
+
+            OnExit(blackboard);
             // 명령어 완료 콜백 호출
             onComplete?.Invoke();
+        }
+
+        public override void OnExit(Blackboard.Blackboard blackboard)
+        {
+            base.OnExit(blackboard);
+            Debug.Log("Exiting IdleCommand.");
         }
     }
 }

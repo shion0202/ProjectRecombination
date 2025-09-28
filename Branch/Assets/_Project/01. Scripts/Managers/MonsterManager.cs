@@ -31,17 +31,21 @@ namespace Managers
                 monsters.Remove(monster);
             }
         }
-        
+
         public GameObject[] GetBattleMonsters()
         {
-            List<GameObject> battleMonsters = new ();
+            List<GameObject> battleMonsters = new();
             foreach (GameObject monster in monsters)
             {
                 Blackboard blackboard = monster?.GetComponentInChildren<Blackboard>();
-                if (blackboard?.State is MonsterState.Chase or MonsterState.Attack or MonsterState.Hit)
+                if (blackboard is not null)
                 {
-                    battleMonsters.Add(monster);
+                    if (blackboard.State.HasState("Chase") || blackboard.State.HasState("Attack") || blackboard.State.HasState("Hit"))
+                    {
+                        battleMonsters.Add(monster);
+                    }
                 }
+
             }
             return battleMonsters.ToArray();
         }

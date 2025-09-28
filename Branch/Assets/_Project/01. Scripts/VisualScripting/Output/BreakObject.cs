@@ -23,6 +23,14 @@ public class BreakObject : ProcessBase
     [SerializeField] private LayerMask obstacleLayers; // 파괴된 오브젝트와 충돌하지 않을 레이어
     private Coroutine _breakRoutine = null;
 
+    private void Awake()
+    {
+        if (obstacleLayers == 0)
+        {
+            obstacleLayers |= (1 << LayerMask.NameToLayer("Breakable"));
+        }
+    }
+
     public override void Execute()
     {
         if (IsOn) return;

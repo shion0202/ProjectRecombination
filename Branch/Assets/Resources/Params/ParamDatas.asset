@@ -24,7 +24,7 @@ MonoBehaviour:
     workSheetGid: 192128569
   - sheetKey: Monster2Skill
     sheetLink: 1Haa-bYjMBgwnmZcYOElVQ2_zyMGfy0GDxbJr5TP6pF8
-    workSheetGid: 789787461
+    workSheetGid: 934060537
   sheetDatas:
   - sheetKey: CharacterStats
     rows:
@@ -39,7 +39,7 @@ MonoBehaviour:
       - key: 1
         value:
           statType: 1
-          stringValue: Player
+          stringValue: U.R.A(Player)
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -54,7 +54,7 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 10
+          value: 20
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 4
@@ -111,7 +111,7 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 200
+          value: 250
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
@@ -182,7 +182,7 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 50
+          value: 15
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 4
@@ -231,7 +231,7 @@ MonoBehaviour:
       - key: 1
         value:
           statType: 1
-          stringValue: securityDrone
+          stringValue: siegeBreaker
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -239,14 +239,14 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 300
+          value: 650
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
         value:
           statType: 3
           stringValue: 
-          value: 60
+          value: 30
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 4
@@ -260,7 +260,7 @@ MonoBehaviour:
         value:
           statType: 5
           stringValue: 
-          value: 7
+          value: 6
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 6
@@ -274,7 +274,71 @@ MonoBehaviour:
         value:
           statType: 7
           stringValue: 
-          value: 10
+          value: 20
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1005
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: siegeBreakerAce
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 2
+        value:
+          statType: 2
+          stringValue: 
+          value: 750
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 30
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 4
+        value:
+          statType: 4
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 5
+        value:
+          statType: 5
+          stringValue: 
+          value: 6
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 6
+        value:
+          statType: 6
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 15
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 8
@@ -289,13 +353,13 @@ MonoBehaviour:
         value:
           statType: 0
           stringValue: 
-          value: 1005
+          value: 1006
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
         value:
           statType: 1
-          stringValue: twistedSpectre
+          stringValue: stalker
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -303,21 +367,21 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 350
+          value: 225
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
         value:
           statType: 3
           stringValue: 
-          value: 55
+          value: 20
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 4
         value:
           statType: 4
           stringValue: 
-          value: 9
+          value: 8
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 5
@@ -353,13 +417,13 @@ MonoBehaviour:
         value:
           statType: 0
           stringValue: 
-          value: 1006
+          value: 1007
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
         value:
           statType: 1
-          stringValue: corruptedHunter
+          stringValue: stalkerAce
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -367,14 +431,14 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 500
+          value: 300
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
         value:
           statType: 3
           stringValue: 
-          value: 75
+          value: 20
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 4
@@ -388,71 +452,7 @@ MonoBehaviour:
         value:
           statType: 5
           stringValue: 
-          value: 11
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 6
-        value:
-          statType: 6
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 7
-        value:
-          statType: 7
-          stringValue: 
-          value: 15
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 8
-        value:
-          statType: 8
-          stringValue: 
-          value: 10
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-    - statEntries:
-      - key: 0
-        value:
-          statType: 0
-          stringValue: 
-          value: 1007
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: siegeBreaker
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 2
-        value:
-          statType: 2
-          stringValue: 
-          value: 4000
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 3
-        value:
-          statType: 3
-          stringValue: 
-          value: 90
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 4
-        value:
-          statType: 4
-          stringValue: 
-          value: 4
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 5
-        value:
-          statType: 5
-          stringValue: 
-          value: 9
+          value: 12
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 6
@@ -502,7 +502,7 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 80
+          value: 40
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 4
@@ -566,7 +566,7 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 100
+          value: 50
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 4
@@ -1786,13 +1786,6 @@ MonoBehaviour:
           value: 4001
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: OneShot
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -1811,7 +1804,7 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 15
+          value: 25
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 18
@@ -1843,13 +1836,6 @@ MonoBehaviour:
           value: 4002
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: ChragingShot
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -1868,7 +1854,7 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 30
+          value: 60
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 18
@@ -1900,13 +1886,6 @@ MonoBehaviour:
           value: 4003
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: GravityBullet
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -1925,7 +1904,7 @@ MonoBehaviour:
         value:
           statType: 3
           stringValue: 
-          value: 35
+          value: 55
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 18
@@ -1946,7 +1925,7 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
-          value: 1
+          value: 3
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -1957,39 +1936,32 @@ MonoBehaviour:
           value: 4004
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: Avoidance
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
           stringValue: 
-          value: 3
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 20
         value:
           statType: 20
           stringValue: 
-          value: 6
+          value: 1.5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
         value:
           statType: 3
           stringValue: 
-          value: 0
+          value: 30
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 18
         value:
           statType: 18
           stringValue: 
-          value: 7
+          value: 2
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 19
@@ -2003,7 +1975,7 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -2012,13 +1984,6 @@ MonoBehaviour:
           statType: 0
           stringValue: 
           value: 4005
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: TwoHandsStrike
-          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 17
@@ -2071,13 +2036,6 @@ MonoBehaviour:
           value: 4006
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: SuicideExplosion
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -2089,21 +2047,21 @@ MonoBehaviour:
         value:
           statType: 20
           stringValue: 
-          value: 8
+          value: 5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
         value:
           statType: 3
           stringValue: 
-          value: 150
+          value: 90
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 18
         value:
           statType: 18
           stringValue: 
-          value: 15
+          value: 1.1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 19
@@ -2117,7 +2075,7 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
-          value: 0
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -2126,13 +2084,6 @@ MonoBehaviour:
           statType: 0
           stringValue: 
           value: 4007
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: Rush
-          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 17
@@ -2185,13 +2136,6 @@ MonoBehaviour:
           value: 4008
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: Overload
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -2240,13 +2184,6 @@ MonoBehaviour:
           statType: 0
           stringValue: 
           value: 4009
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: Tramble
-          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 17
@@ -2299,13 +2236,6 @@ MonoBehaviour:
           value: 4010
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: Whiplash
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -2354,13 +2284,6 @@ MonoBehaviour:
           statType: 0
           stringValue: 
           value: 4011
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: CriticalShot
-          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 17
@@ -2413,13 +2336,6 @@ MonoBehaviour:
           value: 4012
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: ChargingLaser
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -2468,13 +2384,6 @@ MonoBehaviour:
           statType: 0
           stringValue: 
           value: 4013
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: DetornatorFire
-          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 17
@@ -2527,13 +2436,6 @@ MonoBehaviour:
           value: 4014
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: ActivateWholeShield
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -2582,13 +2484,6 @@ MonoBehaviour:
           statType: 0
           stringValue: 
           value: 4015
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: ActivateHologramShield
-          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 17
@@ -2641,13 +2536,6 @@ MonoBehaviour:
           value: 4016
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: SwordSwing
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -2696,13 +2584,6 @@ MonoBehaviour:
           statType: 0
           stringValue: 
           value: 4017
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: Lockdown
-          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 17
@@ -2755,13 +2636,6 @@ MonoBehaviour:
           value: 4018
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: LaserBurst
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -2812,13 +2686,6 @@ MonoBehaviour:
           value: 4019
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: PhaseShift
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
       - key: 17
         value:
           statType: 17
@@ -2861,6 +2728,106 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4020
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 15
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 7.5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 8
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
   - sheetKey: Monster2Skill
     rows:
     - statEntries:
@@ -2891,5 +2858,20 @@ MonoBehaviour:
           statType: 21
           stringValue: 4001 4003
           value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1004
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 4006
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38

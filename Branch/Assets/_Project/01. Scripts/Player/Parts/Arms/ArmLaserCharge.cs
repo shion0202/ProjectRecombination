@@ -1,6 +1,7 @@
+using Managers;
+using Monster;
 using System.Collections;
 using System.Collections.Generic;
-using Monster;
 using UnityEngine;
 
 public class ArmLaserCharge : PartBaseArm
@@ -25,6 +26,15 @@ public class ArmLaserCharge : PartBaseArm
 
     protected override void Update()
     {
+        if (partType == EPartType.ArmL)
+        {
+            GUIManager.Instance.SetAmmoLeftSlider(_currentAmmo, maxAmmo);
+        }
+        else
+        {
+            GUIManager.Instance.SetAmmoRightSlider(_currentAmmo, maxAmmo);
+        }
+
         if (!_isShooting)
         {
             if (_currentAmmo >= maxAmmo) return;
@@ -37,6 +47,7 @@ public class ArmLaserCharge : PartBaseArm
             if (_currentAmmo >= maxAmmo)
             {
                 _isOverheat = false;
+                GUIManager.Instance.SetAmmoColor(partType, false);
             }
 
             return;
@@ -87,6 +98,13 @@ public class ArmLaserCharge : PartBaseArm
         {
             Destroy(chargeEffect);
         }
+
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+            fadeCoroutine = null;
+        }
+        fadeCoroutine = StartCoroutine(CoDestroyLaser());
     }
 
     protected override void Shoot()
@@ -142,6 +160,7 @@ public class ArmLaserCharge : PartBaseArm
         {
             //CancleShootState(partType == EPartType.ArmL ? true : false);
             _isOverheat = true;
+            GUIManager.Instance.SetAmmoColor(partType, true);
         }
     }
 

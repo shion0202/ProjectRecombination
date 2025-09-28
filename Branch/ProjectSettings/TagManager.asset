@@ -13,7 +13,7 @@ TagManager:
   - Bullet
   - Obstacle
   - Platform
-  - PlatformEnd
+  - PlatformIn
   layers:
   - Default
   - TransparentFX

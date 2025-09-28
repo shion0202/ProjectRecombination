@@ -6,9 +6,9 @@ namespace Monster.AI.Command
 {
     public class HitCommand : AICommand
     {
-        public override IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        public override void Execute(Blackboard.Blackboard blackboard, Action onComplete)
         {
-            yield return null;
+            // yield return null;
         }
     }
 }

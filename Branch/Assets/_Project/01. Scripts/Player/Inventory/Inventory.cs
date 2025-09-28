@@ -232,6 +232,10 @@ public class Inventory : MonoBehaviour
             part.FinishActionForced();
             owner.Stats.RemoveModifier(part);
             part.gameObject.SetActive(false);
+            foreach (Transform child in part.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
         }
         _equippedItems[equipItem.PartType].Clear();
 
@@ -244,6 +248,10 @@ public class Inventory : MonoBehaviour
         foreach (var part in sameTypeParts)
         {
             part.gameObject.SetActive(true);
+            foreach (Transform child in part.transform)
+            {
+                child.gameObject.SetActive(true);
+            }
             _equippedItems[equipItem.PartType].Add(part);
         }
 

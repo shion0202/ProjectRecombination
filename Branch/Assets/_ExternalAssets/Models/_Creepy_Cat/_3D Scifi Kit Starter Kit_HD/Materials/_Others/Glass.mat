@@ -125,7 +125,7 @@ Material:
     - _ReflAmount: 0.625
     - _RimPower: 1.0357144
     - _Shininess: 0.11190579
-    - _Smoothness: 0.3
+    - _Smoothness: 0.799
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

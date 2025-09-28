@@ -1,3 +1,4 @@
+using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +44,7 @@ public class PartBaseLegs : PartBase, ILegsMovement
         }
 
         _currentSkillCount = 0;
+        GUIManager.Instance.ResetSkillCooldown();
     }
 
     public virtual Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)

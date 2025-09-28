@@ -4,6 +4,7 @@ using UnityEngine;
 using Monster;
 using Monster.AI.Blackboard;
 using Monster.AI;
+using Managers;
 
 public class ShoulderLaser : PartBaseShoulder
 {
@@ -41,22 +42,12 @@ public class ShoulderLaser : PartBaseShoulder
     {
         if (_isShooting || _skillCoroutine != null) return;
 
-        beamStart = Instantiate(beamStartPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        beamEnd = Instantiate(beamEndPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        beam = Instantiate(beamLineRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        line = beam.GetComponent<LineRenderer>();
-        line.startWidth = 2.0f;
-        line.endWidth = 2.0f;
-
         // 캐릭터가 카메라 방향을 바라보고, 특정 위치에서 레이저가 시작하며, N초간 지속되도록 설정
         LookCameraDirection();
-
-        RaycastHit[] hits;
-        _targetPoint = GetTargetPoint(out hits);
-
         _owner.FollowCamera.SetCameraRotatable(false);
         _owner.SetMovable(false);
         _isShooting = true;
+
         _skillCoroutine = StartCoroutine(CoStopAndCooldown());
     }
 
@@ -123,6 +114,24 @@ public class ShoulderLaser : PartBaseShoulder
 
     private IEnumerator CoStopAndCooldown()
     {
+        GUIManager.Instance.SetBackSkillIcon(true);
+
+        _owner.PlayerAnimator.SetBool("isPlayBackLaserAnim", true);
+        yield return new WaitForSeconds(0.5f);
+
+        _owner.PlayerAnimator.SetBool("isPlayBackShootAnim", true);
+        yield return new WaitForSeconds(0.5f);
+
+        beamStart = Instantiate(beamStartPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        beamEnd = Instantiate(beamEndPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        beam = Instantiate(beamLineRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        line = beam.GetComponent<LineRenderer>();
+        line.startWidth = 2.0f;
+        line.endWidth = 2.0f;
+
+        RaycastHit[] hits;
+        _targetPoint = GetTargetPoint(out hits);
+
         yield return new WaitForSeconds(beamDuration);
 
         _isShooting = false;
@@ -132,8 +141,26 @@ public class ShoulderLaser : PartBaseShoulder
         _owner.FollowCamera.SetCameraRotatable(true);
         _owner.SetMovable(true);
 
-        yield return new WaitForSeconds(beamCooldown);
+        _owner.PlayerAnimator.SetBool("isPlayBackShootAnim", false);
+        _owner.PlayerAnimator.SetBool("isPlayBackLaserAnim", false);
 
+        float time = beamCooldown;
+        GUIManager.Instance.SetBackSkillCooldown(true);
+        GUIManager.Instance.SetBackSkillCooldown(time);
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            time -= 0.1f;
+            GUIManager.Instance.SetBackSkillCooldown(time);
+            if (time <= 0.0f)
+            {
+                break;
+            }
+        }
+
+        GUIManager.Instance.SetBackSkillIcon(false);
+        GUIManager.Instance.SetBackSkillCooldown(false);
         Debug.Log("쿨타임 종료");
         _skillCoroutine = null;
     }

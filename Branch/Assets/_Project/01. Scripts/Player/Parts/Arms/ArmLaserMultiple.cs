@@ -1,3 +1,4 @@
+using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.InputSystem;
@@ -14,6 +15,7 @@ public class ArmLaserMultiple : PartBaseArm
     protected Transform currentTarget = null;          // 현재 타겟
     protected float targetingProgress = 0f;             // 타겟팅 진행도 (0~maxCastTime)
     protected GameObject currentTargetIndicator = null;
+    protected Coroutine _targetRoutine = null;
 
     [SerializeField] private Color targetingInProgressColor = Color.yellow;
     [SerializeField] private Color targetingCompleteColor = Color.red;
@@ -21,6 +23,15 @@ public class ArmLaserMultiple : PartBaseArm
 
     protected override void Update()
     {
+        if (partType == EPartType.ArmL)
+        {
+            GUIManager.Instance.SetAmmoLeftSlider(_currentAmmo, maxAmmo);
+        }
+        else
+        {
+            GUIManager.Instance.SetAmmoRightSlider(_currentAmmo, maxAmmo);
+        }
+
         if (!_isShooting)
         {
             targetingProgress = 0f;
@@ -37,6 +48,7 @@ public class ArmLaserMultiple : PartBaseArm
             if (_currentAmmo >= maxAmmo)
             {
                 _isOverheat = false;
+                GUIManager.Instance.SetAmmoColor(partType, false);
             }
 
             return;
@@ -95,6 +107,21 @@ public class ArmLaserMultiple : PartBaseArm
         currentTarget = null;
     }
 
+    public override void FinishActionForced()
+    {
+        base.FinishActionForced();
+
+        // 파티클 시스템 참조
+        if (_targetRoutine == null && currentTargetIndicator != null)
+        {
+            ParticleSystem ps = currentTargetIndicator.GetComponentInChildren<ParticleSystem>();
+            if (ps != null)
+            {
+                _targetRoutine = StartCoroutine(StopParticleAfterDelay(ps));
+            }
+        }
+    }
+
     // 타겟 적 유효성 검사 (예: 사망 또는 비활성 체크)
     private bool IsTargetValid(Transform target)
     {
@@ -122,7 +149,7 @@ public class ArmLaserMultiple : PartBaseArm
             ParticleSystem ps = currentTargetIndicator.GetComponentInChildren<ParticleSystem>();
             if (ps != null)
             {
-                StartCoroutine(StopParticleAfterDelay(ps));
+                _targetRoutine = StartCoroutine(StopParticleAfterDelay(ps));
             }
         }
     }
@@ -190,6 +217,7 @@ public class ArmLaserMultiple : PartBaseArm
         {
             //CancleShootState(partType == EPartType.ArmL ? true : false);
             _isOverheat = true;
+            GUIManager.Instance.SetAmmoColor(partType, true);
         }
     }
 

@@ -7,7 +7,9 @@ namespace Monster.AI.Command
 {
     public class ChaseCommand : AICommand
     {
-        private static bool CheckBlackboard(Blackboard.Blackboard blackboard)
+        private static readonly int IsRun = Animator.StringToHash("IsRun");
+        
+        private static bool IsValid(Blackboard.Blackboard blackboard)
         {
             if (blackboard?.NavMeshAgent is null)
             {
@@ -24,49 +26,78 @@ namespace Monster.AI.Command
             return true;
         }
         
-        public override IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        public override void OnEnter(Blackboard.Blackboard blackboard, Action processError = null)
         {
-            if (!CheckBlackboard(blackboard)) yield break;
-            
-            // Chase 상태 처리
-            if (blackboard.State is MonsterState.Chase)
+            base.OnEnter(blackboard, () => { });
+            // Debug.Log("ChaseCommand OnEnter");
+            if (!IsValid(blackboard))
             {
-                // 이미 Chase 중인 경우, 타겟과 충분히 가까운지 확인
-                float distance = Vector3.Distance(blackboard.Agent.transform.position, blackboard.Target.transform.position);
-                float stopDistance = blackboard.TryGet(new BBKey<float>("minDetectionRange"), out float value) ? value : 0f;
-                if (distance <= stopDistance)
-                {
-                    // 타겟과 충분히 가까운 경우, Chase 상태를 종료하고 Idle 상태로 전환
-                    // _isChasing = false;
-                    // blackboard.State = MonsterState.Idle;
-                    blackboard.NavMeshAgent.isStopped = true; // 이동을 멈춤
-                    blackboard.NavMeshAgent.ResetPath(); // 경로를 초기화
-                }
-                else
-                {
-                    // 타겟과 충분히 멀리 있는 경우, 계속 Chase 상태 유지
-                    blackboard.NavMeshAgent.SetDestination(blackboard.Target.gameObject.transform.position); // 타겟 위치로 이동 경로 설정
-                    // blackboard.NavMeshAgent.isStopped = false; // 이동을 계속
-                }
+                OnExit(blackboard);
+                processError?.Invoke();
+                return;
+            }
+            float speed = blackboard.TryGet(new BBKey<float>("runSpeed"), out float s) ? s : 0;   // NavMesh Speed 설정
+            blackboard.NavMeshAgent.speed = speed;
+
+            SetDestination(blackboard); // 이동을 시작
+            
+            // 이동 애니메이션 재생
+            // Debug.Log("Run Animation Play");
+            // if (!blackboard.Animator.GetBool(IsRun))
+            //     blackboard.Animator.SetBool(IsRun, true);
+        }
+        
+        // Chase 상태 처리
+        public override void Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        {
+            Debug.Log("ChaseCommand Execute");
+            if (!IsValid(blackboard)) return;
+            
+            // 이미 Chase 중인 경우, 타겟과 충분히 가까운지 확인
+            float distance = Vector3.Distance(blackboard.Agent.transform.position, blackboard.Target.transform.position);
+            float stopDistance = blackboard.TryGet(new BBKey<float>("minDetectionRange"), out float value) ? value : 0f;
+            blackboard.NavMeshAgent.stoppingDistance = stopDistance;
+            if (distance > stopDistance)
+            {
+                // 타겟과 충분히 멀리 있는 경우 계속 추적
+                SetDestination(blackboard);
             }
             else
             {
-                // Chase 상태로 전환
-                blackboard.State = MonsterState.Chase;
-                // Debug.Log("AI is now Chase.");
-                blackboard.NavMeshAgent.speed = blackboard.TryGet(new BBKey<float>("runSpeed"), out float speed) ? speed : 0;   // NavMesh Speed 설정
-                blackboard.NavMeshAgent.SetDestination(blackboard.Target.gameObject.transform.position); // 타겟 위치로 이동 경로 설정
-                blackboard.NavMeshAgent.isStopped = false; // 이동을 시작
+                Debug.Log("ChaseCommand OnExit");
+                OnExit(blackboard);
+                onComplete?.Invoke();                          // 명령어 완료 콜백 호출
             }
+        }
+
+        // Chase 상태 종료 처리
+        public override void OnExit(Blackboard.Blackboard blackboard)
+        {
+            base.OnExit(blackboard);
             
-            // 이동 애니메이션 재생
-            if (CheckAnimator(blackboard, "Run"))
-            {
-                blackboard.Animator.SetTrigger("Run");
-            }
+            // if (blackboard.Animator.GetBool(IsRun))
+            //     blackboard.Animator.SetBool(IsRun, false);
             
-            // 명령어 완료 콜백 호출
-            onComplete?.Invoke();
+            blackboard.NavMeshAgent.isStopped = true;       // 이동을 멈춤
+            blackboard.NavMeshAgent.ResetPath();            // 경로를 초기화
+            
+            Debug.Log("ChaseCommand OnExit");
+        }
+        
+        private static void SetDestination(Blackboard.Blackboard blackboard)
+        {
+            if (blackboard.Target is null) return;
+            Vector3 targetPosition = blackboard.Target.transform.position;
+            blackboard.NavMeshAgent.SetDestination(targetPosition);
+            
+            blackboard.NavMeshAgent.isStopped = false;    
+        }
+        
+        private static bool HasReachedDestination(Blackboard.Blackboard blackboard)
+        {
+            if (blackboard.NavMeshAgent.pathPending) return false;
+            if (!(blackboard.NavMeshAgent.remainingDistance <= blackboard.NavMeshAgent.stoppingDistance)) return false;
+            return !blackboard.NavMeshAgent.hasPath || blackboard.NavMeshAgent.velocity.sqrMagnitude == 0f;
         }
     }
 }

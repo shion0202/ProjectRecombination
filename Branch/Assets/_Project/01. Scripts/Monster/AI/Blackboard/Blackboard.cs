@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using _Project._01._Scripts.Monster.Animator;
+using Managers;
 using Monster.AI.Command;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,15 +11,17 @@ namespace Monster.AI.Blackboard
     {
         #region SerializeFields
         
-        [Tooltip("몬스터의 현재 상태를 나타냅니다.")][SerializeField] private MonsterState state = MonsterState.Idle;
-        [SerializeField] private int index;
+        [Tooltip("몬스터의 현재 상태를 나타냅니다.")]
+        [SerializeField] private MonsterState state;
+        // [SerializeField] private MonsterAction action; // 현재 행동 상태 (공격, 스킬 사용 등)
+        [SerializeField] private int id;
         
         [Header("Dependency")] // 의존성 주입
         [SerializeField] private NavMeshAgent navMeshAgent;
         [SerializeField] private GameObject agent;          // AI 에이전트 (몬스터)
         [SerializeField] private Collider agentCollider;
         [SerializeField] private Rigidbody agentRigidbody;
-        [SerializeField] private Animator animator;
+        [SerializeField] private AnimatorParameterSetter animatorParameterSetter;
         [SerializeField] private GameObject target;
         [SerializeField] private GameObject deathEffect;    // 몬스터 사망 이펙트 프리팹
         // [SerializeField] private LayerMask obstacleLayer;
@@ -44,6 +47,12 @@ namespace Monster.AI.Blackboard
             set => state = value;
         }
         
+        // public MonsterAction Action
+        // {
+        //     get => action;
+        //     set => action = value;
+        // }
+        
         public NavMeshAgent NavMeshAgent
         {
             get => navMeshAgent;
@@ -68,10 +77,10 @@ namespace Monster.AI.Blackboard
             set => agentRigidbody = value;
         }
         
-        public Animator Animator
+        public AnimatorParameterSetter AnimatorParameterSetter
         {
-            get => animator;
-            set => animator = value;
+            get => animatorParameterSetter;
+            set => animatorParameterSetter = value;
         }
         
         public GameObject Target
@@ -85,12 +94,6 @@ namespace Monster.AI.Blackboard
             get => deathEffect;
             set => deathEffect = value;
         }
-        
-        // public LayerMask ObstacleLayer
-        // {
-        //     get => obstacleLayer;
-        //     set => obstacleLayer = value;
-        // }
         
         public MonsterPatrol PatrolInfo
         {
@@ -116,11 +119,12 @@ namespace Monster.AI.Blackboard
             set => Set(new BBKey<float>("health"), value);
         }
         
-        public float MaxHealth
-        {
-            get => TryGet(new BBKey<float>("maxHealth"), out float maxHealth) ? maxHealth : 0f;
-            set => Set(new BBKey<float>("maxHealth"), value);
-        }
+        public float MaxHealth => TryGet(new BBKey<float>("maxHealth"), out float maxHealth) ? maxHealth : 0f;
+        
+        public float RunSpeed => TryGet(new BBKey<float>("runSpeed"), out float runSpeed) ? runSpeed : 0f;
+        public float WalkSpeed => TryGet(new BBKey<float>("walkSpeed"), out float walkSpeed) ? walkSpeed : 0f;
+        public float MinDetectionRange => TryGet(new BBKey<float>("minDetectionRange"), out float minDetectionRange) ? minDetectionRange : 0f;
+        public float MaxDetectionRange => TryGet(new BBKey<float>("maxDetectionRange"), out float maxDetectionRange) ? maxDetectionRange : 0f;
 
         #endregion
 
@@ -151,13 +155,13 @@ namespace Monster.AI.Blackboard
         public void InitMonsterStatsByID()
         {
             // 몬스터의 인덱스 번호 확인
-            if (index < 1000 || index > 1999) return;
+            if (id < 1000 || id > 1999) return;
 
-            RowData defaultStats = DataManager.Instance.GetRowDataByIndex("CharacterStats", index);
+            RowData defaultStats = DataManager.Instance.GetRowDataByIndex("CharacterStats", id);
                 
             if (defaultStats == null)
             {
-                Debug.Log("Default stats not found for index: " + index);
+                Debug.Log("Default stats not found for index: " + id);
                 return;
             }
             // Debug.Log(defaultStats.ToString()); // 디버그용: 기본 스탯 데이터 확인
@@ -177,19 +181,36 @@ namespace Monster.AI.Blackboard
             // 몬스터 스킬 초기화
             {
                 Skills.Clear();
-                RowData skillData = DataManager.Instance.GetRowDataByIndex("Monster2Skill", index);
+                RowData skillData = DataManager.Instance.GetRowDataByIndex("Monster2Skill", id);
                 // Debug.Log("SkillData: " + skillData.GetStringStat(EStatType.IdArray));
                 // 스페이스바로 구분된 스킬 ID 문자열을 가져와서 배열로 변환
                 string[] skillIds = skillData.GetStringStat(EStatType.IdArray).Split(' ');
-                foreach (string skillId in skillIds)
+                // 배열에 값이 없는 경우
+                
+                if (skillIds.Length > 0 && !string.IsNullOrWhiteSpace(skillIds[0]))
                 {
-                    if (!int.TryParse(skillId, out int id)) continue;
-
-                    // 스킬 ID에 해당하는 RowData를 가져옴
-                    RowData skillRow = DataManager.Instance.GetRowDataByIndex("MonsterSkill", id);
-                    if (skillRow != null)
+                    foreach (string skillId in skillIds)
                     {
-                        Skills[id] = skillRow;
+                        if (!int.TryParse(skillId, out int id)) continue;
+
+                        // 스킬 ID에 해당하는 RowData를 가져옴
+                        RowData skillRow = DataManager.Instance.GetRowDataByIndex("MonsterSkill", id);
+                        if (skillRow != null)
+                        {
+                            Skills[id] = skillRow;
+                        }
+                    }
+                }
+                else
+                {
+                    var value = skillData.GetStat(EStatType.IdArray);
+                    if (value > 0f && int.TryParse(value.ToString(), out int id))
+                    {
+                        RowData skillRow = DataManager.Instance.GetRowDataByIndex("MonsterSkill", id);
+                        if (skillRow != null)
+                        {
+                            Skills[id] = skillRow;
+                        }
                     }
                 }
             }
@@ -203,7 +224,7 @@ namespace Monster.AI.Blackboard
             NavMeshAgent.isStopped = false;
             NavMeshAgent.ResetPath();
             CurrentHealth = MaxHealth;
-            State = MonsterState.Idle;
+            State.SetState("Idle");
             Target = MonsterManager.Instance.Player;
         }
 

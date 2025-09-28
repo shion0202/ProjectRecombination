@@ -5,6 +5,7 @@ namespace Monster
     [System.Serializable]
     public class MonsterPatrol
     {
+        public bool isPatrol;
         public float minPatrolTime = 5f;    // 최소 순찰 시간
         public float maxPatrolTime = 10f;   // 최대 순찰 시간
         public Vector3[] wayPoints; // 순찰 경로 포인트 배열

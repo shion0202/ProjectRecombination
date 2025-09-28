@@ -264,6 +264,24 @@ public class BTNodeSettingsPopupWindow : VisualElement
                 Add(speakerField);
                 Add(messageField);
             }
+            
+            // 상태 전환 노드
+            if (action is BTActionChangeState changeStateAction)
+            {
+                var stateField = new TextField("전환할 상태 이름") { value = changeStateAction.newState, isDelayed = true };
+                stateField.RegisterValueChangedCallback(evt =>
+                {
+                    if (changeStateAction.newState != evt.newValue)
+                    {
+                        changeStateAction.newState = evt.newValue;
+                        EditorUtility.SetDirty(changeStateAction);
+                        AssetDatabase.SaveAssets();
+                        _graphView?.RedrawTree();
+                        stateField.Focus();
+                    }
+                });
+                Add(stateField);
+            }
         }
     }
 }

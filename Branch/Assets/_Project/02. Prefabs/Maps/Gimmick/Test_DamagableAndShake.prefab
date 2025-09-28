@@ -198,7 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ImpulseDefinition:
     m_ImpulseChannel: 1
-    m_ImpulseShape: 2
+    m_ImpulseShape: 3
     m_CustomImpulseShape:
       serializedVersion: 2
       m_Curve: []
@@ -236,7 +236,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 2, y: 2, z: 2}
+  m_DefaultVelocity: {x: 1, y: 1, z: 1}
 --- !u!1 &8594546718725367885
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,7 +362,7 @@ MonoBehaviour:
   - StatName: Name
     StatValue: 0
   - StatName: MaxHp
-    StatValue: 100
+    StatValue: 10
   - StatName: Damage
     StatValue: 0
   - StatName: WalkSpeed
@@ -370,7 +370,7 @@ MonoBehaviour:
   - StatName: RunSpeed
     StatValue: 0
   - StatName: Defence
-    StatValue: 0
+    StatValue: 100
   - StatName: MaxDetectiveRange
     StatValue: 0
   - StatName: MinDetectiveRange

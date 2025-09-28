@@ -19,10 +19,19 @@ namespace Monster.AI
         }
     }
     
+    [Serializable]
+    public struct BTData
+    {
+        // public EState state;
+        public string stateName;
+        public BehaviorTree.BehaviorTree behaviorTree;
+    }
+    
     public sealed class AIController : MonoBehaviour, IDamagable
     {
         [SerializeField] private Blackboard.Blackboard blackboard;
-        [SerializeField] private BehaviorTree.BehaviorTree tree;
+        [SerializeField] private BehaviorTree.BehaviorTree globalBehaviorTree; // GlobalBehaviorTree;
+        [SerializeField] private BTData[] data;
         
         /// <summary>
         /// <para>AICommandQueue를 구현하여 AI 명령어를 큐에 저장하고 처리</para>
@@ -31,7 +40,8 @@ namespace Monster.AI
         private PriorityQueue<AICommand> _queue;
         
         private int _currentPriority = -999; // 현재 실행 중인 명령어의 우선순위(초기값은 매우 낮게 설정)
-        private Coroutine _currentCoroutine;
+        // private Coroutine _currentCoroutine;
+        private AICommand _currentCommand;
         
         private bool _isInit;
         
@@ -74,7 +84,7 @@ namespace Monster.AI
             _isInit = false;
         }
         
-        private void Start() => tree?.Init();
+        // private void Start() => tree?.Init();
         
         // Blackboard의 상태를 매 프레임마다 업데이트할 필요가 있을 경우 사용
         private void Update()
@@ -195,76 +205,141 @@ namespace Monster.AI
         private void Think()
         {
             // 블랙보드의 상태를 기반으로 행동 트리를 실행
-            tree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
+            globalBehaviorTree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
+
+            foreach (BTData btData in data)
+            {
+                if (!blackboard.State.HasState(btData.stateName)) continue;
+                btData.behaviorTree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
+            }
         }
-        
+
         /// <summary>
         /// <para>AI 행동을 처리하는 로직</para>
         /// 예: 공격, 이동, 대기 등
         /// </summary>
+        // private void Act()
+        // {
+        //     // 큐가 비어있으면 아무 것도 하지 않음
+        //     if (_queue.Count == 0) return;
+        //     
+        //     // if (blackboard.IsCoroutineRunning()) return;
+        //     
+        //     // 큐에 명령어가 있는 경우, 첫 번째 명령어를 처리
+        //     (AICommand command, int priority) = DequeueCommand();
+        //     // Debug.Log(command + $"{priority}");
+        //
+        //     // 현재 실행할 명령어가 DeathCommand인 경우
+        //     if (command is DeathCommand)
+        //     {
+        //         // if (blackboard.State is MonsterState.Death) return;
+        //         
+        //         // // 즉시 DeathCommand 실행
+        //         // _currentCoroutine = StartCoroutine(command.Execute(blackboard, () =>
+        //         // {
+        //         //     // Debug.Log("DeathCommand completed. Releasing to PoolManager.");
+        //         //     _currentPriority = -999;
+        //         //     
+        //         //     // 비활성화될 때 몬스터 매니저에서 제거
+        //         //     MonsterManager.Instance.RemoveMonster(gameObject);
+        //         //     
+        //         //     // 사망 애니메이션이 끝난 후 오브젝트 풀에 반환
+        //         //     PoolManager.Instance.ReleaseObject(gameObject);
+        //         // }));
+        //         
+        //         // 즉시 DeathCommand 실행
+        //         command.Execute(blackboard, () =>
+        //         {
+        //             // Debug.Log("DeathCommand completed. Releasing to PoolManager.");
+        //             _currentPriority = -999;
+        //             
+        //             // 비활성화될 때 몬스터 매니저에서 제거
+        //             MonsterManager.Instance.RemoveMonster(gameObject);
+        //             
+        //             // 사망 애니메이션이 끝난 후 오브젝트 풀에 반환
+        //             PoolManager.Instance.ReleaseObject(gameObject);
+        //         });
+        //         
+        //         // 명령어 실행 후 큐 청소
+        //         _queue.CleanUp();
+        //         return;
+        //     }
+        //     
+        //     if (_currentPriority < priority)
+        //     {
+        //         _currentPriority = priority;    // 현재 우선순위를 업데이트(다른 명령어가 더 높은 우선순위를 가질 때만 업데이트)
+        //         
+        //         // // 현재 실행 중인 코루틴이 있으면 중지
+        //         // if (_currentCoroutine != null)
+        //         // {
+        //         //     StopCoroutine(_currentCoroutine);
+        //         //     _currentCoroutine = null;
+        //         // }
+        //         
+        //         // 명령어를 실행
+        //         // _currentCoroutine = StartCoroutine(command?.Execute(blackboard, () =>
+        //         // {
+        //         //     _currentPriority = -999;
+        //         // }));
+        //         command?.Execute(blackboard, () =>
+        //         {
+        //             _currentPriority = -999;
+        //         });
+        //     }
+        //     // 명령어 실행 후 큐 청소
+        //     _queue.CleanUp();
+        // }
+
         private void Act()
         {
-            // 큐가 비어있으면 아무 것도 하지 않음
-            if (_queue.Count == 0) return;
-            
-            // if (blackboard.IsCoroutineRunning()) return;
-            
-            // 큐에 명령어가 있는 경우, 첫 번째 명령어를 처리
-            (AICommand command, int priority) = DequeueCommand();
-            // Debug.Log(command + $"{priority}");
-
-            // 현재 실행할 명령어가 DeathCommand인 경우
-            if (command is DeathCommand)
+            if (_queue.Count == 0)
             {
-                if (blackboard.State is MonsterState.Death) return;
-                
-                // 즉시 DeathCommand 실행
-                _currentCoroutine = StartCoroutine(command.Execute(blackboard, () =>
-                {
-                    // Debug.Log("DeathCommand completed. Releasing to PoolManager.");
-                    _currentPriority = -999;
-                    
-                    // 비활성화될 때 몬스터 매니저에서 제거
-                    MonsterManager.Instance.RemoveMonster(gameObject);
-                    
-                    // 사망 애니메이션이 끝난 후 오브젝트 풀에 반환
-                    PoolManager.Instance.ReleaseObject(gameObject);
-                }));
-                // 명령어 실행 후 큐 청소
-                _queue.CleanUp();
+                ResetCommandState();
                 return;
             }
-            
-            if (_currentPriority < priority)
-            {
-                _currentPriority = priority;    // 현재 우선순위를 업데이트(다른 명령어가 더 높은 우선순위를 가질 때만 업데이트)
-                
-                // 현재 실행 중인 코루틴이 있으면 중지
-                if (_currentCoroutine != null)
-                {
-                    StopCoroutine(_currentCoroutine);
-                    _currentCoroutine = null;
-                }
-                
-                // 명령어를 실행
-                _currentCoroutine = StartCoroutine(command?.Execute(blackboard, () =>
-                {
-                    _currentPriority = -999;
-                }));
-            }
-            // 명령어 실행 후 큐 청소
+        
+            (AICommand command, int priority) = DequeueCommand();
             _queue.CleanUp();
+
+            if (_currentCommand is not null)
+            {
+                if (_currentPriority < priority)
+                {
+                    _currentCommand.OnExit(blackboard);
+                    _currentPriority = priority;
+                    _currentCommand = command;
+                    _currentCommand.OnEnter(blackboard, ResetCommandState);
+                }
+                else
+                {
+                    _currentCommand.Execute(blackboard, ResetCommandState);
+                }
+            }
+            else
+            {
+                _currentPriority = priority;
+                _currentCommand = command;
+                _currentCommand.OnEnter(blackboard, ResetCommandState);
+            }
+            
+            return;
+
+            void ResetCommandState()
+            {
+                _currentCommand = null;
+                _currentPriority = -999;
+            }
         }
 
         #endregion
-
+        
         #region Public Methods
-        // 피격 이벤트 처리
         public void ApplyDamage(float inDamage)
         {
             OnHit(inDamage);
         }
 
+        // 피격 이벤트 처리
         public void OnHit(float damage, AICommand command = null, int priority = 0)
         {
             if (blackboard == null) return;
@@ -289,6 +364,7 @@ namespace Monster.AI
             result += $"- Queue: {_queue}\n";
             return result;
         }
+        
         #endregion
     }
 }

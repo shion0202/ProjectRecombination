@@ -1,4 +1,4 @@
-﻿using Managers;
+using Managers;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -21,6 +21,8 @@ namespace _Project.Scripts.VisualScripting
         [SerializeField] private IsDestroy destroyTrigger;
         [Tooltip("생성한 객체가 비활성화 되었음을 감지할 객체")]
         [SerializeField] private IsDisable disableTrigger;
+        [Tooltip("생성한 객체가 사망했음을 감지할 객체")]
+        [SerializeField] private IsDead deadTrigger;
 
         public override void Execute()
         {
@@ -52,6 +54,7 @@ namespace _Project.Scripts.VisualScripting
                 
                 destroyTrigger?.AddObject(obj.GetComponent<GlobalGameObject>());
                 disableTrigger?.AddObject(obj.GetComponent<GlobalGameObject>());
+                deadTrigger?.AddObject(obj.GetComponent<DamagableObject>());
             }
             IsOn = true;
         }
