@@ -32,7 +32,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -94,7 +94,7 @@ ModelImporter:
       humanName: LeftUpperLeg
       limit:
         min: {x: -60, y: -60, z: -90}
-        max: {x: 60, y: 60, z: 50}
+        max: {x: 60, y: 60, z: 49.999996}
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 1
