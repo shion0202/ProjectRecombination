@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Assets.Agoston_R.Simple_Laser.Scripts.Raycaster
 {
@@ -6,12 +6,12 @@ namespace Assets.Agoston_R.Simple_Laser.Scripts.Raycaster
     {
         public LaserHit Transform(Vector3 origin, RaycastHit hit)
         {
-            return new LaserHit(origin, hit.point, hit.normal);
+            return new LaserHit(hit.transform, origin, hit.point, hit.normal);
         }
 
         public LaserHit Transform(Vector2 origin, RaycastHit2D hit)
         {
-            return new LaserHit(origin, hit.point, hit.normal);
+            return new LaserHit(hit.transform,origin, hit.point, hit.normal);
         }
     }
 }

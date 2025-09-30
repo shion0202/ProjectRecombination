@@ -9,13 +9,14 @@ namespace Controller
     /// </summary>
     public class LaserBeamController : MonoBehaviour
     {
+        [Header("Damage")]
+        [SerializeField] float damagePerSecond = 100.0f;
+
         private const float Eps = 0.001f;
         private static readonly int LineDistance = Shader.PropertyToID("_lineDistance");
         private static readonly int WidthConstant = Shader.PropertyToID("_widthConstant");
         private static readonly int ColorConstant = Shader.PropertyToID("_Color");
         private readonly Vector3[] linePositionsLocalSpace = new Vector3[2];
-
-        [SerializeField] private float damagePerSecond = 100.0f;
 
         [Header("Setup")]
         [Tooltip("Switch to activate or deactivate the laser.")]
@@ -79,12 +80,13 @@ namespace Controller
             {
                 var position = transform.position;
                 var direction = SelectForwardDirection();
-                OnRaycastMiss(new LaserHit(position, direction * MaxLaserDistance + position, transform.TransformDirection(Vector3.back).normalized));
+                OnRaycastMiss(new LaserHit(null, position, direction * MaxLaserDistance + position, transform.TransformDirection(Vector3.back).normalized));
             }
         }
 
         private void OnRaycastHit(LaserHit hit)
         {
+            TakeDamage(hit, damagePerSecond * Time.deltaTime);
             DrawBeam(hit.HitPoint);
             PlayParticles(hit);
         }
@@ -192,9 +194,14 @@ namespace Controller
             throw new MissingComponentException($"Laser object {name}: line renderer or its material is missing.");
         }
 
-        private void TakeDamage(Transform target, float damage)
+        private void TakeDamage(LaserHit hit, float damage)
         {
-            //global:: IDamagable damagable = target.GetComponent<global::IDamagable>();
+            Debug.Log("타겟: " + hit.Target.name);
+            IDamagable damagable = hit.Target.GetComponent<IDamagable>();
+            if (damagable != null)
+            {
+                damagable.ApplyDamage(damage);
+            }
         }
     }
 
