@@ -115,7 +115,8 @@ public class PartBaseArm : PartBase
         Vector3 targetPoint = GetTargetPoint(out RaycastHit hit);
         Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position);
 
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection.normalized));
+        //GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection.normalized));
+        GameObject bullet = PoolManager.Instance.GetObject(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection.normalized));
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {

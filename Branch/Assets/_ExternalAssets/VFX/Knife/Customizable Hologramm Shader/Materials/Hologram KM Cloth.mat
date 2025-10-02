@@ -2,25 +2,42 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hologram KM Cloth
   m_Shader: {fileID: 4800000, guid: e99f8b80b1693284587af0c131f61f3d, type: 3}
-  m_ShaderKeywords: _COLORGLITCHFEATURE_ON _DISSOLVEFEATURE_ON _FRESNELALPHAFEATURE_ON
-    _FRESNELCOLORFEATURE_ON _FRESNELFEATURE_ON _GLITCHDEBUG_ON _GRAINFEATURE_ON _LINE1FEATURE_ON
-    _LINE2FEATURE_ON _LINEBOTHFEATURE_ON _LINEGLITCHFEATURE_ON _NORMALMAPFEATURE_ON
-    _POSITIONFEATURE_Y _POSITIONSPACEFEATURE_WORLD _RANDOMGLITCHFEATURE_ON _SOFTINTERSECTION1FEATURE_OFF
-    _SOFTINTERSECTION2FEATURE_OFF _SOFTINTERSECTIONFEATURE_COLOR _SOFTINTERSECTION_COLOR
-    _ZWRITE_ON
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _COLORGLITCHFEATURE_ON
+  - _DISSOLVEFEATURE_ON
+  - _FRESNELFEATURE_ON
+  - _LINE1FEATURE_ON
+  - _LINE2FEATURE_ON
+  - _LINEBOTHFEATURE_ON
+  - _LINEGLITCHFEATURE_ON
+  - _NORMALMAPFEATURE_ON
+  - _POSITIONFEATURE_Y
+  - _POSITIONSPACEFEATURE_WORLD
+  - _SOFTINTERSECTION1FEATURE_OFF
+  - _SOFTINTERSECTION2FEATURE_OFF
+  m_InvalidKeywords:
+  - _FRESNELALPHAFEATURE_ON
+  - _FRESNELCOLORFEATURE_ON
+  - _GLITCHDEBUG_ON
+  - _SOFTINTERSECTIONFEATURE_COLOR
+  - _SOFTINTERSECTION_COLOR
+  - _ZWRITE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -80,8 +97,22 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _Alpha: 1
+    - _AlphaCutoff: 0.5
     - _AlphaMaskAffect: 0.5
     - _AlphaMaskFeature: 0
     - _ColorGlitchAffect: 0.3
@@ -95,7 +126,7 @@ Material:
     - _DisplacementAmount: 0
     - _DisplacementFeature: 0
     - _DissolveFeature: 1
-    - _DissolveHide: -1
+    - _DissolveHide: 0.54
     - _EdgeLength: 15
     - _Float0: 1
     - _Float1: 1
@@ -123,7 +154,7 @@ Material:
     - _GlitchRemapMinNew: -0.61
     - _GlitchRemapMinOld: 0
     - _GrainAffect: 1
-    - _GrainFeature: 1
+    - _GrainFeature: 0
     - _GrainPower: 4.4
     - _Hide: -1
     - _Keyword0: 0
@@ -175,9 +206,11 @@ Material:
     - _PositionFeature: 1
     - _PositionFeature1: 0
     - _PositionSpaceFeature: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _RandomGlitchAmount: 0.122
     - _RandomGlitchConstant: 0
-    - _RandomGlitchFeature: 1
+    - _RandomGlitchFeature: 0
     - _RandomGlitchTiling: 2.83
     - _RandomOffset: 73887
     - _SoftIntersection: 2
@@ -206,7 +239,8 @@ Material:
     - __dirty: 0
     m_Colors:
     - _Color: {r: 0.620945, g: 1.420074, b: 3.953349, a: 0.05098039}
-    - _DissolveScale: {r: 15, g: 0.1, b: 0.1, a: 0}
+    - _DissolveScale: {r: 0, g: 1, b: 0, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _FresnelColor: {r: 0.620945, g: 1.420074, b: 3.953349, a: 1}
     - _GlitchOffset: {r: 0.03, g: 0, b: 0, a: 0}
     - _GlitchOffset1: {r: -0.5, g: 0, b: 0, a: 0}
@@ -222,3 +256,4 @@ Material:
     - _RandomGlitchOffset: {r: -0.5, g: 0, b: 0, a: 0}
     - _Scale: {r: 0.1, g: 1.01, b: 5, a: 0}
     - _SoftIntersectionColor: {r: 63.999992, g: 9.382197, b: 9.382197, a: 1}
+  m_BuildTextureStacks: []

@@ -79,6 +79,7 @@ public enum EPlayerState
     Rotating = 1 << 7,
     Spawning = 1 << 8,
     Dead = 1 << 9,
+    Invincibility = 1 << 10,
 
     RotateState = Moving | LeftShooting | RightShooting | Zooming,
     ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,

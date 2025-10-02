@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 
 public class Missile : Bullet
@@ -72,7 +73,10 @@ public class Missile : Bullet
         foreach (Collider collider in colliders)
         {
             TakeDamage(collider.transform);
-            Destroy(Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
+
+            //Destroy(Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
+            GameObject tBullet = Utils.Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity);
+            Utils.Destroy(tBullet, 0.1f);
         }
     }
 

@@ -2,10 +2,13 @@ using Cinemachine;
 using FIMSpace.FProceduralAnimation;
 using Managers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 [Serializable]
 public struct BaseAnimation
@@ -29,6 +32,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private RigAimController rigAimController;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private GameObject followCameraPrefab;
+    [SerializeField] private Volume volume;
     private FollowCameraController _followCamera;
 
     [Header("State")]
@@ -495,6 +499,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
             rigAimController.IsAim = true;
             rigAimController.SmoothChangeBaseWeight(true);
+
+            // To-do: 상태이상이 추가될 경우 해당 로직으로 변경
+            StartCoroutine(CoStartInvincibility(3.0f));
         }
     }
 
@@ -506,6 +513,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     public void Dash(float dashSpeed)
     {
         legsAnimator.enabled = false;
+        SetMotionBlur(true);
 
         _dashSpeed = dashSpeed;
 
@@ -537,6 +545,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     public void FinishDash()
     {
         legsAnimator.enabled = true;
+        SetMotionBlur(false);
 
         _dashDirection = Vector3.zero;
         _dashSpeed = 0.0f;
@@ -592,6 +601,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
+    // To-do: 데미지가 아니라 Stat을 넘겨주는 방식은 어떤가?
+    // 방어 무시 등 공격자에 의존적인 스탯이 있을 경우에도 별 다른 참조 없이 바로 계산 가능
     public void ApplyDamage(float inDamage)
     {
         TakeDamage(inDamage);
@@ -602,7 +613,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // 현재 HP의 값을 데미지 만큼 처리
         // stats.CurrentHealth = takeDamage;
 
-        if ((_currentPlayerState & EPlayerState.Spawning) != 0) return;
+        if ((_currentPlayerState & EPlayerState.Spawning) != 0 || (_currentPlayerState & EPlayerState.Invincibility) != 0) return;
         if (stats.CurrentHealth <= 0) return;
 
         var damage = (takeDamage - (stats.TotalStats[EStatType.Defence].value + stats.TotalStats[EStatType.AddDefence].value)) * stats.TotalStats[EStatType.DamageReductionRate].value;
@@ -991,6 +1002,25 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 inventory.EquippedItems[EPartType.ArmR][0].UseAbility();
             }
         }   
+    }
+
+    private void SetMotionBlur(bool isOn)
+    {
+        // VolumeProfile 가져오기
+        VolumeProfile profile = volume.profile;     // 공유 프로필을 쓸 경우 sharedProfile을 사용                      
+        if (profile.TryGet<MotionBlur>(out var blur))   // MotionBlur 오버라이드 얻기
+        {
+            blur.active = isOn; // 또는 blur.intensity.overrideState = enabled;
+        }
+    }
+
+    private IEnumerator CoStartInvincibility(float duration)
+    {
+        _currentPlayerState |= EPlayerState.Invincibility;
+
+        yield return new WaitForSeconds(duration);
+
+        _currentPlayerState &= ~(EPlayerState.Invincibility);
     }
     #endregion
 }

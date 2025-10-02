@@ -10,7 +10,8 @@ namespace Controller
     public class LaserBeamController : MonoBehaviour
     {
         [Header("Damage")]
-        [SerializeField] float damagePerSecond = 100.0f;
+        [SerializeField] float damagePerSecond = 0.0f;
+
 
         private const float Eps = 0.001f;
         private static readonly int LineDistance = Shader.PropertyToID("_lineDistance");
@@ -50,6 +51,21 @@ namespace Controller
             SetUpBeam();
             SetUpParticles();
             SetUpRaycaster();
+
+            if (layersThatStopLaser == 0 || layersThatStopLaser == LayerMask.NameToLayer("Default"))
+            {
+                // 레이어 설정이 없거나, 기본 값인 Default로만 설정되어 있을 경우
+                layersThatStopLaser = 0;
+                layersThatStopLaser |= (1 << LayerMask.NameToLayer("Default"));
+                layersThatStopLaser |= (1 << LayerMask.NameToLayer("Player"));
+                layersThatStopLaser |= (1 << LayerMask.NameToLayer("Enemy"));
+            }
+
+            if (damagePerSecond <= 0.0f)
+            {
+                // 데미지 설정이 없을 경우 기본 값
+                damagePerSecond = 100.0f;
+            }
         }
 
         private void Start()
@@ -86,9 +102,9 @@ namespace Controller
 
         private void OnRaycastHit(LaserHit hit)
         {
-            TakeDamage(hit, damagePerSecond * Time.deltaTime);
             DrawBeam(hit.HitPoint);
             PlayParticles(hit);
+            TakeDamage(hit, damagePerSecond);
         }
 
         private void OnRaycastMiss(LaserHit hit)
@@ -196,13 +212,16 @@ namespace Controller
 
         private void TakeDamage(LaserHit hit, float damage)
         {
-            Debug.Log("타겟: " + hit.Target.name);
             IDamagable damagable = hit.Target.GetComponent<IDamagable>();
+            if (damagable == null)
+            {
+                damagable = hit.Target.GetComponentInChildren<IDamagable>();
+            }
+
             if (damagable != null)
             {
                 damagable.ApplyDamage(damage);
             }
         }
     }
-
 }
