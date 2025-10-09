@@ -603,12 +603,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     // To-do: 데미지가 아니라 Stat을 넘겨주는 방식은 어떤가?
     // 방어 무시 등 공격자에 의존적인 스탯이 있을 경우에도 별 다른 참조 없이 바로 계산 가능
-    public void ApplyDamage(float inDamage)
+    public void ApplyDamage(float inDamage, float defenceIgnoreRate = 0.0f)
     {
-        TakeDamage(inDamage);
+        TakeDamage(inDamage, defenceIgnoreRate);
     }
 
-    public void TakeDamage(float takeDamage)
+    public void TakeDamage(float takeDamage, float defenceIgnoreRate)
     {
         // 현재 HP의 값을 데미지 만큼 처리
         // stats.CurrentHealth = takeDamage;
@@ -616,9 +616,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if ((_currentPlayerState & EPlayerState.Spawning) != 0 || (_currentPlayerState & EPlayerState.Invincibility) != 0) return;
         if (stats.CurrentHealth <= 0) return;
 
-        var damage = (takeDamage - (stats.TotalStats[EStatType.Defence].value + stats.TotalStats[EStatType.AddDefence].value)) * stats.TotalStats[EStatType.DamageReductionRate].value;
-        // Debug.Log($"Player에게 {damage} 데미지! 효과는 굉장했다!");
-
+        var damage = Utils.GetDamage(takeDamage, defenceIgnoreRate, stats.TotalStats);
         if (damage > 0)
         {
             if (stats.CurrentPartHealth > 0)        // 파츠 HP가 남아있으면 파츠를 우선 데미지 계산

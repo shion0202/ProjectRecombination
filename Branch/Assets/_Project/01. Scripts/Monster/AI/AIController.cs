@@ -334,7 +334,7 @@ namespace Monster.AI
         #endregion
         
         #region Public Methods
-        public void ApplyDamage(float inDamage)
+        public void ApplyDamage(float inDamage, float defenceIgnoreRate = 0.0f)
         {
             OnHit(inDamage);
         }

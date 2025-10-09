@@ -104,7 +104,7 @@ namespace Controller
         {
             DrawBeam(hit.HitPoint);
             PlayParticles(hit);
-            TakeDamage(hit, damagePerSecond);
+            TakeDamage(hit, damagePerSecond * Time.deltaTime);
         }
 
         private void OnRaycastMiss(LaserHit hit)
@@ -220,7 +220,7 @@ namespace Controller
 
             if (damagable != null)
             {
-                damagable.ApplyDamage(damage);
+                damagable.ApplyDamage(damage, 1.0f);
             }
         }
     }

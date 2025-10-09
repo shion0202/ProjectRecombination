@@ -352,12 +352,6 @@ public class CharacterStat : MonoBehaviour
             }
             foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
             {
-                if (stat.statType == EStatType.DamageReductionRate)
-                {
-                    finalValue *= (1 - mod.value);
-                    continue;
-                }
-
                 finalValue *= (1 + mod.value);
             }
 

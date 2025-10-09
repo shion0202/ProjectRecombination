@@ -12,14 +12,9 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _COLORGLITCHFEATURE_ON
   - _DISSOLVEFEATURE_ON
   - _FRESNELFEATURE_ON
-  - _LINE1FEATURE_ON
-  - _LINE2FEATURE_ON
-  - _LINEBOTHFEATURE_ON
   - _LINEGLITCHFEATURE_ON
-  - _NORMALMAPFEATURE_ON
   - _POSITIONFEATURE_Y
   - _POSITIONSPACEFEATURE_WORLD
   - _SOFTINTERSECTION1FEATURE_OFF
@@ -115,8 +110,8 @@ Material:
     - _AlphaCutoff: 0.5
     - _AlphaMaskAffect: 0.5
     - _AlphaMaskFeature: 0
-    - _ColorGlitchAffect: 0.3
-    - _ColorGlitchFeature: 1
+    - _ColorGlitchAffect: 1
+    - _ColorGlitchFeature: 0
     - _ColorPeriodcTiling: 223
     - _ColorPeriodicSpeed: -15
     - _ColorPeriodicSpeedX: -0.5
@@ -126,7 +121,7 @@ Material:
     - _DisplacementAmount: 0
     - _DisplacementFeature: 0
     - _DissolveFeature: 1
-    - _DissolveHide: 0.54
+    - _DissolveHide: 0
     - _EdgeLength: 15
     - _Float0: 1
     - _Float1: 1
@@ -159,13 +154,13 @@ Material:
     - _Hide: -1
     - _Keyword0: 0
     - _Line1Alpha: 0.15
-    - _Line1Feature: 1
+    - _Line1Feature: 0
     - _Line1Frequency: 101
     - _Line1Hardness: 1.45
     - _Line1InvertedThickness: 0
     - _Line1Speed: -3.57
     - _Line2Alpha: 0.1
-    - _Line2Feature: 1
+    - _Line2Feature: 0
     - _Line2Frequency: 1
     - _Line2Hardness: 2
     - _Line2InvertedThickness: 0.255
@@ -173,7 +168,7 @@ Material:
     - _LineAlpha: 1
     - _LineAlpha1: 0.15
     - _LineAlpha2: 0.1
-    - _LineBothFeature: 1
+    - _LineBothFeature: 0
     - _LineFrequency: 6
     - _LineFrequency1: 100
     - _LineFrequency2: 1
@@ -200,7 +195,7 @@ Material:
     - _MaskInversion: 0
     - _MaskLocalFeature: 0
     - _NormalAffect: 0.589
-    - _NormalMapFeature: 1
+    - _NormalMapFeature: 0
     - _NormalScale: 1
     - _PositionDirection: 1
     - _PositionFeature: 1

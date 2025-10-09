@@ -43,16 +43,12 @@ public class DamagableObject : MonoBehaviour, IDamagable
         }
     }
 
-    public void ApplyDamage(float inDamage)
+    public void ApplyDamage(float inDamage, float defenceIgnoreRate = 0.0f)
     {
         if (inDamage <= 0) return;
         if (IsDead) return;
 
-        float damage = (inDamage - (_stats[EStatType.Defence].value + _stats[EStatType.AddDefence].value)) * (1 - _stats[EStatType.DamageReductionRate].value);
-        if (damage <= 0.0f)
-        {
-            damage = 1.0f;  // 최소 데미지
-        }
+        float damage = Utils.GetDamage(inDamage, defenceIgnoreRate, _stats);
 
         _currentHp -= damage;
         if (_currentHp <= 0)
