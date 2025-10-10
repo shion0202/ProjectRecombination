@@ -4,7 +4,6 @@ using UnityEngine;
 public class Missile : Bullet
 {
     [SerializeField] protected GameObject collisionBulletPrefab;
-    [SerializeField] protected float velocity = 300f;     // Missile velocity
     [SerializeField] protected float alignSpeed = 1f;
     protected Transform _target = null;
     protected Vector3 _step;
@@ -27,7 +26,7 @@ public class Missile : Bullet
         // Navigate
         if (_target != null)
         {
-            _hitPos = Predict(transform.position, _target.position, _targetLastPos, velocity);
+            _hitPos = Predict(transform.position, _target.position, _targetLastPos, bulletSpeed);
             _targetLastPos = _target.position;
         }
         else
@@ -39,7 +38,7 @@ public class Missile : Bullet
                 Quaternion.LookRotation(_hitPos - transform.position), Time.deltaTime * alignSpeed);
 
         // Missile step per frame based on velocity and time
-        _step = transform.forward * Time.deltaTime * velocity;
+        _step = transform.forward * Time.deltaTime * bulletSpeed;
 
         // Advances missile forward
         transform.position += _step;
@@ -111,7 +110,7 @@ public class Missile : Bullet
         string baseLog = base.ToString();
         string targetName = _target != null ? _target.name : "None";
 
-        string log = $"{baseLog}\n" + $"Target: {targetName}, Predicted Hit Position: {_hitPos}, Bullet Velocity: {velocity}, Bullet Align Speed: {alignSpeed}";
+        string log = $"{baseLog}\n" + $"Target: {targetName}, Predicted Hit Position: {_hitPos}, Bullet Align Speed: {alignSpeed}";
         return log;
     }
 

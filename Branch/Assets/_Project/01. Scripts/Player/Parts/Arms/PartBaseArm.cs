@@ -8,11 +8,11 @@ public class PartBaseArm : PartBase
 {
     [Header("사격")]
     [SerializeField] protected GameObject bulletPrefab;
-    [SerializeField] protected Transform bulletSpawnPoint;
-    [SerializeField] protected CinemachineImpulseSource impulseSource;
     [SerializeField] protected LayerMask ignoreMask = 0;
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected float reloadTime;
+    protected Transform bulletSpawnPoint;
+    protected CinemachineImpulseSource impulseSource;
     protected float _currentShootTime = 0.0f;
     protected bool _isShooting = false;
     protected int _currentAmmo = 0;
@@ -36,6 +36,8 @@ public class PartBaseArm : PartBase
 
     protected virtual void Awake()
     {
+        impulseSource = GetComponent<CinemachineImpulseSource>();
+
         if (ignoreMask == 0)
         {
             ignoreMask |= 1;
@@ -107,6 +109,18 @@ public class PartBaseArm : PartBase
         {
             StopCoroutine(fadeCoroutine);
             fadeCoroutine = null;
+        }
+    }
+    public override void SetOwner(PlayerController owner)
+    {
+        base.SetOwner(owner);
+
+        BulletSpawnPoint bulletSpawner = null;
+        if (partType == EPartType.ArmL) bulletSpawner = _owner.GetComponentInChildren<BulletSpawnPointLeft>();
+        else bulletSpawner = _owner.GetComponentInChildren<BulletSpawnPointRight>();
+        if (bulletSpawner != null)
+        {
+            bulletSpawnPoint = bulletSpawner.transform;
         }
     }
 

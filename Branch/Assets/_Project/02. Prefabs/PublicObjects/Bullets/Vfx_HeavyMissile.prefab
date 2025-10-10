@@ -14626,7 +14626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
-  bulletSpeed: 15
+  bulletSpeed: 30
   explosionRadius: 5
   lifeTime: 5
   muzzleParticlePrefab: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}

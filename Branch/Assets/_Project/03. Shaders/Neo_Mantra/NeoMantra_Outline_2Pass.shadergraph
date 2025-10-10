@@ -629,7 +629,7 @@
         },
         "preventRotation": false
     },
-    "m_Path": "_NeoMantra",
+    "m_Path": "_NeoMantra/Test",
     "m_GraphPrecision": 1,
     "m_PreviewMode": 2,
     "m_OutputNode": {

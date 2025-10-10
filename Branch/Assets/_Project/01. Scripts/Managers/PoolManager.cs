@@ -47,7 +47,7 @@ namespace Managers
                 ObjectPool<GameObject> pool = new(
                     createFunc: () => InstantiateObject(poolData.prefab),
                     actionOnGet: obj => obj.SetActive(true),
-                    actionOnRelease: obj => obj.SetActive(false),
+                    actionOnRelease: obj => OnRelease(obj),
                     actionOnDestroy: Destroy,
                     collectionCheck: true,
                     defaultCapacity: poolData.defaultSize,
@@ -138,6 +138,12 @@ namespace Managers
             else Destroy(obj, delay);
         }
 
+        public void OnRelease(GameObject go)
+        {
+            go.transform.SetParent(_poolParents[go.name]);
+            go.SetActive(false);
+        }
+
         public (bool, string) IsPooledObject(GameObject o)
         {
             // 오브젝트의 이름에서 "(Clone)" 제거
@@ -150,7 +156,15 @@ namespace Managers
         {
             yield return new WaitForSeconds(delay);
 
-            _pools[key].Release(go);
+            try
+            {
+                _pools[key].Release(go);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // 이미 Release된 오브젝트일 경우 에러 메시지 반환 또는 무시
+                Debug.LogWarning(ex.Message);
+            }
         }
     }
 }

@@ -63,7 +63,7 @@ public class Orb : Bullet
         if (explosionEffectPrefab)
         {
             // 필요할 경우 Pooling
-            Instantiate(explosionEffectPrefab, transform.position, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f)));
+            Utils.Instantiate(explosionEffectPrefab, transform.position, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f)));
         }
     }
 
@@ -73,7 +73,7 @@ public class Orb : Bullet
         foreach (Collider collider in colliders)
         {
             TakeDamage(collider.transform);
-            Destroy(Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
+            Utils.Destroy(Utils.Instantiate(collisionBulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
         }
 
         // 구체 소멸 시 다방향 칼날 일제 발사
@@ -98,7 +98,7 @@ public class Orb : Bullet
         }
         Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.forward;
 
-        GameObject blade = Instantiate(bladePrefab, transform.position, Quaternion.LookRotation(direction));
+        GameObject blade = Utils.Instantiate(bladePrefab, transform.position, Quaternion.LookRotation(direction));
         ProjectileBlade bladeComp = blade.GetComponent<ProjectileBlade>();
         if (bladeComp != null)
         {

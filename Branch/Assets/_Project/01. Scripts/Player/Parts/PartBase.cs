@@ -40,7 +40,7 @@ public abstract class PartBase : MonoBehaviour
         SetPartStat();
     }
 
-    public void SetOwner(PlayerController owner)
+    public virtual void SetOwner(PlayerController owner)
     {
         _owner = owner;
     }

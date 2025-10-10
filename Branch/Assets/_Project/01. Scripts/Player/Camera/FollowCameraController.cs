@@ -9,7 +9,7 @@ public class FollowCameraController : MonoBehaviour
 {
     #region Variables
     [Header("Camera Settings")]
-    [SerializeField] private CinemachineVirtualCamera vcam;
+    private CinemachineVirtualCamera vcam;
     private CinemachineFramingTransposer _cameraBody;
     private CinemachinePOV _cameraAim;
 
@@ -81,6 +81,11 @@ public class FollowCameraController : MonoBehaviour
     #endregion
 
     #region Editor Methods
+    private void Awake()
+    {
+        vcam = GetComponent<CinemachineVirtualCamera>();
+    }
+
 #if UNITY_EDITOR
     private void Update()
     {
