@@ -372,8 +372,9 @@ namespace Monster.AI.FSM
             }
         }
         
-        public void ApplyDamage(float inDamage, float defenceIgnoreRate = 0.0f)
+        public void ApplyDamage(LayerMask targetMask, float inDamage, float defenceIgnoreRate = 0.0f)
         {
+            if ((targetMask & (LayerMask)gameObject.layer) == 0) return;
             OnHit(inDamage);
         }
         

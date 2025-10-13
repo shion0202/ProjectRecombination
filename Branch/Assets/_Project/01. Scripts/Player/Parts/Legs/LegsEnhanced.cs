@@ -91,14 +91,14 @@ public class LegsEnhanced : PartBaseLegs
             IDamagable monster = hit.transform.GetComponent<IDamagable>();
             if (monster != null)
             {
-                monster.ApplyDamage(skillDamage);
+                monster.ApplyDamage(targetMask, skillDamage);
             }
             else
             {
                 monster = hit.transform.GetComponentInParent<IDamagable>();
                 if (monster != null)
                 {
-                    monster.ApplyDamage(skillDamage);
+                    monster.ApplyDamage(targetMask, skillDamage);
                 }
             }
         }

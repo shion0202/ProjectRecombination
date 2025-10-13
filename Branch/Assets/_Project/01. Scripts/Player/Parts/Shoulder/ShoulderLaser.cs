@@ -5,6 +5,7 @@ using Monster;
 using Monster.AI.Blackboard;
 using Monster.AI;
 using Managers;
+using UnityEngine.UIElements;
 
 public class ShoulderLaser : PartBaseShoulder
 {
@@ -13,8 +14,11 @@ public class ShoulderLaser : PartBaseShoulder
     [SerializeField] protected GameObject beamEndPrefab;
     [SerializeField] protected GameObject bulletPrefab;
 
+    [SerializeField] protected float beamDamage = 300.0f;
+    [SerializeField] protected Vector3 beamOffset = Vector3.zero;
     [SerializeField] protected float beamDuration = 2.0f;
     [SerializeField] protected float beamCooldown = 5.0f;
+    [SerializeField] protected LayerMask obstacleMask;
 
     private GameObject beamStart;
     private GameObject beamEnd;
@@ -23,13 +27,18 @@ public class ShoulderLaser : PartBaseShoulder
     private bool _isShooting = false;
     private Coroutine _skillCoroutine = null;
 
-    private Vector3 _targetPoint = Vector3.zero;
-
+    // To-do: 연산량 과한 상태, Timer 등을 추가하여 연산 횟수를 줄이도록
     protected void Update()
     {
         if (_isShooting)
         {
-            ShootBeamInDir(transform.position + (Vector3.up * 1.0f), _targetPoint);
+            RaycastHit[] hits;
+            Vector3 targetPoint = GetTargetPoint(out hits);
+
+            Vector3 beamOffsetForward = beamOffset;
+            beamOffsetForward.y = 0.0f;
+
+            ShootBeamInDir(transform.position + (_owner.transform.right * beamOffset.x + _owner.transform.up * beamOffset.y + _owner.transform.forward * beamOffset.z), targetPoint);
         }
     }
 
@@ -44,10 +53,6 @@ public class ShoulderLaser : PartBaseShoulder
 
         // 캐릭터가 카메라 방향을 바라보고, 특정 위치에서 레이저가 시작하며, N초간 지속되도록 설정
         LookCameraDirection();
-        _owner.FollowCamera.SetCameraRotatable(false);
-        _owner.SetMovable(false);
-        _isShooting = true;
-
         _skillCoroutine = StartCoroutine(CoStopAndCooldown());
     }
 
@@ -57,9 +62,12 @@ public class ShoulderLaser : PartBaseShoulder
         Vector3 lookDirection = cam.transform.forward;
         lookDirection.y = 0; // 수평 방향으로만 회전
         if (lookDirection != Vector3.zero)
+        {
             _owner.transform.rotation = Quaternion.LookRotation(lookDirection);
+        }
     }
 
+    // To-do: 레이저 범위는 벽에 닿을 때까지, 그 후 범위 내의 모든 적과 오브젝트에 데미지 계산
     protected Vector3 GetTargetPoint(out RaycastHit[] hits)
     {
         Camera cam = Camera.main;
@@ -74,14 +82,14 @@ public class ShoulderLaser : PartBaseShoulder
             IDamagable monster = hit.transform.GetComponent<IDamagable>();
             if (monster != null)
             {
-                monster.ApplyDamage(100.0f);
+                monster.ApplyDamage(targetMask, beamDamage);
             }
             else
             {
                 monster = hit.transform.GetComponentInParent<IDamagable>();
                 if (monster != null)
                 {
-                    monster.ApplyDamage(100.0f);
+                    monster.ApplyDamage(targetMask, beamDamage);
                 }
             }
 
@@ -122,15 +130,13 @@ public class ShoulderLaser : PartBaseShoulder
         _owner.PlayerAnimator.SetBool("isPlayBackShootAnim", true);
         yield return new WaitForSeconds(0.5f);
 
+        _isShooting = true;
         beamStart = Instantiate(beamStartPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         beamEnd = Instantiate(beamEndPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         beam = Instantiate(beamLineRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         line = beam.GetComponent<LineRenderer>();
         line.startWidth = 2.0f;
         line.endWidth = 2.0f;
-
-        RaycastHit[] hits;
-        _targetPoint = GetTargetPoint(out hits);
 
         yield return new WaitForSeconds(beamDuration);
 

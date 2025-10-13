@@ -111,6 +111,7 @@ public class PartBaseArm : PartBase
             fadeCoroutine = null;
         }
     }
+
     public override void SetOwner(PlayerController owner)
     {
         base.SetOwner(owner);

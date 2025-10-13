@@ -12,7 +12,6 @@ namespace Controller
         [Header("Damage")]
         [SerializeField] float damagePerSecond = 0.0f;
 
-
         private const float Eps = 0.001f;
         private static readonly int LineDistance = Shader.PropertyToID("_lineDistance");
         private static readonly int WidthConstant = Shader.PropertyToID("_widthConstant");
@@ -220,7 +219,7 @@ namespace Controller
 
             if (damagable != null)
             {
-                damagable.ApplyDamage(damage, 1.0f);
+                damagable.ApplyDamage(layersThatStopLaser, damage, 1.0f);
             }
         }
     }

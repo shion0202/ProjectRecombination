@@ -70,7 +70,6 @@ public class Utils
         float totalDamage = (originalDamage - ((stats[EStatType.Defence].value + stats[EStatType.AddDefence].value) * (1 - defenceIgnoreRate))) * (1 - stats[EStatType.DamageReductionRate].value);
 
         // 방어력이나 데미지 감소율로 인한 감소 값이 원래 데미지보다 클 경우 최소 데미지를 보장하도록 Clamp하였으나, 기획 의도에 따라 수정될 수 있음
-        float finalDamage = Mathf.Clamp(totalDamage, 1.0f, totalDamage);
-        return finalDamage;
+        return Mathf.Clamp(totalDamage, 1.0f, totalDamage);
     }
 }

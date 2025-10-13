@@ -11,14 +11,13 @@ public class LegsHover : PartBaseLegs
     [Header("호버링 설정")]
     [SerializeField] protected GameObject barrierPrefab;        // 보호막 프리팹
     [SerializeField] protected Transform barrierSpawnPoint;     // 보호막 생성 위치
-    [SerializeField] protected float barrierDamage = 200.0f;
-    [SerializeField] protected float barrierPushForce = 50.0f;
     [SerializeField] protected float acceleration = 10f;        // 클수록 즉각적, 작을수록 둔함
     [SerializeField] protected float deceleration = 14f;        // 클수록 급브레이크, 작을수록 천천히 멈춤
     [SerializeField] protected float hoverHeight = 1.5f;
     [SerializeField] protected float hoverRange = 0.2f;
     [SerializeField] protected float hoverSpeed = 2.0f;
     [SerializeField] protected float hoverDownSpeed = 4.0f;
+    [SerializeField] protected LayerMask groundLayer;
     protected GameObject _currentBarrier = null;                // 현재 활성화된 보호막
     protected Vector3 _currentMoveDirection = Vector3.zero;
     protected float groundY = 0.0f;
@@ -31,7 +30,7 @@ public class LegsHover : PartBaseLegs
     {
         base.Awake();
 
-        _partModifiers.Add(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, 0.5f, this));
+        _partModifiers.Add(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, 0.7f, this));
         _partModifiers.Add(new StatModifier(EStatType.DamageReductionRate, EStackType.PercentMul, 0.7f, this));
 
         _legsAnimType = EAnimationType.Hover;
@@ -89,7 +88,7 @@ public class LegsHover : PartBaseLegs
     {
         RaycastHit hit;
         Vector3 rayOrigin = _owner.transform.position + Vector3.up * 0.5f;
-        if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 50f))
+        if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 50f, groundLayer))
         {
             groundY = hit.point.y;
         }
@@ -139,12 +138,6 @@ public class LegsHover : PartBaseLegs
         GUIManager.Instance.SetLegsSkillIcon(true);
         // 스킬 사용 시 보호막 생성
         _currentBarrier = Instantiate(barrierPrefab, barrierSpawnPoint.position - new Vector3(0.0f, 0.2f, 0.0f), Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f)), transform);
-        HoverBarrier barrier = _currentBarrier.GetComponent<HoverBarrier>();
-        if (barrier != null)
-        {
-            barrier.Damage = barrierDamage;
-            barrier.PushForce = barrierPushForce;
-        }
         Debug.Log("호버링 보호막 생성 및 버프");
 
         // 이동 속도 증가 및 받는 피해 감소 = Modifier 적용

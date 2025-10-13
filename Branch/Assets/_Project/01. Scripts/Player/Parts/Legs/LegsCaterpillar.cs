@@ -152,7 +152,7 @@ public class LegsCaterpillar : PartBaseLegs
             IDamagable monster = hit.transform.GetComponent<IDamagable>();
             if (monster != null)
             {
-                monster.ApplyDamage(skillDamage);
+                monster.ApplyDamage(targetMask, skillDamage);
                 // TODO: 적 기절 (2초)
             }
             else
@@ -160,7 +160,7 @@ public class LegsCaterpillar : PartBaseLegs
                 monster = hit.transform.GetComponentInParent<IDamagable>();
                 if (monster != null)
                 {
-                    monster.ApplyDamage(skillDamage);
+                    monster.ApplyDamage(targetMask,skillDamage);
                     // TODO: 적 기절 (2초)
                 }
             }

@@ -27,7 +27,7 @@ namespace Monster.AI
         public BehaviorTree.BehaviorTree behaviorTree;
     }
     
-    public sealed class AIController : MonoBehaviour, IDamagable
+    public sealed class AIController : MonoBehaviour
     {
         [SerializeField] private Blackboard.Blackboard blackboard;
         [SerializeField] private BehaviorTree.BehaviorTree globalBehaviorTree; // GlobalBehaviorTree;

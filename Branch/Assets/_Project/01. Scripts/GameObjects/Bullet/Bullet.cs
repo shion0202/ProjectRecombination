@@ -22,6 +22,7 @@ public class Bullet : MonoBehaviour
     protected Vector3 _targetDirection;
 
     [SerializeField] private float lifeTime = 5f; // 총알의 생명 시간
+    [SerializeField] protected LayerMask targetMask;
     private float _timer;
 
     [Header("Effects")]
@@ -37,6 +38,12 @@ public class Bullet : MonoBehaviour
     {
         get => lifeTime;
         set => lifeTime = value;
+    }
+
+    public LayerMask TargetMask
+    {
+        get => targetMask;
+        set => targetMask = value;
     }
 
     protected float Timer
@@ -71,6 +78,11 @@ public class Bullet : MonoBehaviour
         if (_rb == null)
         {
             _rb = GetComponentInChildren<Rigidbody>();
+        }
+
+        if (targetMask == 0)
+        {
+            targetMask |= (1 << LayerMask.NameToLayer("Enemy"));
         }
     }
 
@@ -305,14 +317,14 @@ public class Bullet : MonoBehaviour
         IDamagable enemy = target.GetComponent<IDamagable>();
         if (enemy != null)
         {
-            enemy.ApplyDamage(_damage * coefficient);
+            enemy.ApplyDamage(targetMask, _damage * coefficient);
         }
         else
         {
             enemy = target.transform.GetComponentInParent<IDamagable>();
             if (enemy != null)
             {
-                enemy.ApplyDamage(_damage * coefficient);
+                enemy.ApplyDamage(targetMask, _damage * coefficient);
             }
         }
     }

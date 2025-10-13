@@ -18,11 +18,6 @@ public class PartBaseLegs : PartBase, ILegsMovement
 
     public EAnimationType LegsAnimType => _legsAnimType;
 
-    protected virtual void Awake()
-    {
-
-    }
-
     public override void UseAbility()
     {
         // 스킬 입력 시작 시 실행할 로직

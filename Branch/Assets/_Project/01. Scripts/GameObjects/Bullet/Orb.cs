@@ -43,7 +43,7 @@ public class Orb : Bullet
         IDamagable damagable = other.gameObject.GetComponent<IDamagable>();
         if (damagable != null)
         {
-            damagable.ApplyDamage(Damage);
+            damagable.ApplyDamage(targetMask, Damage);
         }
     }
 

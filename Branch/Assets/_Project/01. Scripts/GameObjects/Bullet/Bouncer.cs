@@ -31,7 +31,7 @@ public class Bouncer : Bullet
         IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
         if (damagable != null)
         {
-            damagable.ApplyDamage(Damage);
+            damagable.ApplyDamage(targetMask, Damage);
         }
 
         CheckBounceCount(collision);

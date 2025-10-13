@@ -603,8 +603,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     // To-do: 데미지가 아니라 Stat을 넘겨주는 방식은 어떤가?
     // 방어 무시 등 공격자에 의존적인 스탯이 있을 경우에도 별 다른 참조 없이 바로 계산 가능
-    public void ApplyDamage(float inDamage, float defenceIgnoreRate = 0.0f)
+    public void ApplyDamage(LayerMask targetMask, float inDamage, float defenceIgnoreRate = 0.0f)
     {
+        if ((targetMask & (LayerMask)gameObject.layer) == 0) return;
         TakeDamage(inDamage, defenceIgnoreRate);
     }
 
