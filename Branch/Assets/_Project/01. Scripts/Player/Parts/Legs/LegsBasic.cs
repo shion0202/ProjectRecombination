@@ -14,6 +14,7 @@ public class LegsBasic : PartBaseLegs
     protected override void Awake()
     {
         base.Awake();
+
         _legsAnimType = EAnimationType.Base;
     }
 

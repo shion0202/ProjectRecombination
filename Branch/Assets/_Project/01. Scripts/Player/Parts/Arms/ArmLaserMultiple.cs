@@ -7,19 +7,33 @@ using UnityEngine;
 public class ArmLaserMultiple : PartBaseArm
 {
     [Header("다중 레이저 설정")]
-    [SerializeField] protected GameObject targetPrefab;
-    [SerializeField] protected float spreadAngle = 10.0f;
-    [SerializeField] protected float maxCastTime = 1.0f;
+    [SerializeField] protected float minSpreadAngle = 5.0f;
+    [SerializeField] protected float maxSpreadAngle = 90.0f;
     [SerializeField] protected int bulletPerShot = 3;
+    [SerializeField] protected GameObject chargeEffectPrefab;
+    [SerializeField] protected float maxChargeTime = 2.0f;
+    [SerializeField] protected Vector3 chargeOffset = Vector3.zero;
+    protected float _currentChargeTime = 0.0f;
+    private GameObject chargeEffect;
+    protected Vector3 defaultImpulseValue;
+    protected Coroutine _recoilRoutine = null;
+
+    [Header("타겟팅 설정")]
+    [SerializeField] protected GameObject targetPrefab;
+    [SerializeField] protected float maxCastTime = 1.0f;
     [SerializeField] private float particleStopDelay = 0.9f;  // Inspector에서 조절 가능
     protected Transform currentTarget = null;          // 현재 타겟
     protected float targetingProgress = 0f;             // 타겟팅 진행도 (0~maxCastTime)
     protected GameObject currentTargetIndicator = null;
     protected Coroutine _targetRoutine = null;
-
-    [SerializeField] private Color targetingInProgressColor = Color.yellow;
-    [SerializeField] private Color targetingCompleteColor = Color.red;
     private Vector3 targetIndicatorStartPosOffset = new Vector3(0, 5f, 0);
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        defaultImpulseValue = impulseSource.m_DefaultVelocity;
+    }
 
     protected override void Update()
     {
@@ -34,9 +48,9 @@ public class ArmLaserMultiple : PartBaseArm
 
         if (!_isShooting)
         {
-            targetingProgress = 0f;
-            ClearTargetIndicator();
-            currentTarget = null;
+            //targetingProgress = 0f;
+            //ClearTargetIndicator();
+            //currentTarget = null;
 
             if (_currentAmmo >= maxAmmo) return;
 
@@ -54,71 +68,144 @@ public class ArmLaserMultiple : PartBaseArm
             return;
         }
         if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
-        if (_currentAmmo <= 0) return;
+        //if (_currentAmmo <= 0) return;
 
         _currentShootTime += Time.deltaTime;
-        Transform newTarget = FindTargetInView();
-        if (newTarget != currentTarget)
+        if (chargeEffect && _currentShootTime >= maxChargeTime)
         {
-            currentTarget = newTarget;
-            ClearTargetIndicator();
-            targetingProgress = 0f; // 진행도 초기화
+            Utils.Destroy(chargeEffect);
+            chargeEffect = null;
         }
-        else
-        {
-            if (currentTarget == null || !IsTargetValid(currentTarget))
-            {
-                ClearTargetIndicator();
-                currentTarget = null;
-                targetingProgress = 0f;
-                return;
-            }
-            targetingProgress += Time.deltaTime;
-            targetingProgress = Mathf.Min(targetingProgress, maxCastTime);
+        //Transform newTarget = FindTargetInView();
+        //if (newTarget != currentTarget)
+        //{
+        //    currentTarget = newTarget;
+        //    ClearTargetIndicator();
+        //    targetingProgress = 0f; // 진행도 초기화
+        //}
+        //else
+        //{
+        //    if (currentTarget == null || !IsTargetValid(currentTarget))
+        //    {
+        //        ClearTargetIndicator();
+        //        currentTarget = null;
+        //        targetingProgress = 0f;
+        //        return;
+        //    }
+        //    targetingProgress += Time.deltaTime;
+        //    targetingProgress = Mathf.Min(targetingProgress, maxCastTime);
 
-            // 변경된 부분: 진행이 완료된 후에만 생성
-            if (targetingProgress >= maxCastTime && currentTargetIndicator == null)
-            {
-                CreateTargetIndicator();
-            }
+        //    // 변경된 부분: 진행이 완료된 후에만 생성
+        //    if (targetingProgress >= maxCastTime && currentTargetIndicator == null)
+        //    {
+        //        CreateTargetIndicator();
+        //    }
+        //}
+    }
+
+    public override void UseAbility()
+    {
+        if (_currentAmmo <= 0) return;
+
+        base.UseAbility();
+        if (chargeEffectPrefab)
+        {
+            chargeEffect = Utils.Instantiate(chargeEffectPrefab, bulletSpawnPoint.position + chargeOffset, Quaternion.identity, bulletSpawnPoint);
         }
     }
 
     public override void UseCancleAbility()
     {
-        base.UseCancleAbility();
+        if (!_isShooting || _currentAmmo <= 0) return;
 
-        if (targetingProgress >= maxCastTime && currentTarget != null)
+        base.UseCancleAbility();
+        if (chargeEffect)
         {
-            TargetPoint targetPos = currentTarget.GetComponentInChildren<TargetPoint>();
-            if (targetPos != null)
-            {
-                ShootAtTarget(targetPos.transform);
-            }
-            else
-            {
-                ShootAtTarget(currentTarget);
-            }
+            Utils.Destroy(chargeEffect);
+            chargeEffect = null;
         }
 
+        Shoot();
+
+        //if (targetingProgress >= maxCastTime && currentTarget != null)
+        //{
+        //    TargetPoint targetPos = currentTarget.GetComponentInChildren<TargetPoint>();
+        //    if (targetPos != null)
+        //    {
+        //        ShootAtTarget(targetPos.transform);
+        //    }
+        //    else
+        //    {
+        //        ShootAtTarget(currentTarget);
+        //    }
+        //}
+
         _currentShootTime = 0.0f;
-        targetingProgress = 0f;
-        ClearTargetIndicator();
-        currentTarget = null;
+        //targetingProgress = 0f;
+        //ClearTargetIndicator();
+        //currentTarget = null;
     }
 
     public override void FinishActionForced()
     {
         base.FinishActionForced();
 
-        // 파티클 시스템 참조
-        if (_targetRoutine == null && currentTargetIndicator != null)
+        if (chargeEffect)
         {
-            ParticleSystem ps = currentTargetIndicator.GetComponentInChildren<ParticleSystem>();
-            if (ps != null)
-            {
-                _targetRoutine = StartCoroutine(StopParticleAfterDelay(ps));
-            }
+            Utils.Destroy(chargeEffect);
+            chargeEffect = null;
+        }
+
+        if (_recoilRoutine != null)
+        {
+            StopCoroutine(_recoilRoutine);
+            _recoilRoutine = null;
+        }
+        _recoilRoutine = StartCoroutine(CoDelayRecoil());
+
+        //// 파티클 시스템 참조
+        //if (_targetRoutine == null && currentTargetIndicator != null)
+        //{
+        //    ParticleSystem ps = currentTargetIndicator.GetComponentInChildren<ParticleSystem>();
+        //    if (ps != null)
+        //    {
+        //        _targetRoutine = StartCoroutine(StopParticleAfterDelay(ps));
+        //    }
+        //}
+    }
+
+    protected override void Shoot()
+    {
+        if (_currentShootTime > maxChargeTime)
+        {
+            _currentShootTime = maxChargeTime;
+        }
+        _currentChargeTime = (_currentShootTime / maxChargeTime);
+
+        RaycastHit hit;
+        Vector3 targetPoint = GetTargetPoint(out hit);
+        Vector3 shootDirection = (targetPoint - bulletSpawnPoint.position).normalized;
+
+        for (int i = 0; i < bulletPerShot; i++)
+        {
+            Vector3 randomizedDirection = GetRandomSpreadDirection(shootDirection, Mathf.Lerp(maxSpreadAngle, minSpreadAngle, _currentChargeTime));
+            SpawnBullet(randomizedDirection);
+        }
+
+        impulseSource.m_DefaultVelocity = (defaultImpulseValue * 0.5f) + defaultImpulseValue * _currentChargeTime * 0.5f;
+        _owner.ApplyRecoil(impulseSource, recoilX * _currentChargeTime, recoilY * _currentChargeTime);
+        if (_recoilRoutine != null)
+        {
+            StopCoroutine(_recoilRoutine);
+        }
+        _recoilRoutine = StartCoroutine(CoDelayRecoil());
+
+        _currentAmmo = Mathf.Clamp(_currentAmmo - 1, 0, maxAmmo);
+        if (_currentAmmo <= 0)
+        {
+            //CancleShootState(partType == EPartType.ArmL ? true : false);
+            _isOverheat = true;
+            GUIManager.Instance.SetAmmoColor(partType, true);
         }
     }
 
@@ -154,39 +241,6 @@ public class ArmLaserMultiple : PartBaseArm
         }
     }
 
-    private void UpdateTargetIndicatorPositionAndColor()
-    {
-        if (currentTargetIndicator == null || currentTarget == null) return;
-
-        float t = targetingProgress / maxCastTime;
-        Vector3 startPos = (currentTarget.position + Vector3.up) + targetIndicatorStartPosOffset;
-        Vector3 endPos = (currentTarget.position + Vector3.up);
-
-        // 부드럽게 lerp (선형 보간) 해서 내려오는 위치 계산
-        Vector3 lerpedPos = Vector3.Lerp(startPos, endPos, t);
-
-        currentTargetIndicator.transform.position = lerpedPos;
-
-        // 타겟팅 완료 시 색 변경
-        if (t >= 1f)
-        {
-            SetTargetIndicatorColor(targetingCompleteColor);
-        }
-        else
-        {
-            SetTargetIndicatorColor(targetingInProgressColor);
-        }
-    }
-
-    private void SetTargetIndicatorColor(Color color)
-    {
-        SpriteRenderer sr = currentTargetIndicator.GetComponent<SpriteRenderer>();
-        if (sr != null)
-        {
-            sr.color = color;
-        }
-    }
-
     // 타겟팅 표시 삭제 함수
     private void ClearTargetIndicator()
     {
@@ -206,7 +260,7 @@ public class ArmLaserMultiple : PartBaseArm
 
         for (int i = 0; i < bulletPerShot - 1; i++)
         {
-            Vector3 randomizedDirection = GetRandomSpreadDirection(shootDirection, spreadAngle);
+            Vector3 randomizedDirection = GetRandomSpreadDirection(shootDirection, Mathf.Lerp(minSpreadAngle, maxSpreadAngle, _currentChargeTime));
             SpawnBullet(randomizedDirection);
         }
 
@@ -292,6 +346,14 @@ public class ArmLaserMultiple : PartBaseArm
         }
 
         return bestTarget;
+    }
+
+    protected IEnumerator CoDelayRecoil()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        impulseSource.m_DefaultVelocity = defaultImpulseValue;
+        _recoilRoutine = null;
     }
 
     private IEnumerator StopParticleAfterDelay(ParticleSystem ps)

@@ -48530,12 +48530,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea4308861e24ac4caa06d26e151d595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageOverTime: 30
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 73729
   HitEffect: {fileID: 1132006484797202}
   HitOffset: 0.01
   useLaserRotation: 0
-  MaxLength: 30
-  MainTextureLength: 0.5
+  MaxLength: 100
+  MainTextureLength: 0.1
   NoiseTextureLength: 0.5
 --- !u!120 &120065101442726732
 LineRenderer:
@@ -48584,7 +48586,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.3
+    widthMultiplier: 0.6
     widthCurve:
       serializedVersion: 2
       m_Curve:

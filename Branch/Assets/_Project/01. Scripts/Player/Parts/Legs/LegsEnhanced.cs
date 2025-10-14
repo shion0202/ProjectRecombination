@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Monster;
-using UnityEngine.InputSystem;
 using Monster.AI;
 using Managers;
 

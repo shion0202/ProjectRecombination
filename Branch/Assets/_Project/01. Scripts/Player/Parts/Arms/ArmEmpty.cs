@@ -7,6 +7,7 @@ public class ArmEmpty : PartBaseArm
     protected override void Awake()
     {
         base.Awake();
+
         _isAnimating = false;
     }
 

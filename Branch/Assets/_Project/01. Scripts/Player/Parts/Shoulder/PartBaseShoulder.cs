@@ -7,8 +7,10 @@ public class PartBaseShoulder : PartBase
 {
     [SerializeField] protected LayerMask ignoreMask = 0;
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         if (ignoreMask == 0)
         {
             ignoreMask |= 1;

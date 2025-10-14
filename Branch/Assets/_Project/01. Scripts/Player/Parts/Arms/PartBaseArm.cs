@@ -18,6 +18,7 @@ public class PartBaseArm : PartBase
     protected int _currentAmmo = 0;
     protected float _currentReloadTime = 0.0f;
     protected bool _isOverheat = false;
+    protected bool _isUseOverheat = false;
 
     [Header("이펙트")]
     [SerializeField] protected GameObject muzzleFlashEffectPrefab;
@@ -34,8 +35,10 @@ public class PartBaseArm : PartBase
 
     public bool IsOverheat => _isOverheat;
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         impulseSource = GetComponent<CinemachineImpulseSource>();
 
         if (ignoreMask == 0)
@@ -61,7 +64,7 @@ public class PartBaseArm : PartBase
             GUIManager.Instance.SetAmmoRightSlider(_currentAmmo, maxAmmo);
         }
 
-            _currentShootTime -= Time.deltaTime;
+        _currentShootTime -= Time.deltaTime;
 
         if (!_isShooting)
         {
@@ -130,8 +133,7 @@ public class PartBaseArm : PartBase
         Vector3 targetPoint = GetTargetPoint(out RaycastHit hit);
         Vector3 camShootDirection = (targetPoint - bulletSpawnPoint.position);
 
-        //GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection.normalized));
-        GameObject bullet = PoolManager.Instance.GetObject(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection.normalized));
+        GameObject bullet = Utils.Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(camShootDirection.normalized));
         Bullet bulletComponent = bullet.GetComponent<Bullet>();
         if (bulletComponent != null)
         {
@@ -193,6 +195,7 @@ public class PartBaseArm : PartBase
         _owner.CancleAttack(isLeft);
     }
 
+    // 현재 사용 X
     protected IEnumerator CoFadeOutLaser()
     {
         //MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();

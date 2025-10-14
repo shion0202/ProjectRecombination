@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Monster;
-using Monster.AI.Blackboard;
 using Managers;
 
 public class ShoulderRapid : PartBaseShoulder
