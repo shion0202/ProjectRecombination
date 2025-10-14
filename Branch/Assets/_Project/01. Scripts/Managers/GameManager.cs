@@ -45,8 +45,7 @@ namespace Managers
             yield return new WaitForSeconds(5.0f);
 
             GUIManager.Instance.CloseGameOverPanel();
-            player.Stats.CurrentBodyHealth = player.Stats.MaxBodyHealth;
-            player.Stats.CurrentPartHealth = player.Stats.MaxPartHealth;
+            player.Stats.CurrentHealth = player.Stats.MaxHealth;
             player.Spawn();
 
             _rebirthRoutine = null;

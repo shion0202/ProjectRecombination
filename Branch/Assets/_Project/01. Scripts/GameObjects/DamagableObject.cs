@@ -43,13 +43,13 @@ public class DamagableObject : MonoBehaviour, IDamagable
         }
     }
 
-    public void ApplyDamage(LayerMask targetMask, float inDamage, float defenceIgnoreRate = 0.0f)
+    public void ApplyDamage(LayerMask targetMask, float inDamage, float unitOfTime = 1.0f, float defenceIgnoreRate = 0.0f)
     {
         if (inDamage <= 0) return;
         if (IsDead) return;
-        if ((targetMask & (LayerMask)gameObject.layer) == 0) return;
+        if ((targetMask & (LayerMask)(1 << gameObject.layer)) == 0) return;
 
-        float damage = Utils.GetDamage(inDamage, defenceIgnoreRate, _stats);
+        float damage = Utils.GetDamage(inDamage, defenceIgnoreRate, unitOfTime, _stats);
 
         _currentHp -= damage;
         if (_currentHp <= 0)

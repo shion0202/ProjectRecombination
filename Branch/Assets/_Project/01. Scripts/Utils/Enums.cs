@@ -50,14 +50,6 @@ public enum EStackType
     PercentMul      // 곱연산 (×1.1 × 1.1)
 }
 
-// 회복 범위
-public enum EHealRange
-{
-    All = 0,
-    Body = 1,
-    Part = 2,
-}
-
 // 회복 연산 방식
 public enum EHealType
 {
@@ -80,8 +72,9 @@ public enum EPlayerState
     Spawning = 1 << 8,
     Dead = 1 << 9,
     Invincibility = 1 << 10,
+    Skilling = 1 << 11,
 
-    RotateState = Moving | LeftShooting | RightShooting | Zooming,
+    RotateState = Moving | LeftShooting | RightShooting | Zooming | Skilling,
     ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
     ShootState = LeftShooting | RightShooting,
     UnmanipulableState = Spawning | Dead,

@@ -372,16 +372,19 @@ namespace Monster.AI.FSM
             }
         }
         
-        public void ApplyDamage(LayerMask targetMask, float inDamage, float defenceIgnoreRate = 0.0f)
+        public void ApplyDamage(LayerMask targetMask, float inDamage, float unitOfTime = 1.0f, float defenceIgnoreRate = 0.0f)
         {
-            if ((targetMask & (LayerMask)gameObject.layer) == 0) return;
-            OnHit(inDamage);
+            if ((targetMask & (LayerMask)(1 << gameObject.layer)) == 0) return;
+            OnHit(inDamage, defenceIgnoreRate, unitOfTime);
         }
         
-        public void OnHit(float damage)
+        public void OnHit(float damage, float defenceIgnoreRate, float unitOfTime)
         {
             if (blackboard is null) return;
-            blackboard.CurrentHealth -= damage;
+
+            float totalDamage = Utils.GetDamage(damage, defenceIgnoreRate, unitOfTime, blackboard.Map);
+            blackboard.CurrentHealth -= totalDamage;
+
             // 피격 시 추적 상태로 즉시 전환하는 로직 추가 가능
             // if (blackboard.CurrentHealth > 0) ChangeState("Chase");
         }

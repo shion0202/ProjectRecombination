@@ -603,45 +603,44 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     // To-do: 데미지가 아니라 Stat을 넘겨주는 방식은 어떤가?
     // 방어 무시 등 공격자에 의존적인 스탯이 있을 경우에도 별 다른 참조 없이 바로 계산 가능
-    public void ApplyDamage(LayerMask targetMask, float inDamage, float defenceIgnoreRate = 0.0f)
+    public void ApplyDamage(LayerMask targetMask, float inDamage, float unitOfTime = 1.0f, float defenceIgnoreRate = 0.0f)
     {
-        if ((targetMask & (LayerMask)gameObject.layer) == 0) return;
-        TakeDamage(inDamage, defenceIgnoreRate);
+        if ((targetMask & (LayerMask)(1 << gameObject.layer)) == 0) return;
+        TakeDamage(inDamage, defenceIgnoreRate, unitOfTime);
     }
 
-    public void TakeDamage(float takeDamage, float defenceIgnoreRate)
+    public void TakeDamage(float takeDamage, float defenceIgnoreRate, float unitOfTime)
     {
-        // 현재 HP의 값을 데미지 만큼 처리
-        // stats.CurrentHealth = takeDamage;
-
         if ((_currentPlayerState & EPlayerState.Spawning) != 0 || (_currentPlayerState & EPlayerState.Invincibility) != 0) return;
         if (stats.CurrentHealth <= 0) return;
 
-        var damage = Utils.GetDamage(takeDamage, defenceIgnoreRate, stats.TotalStats);
+        var damage = Utils.GetDamage(takeDamage, defenceIgnoreRate, unitOfTime,stats.TotalStats);
         if (damage > 0)
         {
-            if (stats.CurrentPartHealth > 0)        // 파츠 HP가 남아있으면 파츠를 우선 데미지 계산
-            {
-                stats.CurrentPartHealth -= damage;  
+            //if (stats.CurrentPartHealth > 0)        // 파츠 HP가 남아있으면 파츠를 우선 데미지 계산
+            //{
+            //    stats.CurrentPartHealth -= damage;  
                 
-                // 계산 후 파츠 HP가 음수가 된 경우
-                if (stats.CurrentPartHealth < 0)
-                {
-                    damage += stats.CurrentPartHealth;  // 바디에 적용할 데미지를 감소
-                    stats.CurrentPartHealth = 0;        // 파츠 HP를 0으로 초기화
-                }
-                else
-                {
-                    damage = 0;
-                }
-            }
+            //    // 계산 후 파츠 HP가 음수가 된 경우
+            //    if (stats.CurrentPartHealth < 0)
+            //    {
+            //        damage += stats.CurrentPartHealth;  // 바디에 적용할 데미지를 감소
+            //        stats.CurrentPartHealth = 0;        // 파츠 HP를 0으로 초기화
+            //    }
+            //    else
+            //    {
+            //        damage = 0;
+            //    }
+            //}
 
-            if (stats.CurrentBodyHealth > 0)
-            {
-                stats.CurrentBodyHealth -= damage;
-                if (stats.CurrentBodyHealth < 0)
-                    stats.CurrentBodyHealth = 0;
-            }
+            //if (stats.CurrentBodyHealth > 0)
+            //{
+            //    stats.CurrentBodyHealth -= damage;
+            //    if (stats.CurrentBodyHealth < 0)
+            //        stats.CurrentBodyHealth = 0;
+            //}
+
+            stats.CurrentHealth -= damage;
         }
         else
         {
@@ -654,7 +653,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
-    public void HealHp(float healAmount, EHealType healType, EHealRange healRange = EHealRange.All)
+    public void HealHp(float healAmount, EHealType healType)
     {
         if (healAmount <= 0.0f) return;
         if (stats.CurrentHealth <= 0) return;
@@ -670,26 +669,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 break;
         }
 
-        if (healRange != EHealRange.Part)
-        {
-            // 계산 후 Body Hp가 최대치를 초과했을 경우
-            float postHealth = stats.CurrentBodyHealth;
-            stats.CurrentBodyHealth += amount;
-            if (stats.CurrentBodyHealth > stats.MaxBodyHealth)
-            {
-                amount = stats.CurrentBodyHealth - postHealth;          // 파츠 회복량 감소
-                stats.CurrentBodyHealth = stats.MaxBodyHealth;      // 바디 Hp를 최대값으로 초기화
-            }
-            else
-            {
-                amount = 0;
-            }
-        }
-
-        if (healRange != EHealRange.Body)
-        {
-            stats.CurrentPartHealth = Mathf.Clamp(stats.CurrentPartHealth + amount, 0.0f, stats.MaxPartHealth);
-        }
+        stats.CurrentHealth = Mathf.Clamp(stats.CurrentHealth + amount, 0.0f, stats.MaxHealth);
     }
 
     public bool SetOvrrideAnimator(EAnimationType type)
@@ -779,6 +759,18 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         _platformVelocity = Vector3.zero;
 
         legsAnimator.enabled = true;
+    }
+
+    public void SetPlayerState(EPlayerState newState, bool isAdd)
+    {
+        if (isAdd)
+        {
+            _currentPlayerState |= newState;
+        }
+        else
+        {
+            _currentPlayerState &= newState;
+        }
     }
     #endregion
 

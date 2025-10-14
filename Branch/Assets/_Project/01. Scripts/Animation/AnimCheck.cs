@@ -39,23 +39,29 @@ public class AnimCheck : MonoBehaviour
         //Default로 사용 중인 애니메이션 이름이 변경될 경우 수정할 것
         _overrideController["Take 001"] = animationClip;
         _animator.SetFloat("animSpeed", animSpeed);
-    }
-
-    // 애니메이션 테스트를 위한 Update문
-#if UNITY_EDITOR
-    private void Update()
-    {
-        _overrideController["Take 001"] = animationClip;
-        _animator.SetFloat("animSpeed", animSpeed);
         _animator.SetBool("isPlay", isPlay);
-
         if (defaultObject != null && animObject != null)
         {
             defaultObject.SetActive(!isPlay);
             animObject.SetActive(isPlay);
         }
     }
-#endif
+
+    // 애니메이션 테스트를 위한 Update문
+//#if UNITY_EDITOR
+//    private void Update()
+//    {
+//        _overrideController["Take 001"] = animationClip;
+//        _animator.SetFloat("animSpeed", animSpeed);
+//        _animator.SetBool("isPlay", isPlay);
+
+//        if (defaultObject != null && animObject != null)
+//        {
+//            defaultObject.SetActive(!isPlay);
+//            animObject.SetActive(isPlay);
+//        }
+//    }
+//#endif
 
     public void Play()
     {

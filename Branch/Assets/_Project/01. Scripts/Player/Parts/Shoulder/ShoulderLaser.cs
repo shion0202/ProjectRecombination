@@ -1,11 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Monster;
-using Monster.AI.Blackboard;
-using Monster.AI;
 using Managers;
-using UnityEngine.UIElements;
 
 public class ShoulderLaser : PartBaseShoulder
 {
@@ -18,6 +14,8 @@ public class ShoulderLaser : PartBaseShoulder
     [SerializeField] protected Vector3 beamOffset = Vector3.zero;
     [SerializeField] protected float beamDuration = 2.0f;
     [SerializeField] protected float beamCooldown = 5.0f;
+    [SerializeField] protected float beamMaxDistance = 100.0f;
+    [SerializeField] protected float beamRadius = 1.0f;
     [SerializeField] protected LayerMask obstacleMask;
 
     private GameObject beamStart;
@@ -26,20 +24,22 @@ public class ShoulderLaser : PartBaseShoulder
     private LineRenderer line;
     private bool _isShooting = false;
     private Coroutine _skillCoroutine = null;
+    private float _timer = 0.05f;
+    private float _currentTimer = 0.0f;
 
-    // To-do: 연산량 과한 상태, Timer 등을 추가하여 연산 횟수를 줄이도록
     protected void Update()
     {
-        if (_isShooting)
-        {
-            RaycastHit[] hits;
-            Vector3 targetPoint = GetTargetPoint(out hits);
+        if (!_isShooting) return;
 
-            Vector3 beamOffsetForward = beamOffset;
-            beamOffsetForward.y = 0.0f;
+        _currentTimer += Time.deltaTime;
+        if (_currentTimer < _timer) return;
+        _currentTimer = 0.0f;
 
-            ShootBeamInDir(transform.position + (_owner.transform.right * beamOffset.x + _owner.transform.up * beamOffset.y + _owner.transform.forward * beamOffset.z), targetPoint);
-        }
+        Vector3 origin = transform.position + (_owner.transform.right * beamOffset.x + _owner.transform.up * beamOffset.y + _owner.transform.forward * beamOffset.z);
+        RaycastHit[] hits;
+        Vector3 targetPoint = GetTargetPoint(origin, out hits);
+
+        ShootBeamInDir(origin, targetPoint);
     }
 
     public override void UseAbility()
@@ -67,57 +67,82 @@ public class ShoulderLaser : PartBaseShoulder
         }
     }
 
-    // To-do: 레이저 범위는 벽에 닿을 때까지, 그 후 범위 내의 모든 적과 오브젝트에 데미지 계산
-    protected Vector3 GetTargetPoint(out RaycastHit[] hits)
+    protected Vector3 GetTargetPoint(Vector3 origin, out RaycastHit[] hits)
     {
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward;
+        float maxDistance = beamMaxDistance;
         Vector3 targetPoint = Vector3.zero;
 
-        targetPoint = transform.position + (Vector3.up * 1.0f) + ray.direction * 10.0f;
-        hits = Physics.CapsuleCastAll(transform.position + (Vector3.up * 1.0f), targetPoint, 1.0f, ray.direction, 100.0f);
-
-        foreach (RaycastHit hit in hits)
+        // 벽 충돌 위치 찾기 (CapsuleCast에서 첫 충돌)
+        if (Physics.Raycast(startPoint, ray.direction, out RaycastHit hitInfo, maxDistance, obstacleMask))
         {
-            IDamagable monster = hit.transform.GetComponent<IDamagable>();
-            if (monster != null)
-            {
-                monster.ApplyDamage(targetMask, beamDamage);
-            }
-            else
+            targetPoint = hitInfo.point;
+            maxDistance = hitInfo.distance;  // 벽에 닿는 거리로 범위 제한
+        }
+        Vector3 targetDirection = targetPoint != Vector3.zero ? (targetPoint - origin).normalized : ray.direction;
+
+        // 제한된 범위 내 모든 충돌 정보 수집
+        hits = Physics.CapsuleCastAll(origin, origin, beamRadius, targetDirection, maxDistance, targetMask);
+
+        // 적 데미지 처리
+        foreach (var hit in hits)
+        {
+            if (!hit.transform.TryGetComponent<IDamagable>(out var monster))
             {
                 monster = hit.transform.GetComponentInParent<IDamagable>();
-                if (monster != null)
-                {
-                    monster.ApplyDamage(targetMask, beamDamage);
-                }
+            }
+            if (monster != null)
+            {
+                monster.ApplyDamage(targetMask, beamDamage * _timer, _timer, 0.0f);
             }
 
-            Destroy(Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);
+            Utils.Destroy(Utils.Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);
         }
 
+        //DrawCapsule(origin, targetPoint, beamRadius, Color.yellow, 0.5f);
         return targetPoint;
     }
 
     void ShootBeamInDir(Vector3 start, Vector3 end)
     {
-#if UNITY_5_5_OR_NEWER
         line.positionCount = 2;
-#else
-		line.SetVertexCount(2); 
-#endif
+
         line.SetPosition(0, start);
         beamStart.transform.position = start;
 
-        beamEnd.transform.position = end;
         line.SetPosition(1, end);
+        beamEnd.transform.position = end;
 
         beamStart.transform.LookAt(beamEnd.transform.position);
         beamEnd.transform.LookAt(beamStart.transform.position);
 
-        float distance = Vector3.Distance(start, end);
-        line.sharedMaterial.mainTextureScale = new Vector2(distance / 3.0f, 1);
-        line.sharedMaterial.mainTextureOffset -= new Vector2(Time.deltaTime * 375.0f, 0);
+        //float distance = Vector3.Distance(start, end);
+        //line.sharedMaterial.mainTextureScale = new Vector2(distance / 3.0f, 1);
+        //line.sharedMaterial.mainTextureOffset -= new Vector2(Time.deltaTime * 375.0f, 0);
+    }
+
+    void DrawCapsule(Vector3 point1, Vector3 point2, float radius, Color color, float duration = 0)
+    {
+        int segments = 16; // 원의 세그먼트 수 (원에 가까울수록 정밀)
+        float angleStep = 360f / segments;
+
+        // 캡슐 축선 그리기
+        Debug.DrawLine(point1, point2, color, duration);
+
+        // 각 끝점에 원 그리기 (XY 평면 기준 예시)
+        for (int i = 0; i < segments; i++)
+        {
+            float angle1 = Mathf.Deg2Rad * i * angleStep;
+            float angle2 = Mathf.Deg2Rad * (i + 1) * angleStep;
+
+            Vector3 offset1 = new Vector3(Mathf.Cos(angle1), Mathf.Sin(angle1), 0) * radius;
+            Vector3 offset2 = new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2), 0) * radius;
+
+            Debug.DrawLine(point1 + offset1, point1 + offset2, color, duration);
+            Debug.DrawLine(point2 + offset1, point2 + offset2, color, duration);
+        }
     }
 
     private IEnumerator CoStopAndCooldown()
@@ -131,21 +156,19 @@ public class ShoulderLaser : PartBaseShoulder
         yield return new WaitForSeconds(0.5f);
 
         _isShooting = true;
-        beamStart = Instantiate(beamStartPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        beamEnd = Instantiate(beamEndPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        beam = Instantiate(beamLineRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        _owner.SetPlayerState(EPlayerState.Skilling, true);
+        beamStart = Utils.Instantiate(beamStartPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        beamEnd = Utils.Instantiate(beamEndPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        beam = Utils.Instantiate(beamLineRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         line = beam.GetComponent<LineRenderer>();
-        line.startWidth = 2.0f;
-        line.endWidth = 2.0f;
 
         yield return new WaitForSeconds(beamDuration);
 
         _isShooting = false;
-        Destroy(beamStart);
-        Destroy(beamEnd);
-        Destroy(beam);
-        _owner.FollowCamera.SetCameraRotatable(true);
-        _owner.SetMovable(true);
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+        Utils.Destroy(beamStart);
+        Utils.Destroy(beamEnd);
+        Utils.Destroy(beam);
 
         _owner.PlayerAnimator.SetBool("isPlayBackShootAnim", false);
         _owner.PlayerAnimator.SetBool("isPlayBackLaserAnim", false);

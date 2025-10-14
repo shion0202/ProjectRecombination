@@ -63,9 +63,7 @@ public class CharacterStat : MonoBehaviour
     [Header("플레이어에게 적용된 효과 목록")]
     [SerializeField] private List<StatModifier> modifiersView = new List<StatModifier>();
 
-    // private float _currentTotalHealth;
-    private float _currentBodyHealth;
-    private float _currentPartHealth;
+    private float _currentHealth;
     
     private StatDictionary _baseStats = new();                                  // 캐릭터 기본 스탯
     private Dictionary<EPartType, StatDictionary> _partStats = new();           // 파츠 부위별 스탯
@@ -97,32 +95,24 @@ public class CharacterStat : MonoBehaviour
         get { return _totalStats; }
         set { _totalStats = value; }
     }
-    
-    // 현재 체력값의 Getter/Setter
-    public float CurrentHealth => _currentBodyHealth + _currentPartHealth;
-    
-    public float CurrentPartHealth
+
+    // 현재 체력 관련 Getter/Setter
+    public float CurrentHealth
     {
-        get => _currentPartHealth;
-        set => _currentPartHealth = value;
-    }
-    public float CurrentBodyHealth
-    {
-        get => _currentBodyHealth;
-        set => _currentBodyHealth = value;
+        get => _currentHealth;
+        set => _currentHealth = value;
     }
 
-    public float MaxHealth => MaxBodyHealth + MaxPartHealth;            // 최대 체력 (몸통 + 파츠)
+    public float MaxHealth => MaxBodyHealth + MaxPartHealth;                // 최대 체력 (몸통 + 파츠)
     public float MaxBodyHealth => _totalStats[EStatType.MaxHp].value;
     public float MaxPartHealth
     {
         get
         {
-            if (_totalStats.Contains(EStatType.MaxHp))
+            if (_totalStats.Contains(EStatType.AddHp))
             {
                 return _totalStats[EStatType.AddHp].value;
             }
-
             return 0.0f;
         }
     }
@@ -132,7 +122,6 @@ public class CharacterStat : MonoBehaviour
     private void Awake()
     {
         // Part Stat은 파츠 부위 종류만큼 미리 생성
-        // To-do: 베이스 파츠는 기본 장착 파츠이므로 이를 기준으로 초기화하도록 수정 가능
         foreach (EPartType type in Enum.GetValues(typeof(EPartType)))
         {
             if (_partStats.ContainsKey(type)) continue;
@@ -165,8 +154,7 @@ public class CharacterStat : MonoBehaviour
         //_currentBodyHealth = _baseStats[EStatType.MaxHp].value;
         //_currentPartHealth = CalculatePartHealth();
 
-        _currentBodyHealth = MaxBodyHealth;     // 캐릭터의 바디 체력 값 초기화
-        _currentPartHealth = MaxPartHealth;     // 기본 파츠 체력 총합 초기화
+        _currentHealth = MaxHealth;
 
         SyncToInspector();
     }
@@ -186,11 +174,9 @@ public class CharacterStat : MonoBehaviour
     {
         _partStats[part.PartType] = part.Stats ?? new StatDictionary();
         CalculateTotalStats();
-
-        _currentPartHealth = MaxPartHealth;
-        // Debug.Log($"파츠 교체: Body Hp({_currentBodyHealth}), Part Hp({_currentPartHealth})");
     }
 
+    // To-do: 버프/디버프 완성 어려울 경우 Modifier로 임시 버프 사용
     public void AddModifier(StatModifier mod)
     {
         _modifiers.Add(mod);
@@ -280,7 +266,6 @@ public class CharacterStat : MonoBehaviour
     #region Private Methods
     // Total Stat(최종적으로 사용하는 스탯)을 갱신하는 함수
     // Combined Part Stats도 함께 갱신
-    // To-do: Total Stats용 파라미터와 CPS용 파라미터 분리 고려
     private void CalculateTotalStats()
     {
         // Stat Type 중 Base Stat에 해당하는 스탯을 Total Stats에 추가
@@ -294,120 +279,106 @@ public class CharacterStat : MonoBehaviour
         // 이미 Base Stat을 통해 추가된 상태라면 값만 갱신
         foreach (EPartType type in Enum.GetValues(typeof(EPartType)))
         {
-            StatDictionary partStats;
-            _partStats.TryGetValue(type, out partStats);
-            if (partStats == null)
-            {
-                partStats = new StatDictionary();
-            }
+            if (!_partStats.TryGetValue(type, out var partStats) || partStats == null) continue;
 
             foreach (var stat in partStats.GetAllStats())
             {
-                var target = _totalStats[stat.statType];
-                if (target != null)
-                {
-                    if (stat.statType == EStatType.DamageReductionRate)
-                    {
-                        target.MultiplyValue(stat.value);
-                        continue;
-                    }
-
-                    target.AddValue(stat.value);
-                }
-                else
-                {
-                    _totalStats.SetStat(stat);
-                }
-
-                var partTarget = _combinedPartStats[type][stat.statType];
-                if (partTarget != null)
-                {
-                    if (stat.statType == EStatType.DamageReductionRate)
-                    {
-                        target.MultiplyValue(stat.value);
-                        continue;
-                    }
-
-                    partTarget.AddValue(stat.value);
-                }
-                else
-                {
-                    _combinedPartStats[type].SetStat(stat);
-                }
+                AddOrUpdateStat(_totalStats, stat);
+                AddOrUpdateStat(_combinedPartStats[type], stat);
             }
         }
 
-        // Modifiers 적용 (Flat → PercentAdd → PercentMul 순)
-        foreach (var stat in _totalStats.GetAllStats())
-        {
-            float finalValue = stat.value;
+        // Modifier를 statType별로 그룹핑해서 캐싱
+        var modsByType = _modifiers.GroupBy(m => m.statType)
+                                   .ToDictionary(g => g.Key, g => g.ToList());
 
-            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.Flat))
-            {
-                finalValue += mod.value;
-            }
-            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentAdd))
-            {
-                finalValue += stat.value * mod.value;
-            }
-            foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
-            {
-                finalValue *= (1 + mod.value);
-            }
-
-            stat.SetValue(finalValue);
-        }
+        // Modifier 연산 적용
+        ApplyModifiersToDict(_totalStats, modsByType);
         foreach (var stats in _combinedPartStats.Values)
         {
-            foreach (var stat in stats.GetAllStats())
-            {
-                float finalValue = stat.value;
-
-                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.Flat))
-                {
-                    finalValue += mod.value;
-                }
-                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentAdd))
-                {
-                    finalValue += stat.value * mod.value;
-                }
-                foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
-                {
-                    finalValue *= (1 + mod.value);
-                }
-
-                stat.SetValue(finalValue);
-            }
+            ApplyModifiersToDict(stats, modsByType);
         }
 
         SyncToInspector();
     }
-    
-    // 캐릭터가 착용 중인 파츠별 HP 값을 총합하여 반환
-    private float CalculatePartHealth()
+
+    private void AddOrUpdateStat(StatDictionary dict, StatData stat)
     {
-        var result = 0f;
-        
-        foreach (StatDictionary partStats in _partStats.Values)
+        // 이미 statType이 존재하면 값 누적, 없으면 새로 추가
+        StatData targetStat = dict[stat.statType];
+        if (targetStat != null)
         {
-            if (partStats.IsEmpty()) continue;
-
-            foreach (EStatType type in System.Enum.GetValues(typeof(EStatType)))
-            {
-                if (partStats[type] == null)  continue;
-                
-                if (partStats[type].statType == EStatType.MaxHp)
-                    result += partStats[type].value;
-            }
+            targetStat.AddValue(stat.value);
         }
-        
-        return result;
+        else
+        {
+            dict.SetStat(stat);
+        }
     }
 
-    private float CalculateBodyHealth()
+    private void ApplyModifiersToDict(StatDictionary dict, Dictionary<EStatType, List<StatModifier>> modsByType)
     {
-        return 0f;
+        foreach (var stat in dict.GetAllStats())
+        {
+            float baseValue = stat.value;
+
+            if (modsByType.TryGetValue(stat.statType, out var modsForType))
+            {
+                // Flat → PercentAdd → PercentMul 순서로 계산
+                float flat = modsForType.Where(m => m.modifierType == EStackType.Flat).Sum(m => m.value);
+                float percentAdd = modsForType.Where(m => m.modifierType == EStackType.PercentAdd).Sum(m => m.value);
+                float percentMul = modsForType.Where(m => m.modifierType == EStackType.PercentMul).Sum(m => m.value);
+
+                baseValue += flat;
+                baseValue += stat.value * percentAdd;
+                baseValue *= (1 + percentMul);
+            }
+
+            stat.SetValue(baseValue);
+        }
+
+        // Modifiers 적용 (Flat → PercentAdd → PercentMul 순)
+        //foreach (var stat in _totalStats.GetAllStats())
+        //{
+        //    float finalValue = stat.value;
+
+        //    foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.Flat))
+        //    {
+        //        finalValue += mod.value;
+        //    }
+        //    foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentAdd))
+        //    {
+        //        finalValue += stat.value * mod.value;
+        //    }
+        //    foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
+        //    {
+        //        finalValue *= (1 + mod.value);
+        //    }
+
+        //    stat.SetValue(finalValue);
+        //}
+        //foreach (var stats in _combinedPartStats.Values)
+        //{
+        //    foreach (var stat in stats.GetAllStats())
+        //    {
+        //        float finalValue = stat.value;
+
+        //        foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.Flat))
+        //        {
+        //            finalValue += mod.value;
+        //        }
+        //        foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentAdd))
+        //        {
+        //            finalValue += stat.value * mod.value;
+        //        }
+        //        foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
+        //        {
+        //            finalValue *= (1 + mod.value);
+        //        }
+
+        //        stat.SetValue(finalValue);
+        //    }
+        //}
     }
-    
     #endregion
 }

@@ -1,4 +1,4 @@
-﻿using _Project._01._Scripts.Monster.Animator;
+using _Project._01._Scripts.Monster.Animator;
 using Managers;
 using Monster.AI.Command;
 using System.Collections.Generic;
@@ -133,6 +133,8 @@ namespace Monster.AI.Blackboard
         private readonly Dictionary<string, object> _map = new();
         
         public void Set<T>(BBKey<T> key, T value) => _map[key.Name] = value;
+
+        public Dictionary<string, object> Map => _map;
 
         public bool TryGet<T>(BBKey<T> key, out T value)
         {

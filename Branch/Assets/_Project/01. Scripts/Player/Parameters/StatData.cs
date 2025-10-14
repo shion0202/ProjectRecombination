@@ -30,7 +30,7 @@ public class StatData
         SetValue(string.Empty);
     }
 
-    public StatData(EStatType type, string stringValue = "", float min = float.MinValue, float max = float.MaxValue)
+    public StatData(EStatType type, string stringValue, float min = float.MinValue, float max = float.MaxValue)
     {
         statType = type;
         minValue = min;

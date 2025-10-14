@@ -259,6 +259,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53473501e43448441b25b232f2746fa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  positionOffset: {x: 0, y: 0, z: 0}
+  moveSpeed: 1
+  isFollow: 0
 --- !u!1001 &5704368144201598753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -346,6 +350,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ranged_enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 76fcd99438f0c4ed98831639fb3be170,
+        type: 3}
+      propertyPath: m_Layer
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 76fcd99438f0c4ed98831639fb3be170,
         type: 3}

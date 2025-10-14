@@ -44,6 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53473501e43448441b25b232f2746fa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  positionOffset: {x: 0, y: 0, z: 0}
+  moveSpeed: 1
+  isFollow: 0
 --- !u!1 &3350673321423394998
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +303,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ralph
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 665d0309c8cf747898bd6a10a93e6d48,
+        type: 3}
+      propertyPath: m_Layer
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 665d0309c8cf747898bd6a10a93e6d48,
         type: 3}

@@ -9,7 +9,6 @@ public class HealCharacter : ProcessBase
 {
     [SerializeField] private float healAmount = 0.0f;
     [SerializeField] private EHealType healType = EHealType.Flat;
-    [SerializeField] private EHealRange healRange = EHealRange.All;
     private string debuggingString = string.Empty;
 
     public override void Execute()
@@ -21,7 +20,7 @@ public class HealCharacter : ProcessBase
         PlayerController player = MonsterManager.Instance.Player.GetComponent<PlayerController>();
         if (player != null)
         {
-            player.HealHp(healAmount, healType, healRange);
+            player.HealHp(healAmount, healType);
 
             debuggingString = healType == EHealType.Flat ? "" : "%";
             Debug.Log($"Heal player's hp: +{healAmount}{debuggingString}");
