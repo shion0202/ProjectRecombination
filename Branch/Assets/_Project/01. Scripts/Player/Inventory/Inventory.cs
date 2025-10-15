@@ -41,6 +41,11 @@ public class Inventory : MonoBehaviour
     {
         get { return _equippedItems; }
     }
+
+    public Dictionary<string, PartBase> Parts
+    {
+        get => _parts;
+    }
     #endregion
 
     #region Unity Methods
@@ -132,7 +137,7 @@ public class Inventory : MonoBehaviour
 
         foreach (PartBase part in baseParts)
         {
-            // GetItem(part);
+            GetItem(part);
             EquipItem(part);
         }
     }

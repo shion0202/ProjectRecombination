@@ -1,6 +1,8 @@
 using Cinemachine;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // 기획자 작업 편의를 위해, 씬에서 SO 값을 변경하여 바로 적용할 수 있도록 ExecuteInEditMode 속성 추가
@@ -33,6 +35,12 @@ public class FollowCameraController : MonoBehaviour
     #endregion
 
     #region Properties
+    public CinemachineVirtualCamera VCam
+    {
+        get => vcam;
+        set => vcam = value;
+    }
+
     public ECameraState CurrentCameraState
     {
         get { return currentCameraState; }
@@ -83,7 +91,7 @@ public class FollowCameraController : MonoBehaviour
     #region Editor Methods
     private void Awake()
     {
-        vcam = GetComponent<CinemachineVirtualCamera>();
+        vcam = gameObject.GetComponent<CinemachineVirtualCamera>();
     }
 
 #if UNITY_EDITOR
@@ -141,6 +149,11 @@ public class FollowCameraController : MonoBehaviour
         if (target != null)
         {
             _cameraTarget = target.transform;
+        }
+
+        if (!vcam)
+        {
+            vcam = gameObject.GetComponent<CinemachineVirtualCamera>();
         }
 
         vcam.m_LookAt = _cameraTarget;

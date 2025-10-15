@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Managers;
+using Cinemachine;
 
 public class ShoulderLaser : PartBaseShoulder
 {
@@ -26,6 +27,12 @@ public class ShoulderLaser : PartBaseShoulder
     private Coroutine _skillCoroutine = null;
     private float _timer = 0.05f;
     private float _currentTimer = 0.0f;
+    private CinemachineBasicMultiChannelPerlin noise;
+
+    protected void Start()
+    {
+        noise = _owner.FollowCamera.VCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
 
     protected void Update()
     {
@@ -123,6 +130,11 @@ public class ShoulderLaser : PartBaseShoulder
         //line.sharedMaterial.mainTextureOffset -= new Vector2(Time.deltaTime * 375.0f, 0);
     }
 
+    protected void ApplyLaserShake(float gain)
+    {
+        noise.m_AmplitudeGain = gain;
+    }
+
     void DrawCapsule(Vector3 point1, Vector3 point2, float radius, Color color, float duration = 0)
     {
         int segments = 16; // 원의 세그먼트 수 (원에 가까울수록 정밀)
@@ -162,6 +174,8 @@ public class ShoulderLaser : PartBaseShoulder
         beam = Utils.Instantiate(beamLineRendererPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         line = beam.GetComponent<LineRenderer>();
 
+        ApplyLaserShake(1.5f);
+
         yield return new WaitForSeconds(beamDuration);
 
         _isShooting = false;
@@ -169,6 +183,8 @@ public class ShoulderLaser : PartBaseShoulder
         Utils.Destroy(beamStart);
         Utils.Destroy(beamEnd);
         Utils.Destroy(beam);
+
+        ApplyLaserShake(0.0f);
 
         _owner.PlayerAnimator.SetBool("isPlayBackShootAnim", false);
         _owner.PlayerAnimator.SetBool("isPlayBackLaserAnim", false);

@@ -135,6 +135,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         get { return _isGrounded; }
     }
+
+    public Inventory Inven
+    {
+        get => inventory;
+    }
     #endregion
 
     #region Unity Methods

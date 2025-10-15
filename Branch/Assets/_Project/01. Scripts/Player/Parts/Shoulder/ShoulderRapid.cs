@@ -22,6 +22,7 @@ public class ShoulderRapid : PartBaseShoulder
     [SerializeField] protected List<CinemachineVirtualCamera> cutsceneCams = new();
     protected CinemachineBrain brain;
     protected CinemachineBlendDefinition defaultBlend;
+    protected CinemachineImpulseSource source;
 
     protected override void Awake()
     {
@@ -29,6 +30,7 @@ public class ShoulderRapid : PartBaseShoulder
 
         brain = Camera.main.GetComponent<CinemachineBrain>();
         defaultBlend = brain.m_DefaultBlend;
+        source = gameObject.GetComponent<CinemachineImpulseSource>();
     }
 
     public override void UseAbility()
@@ -168,10 +170,12 @@ public class ShoulderRapid : PartBaseShoulder
             yield break;
         }
 
-        brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.3f);
+        brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.1f);
         cutsceneCams[0].m_Priority = 10;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
+
+        _owner.FollowCamera.ApplyShake(source);
 
         // 타겟팅 프리팹 제거 (시각 효과 종료)
         foreach (var inst in targetingInstances)

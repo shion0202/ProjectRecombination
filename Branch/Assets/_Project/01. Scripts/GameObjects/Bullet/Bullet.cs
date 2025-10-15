@@ -111,21 +111,21 @@ public class Bullet : MonoBehaviour
         // 3. 총알은 벽(또는 기타 오브젝트)에 닿으면 파괴된다.
 
         // 플레이어가 발사한 총알
-        if (From.CompareTag("Player") && other.CompareTag("Enemy"))
+        if (From && From.CompareTag("Player") && other && other.CompareTag("Enemy"))
         {
             ShootByPlayer(other);
             return;
         }
         
         // 적이 발사한 총알
-        if (From.CompareTag("Enemy") && other.CompareTag("Player"))
+        if (From && From.CompareTag("Enemy") && other && other.CompareTag("Player"))
         {
             ShootByEnemy(other);
             return;
         }
         
         // 벽(또는 기타 오브젝트)에 닿은 경우
-        if (other.CompareTag("Wall") || other.CompareTag("Obstacle"))
+        if (other && (other.CompareTag("Wall") || other.CompareTag("Obstacle")))
         {
             ImpactObstacle(other);
             return;

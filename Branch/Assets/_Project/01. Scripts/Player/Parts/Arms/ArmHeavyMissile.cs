@@ -11,9 +11,17 @@ public class ArmHeavyMissile : PartBaseArm
     [SerializeField] protected float maxPitchAngle = 10f; // 상하 각도 범위 (조절 가능)
     [SerializeField] protected float targetRadius = 5f;  // 타겟 주변 랜덤 목표 위치 반경
     protected Transform _currentTarget = null;
+    protected SkinnedMeshRenderer smr;
+    protected Coroutine _morphBlendRoutine = null;
 
     protected override void Shoot()
     {
+        if (_morphBlendRoutine != null)
+        {
+            StopCoroutine(_morphBlendRoutine);
+        }
+        _morphBlendRoutine = StartCoroutine(CoStartMorphBlend());
+
         _currentTarget = FindTargetInView();
 
         Vector3 targetPoint = GetTargetPoint(out RaycastHit hit);
@@ -95,5 +103,44 @@ public class ArmHeavyMissile : PartBaseArm
         }
 
         return bestTarget;
+    }
+
+    protected IEnumerator CoStartMorphBlend(float time = 0.1f)
+    {
+        SkinnedMeshRenderer smr = gameObject.GetComponent<SkinnedMeshRenderer>();
+        float min = 0.0f;
+        float max = 100.0f;
+
+        float elapsed = min;
+        while (elapsed < time)
+        {
+            elapsed += Time.deltaTime;
+            float weight = Mathf.Lerp(min, max, elapsed / time);
+            smr.SetBlendShapeWeight(0, weight);
+            yield return null;
+        }
+
+        smr.SetBlendShapeWeight(0, max);
+
+        _morphBlendRoutine = StartCoroutine(CoEndMorphBlend(time));
+    }
+
+    protected IEnumerator CoEndMorphBlend(float time)
+    {
+        SkinnedMeshRenderer smr = gameObject.GetComponent<SkinnedMeshRenderer>();
+        float min = 100.0f;
+        float max = 0.0f;
+
+        float elapsed = min;
+        while (elapsed < time)
+        {
+            elapsed -= Time.deltaTime;
+            float weight = Mathf.Lerp(min, max, elapsed / time);
+            smr.SetBlendShapeWeight(0, weight);
+            yield return null;
+        }
+
+        smr.SetBlendShapeWeight(0, max);
+        _morphBlendRoutine = null;
     }
 }

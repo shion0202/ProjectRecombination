@@ -14578,7 +14578,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -14626,17 +14626,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
-  bulletSpeed: 30
-  explosionRadius: 5
-  lifeTime: 5
+  bulletSpeed: 25
+  explosionRadius: 3
+  lifeTime: 3
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
   muzzleParticlePrefab: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
   impactParticle: {fileID: 0}
   explosionEffectPrefab: {fileID: 134082, guid: 2b9e3bdfae9517545b64fcf374d8c9ce,
     type: 3}
   collisionBulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
     type: 3}
-  velocity: 30
-  alignSpeed: 10
+  alignSpeed: 5
+  explodeDistanceThreshold: 2
 --- !u!1 &185690
 GameObject:
   m_ObjectHideFlags: 0
