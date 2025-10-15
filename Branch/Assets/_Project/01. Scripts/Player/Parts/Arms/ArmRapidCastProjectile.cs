@@ -9,8 +9,10 @@ public class ArmRapidCastProjectile : PartBaseArm
     [SerializeField] protected GameObject castEffectPrefab;
     [SerializeField] protected float maxChargeTime = 2.0f;
     [SerializeField] protected float maxCastTime = 1.0f;
+    [SerializeField] protected Vector3 castOffset = Vector3.zero;
     protected float _currentChargeTime = 0.0f;
     private float _currentCastTime = 0.0f;
+    private GameObject castEffect;
 
     protected override void Update()
     {
@@ -50,8 +52,14 @@ public class ArmRapidCastProjectile : PartBaseArm
             _currentCastTime += Time.deltaTime;
             return;
         }
-
         if (_currentAmmo <= 0) return;
+
+        if (castEffect)
+        {
+            Utils.Destroy(castEffect);
+            castEffect = null;
+        }
+
         _currentChargeTime += Time.deltaTime;
         if (_currentShootTime <= 0.0f)
         {
@@ -68,12 +76,35 @@ public class ArmRapidCastProjectile : PartBaseArm
         {
             _currentCastTime = 0.0f;
         }
+
+        if (castEffectPrefab)
+        {
+            castEffect = Utils.Instantiate(castEffectPrefab, bulletSpawnPoint.position + castOffset, Quaternion.identity, bulletSpawnPoint);
+        }
     }
 
     public override void UseCancleAbility()
     {
         base.UseCancleAbility();
+
         _currentChargeTime = 0.0f;
+
+        if (castEffect)
+        {
+            Utils.Destroy(castEffect);
+            castEffect = null;
+        }
+    }
+
+    public override void FinishActionForced()
+    {
+        base.FinishActionForced();
+
+        if (castEffect)
+        {
+            Utils.Destroy(castEffect);
+            castEffect = null;
+        }
     }
 
     protected override void Shoot()

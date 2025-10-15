@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Managers;
+using Cinemachine;
 
 public class ShoulderRapid : PartBaseShoulder
 {
@@ -9,11 +10,26 @@ public class ShoulderRapid : PartBaseShoulder
     [SerializeField] protected GameObject targetingPrefab; // 타겟팅 표시용 프리팹
     [SerializeField] protected int maxTargetCount = 12;
     [SerializeField] private float particleStopDelay = 0.9f;  // Inspector에서 조절 가능
+    [SerializeField] protected float skillDamage = 100.0f;
+    [SerializeField] protected float skillCooldown = 15.0f;
     private Coroutine _skillCoroutine = null;
     private List<GameObject> targetingInstances = new List<GameObject>();
 
     [SerializeField] protected float maxYawAngle = 90f; // 좌우 방향 최대 90도씩 = 180도 범위
     [SerializeField] protected float maxPitchAngle = 10f; // 상하 각도 범위 (조절 가능)
+    [SerializeField] protected Vector3 launchOffset = Vector3.zero;
+
+    [SerializeField] protected List<CinemachineVirtualCamera> cutsceneCams = new();
+    protected CinemachineBrain brain;
+    protected CinemachineBlendDefinition defaultBlend;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        brain = Camera.main.GetComponent<CinemachineBrain>();
+        defaultBlend = brain.m_DefaultBlend;
+    }
 
     public override void UseAbility()
     {
@@ -27,6 +43,19 @@ public class ShoulderRapid : PartBaseShoulder
         // 화면 범위 내의 적을 조준(타겟팅), 최대 수치까지 타겟팅 가능
         // 타겟팅된 적에게 미사일 발사, 최대 수치가 아닐 경우 남은 미사일은 타겟팅된 적들에게 균등 분배
         if (_skillCoroutine != null) return;
+
+        GUIManager.Instance.SetBackSkillIcon(true);
+        // 1. 스킬 시전 중 플레이어와 카메라 조작 불가
+        _owner.FollowCamera.SetCameraRotatable(false);
+        _owner.SetMovable(false);
+
+        // 2. 플레이어가 카메라 방향 바라봄
+        LookCameraDirection();
+
+        brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.3f);
+        cutsceneCams[0].m_Priority = 100;
+        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", true);
+
         _skillCoroutine = StartCoroutine(CoLaunchTargetMissiles());
     }
 
@@ -44,6 +73,7 @@ public class ShoulderRapid : PartBaseShoulder
         Camera cam = Camera.main;
         List<TargetPoint> result = new List<TargetPoint>();
         TargetPoint[] allEnemies = FindObjectsOfType<TargetPoint>();
+        float maxRangeSqr = maxRange * maxRange;
 
         foreach (var enemy in allEnemies)
         {
@@ -52,12 +82,12 @@ public class ShoulderRapid : PartBaseShoulder
             {
                 if (viewPos.z <= cam.farClipPlane) // 카메라 시야거리 제한
                 {
-                    if (Vector3.Distance(_owner.transform.position, enemy.transform.position) <= maxRange)
+                    Vector3 toTarget = enemy.transform.position - _owner.transform.position;
+                    if (toTarget.sqrMagnitude > maxRangeSqr) continue;
+
+                    if (IsVisibleFromCamera(enemy.transform, cam, obstacleMask))
                     {
-                        if (IsVisibleFromCamera(enemy.transform, cam, obstacleMask))
-                        {
-                            result.Add(enemy);
-                        }
+                        result.Add(enemy);
                     }
                 }
             }
@@ -73,9 +103,8 @@ public class ShoulderRapid : PartBaseShoulder
 
         if (Physics.Raycast(cam.transform.position, direction, out RaycastHit hit, distance, obstacleMask))
         {
-            // 장애물이 적 앞에 있음
-            if (!hit.transform.GetComponentInChildren<TargetPoint>())
-                return false;
+            // Raycast 결과가 true일 경우, ObstacleMask에 해당하는 오브젝트가 존재한다는 의미이므로 장애물이 적 앞에 있음
+            return false;
         }
         return true;
     }
@@ -83,41 +112,30 @@ public class ShoulderRapid : PartBaseShoulder
     protected Vector3 GetRandomDirection(Vector3 forward)
     {
         // 좌우 yaw -maxYaw ~ +maxYawdeg, 상하 pitch -maxPitch ~ +maxPitchdeg
-        float roll = Random.Range(0.0f, maxPitchAngle);
+        float roll = Random.Range(-maxPitchAngle, maxPitchAngle);
         float yaw = Random.Range(-maxYawAngle, maxYawAngle);
-        float pitch = Random.Range(0.0f, maxPitchAngle);
+        float pitch = Random.Range(-maxPitchAngle, maxPitchAngle);
         Quaternion rot = Quaternion.Euler(pitch, yaw, roll);
         return rot * forward;
     }
 
     private IEnumerator CoLaunchTargetMissiles()
     {
-        GUIManager.Instance.SetBackSkillIcon(true);
-        // 1. 스킬 시전 중 플레이어와 카메라 조작 불가
-        _owner.FollowCamera.SetCameraRotatable(false);
-        _owner.SetMovable(false);
-
-        // 2. 플레이어가 카메라 방향 바라봄
-        LookCameraDirection();
+        yield return new WaitForSeconds(0.5f);
 
         // 3. 화면 내의 적을 감지(카메라 시야각/범위 외 적 제외)
-        LayerMask mask = 0;
-        mask |= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
-        List<TargetPoint> targets = FindValidTargets(mask, 100.0f);
+        List<TargetPoint> targets = FindValidTargets(ignoreMask, 100.0f);
         if (targets.Count > maxTargetCount)
+        {
             targets = targets.GetRange(0, maxTargetCount);
+        }
 
         // 4. 타겟마다 targetingPrefab 생성(시각적 타겟 표시)
         foreach (var enemy in targets)
         {
-            TargetPoint targetPos = enemy.GetComponentInChildren<TargetPoint>();
             Vector3 targetPoint = enemy.transform.position;
-            if (targetPos != null)
-            {
-                targetPoint = targetPos.transform.position;
-            }
 
-            GameObject targeting = Instantiate(targetingPrefab, targetPoint, Quaternion.identity, enemy.transform);
+            GameObject targeting = Utils.Instantiate(targetingPrefab, targetPoint, Quaternion.identity, enemy.transform);
             targetingInstances.Add(targeting);
 
             ParticleSystem ps = targeting.GetComponentInChildren<ParticleSystem>();
@@ -126,30 +144,47 @@ public class ShoulderRapid : PartBaseShoulder
                 StartCoroutine(StopParticleAfterDelay(ps));
             }
 
-            // 도착 후 잠깐 멈춤
+            // 타겟팅 후 다음 타겟팅 전까지 잠깐 대기
             yield return new WaitForSeconds(0.2f);
         }
+        yield return new WaitForSeconds(0.4f);
 
-        // 6. 각 타겟에게 유도 미사일 발사
+        // 5. 각 타겟에게 유도 미사일 발사
+        // Count된 적이 없을 경우 종료
         int targetCount = targets.Count;
         if (targetCount <= 0)
         {
             _owner.FollowCamera.SetCameraRotatable(true);
             _owner.SetMovable(true);
-            _skillCoroutine = null;
 
             GUIManager.Instance.SetBackSkillIcon(false);
             GUIManager.Instance.SetBackSkillCooldown(false);
+
+            brain.m_DefaultBlend = defaultBlend;
+            cutsceneCams[0].m_Priority = 10;
+            _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", false);
+
+            _skillCoroutine = null;
             yield break;
         }
 
+        brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.3f);
+        cutsceneCams[0].m_Priority = 10;
+
+        yield return new WaitForSeconds(0.5f);
+
+        // 타겟팅 프리팹 제거 (시각 효과 종료)
+        foreach (var inst in targetingInstances)
+        {
+            Utils.Destroy(inst);
+        }
+
         int missilesPerTarget = maxTargetCount / targetCount; // 기본 분배 수
-        int remainder = maxTargetCount % targetCount;          // 나머지 미사일 수
+        int remainder = maxTargetCount % targetCount;         // 나머지 미사일 수
 
         for (int i = 0; i < targetCount; i++)
         {
             int missilesToFire = missilesPerTarget + (i < remainder ? 1 : 0); // 나머지는 앞 타겟에 1개씩 분배
-
             TargetPoint enemy = targets[i];
 
             for (int j = 0; j < missilesToFire; j++)
@@ -158,35 +193,30 @@ public class ShoulderRapid : PartBaseShoulder
                 Vector3 camShootDirection = (targetPoint - transform.position).normalized;
                 Vector3 randomDir = GetRandomDirection(camShootDirection);
 
-                GameObject missile = Instantiate(missilePrefab, _owner.transform.position, Quaternion.LookRotation(randomDir));
+                GameObject missile = Utils.Instantiate(missilePrefab, _owner.transform.position + launchOffset, Quaternion.LookRotation(randomDir));
                 var missileComp = missile.GetComponent<Missile>();
                 if (missileComp != null)
                 {
-                    missileComp.Init(_owner.gameObject, enemy.transform, transform.position, targetPoint, randomDir, 100.0f);
+                    missileComp.Init(_owner.gameObject, enemy.transform, transform.position, targetPoint, randomDir, skillDamage);
                 }
             }
         }
 
-        // 타겟팅 프리팹 제거 (시각 효과 종료)
-        foreach (var inst in targetingInstances)
-        {
-            Destroy(inst);
-        }
-
-        // 7. 플레이어와 카메라의 조작 재개
+        // 6. 플레이어와 카메라의 조작 재개
+        brain.m_DefaultBlend = defaultBlend;
+        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", false);
         _owner.FollowCamera.SetCameraRotatable(true);
         _owner.SetMovable(true);
 
-        float time = 5.0f;
         GUIManager.Instance.SetBackSkillCooldown(true);
-        GUIManager.Instance.SetBackSkillCooldown(time);
+        GUIManager.Instance.SetBackSkillCooldown(skillCooldown);
         while (true)
         {
             yield return new WaitForSeconds(0.1f);
 
-            time -= 0.1f;
-            GUIManager.Instance.SetBackSkillCooldown(time);
-            if (time <= 0.0f)
+            skillCooldown -= 0.1f;
+            GUIManager.Instance.SetBackSkillCooldown(skillCooldown);
+            if (skillCooldown <= 0.0f)
             {
                 break;
             }

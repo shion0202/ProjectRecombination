@@ -42,6 +42,15 @@ public class Missile : Bullet
 
         // Advances missile forward
         transform.position += _step;
+
+        // 타겟 혹은 목표 지점과 미사일 위치 간 거리 계산
+        float distanceToTarget = Vector3.Distance(transform.position, _hitPos);
+
+        float explodeDistanceThreshold = 1.0f;
+        if (distanceToTarget <= explodeDistanceThreshold)
+        {
+            DestroyBullet();
+        }
     }
 
     protected override void SetBulletLogic(Transform target, Vector3 direction, Vector3 start)
@@ -113,45 +122,4 @@ public class Missile : Bullet
         string log = $"{baseLog}\n" + $"Target: {targetName}, Predicted Hit Position: {_hitPos}, Bullet Align Speed: {alignSpeed}";
         return log;
     }
-
-    //IEnumerator CoMissileRoutine(Vector3 initialDir, Vector3 fromPos)
-    //{
-    //    float elapsed = 0f;
-    //    transform.forward = initialDir;
-
-    //    float distance = Vector3.Distance(fromPos, _to);     // 목표까지 거리
-    //    float straightDistance = distance * 0.3f;                   // 직선 비행 거리: 거리의 절반 사용
-    //    float initialFlightTime = straightDistance / bulletSpeed;   // 직선 비행 시간 = 거리 / 속도
-
-    //    // 1. 초기 직선 비행 (거리 기반 시간)
-    //    while (elapsed < initialFlightTime)
-    //    {
-    //        transform.position += transform.forward * bulletSpeed * Time.deltaTime;
-    //        elapsed += Time.deltaTime;
-    //        yield return null;
-    //    }
-
-    //    // 2. 타겟 방향으로 부드럽게 선회하며 이동
-    //    bool reached = false;
-    //    while (!reached)
-    //    {
-    //        Vector3 dirToTarget = (_to - transform.position).normalized;
-    //        transform.forward = Vector3.RotateTowards(
-    //            transform.forward,
-    //            dirToTarget,
-    //            Mathf.Deg2Rad * turnSpeed * Time.deltaTime,
-    //            0f
-    //        );
-
-    //        transform.position += transform.forward * bulletSpeed * Time.deltaTime;
-
-    //        if (Vector3.Distance(transform.position, _to) < 1.0f)
-    //        {
-    //            DestroyBullet();
-    //            reached = true;
-    //        }
-
-    //        yield return null;
-    //    }
-    //}
 }

@@ -185,7 +185,7 @@ MonoBehaviour:
   m_ZDamping: 0
   m_TargetMovementOnly: 0
   m_ScreenX: 0.375
-  m_ScreenY: 0.625
+  m_ScreenY: 0.6125
   m_CameraDistance: 2.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
@@ -543,6 +543,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97938fa04561ea4295cacc885f4f52a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vcam: {fileID: 621066846622348936}
   currentCameraState: 0
   recoilRecoverySpeed: 20

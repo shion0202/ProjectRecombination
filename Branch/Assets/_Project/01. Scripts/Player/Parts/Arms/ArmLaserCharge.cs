@@ -65,7 +65,7 @@ public class ArmLaserCharge : PartBaseArm
         {
             if (!isMaxCharge)
             {
-                _morphBlendSecondRoutine = StartCoroutine(CoMorphBlend(1, true));
+                _morphBlendSecondRoutine = StartCoroutine(CoMorphBlend(1, true, 0.3f));
                 isMaxCharge = true;
             }
 
