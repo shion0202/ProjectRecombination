@@ -45,17 +45,17 @@ namespace Managers
 
         public void SetLeftPartText(string leftPart)
         {
-            testPartSystemUILeft.text = leftPart;
+            //testPartSystemUILeft.text = leftPart;
         }
 
         public void SetRightPartText(string rightPart)
         {
-            testPartSystemUIRight.text = rightPart;
+            //testPartSystemUIRight.text = rightPart;
         }
 
         public void SetLegsText(string legs)
         {
-            testPartSystemUILegs.text = legs;
+            //testPartSystemUILegs.text = legs;
         }
 
         public void SetHpSlider(float currentHealth, float maxHealth)
