@@ -264,8 +264,8 @@ MonoBehaviour:
   testPartSystemUILegs: {fileID: 0}
   testHpBar: {fileID: 3590824478087378145}
   testGameOverPanel: {fileID: 2201213023173146818}
-  ammoLeftBar: {fileID: 0}
-  ammoRightBar: {fileID: 0}
+  ammoLeftBar: {fileID: 3200764325976378042}
+  ammoRightBar: {fileID: 574232648774748563}
   legsSkillCooldownImage: {fileID: 3986326392165312282}
   backSkillCooldownImage: {fileID: 6149008000126187747}
   legsSkillCooldownText: {fileID: 612516930812225429}

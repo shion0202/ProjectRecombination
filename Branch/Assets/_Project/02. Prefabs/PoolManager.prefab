@@ -64,8 +64,8 @@ MonoBehaviour:
     defaultSize: 10
     maxSize: 30
   - prefab: {fileID: 196044, guid: 63798d072070fac40948f942612d1ba9, type: 3}
-    defaultSize: 10
-    maxSize: 15
+    defaultSize: 20
+    maxSize: 30
   - prefab: {fileID: 8590510150710387984, guid: 5e260a095a0770e498dc0ad50676117b,
       type: 3}
     defaultSize: 10
@@ -79,12 +79,25 @@ MonoBehaviour:
   - prefab: {fileID: 179992, guid: 87b0eccc2adc29948b134e65a4d45863, type: 3}
     defaultSize: 10
     maxSize: 30
-  - prefab: {fileID: 152452, guid: d153344d8c1dfb249a74761cf5fbd67c, type: 3}
+  - prefab: {fileID: 1234507268503195618, guid: 5c13b7f0b5cd7e04990c03edc858d81a,
+      type: 3}
     defaultSize: 10
-    maxSize: 30
+    maxSize: 20
   - prefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207, type: 3}
     defaultSize: 10
     maxSize: 30
   - prefab: {fileID: 1962479828434100, guid: a8fc40961f0745142a828fd724d7e5bd, type: 3}
     defaultSize: 10
     maxSize: 30
+  - prefab: {fileID: 158132, guid: 74ad75b782bd48a408074ee224c28435, type: 3}
+    defaultSize: 5
+    maxSize: 10
+  - prefab: {fileID: 106912, guid: 18c03f316fa6d1040ab46baf6e46a105, type: 3}
+    defaultSize: 5
+    maxSize: 10
+  - prefab: {fileID: 146450, guid: 189837baf0e34034881c61044f6b2aaa, type: 3}
+    defaultSize: 12
+    maxSize: 20
+  - prefab: {fileID: 134280, guid: 926257f238277da43934f0a7e6122c82, type: 3}
+    defaultSize: 12
+    maxSize: 20

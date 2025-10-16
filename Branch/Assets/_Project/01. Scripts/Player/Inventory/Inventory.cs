@@ -11,7 +11,7 @@ public class Inventory : MonoBehaviour
     [Header("Inventory")]
     [SerializeField] private PlayerController owner;
     [SerializeField] private List<PartBase> baseParts = new List<PartBase>();
-    private Dictionary<EPartType, List<PartBase>> _items = new Dictionary<EPartType, List<PartBase>>();
+    private Dictionary<EPartType, Dictionary<EAttackType, List<PartBase>>> _items = new Dictionary<EPartType, Dictionary<EAttackType, List<PartBase>>>();
     private Dictionary<EPartType, List<PartBase>> _equippedItems = new();
     private int partIndex = 0;
 
@@ -32,7 +32,7 @@ public class Inventory : MonoBehaviour
     #endregion
 
     #region Properties
-    public Dictionary<EPartType, List<PartBase>> Items
+    public Dictionary<EPartType, Dictionary<EAttackType, List<PartBase>>> Items
     {
         get { return _items; }
     }
@@ -58,7 +58,7 @@ public class Inventory : MonoBehaviour
 
         for (int i = 0; i < Enum.GetNames(typeof(EPartType)).Length; ++i)
         {
-            _items.Add((EPartType)(1 << i), new List<PartBase>());
+            _items.Add((EPartType)(1 << i), new Dictionary<EAttackType, List<PartBase>>());
             _boneList.Add((EPartType)(1 << i), new List<string>());
             _boneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
             _laserBoneList.Add((EPartType)(1 << i), new List<string>());
@@ -69,6 +69,11 @@ public class Inventory : MonoBehaviour
             _heavyBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
             _subBoneList.Add((EPartType)(1 << i), new List<string>());
             _subBoneMap.Add((EPartType)(1 << i), new Dictionary<string, Transform>());
+
+            for (int j = 0; j < Enum.GetNames(typeof(EAttackType)).Length; ++j)
+            {
+                _items[(EPartType)(1 << i)].Add((EAttackType)(1 << j), new List<PartBase>());
+            }
         }
 
         foreach (EPartType partType in Enum.GetValues(typeof(EPartType)))
@@ -131,7 +136,8 @@ public class Inventory : MonoBehaviour
                 target.gameObject.SetActive(false);
 
                 // 테스트용으로 MeshRoot에 있는 모든 파츠를 인벤토리에 추가
-                GetItem(target);
+                //GetItem(target);
+                //Managers.GUIManager.Instance.UnlockParts(2);
             }
         }
 
@@ -142,95 +148,50 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (partIndex == 0) return;
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha1))
+    //    {
+    //        if (partIndex == 0) return;
 
-            partIndex = 0;
-            EquipItem(_items[EPartType.Shoulder][partIndex]);
-            EquipItem(_items[EPartType.ArmL][partIndex]);
-            EquipItem(_items[EPartType.ArmR][partIndex]);
-            EquipItem(_items[EPartType.Legs][partIndex]);
-            EquipItem(_items[EPartType.Back][partIndex]);
-            EquipItem(_items[EPartType.Mask][partIndex]);
+    //        partIndex = 0;
+    //        EquipItem(_items[EPartType.Shoulder][partIndex]);
+    //        EquipItem(_items[EPartType.ArmL][partIndex]);
+    //        EquipItem(_items[EPartType.ArmR][partIndex]);
+    //        EquipItem(_items[EPartType.Legs][partIndex]);
+    //        EquipItem(_items[EPartType.Back][partIndex]);
+    //        EquipItem(_items[EPartType.Mask][partIndex]);
 
-            // 임시로 파츠 전체 교체 시 특정 파츠 카메라로 변경
-            // To-do: R&D가 필요하나, 캐릭터 콜라이더 크기에 따라 카메라 위치를 조정하는 등의 조치 필요
-            owner.FollowCamera.CurrentCameraState = ECameraState.Normal;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (partIndex == 1) return;
-
-            partIndex = 1;
-            EquipItem(_items[EPartType.Shoulder][partIndex]);
-            EquipItem(_items[EPartType.ArmL][partIndex]);
-            EquipItem(_items[EPartType.ArmR][partIndex]);
-            EquipItem(_items[EPartType.Legs][partIndex]);
-            EquipItem(_items[EPartType.Back][partIndex]);
-            EquipItem(_items[EPartType.Mask][partIndex]);
-
-            owner.FollowCamera.CurrentCameraState = ECameraState.Hover;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (partIndex == 2) return;
-
-            partIndex = 2;
-            EquipItem(_items[EPartType.Shoulder][partIndex]);
-            EquipItem(_items[EPartType.ArmL][partIndex]);
-            EquipItem(_items[EPartType.ArmR][partIndex]);
-            EquipItem(_items[EPartType.Legs][partIndex]);
-            EquipItem(_items[EPartType.Back][partIndex]);
-            EquipItem(_items[EPartType.Mask][partIndex]);
-
-            owner.FollowCamera.CurrentCameraState = ECameraState.Roller;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            if (partIndex == 3) return;
-
-            partIndex = 3;
-            EquipItem(_items[EPartType.Shoulder][partIndex]);
-            EquipItem(_items[EPartType.ArmL][partIndex]);
-            EquipItem(_items[EPartType.ArmR][partIndex]);
-            EquipItem(_items[EPartType.Legs][partIndex]);
-            EquipItem(_items[EPartType.Back][partIndex]);
-            EquipItem(_items[EPartType.Mask][partIndex]);
-
-            owner.FollowCamera.CurrentCameraState = ECameraState.Caterpillar;
-        }
-
-        // GUI 갱신 스크립트
-        GUIManager.Instance.SetLeftPartText(_items[EPartType.ArmL][partIndex].name);
-        GUIManager.Instance.SetRightPartText(_items[EPartType.ArmR][partIndex].name);
-        GUIManager.Instance.SetLegsText(_items[EPartType.Legs][partIndex].name);
-    }
+    //        // 임시로 파츠 전체 교체 시 특정 파츠 카메라로 변경
+    //        // To-do: R&D가 필요하나, 캐릭터 콜라이더 크기에 따라 카메라 위치를 조정하는 등의 조치 필요
+    //        owner.FollowCamera.CurrentCameraState = ECameraState.Normal;
+    //    }
+    //}
     #endregion
 
     #region Public Methods
     public void GetItem(PartBase newItem)
     {
-        if (!_items[newItem.PartType].Contains(newItem))
+        if (!_items[newItem.PartType][newItem.AttackType].Contains(newItem))
         {
-            _items[newItem.PartType].Add(newItem);
+            _items[newItem.PartType][newItem.AttackType].Add(newItem);
         }
     }
 
     public bool RemoveItem(PartBase removeItem)
     {
-        return _items[removeItem.PartType].Remove(removeItem);
+        return _items[removeItem.PartType][removeItem.AttackType].Remove(removeItem);
     }
 	
 	// TODO: 파츠별,파리미터별 적용 방식 디테일한 논의 필요
+    public void EquipItem(EPartType partType, EAttackType attackType)
+    {
+        EquipItem(_items[partType][attackType][0]);
+    }
+
     public void EquipItem(PartBase equipItem)
     {
-        if (!_items[equipItem.PartType].Contains(equipItem)) return;
+        if (!_items[equipItem.PartType][equipItem.AttackType].Contains(equipItem)) return;
 
         foreach (var part in _equippedItems[equipItem.PartType])
         {
@@ -245,9 +206,11 @@ public class Inventory : MonoBehaviour
         _equippedItems[equipItem.PartType].Clear();
 
         // 동시 장착할 파츠들 찾기 (이름에 따라 필터링 가능)
-        var sameTypeParts = _items[equipItem.PartType]
-            .Where(x => x.AttackType == equipItem.AttackType)   // 예시: GroupKey로 분류, 필요에 따라 본인의 기준으로 변경
-            .ToList();
+        //var sameTypeParts = _items[equipItem.PartType]
+        //    .Where(x => x.AttackType == equipItem.AttackType)   // 예시: GroupKey로 분류, 필요에 따라 본인의 기준으로 변경
+        //    .ToList();
+
+        var sameTypeParts = _items[equipItem.PartType][equipItem.AttackType];
 
         // 여러 파츠 모두 장착
         foreach (var part in sameTypeParts)
@@ -277,8 +240,8 @@ public class Inventory : MonoBehaviour
             ? string.Join(", ", baseParts.ConvertAll(p => p.name))
             : "None";
 
-        string itemsSummary = string.Join(", ", _items.Select(kvp =>
-            $"{kvp.Key}: [{string.Join(", ", kvp.Value.ConvertAll(p => p.name))}]"));
+        //string itemsSummary = string.Join(", ", _items.Select(kvp =>
+        //    $"{kvp.Key}: [{string.Join(", ", kvp.Value.ConvertAll(p => p.name))}]"));
 
         string equippedSummary = string.Join(", ", _equippedItems.Select(kvp =>
             $"{kvp.Key}: [{string.Join(", ", kvp.Value.ConvertAll(p => p.name))}]"));
@@ -286,7 +249,6 @@ public class Inventory : MonoBehaviour
         return $"Inventory:\n" +
                $"  Owner: {ownerName}\n" +
                $"  BaseParts: [{basePartsNames}]\n" +
-               $"  Items:\n    {itemsSummary.Replace(", ", "\n    ")}\n" +
                $"  EquippedItems:\n    {equippedSummary.Replace(", ", "\n    ")}";
     }
     #endregion

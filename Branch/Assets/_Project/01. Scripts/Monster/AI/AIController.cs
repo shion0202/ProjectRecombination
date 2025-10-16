@@ -1,3 +1,4 @@
+using _Test.Skills;
 using Managers;
 using Monster.AI.Blackboard;
 using Monster.AI.Command;
@@ -27,7 +28,7 @@ namespace Monster.AI
         public BehaviorTree.BehaviorTree behaviorTree;
     }
     
-    public sealed class AIController : MonoBehaviour
+    public sealed class AIController : MonoBehaviour, IDamagable
     {
         [SerializeField] private Blackboard.Blackboard blackboard;
         [SerializeField] private BehaviorTree.BehaviorTree globalBehaviorTree; // GlobalBehaviorTree;
@@ -125,11 +126,11 @@ namespace Monster.AI
             }
             
             // 몬스터의 스킬 사거리를 시각적으로 표시
-            if (blackboard.Skills is not null && blackboard.Skills.Count > 0)
+            if (blackboard.Skills is not null && blackboard.Skills.Length > 0)
             {
-                foreach (var skill in blackboard.Skills)
+                foreach (Skill skill in blackboard.Skills)
                 {
-                    var skillRange = skill.Value.Stats[EStatType.Range].GetValue();
+                    var skillRange = skill.skillData.range;
                     if (!(skillRange > 0f)) continue;
 
                     Gizmos.color = Color.red;
@@ -195,7 +196,7 @@ namespace Monster.AI
         {
             // Debug.Log(blackboard?.ToStringCooldown());
             // 블랙보드에서 관리되는 쿨타임 목록을 업데이트
-            blackboard?.UpdateCooldownList();
+            // blackboard?.UpdateCooldownList();
         }
 
         /// <summary>
@@ -334,7 +335,7 @@ namespace Monster.AI
         #endregion
         
         #region Public Methods
-        public void ApplyDamage(float inDamage, float defenceIgnoreRate = 0.0f)
+        public void ApplyDamage(float inDamage, LayerMask targetMask = default, float unitOfTime = 1.0f, float defenceIgnoreRate = 0.0f)
         {
             OnHit(inDamage);
         }

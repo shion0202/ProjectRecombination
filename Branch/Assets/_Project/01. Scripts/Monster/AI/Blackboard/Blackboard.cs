@@ -1,4 +1,5 @@
 using _Project._01._Scripts.Monster.Animator;
+using _Test.Skills;
 using Managers;
 using Monster.AI.Command;
 using System.Collections.Generic;
@@ -24,18 +25,22 @@ namespace Monster.AI.Blackboard
         [SerializeField] private AnimatorParameterSetter animatorParameterSetter;
         [SerializeField] private GameObject target;
         [SerializeField] private GameObject deathEffect;    // 몬스터 사망 이펙트 프리팹
-        // [SerializeField] private LayerMask obstacleLayer;
         
-        // [Header("Battle Setting")][SerializeField] private MonsterBase baseInfo;   // 몬스터 기본 정보 스크립트
         [SerializeField] private MonsterPatrol patrolInfo; // 몬스터 순찰 스크립트
         [SerializeField] private MonsterWander wanderInfo; // 몬스터 방황 스크립트
         [SerializeField] private MonsterAttack attackInfo; // 몬스터 공격 스크립트
 
-        #endregion
-        
-        #region private Fields
-        
-        private List<(int, float)> _cooldownList = new();    // 스킬의 쿨타입을 적용해 사용 가능 여부 관리
+        // [Header("원거리 몬스터 전용 변수")] 
+        // [SerializeField] private Transform firePoint;
+
+        [Header("아몬 2페이즈 전용 변수")]
+        // [SerializeField] private GameObject lWing;
+        // [SerializeField] private GameObject rWing;
+        // [SerializeField] private GameObject body;
+        // [SerializeField] private GameObject energyBall;
+        [SerializeField] private GameObject amonBody;
+        [SerializeField] private GameObject amonShield;
+        [SerializeField] private GameObject amonEnergyBall;
         
         #endregion
         
@@ -46,12 +51,6 @@ namespace Monster.AI.Blackboard
             get => state;
             set => state = value;
         }
-        
-        // public MonsterAction Action
-        // {
-        //     get => action;
-        //     set => action = value;
-        // }
         
         public NavMeshAgent NavMeshAgent
         {
@@ -86,7 +85,7 @@ namespace Monster.AI.Blackboard
         public GameObject Target
         {
             get => target;
-            set => target = value;
+            private set => target = value;
         }
         
         public GameObject DeathEffect
@@ -125,6 +124,21 @@ namespace Monster.AI.Blackboard
         public float WalkSpeed => TryGet(new BBKey<float>("walkSpeed"), out float walkSpeed) ? walkSpeed : 0f;
         public float MinDetectionRange => TryGet(new BBKey<float>("minDetectionRange"), out float minDetectionRange) ? minDetectionRange : 0f;
         public float MaxDetectionRange => TryGet(new BBKey<float>("maxDetectionRange"), out float maxDetectionRange) ? maxDetectionRange : 0f;
+        public bool HasUsedSoulOrbAt20Percent { get; set; }
+        public bool HasUsedSoulOrbAt50Percent { get; set; }
+        public bool HasUsedSoulOrbAt80Percent { get; set; }
+        public string CurrentState { get; set; }
+        public bool IsAnySkillRunning {get; private set;}
+
+        // public GameObject LWing => lWing;
+        // public GameObject RWing => rWing;
+        // public GameObject Body => body;
+        // public GameObject EnergyBall => energyBall;
+        public GameObject AmonBody => amonBody;
+        public AmonShield AmonShield => amonShield.GetComponent<AmonShield>();
+        public AmonEnergyBall AmonEnergyBall => amonEnergyBall.GetComponent<AmonEnergyBall>();
+
+        public Dictionary<string, object> Map => _map;
 
         #endregion
 
@@ -133,8 +147,6 @@ namespace Monster.AI.Blackboard
         private readonly Dictionary<string, object> _map = new();
         
         public void Set<T>(BBKey<T> key, T value) => _map[key.Name] = value;
-
-        public Dictionary<string, object> Map => _map;
 
         public bool TryGet<T>(BBKey<T> key, out T value)
         {
@@ -148,13 +160,15 @@ namespace Monster.AI.Blackboard
             return false;
         }
 
-        public Dictionary<int, RowData> Skills { get; } = new();
+        [SerializeField] private SkillData[] skillDatas;
+
+        [SerializeField] public Skill[] Skills;
 
         #endregion
 
         #region Methods
 
-        public void InitMonsterStatsByID()
+        private void InitMonsterStatsByID()
         {
             // 몬스터의 인덱스 번호 확인
             if (id < 1000 || id > 1999) return;
@@ -182,40 +196,36 @@ namespace Monster.AI.Blackboard
             
             // 몬스터 스킬 초기화
             {
-                Skills.Clear();
-                RowData skillData = DataManager.Instance.GetRowDataByIndex("Monster2Skill", id);
-                // Debug.Log("SkillData: " + skillData.GetStringStat(EStatType.IdArray));
-                // 스페이스바로 구분된 스킬 ID 문자열을 가져와서 배열로 변환
-                string[] skillIds = skillData.GetStringStat(EStatType.IdArray).Split(' ');
-                // 배열에 값이 없는 경우
-                
-                if (skillIds.Length > 0 && !string.IsNullOrWhiteSpace(skillIds[0]))
+                Skills = new Skill[skillDatas.Length];
+                for (int i = 0; i < skillDatas.Length; i++)
                 {
-                    foreach (string skillId in skillIds)
-                    {
-                        if (!int.TryParse(skillId, out int id)) continue;
-
-                        // 스킬 ID에 해당하는 RowData를 가져옴
-                        RowData skillRow = DataManager.Instance.GetRowDataByIndex("MonsterSkill", id);
-                        if (skillRow != null)
-                        {
-                            Skills[id] = skillRow;
-                        }
-                    }
-                }
-                else
-                {
-                    var value = skillData.GetStat(EStatType.IdArray);
-                    if (value > 0f && int.TryParse(value.ToString(), out int id))
-                    {
-                        RowData skillRow = DataManager.Instance.GetRowDataByIndex("MonsterSkill", id);
-                        if (skillRow != null)
-                        {
-                            Skills[id] = skillRow;
-                        }
-                    }
+                    if (skillDatas[i] is null) continue;
+                    Skills[i] = new Skill(skillDatas[i], this);
+                    // 각 스킬의 활성화 및 비활성화 이벤트에 핸들러 등록
+                    Skills[i].OnActivate += HandleSkillActivation;
+                    Skills[i].OnDeactivate += HandleSkillDeactivation;
                 }
             }
+        }
+
+        public bool HasSkill(int skillID)
+        {
+            foreach (var skillData in skillDatas)
+            {
+                if (skillData.skillID == skillID)
+                    return true;
+            }
+            return false;
+        }
+
+        public SkillData GetSkillData(int skillID)
+        {
+            foreach (var skillData in skillDatas)
+            {
+                if (skillData.skillID == skillID)
+                    return skillData;
+            }
+            return null;
         }
 
         public void Init()
@@ -236,85 +246,11 @@ namespace Monster.AI.Blackboard
         }
         
         #endregion
-
-        #region Cooldown Management
-
-        // 쿨타임 적용
-        public void ApplyCooldown(int skillId, float cooldownTime)
-        {
-            // 이미 쿨타임이 적용된 스킬인지 확인
-            for (int i = 0; i < _cooldownList.Count; i++)
-            {
-                if (_cooldownList[i].Item1 == skillId)
-                {
-                    // 기존 쿨타임 업데이트
-                    _cooldownList[i] = (skillId, cooldownTime);
-                    return;
-                }
-            }
-            // 새로운 스킬 추가
-            _cooldownList.Add((skillId, cooldownTime));
-        }
         
-        // 쿨타임이 끝났는지 확인
-        public bool IsSkillReady(int skillId)
-        {
-            // TODO: 쿨타임이 적용된 스킬인지 확인이 안됨
-            for (int i = 0; i < _cooldownList.Count; i++)
-            {
-                // 쿨타임이 적용된 스킬인지 확인
-                if (_cooldownList[i].Item1 == skillId)
-                {
-                    // 쿨타임이 아직 남아있음
-                    // Debug.Log($"Skill {skillId} is ready: {_cooldownList[i].Item2} seconds remaining.");
-                    return false;
-                }
-            }
-            // 쿨타임이 적용되지 않은 스킬
-            return true;
-        }
-        
-        // 쿨타임 목록에서 스킬 제거 (현재 시간 기준으로 쿨타임이 끝난 스킬 제거)
-        public void UpdateCooldownList()
-        {
-            if (_cooldownList.Count == 0) return;
-            float currentTime = Time.time;
-            for (int i = _cooldownList.Count - 1; i >= 0; i--)
-            {
-                // 쿨타임이 끝난 스킬 제거
-                if (_cooldownList[i].Item2 <= currentTime)
-                {
-                    _cooldownList.RemoveAt(i);
-                }
-            }
-        }
+        // 어떤 스킬이든 Active 상태가 되면 호출될 핸들러
+        private void HandleSkillActivation() => IsAnySkillRunning = true;
 
-        public void CleanUpCooldownList()
-        {
-            // 쿨타임 목록을 초기화
-            _cooldownList.Clear();
-        }
-
-        public string ToStringCooldown()
-        {
-            string result = $"Blackboard for {gameObject.name}:\n";
-            // result += $"State: {state}\n";
-            // result += $"Index: {index}\n";
-            // result += $"Target: {target?.name ?? "None"}\n";
-            // result += $"NavMeshAgent: {navMeshAgent?.name ?? "None"}\n";
-            // result += $"PatrolInfo: {patrolInfo?.name ?? "None"}\n";
-            // result += $"WanderInfo: {wanderInfo?.name ?? "None"}\n";
-            // result += "Cooldown List:\n";
-
-            foreach (var cooldown in _cooldownList)
-            {
-                result += $"- Skill ID: {cooldown.Item1}, Remaining Time: {cooldown.Item2}\n";
-            }
-
-            return result;
-        }
-
-        #endregion
-        
+        // 어떤 스킬이든 Active 상태가 끝나면 호출될 핸들러
+        private void HandleSkillDeactivation() => IsAnySkillRunning = false;
     }
 }

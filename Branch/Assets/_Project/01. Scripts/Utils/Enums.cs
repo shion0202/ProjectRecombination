@@ -31,6 +31,8 @@ public enum EStatType
     CooldownTime,         // 스킬 쿨타임
     AnimSpeed,            // 애니메이션 속도
     Range,                // 스킬 사거리
+    CastTime,             // 시전 시간
+    Description,          // 스킬 설명
 
     IdArray,             // ID 배열 (예: 아이템을 장착할 때 사용)
     // TODO: 스킬은 다시 정의해야함
@@ -48,6 +50,14 @@ public enum EStackType
     Flat,           // 고정값 (+10 + 10)
     PercentAdd,     // 합연산 (+10% + 10%)
     PercentMul      // 곱연산 (×1.1 × 1.1)
+}
+
+// 회복 범위
+public enum EHealRange
+{
+    All = 0,
+    Body = 1,
+    Part = 2,
 }
 
 // 회복 연산 방식
@@ -95,10 +105,10 @@ public enum EPartType
 // 파츠 종류
 public enum EAttackType
 {
-    Basic,
-    Laser,
-    Rapid,
-    Heavy,
+    Basic = 1 << 0,
+    Laser = 1 << 1,
+    Rapid = 1 << 2,
+    Heavy = 1 << 3,
 }
 
 // 파츠 연결을 위한 메시 종류

@@ -102,7 +102,7 @@ public class ShoulderLaser : PartBaseShoulder
             }
             if (monster != null)
             {
-                monster.ApplyDamage(targetMask, beamDamage * _timer, _timer, 0.0f);
+                monster.ApplyDamage(beamDamage * _timer, targetMask, _timer, 0.0f);
             }
 
             Utils.Destroy(Utils.Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);

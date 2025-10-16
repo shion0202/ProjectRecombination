@@ -7,11 +7,11 @@ using UnityEngine;
 // 파츠 아이템 획득을 위한 Output
 public class GetItem : ProcessBase
 {
+    [SerializeField] private int unlockIndex = -1;
     [SerializeField] private List<string> partNames;
-    private List<PartBase> _partList;
+    private List<PartBase> _partList = new();
     private Inventory _inven;
-
-    private void Awake()
+    private void Start()
     {
         // 임시로 Manager로부터 Player 정보 획득
         PlayerController player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
@@ -37,6 +37,11 @@ public class GetItem : ProcessBase
         foreach (PartBase part in _partList)
         {
             _inven.GetItem(part);
+        }
+
+        if (unlockIndex > -1)
+        {
+            Managers.GUIManager.Instance.UnlockParts(unlockIndex);
         }
     }
 }

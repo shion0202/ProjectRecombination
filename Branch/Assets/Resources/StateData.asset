@@ -35,3 +35,17 @@ MonoBehaviour:
     bitIndex: 9
   - stateName: Pase1
     bitIndex: 10
+  - stateName: UsingSkill1
+    bitIndex: 11
+  - stateName: UsingSkill2
+    bitIndex: 12
+  - stateName: UsingSkill3
+    bitIndex: 13
+  - stateName: UsingSkill4
+    bitIndex: 14
+  - stateName: UsingSkill5
+    bitIndex: 15
+  - stateName: UsingSkill6
+    bitIndex: 16
+  - stateName: Moving
+    bitIndex: 17

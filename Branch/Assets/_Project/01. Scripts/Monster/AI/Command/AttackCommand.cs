@@ -15,10 +15,10 @@ namespace Monster.AI.Command
 
         #region 생성자
 
-        public AttackCommand(Blackboard.Blackboard blackboard, RowData skillRowData)
+        public AttackCommand(Blackboard.Blackboard blackboard, int skillID)
         {
             _blackboard = blackboard;
-            _skillRowData = skillRowData;
+            // _skillRowData = skillRowData;
             _skillID = (int)_skillRowData.Stats[EStatType.ID].value;
             _coolTime = _skillRowData.Stats[EStatType.CooldownTime].value;
         }
@@ -109,8 +109,6 @@ namespace Monster.AI.Command
                 return;
             }
             
-            
-            
             OnExit(blackboard);
             
             // 명령어 완료 콜백 호출
@@ -129,39 +127,39 @@ namespace Monster.AI.Command
                 blackboard.NavMeshAgent.isStopped = false;
             }
             // 스킬 쿨타임 적용
-            if (_coolTime > 0f) blackboard.ApplyCooldown(_skillID, _coolTime + Time.time);
+            // if (_coolTime > 0f) blackboard.ApplyCooldown();
             
             // 공격 애니메이션 정지
             // blackboard.Animator.SetBool("IsFire", false);
         }
         
-        private void FireBullet(Blackboard.Blackboard blackboard, int bulletType = 0)
-        {
-            // 총알 발사 로직 구현
-            Vector3 startPos = blackboard.AttackInfo.firePoint.position;
-            Vector3 targetPos = blackboard.Target.transform.position + Vector3.up * 1.5f; // 타겟의 중심을 향하도록 약간 위로 조정
-            Vector3 direction = (targetPos - startPos).normalized;
-            
-            // blackboard.Animator.SetBool("IsFire", true);
-            blackboard.AttackInfo.Fire(bulletType, blackboard.Agent, blackboard.AttackInfo.firePoint.position, Vector3.zero, direction, _skillRowData.GetStat(EStatType.Damage));
-            // blackboard.Animator.SetBool("IsFire", false);
-        }
+        // private void FireBullet(Blackboard.Blackboard blackboard, int bulletType = 0)
+        // {
+        //     // 총알 발사 로직 구현
+        //     Vector3 startPos = blackboard.AttackInfo.firePoint.position;
+        //     Vector3 targetPos = blackboard.Target.transform.position + Vector3.up * 1.5f; // 타겟의 중심을 향하도록 약간 위로 조정
+        //     Vector3 direction = (targetPos - startPos).normalized;
+        //     
+        //     // blackboard.Animator.SetBool("IsFire", true);
+        //     blackboard.AttackInfo.Fire(bulletType, blackboard.Agent, blackboard.AttackInfo.firePoint.position, Vector3.zero, direction, _skillRowData.GetStat(EStatType.Damage));
+        //     // blackboard.Animator.SetBool("IsFire", false);
+        // }
 
-        public void AnimationEvent_Fire()
-        {
-            switch (_skillID)
-            {
-                case 4001:
-                    FireBullet(_blackboard);
-                    break;
-                case 4002:
-                    FireBullet(_blackboard);
-                    break;
-                case 4003:
-                    FireBullet(_blackboard, 1);
-                    break;
-            }
-            
-        }
+        // public void AnimationEvent_Fire()
+        // {
+        //     switch (_skillID)
+        //     {
+        //         case 4001:
+        //             FireBullet(_blackboard);
+        //             break;
+        //         case 4002:
+        //             FireBullet(_blackboard);
+        //             break;
+        //         case 4003:
+        //             FireBullet(_blackboard, 1);
+        //             break;
+        //     }
+        //     
+        // }
     }
 }

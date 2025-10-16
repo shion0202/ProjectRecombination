@@ -84,10 +84,10 @@ public class ShoulderRapid : PartBaseShoulder
             {
                 if (viewPos.z <= cam.farClipPlane) // 카메라 시야거리 제한
                 {
-                    Vector3 toTarget = enemy.transform.position - _owner.transform.position;
+                    Vector3 toTarget = enemy.transform.parent.position - _owner.transform.position;
                     if (toTarget.sqrMagnitude > maxRangeSqr) continue;
 
-                    if (IsVisibleFromCamera(enemy.transform, cam, obstacleMask))
+                    if (IsVisibleFromCamera(enemy.transform.parent, cam, obstacleMask))
                     {
                         result.Add(enemy);
                     }

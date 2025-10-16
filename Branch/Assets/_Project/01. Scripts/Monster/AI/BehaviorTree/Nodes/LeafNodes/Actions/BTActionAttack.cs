@@ -1,4 +1,5 @@
-﻿using Monster.AI.Command;
+﻿using _Test.Skills;
+using Monster.AI.Command;
 using Managers;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,8 +17,8 @@ namespace Monster.AI.BehaviorTree.Nodes
             
             // var skillData = DataManager.Instance.GetRowDataByIndex("MonsterSkill", skillId);
             Blackboard.Blackboard blackboard = context.Blackboard;
-            RowData skillData = blackboard.Skills[skillId];
-            if (skillData == null)
+            // SkillData skillData = blackboard.HasSkill(skillId);
+            if (blackboard.HasSkill(skillId))
             {
                 Debug.LogError($"Skill data not found for skill ID: {skillId}");
                 return NodeState.Failure;
@@ -25,7 +26,7 @@ namespace Monster.AI.BehaviorTree.Nodes
             
             // 공격 명령을 행동 대기열에 추가
             // CommandContext commandContext = new CommandContext( new AttackCommand(), skillData);
-            context.Enqueue(new AttackCommand(context.Blackboard, skillData), priority);
+            context.Enqueue(new AttackCommand(context.Blackboard, skillId), priority);
             
             return state = NodeState.Success;
         }

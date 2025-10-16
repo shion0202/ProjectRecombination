@@ -18,6 +18,7 @@ public struct Speaker
 [System.Serializable]
 public struct DialogData
 {
+    public bool isBlending;
     public Sprite scene;                    // 배경 이미지
     [TextArea(3, 5)] public string dialog;  // 텍스트 스크립트
 }

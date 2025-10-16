@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RadialMenu",
+                    "type": "Button",
+                    "id": "f6874795-d083-4591-a22a-342732ee20f1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -248,6 +257,17 @@
                     "processors": "",
                     "groups": ";PC_Keyboard",
                     "action": "ResetCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98ccd144-2fb6-4fd8-a8a5-806724f3f81e",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC_Keyboard",
+                    "action": "RadialMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

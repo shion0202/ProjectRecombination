@@ -246,21 +246,31 @@ MonoBehaviour:
   dialogs:
   - scene: {fileID: 21300000, guid: e2aaa22bceb58f54fa322af61ff50350, type: 3}
     dialog: "21\uC138\uAE30 \uB9D0, \uC778\uB958\uB294 \uC5B4\uB290 \uC0AC\uC545\uD55C
-      \uC601\uD63C\uACFC \uADF8\uC758 \uAE30\uACC4 \uAD70\uB2E8\uC5D0 \uC758\uD574
+      \uC601\uD63C\uACFC\n\uADF8\uC758 \uAE30\uACC4 \uAD70\uB2E8\uC5D0 \uC758\uD574
       \uC704\uAE30\uC5D0 \uBD09\uCC29\uD588\uB2E4."
-  - scene: {fileID: 21300000, guid: e2aaa22bceb58f54fa322af61ff50350, type: 3}
+    isBlending: 0
+  - scene: {fileID: 21300000, guid: e13910f7691e13f4289e1dcfac79d523, type: 3}
     dialog: "\uC778\uB958\uB294 \uC624\uB79C \uC800\uD56D \uB05D\uC5D0 \uADF8\uC758
-      \uADFC\uAC70\uC9C0\uC640 \uC5F0\uACB0\uB41C \uCC28\uC6D0\uBB38\uC758 \uC704\uCE58\uB97C
+      \uADFC\uAC70\uC9C0\uC640 \uC5F0\uACB0\uB41C\n\uCC28\uC6D0\uBB38\uC758 \uC704\uCE58\uB97C
       \uC54C\uC544\uB0C8\uC9C0\uB9CC \uC27D\uC0AC\uB9AC \uC811\uADFC\uD560 \uC218
       \uC5C6\uC5C8\uB2E4."
-  - scene: {fileID: 21300000, guid: e13910f7691e13f4289e1dcfac79d523, type: 3}
+    isBlending: 0
+  - scene: {fileID: 21300000, guid: 53a4dfe083191374f9ffdba61a3dc49c, type: 3}
     dialog: "\uC778\uB958\uB294 \uC544\uC9C1 \uAD70\uB2E8\uC758 \uC190\uC5D0 \uB4E4\uC5B4\uAC00\uC9C0
-      \uC54A\uC740 \uC601\uD63C\uC744 \uBC1C\uACAC\uD558\uACE0, \uC790\uC2E0\uB4E4\uC758
+      \uC54A\uC740 \uC601\uD63C\uC744 \uBC1C\uACAC\uD558\uACE0,\n\uC790\uC2E0\uB4E4\uC758
       \uC548\uB4DC\uB85C\uC774\uB4DC U.R.A\uC640 \uC5F0\uACB0\uD55C\uB2E4."
-  - scene: {fileID: 21300000, guid: e13910f7691e13f4289e1dcfac79d523, type: 3}
-    dialog: "U.R.A\uB294 \uC2DC\uC124 \uB0B4\uBD80\uC5D0 \uCE68\uD22C\uD574 \uAE30\uACC4
+    isBlending: 0
+  - scene: {fileID: 21300000, guid: 7940c52d577f69e4d98c7b8adb28c98b, type: 3}
+    dialog: "U.R.A\uB294 \uC2DC\uC124 \uB0B4\uBD80\uC5D0 \uCE68\uD22C\uD574\n\uAE30\uACC4
       \uAD70\uB2E8\uC744 \uC12C\uBA78\uD558\uACE0 \uCC28\uC6D0\uBB38\uC744 \uD655\uBCF4\uD574\uC57C
       \uD55C\uB2E4."
+    isBlending: 0
+  - scene: {fileID: 21300000, guid: 0365eaf0c1b461640bfa91238fecaf6a, type: 3}
+    dialog: 
+    isBlending: 0
+  - scene: {fileID: 21300000, guid: 472c52ab244e20d4c99151bc6a603948, type: 3}
+    dialog: 
+    isBlending: 0
   nextSceneName: GameScene
   isAutoStart: 1
   typeSpeed: 0.05
@@ -328,8 +338,8 @@ MonoBehaviour:
     \uB2E4\uC774\uC5BC\uB85C\uADF8 \uD14C\uC2A4\uD2B8\uC785\uB2C8\uB2E4. \uB2E4\uC774\uC5BC\uB85C\uADF8
     \uD14C\uC2A4\uD2B8\uC785\uB2C8\uB2E4."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: adf1b113218ee6446b29bc3c3f1d0568, type: 2}
-  m_sharedMaterial: {fileID: 7003283874107307069, guid: adf1b113218ee6446b29bc3c3f1d0568,
+  m_fontAsset: {fileID: 11400000, guid: 71b8c984e6b639e4fa08566623a00c02, type: 2}
+  m_sharedMaterial: {fileID: -7136064791811694356, guid: 71b8c984e6b639e4fa08566623a00c02,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -361,7 +371,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

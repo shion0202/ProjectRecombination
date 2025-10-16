@@ -1,3 +1,4 @@
+using _Test.Skills;
 using Managers;
 using UnityEngine;
 
@@ -11,14 +12,15 @@ namespace Monster.AI.BehaviorTree.Nodes
         protected override bool CheckCondition(NodeContext nodeContext)
         {
             // 스킬 ID로 사용 가능한 스킬인지 판단
-            RowData skillData = nodeContext.Blackboard.Skills[skillId];
-            if (skillData == null)
+            // RowData skillData = nodeContext.Blackboard.Skills[skillId];
+            if (!nodeContext.Blackboard.HasSkill(skillId))
             {
                 Debug.LogError($"Skill not found in Blackboard for skill ID: {skillId}");
                 return false;
             }
             
-            float skillRange = skillData.GetStat(EStatType.Range);
+            SkillData skillData = nodeContext.Blackboard.GetSkillData(skillId);
+            float skillRange = skillData.range;
             
             // 타겟과의 거리 계산
             Vector3 targetPosition = nodeContext.Blackboard.Target.transform.position;

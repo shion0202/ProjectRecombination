@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Managers;
+using Cinemachine;
 
 public class LegsCaterpillar : PartBaseLegs
 {
@@ -15,12 +16,14 @@ public class LegsCaterpillar : PartBaseLegs
     private Vector3 _currentMoveDirection = Vector3.forward;
     private bool _isBackward = false;
     private Quaternion _originalRotation;
+    protected CinemachineImpulseSource source;
 
     protected override void Awake()
     {
         base.Awake();
         _legsAnimType = EAnimationType.Caterpillar;
         _isAnimating = false;
+        source = gameObject.GetComponent<CinemachineImpulseSource>();
     }
 
     protected void OnEnable()
@@ -143,6 +146,11 @@ public class LegsCaterpillar : PartBaseLegs
     protected IEnumerator CoImpartRoutine()
     {
         GUIManager.Instance.SetLegsSkillIcon(true);
+        _owner.PlayerAnimator.SetBool("isPlayLegsAnim", true);
+        yield return new WaitForSeconds(2.5f);
+
+        _owner.PlayerAnimator.SetTrigger("heavyShootTrigger");
+        _owner.FollowCamera.ApplyShake(source);
         Destroy(Instantiate(impactEffectPrefab, _owner.transform.position, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(-90.0f, 0.0f, 0.0f))), 5.0f);
 
         // 적 탐지 및 데미지 적용
@@ -152,7 +160,7 @@ public class LegsCaterpillar : PartBaseLegs
             IDamagable monster = hit.transform.GetComponent<IDamagable>();
             if (monster != null)
             {
-                monster.ApplyDamage(targetMask, skillDamage);
+                monster.ApplyDamage(skillDamage, targetMask);
                 // TODO: 적 기절 (2초)
             }
             else
@@ -160,20 +168,20 @@ public class LegsCaterpillar : PartBaseLegs
                 monster = hit.transform.GetComponentInParent<IDamagable>();
                 if (monster != null)
                 {
-                    monster.ApplyDamage(targetMask,skillDamage);
+                    monster.ApplyDamage(skillDamage, targetMask);
                     // TODO: 적 기절 (2초)
                 }
             }
         }
 
-        // 파츠 HP 모두 회복
-        _owner.HealHp(100.0f, EHealType.Percentage);
-        Debug.Log("캐터필러 스킬 효과: 파츠 Hp 모두 회복");
-
         // 이동 불가 적용
         _owner.SetMovable(false);
         Debug.Log("캐터필러 스킬 효과: 이동 불가");
         yield return new WaitForSeconds(skillDuration);
+
+        _owner.PlayerAnimator.SetBool("isPlayLegsAnim", false);
+        yield return new WaitForSeconds(2.0f);
+
         _owner.SetMovable(true);                            // skillDuration 끝나면 다시 이동 가능
         Debug.Log("캐터필러 스킬 효과: 이동 불가 해제");
 

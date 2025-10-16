@@ -219,7 +219,7 @@ namespace Controller
 
             if (damagable != null)
             {
-                damagable.ApplyDamage(layersThatStopLaser, damage, Time.deltaTime, 1.0f);
+                damagable.ApplyDamage(damage, layersThatStopLaser, Time.deltaTime, 1.0f);
             }
         }
     }

@@ -244,7 +244,17 @@ MonoBehaviour:
     objectArrow: {fileID: 1314636447}
     fadePanel: {fileID: 1307420041}
   dialogs:
-  - scene: {fileID: 21300000, guid: 274a35dc3e474a046b9d67c4df222be9, type: 3}
+  - isBlending: 0
+    scene: {fileID: 21300000, guid: 274a35dc3e474a046b9d67c4df222be9, type: 3}
+    dialog: "\uC5D0\uD544\uB85C\uADF8 \uCCAB\uBC88\uC9F8\uC785\uB2C8\uB2E4."
+  - isBlending: 0
+    scene: {fileID: 21300000, guid: 0c7c3d584b262314b99b86e23c505cd4, type: 3}
+    dialog: "\uB450\uBC88\uC9F8\uC785\uB2C8\uB2E4."
+  - isBlending: 0
+    scene: {fileID: 21300000, guid: 48edf039e79301342b27b796373bd1b2, type: 3}
+    dialog: "\uC138\uBC88\uC9F8\uC785\uB2C8\uB2E4."
+  - isBlending: 0
+    scene: {fileID: 21300000, guid: f7ae3854c8905b6418cc6bb2c179e9a8, type: 3}
     dialog: Thank you for playing!
   nextSceneName: GameOver
   isAutoStart: 1
@@ -313,8 +323,8 @@ MonoBehaviour:
     \uB2E4\uC774\uC5BC\uB85C\uADF8 \uD14C\uC2A4\uD2B8\uC785\uB2C8\uB2E4. \uB2E4\uC774\uC5BC\uB85C\uADF8
     \uD14C\uC2A4\uD2B8\uC785\uB2C8\uB2E4."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: adf1b113218ee6446b29bc3c3f1d0568, type: 2}
-  m_sharedMaterial: {fileID: 7003283874107307069, guid: adf1b113218ee6446b29bc3c3f1d0568,
+  m_fontAsset: {fileID: 11400000, guid: 71b8c984e6b639e4fa08566623a00c02, type: 2}
+  m_sharedMaterial: {fileID: -7136064791811694356, guid: 71b8c984e6b639e4fa08566623a00c02,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -346,7 +356,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

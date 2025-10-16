@@ -317,14 +317,14 @@ public class Bullet : MonoBehaviour
         IDamagable enemy = target.GetComponent<IDamagable>();
         if (enemy != null)
         {
-            enemy.ApplyDamage(targetMask, _damage * coefficient);
+            enemy.ApplyDamage(_damage * coefficient, targetMask);
         }
         else
         {
             enemy = target.transform.GetComponentInParent<IDamagable>();
             if (enemy != null)
             {
-                enemy.ApplyDamage(targetMask, _damage * coefficient);
+                enemy.ApplyDamage(_damage * coefficient, targetMask);
             }
         }
     }

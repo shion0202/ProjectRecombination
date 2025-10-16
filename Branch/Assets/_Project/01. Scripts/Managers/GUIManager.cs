@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,6 +37,35 @@ namespace Managers
         [SerializeField] private Image backSkillCooldownImage;
         [SerializeField] private TextMeshProUGUI legsSkillCooldownText;
         [SerializeField] private TextMeshProUGUI backSkillCooldownText;
+
+        [Header("Interaction UI")]
+        [SerializeField] private GameObject interactionUI;
+        [SerializeField] private TextMeshProUGUI interactionText;
+
+        [Header("Radial UI")]
+        // 꽤 급하게 작업하였으므로 리팩토링 필요
+        [SerializeField] private GameObject radialUI;
+        [SerializeField] private List<Image> selectedCircles = new();
+        [SerializeField] private List<Image> partIcons = new();
+        [SerializeField] private Image baseIcon;
+        [SerializeField] private List<Button> laserParts = new();
+        [SerializeField] private List<Button> rapidParts = new();
+        [SerializeField] private List<Button> heavyParts = new();
+        private int _selectedIndex = -1;
+        private Color originalColor = Color.white;
+        private Color selectedColor = new Color(0.09411765f, 0.1411765f, 0.1411765f);
+
+        public GameObject InteractionUI
+        {
+            get => interactionUI;
+            set => interactionUI = value;
+        }
+
+        public TextMeshProUGUI InteractionText
+        {
+            get => interactionText;
+            set => interactionText = value;
+        }
 
         public void ToggleCrosshead()
         {
@@ -146,6 +176,150 @@ namespace Managers
             SetLegsSkillCooldown(false);
             SetBackSkillIcon(false);
             SetBackSkillCooldown(false);
+        }
+
+        public void ToggleRadialUI(bool isOpen)
+        {
+            if (isOpen) radialUI.gameObject.SetActive(true);
+            else radialUI.gameObject.SetActive(false);
+
+            if (_selectedIndex >= 0 && _selectedIndex < selectedCircles.Count)
+            {
+                selectedCircles[_selectedIndex].gameObject.SetActive(false);
+                partIcons[_selectedIndex].color = originalColor;
+            }
+            _selectedIndex = -1;
+            ToggleBasePartButton(false);
+        }
+
+        public void SelectPartPosition(int type)
+        {
+            if (_selectedIndex >= 0 && _selectedIndex < selectedCircles.Count)
+            {
+                selectedCircles[_selectedIndex].gameObject.SetActive(false);
+                partIcons[_selectedIndex].color = originalColor;
+            }
+
+            _selectedIndex = type;
+            selectedCircles[_selectedIndex].gameObject.SetActive(true);
+            partIcons[_selectedIndex].color = selectedColor;
+
+            // 왼팔 기본 파츠 X
+            if (_selectedIndex != 3)
+            {
+                ToggleBasePartButton(true);
+            }
+            else
+            {
+                ToggleBasePartButton(false);
+            }
+        }
+
+        public void SelectShoulderPartType(int attackType)
+        {
+            PlayerController player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
+            if (player)
+            {
+                player.Inven.EquipItem(EPartType.Back, (EAttackType)(1 << attackType));
+                player.Inven.EquipItem(EPartType.Shoulder, (EAttackType)(1 << attackType));
+                player.Inven.EquipItem(EPartType.Mask, (EAttackType)(1 << attackType));
+            }
+
+            ToggleRadialUI(false);
+        }
+
+        public void SelectLegsPartType(int attackType)
+        {
+            PlayerController player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
+            if (player)
+            {
+                player.Inven.EquipItem(EPartType.Legs, (EAttackType)(1 << attackType));
+            }
+
+            ToggleRadialUI(false);
+        }
+
+        public void SelectArmLPartType(int attackType)
+        {
+            PlayerController player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
+            if (player)
+            {
+                player.Inven.EquipItem(EPartType.ArmL, (EAttackType)(1 << attackType));
+            }
+
+            ToggleRadialUI(false);
+        }
+
+        public void SelectArmRPartType(int attackType)
+        {
+            PlayerController player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
+            if (player)
+            {
+                player.Inven.EquipItem(EPartType.ArmR, (EAttackType)(1 << attackType));
+            }
+
+            ToggleRadialUI(false);
+        }
+
+        public void ToggleBasePartButton(bool isActivate)
+        {
+            if (isActivate) baseIcon.gameObject.SetActive(true);
+            else baseIcon.gameObject.SetActive(false);
+        }
+
+        public void SelectBasePart()
+        {
+            // 현재 selectedIndex에 맞는 부위를 기본 파츠로 교체 (오른팔 제외)
+            // 0: 등/어깨, 1: 다리, 2: 왼팔, 3: 오른팔
+            PlayerController player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
+            if (player)
+            {
+                switch (_selectedIndex)
+                {
+                    case 0:
+                        player.Inven.EquipItem(EPartType.Back, (EAttackType)(1 << 0));
+                        player.Inven.EquipItem(EPartType.Shoulder, (EAttackType)(1 << 0));
+                        player.Inven.EquipItem(EPartType.Mask, (EAttackType)(1 << 0));
+                        break;
+                    case 1:
+                        player.Inven.EquipItem(EPartType.Legs, (EAttackType)(1 << 0));
+                        break;
+                    case 2:
+                        player.Inven.EquipItem(EPartType.ArmL, (EAttackType)(1 << 0));
+                        break;
+                    case 3:
+                        break;
+                }
+            }
+
+            ToggleRadialUI(false);
+        }
+
+        public void UnlockParts(int index)
+        {
+            if (index < 0 || index > 2) return;
+
+            switch (index)
+            {
+                case 0:
+                    foreach (var button in laserParts)
+                    {
+                        button.interactable = true;
+                    }
+                    break;
+                case 1:
+                    foreach (var button in rapidParts)
+                    {
+                        button.interactable = true;
+                    }
+                    break;
+                case 2:
+                    foreach (var button in heavyParts)
+                    {
+                        button.interactable = true;
+                    }
+                    break;
+            }
         }
 
         #region Fade In/Out

@@ -1,62 +1,40 @@
+using _Test.Skills;
 using Managers;
 using Monster.AI.Blackboard;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Monster.AI.FSM
 {
-    public class MonsterFSM : MonoBehaviour, IDamagable
+    public class MonsterFSM : FSM
     {
         #region private Fields
-
-        [SerializeField] private Blackboard.Blackboard blackboard;
-        [SerializeField] private bool isInit;
         
         // 상태별 로직에 필요한 내부 변수들
         private float _waitTimer;
-        private RowData _skillRowData;
-        private bool _isAttack;
-        private int _attackCount;
+        private Skill _useSkill;
+        // private bool _isAttack;
+        // private int _attackCount;
 
         #endregion
+
+        #region Core FSM Methods: Think & Act (Overrided)
+
+        protected override void Init()
+        {
+            blackboard.Init();
+            isInit = true;
+        }
         
-        #region Unity Methods
-
-        private void Start()
-        {
-            Init();
-        }
-
-        // 1. 판단(Think)은 Update에서 처리합니다.
-        private void Update()
-        {
-            if (!isInit) Init();
-            if (blackboard is null) return;
-
-            blackboard.UpdateCooldownList();
-            Think(); // 매 프레임 '무슨 상태가 될지'를 결정합니다.
-        }
-
-        // 2. 행동(Act)은 Update 이후에 처리합니다. (LateUpdate도 좋고, Update 마지막에 호출해도 좋습니다)
-        // 여기서는 명확한 분리를 위해 LateUpdate를 사용하겠습니다.
-        private void LateUpdate()
-        {
-            if (!isInit || blackboard is null) return;
-            
-            Act(); // 결정된 현재 상태에 따라 '무엇을 할지'를 실행합니다.
-        }
-
-        #endregion
-
-        #region Core FSM Methods: Think & Act
-
         /// <summary>
         /// AI의 두뇌 역할: 모든 조건을 검사하여 어떤 상태로 전환할지 결정(판단)합니다.
         /// 기존의 Tink() 메서드와 동일합니다.
         /// </summary>
-        private void Think()
+        protected override void Think()
         {
+            if (!isEnabled) return;
             if (blackboard.State.GetStates() == "None")
             {
                 ChangeState("Idle");
@@ -72,26 +50,31 @@ namespace Monster.AI.FSM
             // Debug.Log($"Current HP: {blackboard.CurrentHealth}/{blackboard.MaxHealth}");
             
             // 공격이 진행 중일 때는 다른 판단을 하지 않도록 하여 상태를 유지합니다.
-            if (_isAttack)
+            // if (_isAttack)
+            // {
+            //     if (blackboard.State.GetStates() != "Attack") ChangeState("Attack");
+            //     return;
+            // }
+            if (blackboard.IsAnySkillRunning) 
             {
-                if (blackboard.State.GetStates() != "Attack") ChangeState("Attack");
-                return;
+                // Debug.Log(blackboard.IsAnySkillRunning);
+                return; // 스킬이 실행 중이면 상태 전환을 하지 않음
             }
             
             // 사용 가능한 스킬 검사 (우선순위가 가장 높음)
-            if (blackboard.Skills is not null && blackboard.Skills.Count != 0)
+            if (blackboard.Skills is not null && blackboard.Skills.Length != 0)
             {
                 foreach (var skill in blackboard.Skills)
                 {
-                    var skillId = skill.Value.GetStat(EStatType.ID);
-                    if (!blackboard.IsSkillReady((int)skillId)) continue;
+                    // int skillId = skill.skillData.skillID;
+                    if (skill.CurrentState != Skill.SkillState.isReady) continue;
 
-                    float skillRange = skill.Value.GetStat(EStatType.Range);
+                    float skillRange = skill.skillData.range;
                     float distanceToPlayer = Vector3.Distance(transform.position, blackboard.Target.transform.position);
                         
                     if (distanceToPlayer <= skillRange)
                     {
-                        _skillRowData = skill.Value;
+                        _useSkill = skill;
                         ChangeState("Attack");
                         return;
                     }
@@ -109,7 +92,15 @@ namespace Monster.AI.FSM
             float distance = Vector3.Distance(transform.position, blackboard.Target.transform.position);
             if (distance <= blackboard.MaxDetectionRange || blackboard.CurrentHealth < blackboard.MaxHealth)
             {
-                ChangeState("Chase");
+                // 플레이어가 인지 범위 내에 있으나 최소 사거리 밖에 있는 경우 추격 상태로 전환
+                if (distance > blackboard.MinDetectionRange)
+                {
+                    ChangeState("Chase");
+                }
+                else
+                {
+                    ChangeState("Idle");
+                }
                 return;
             }
             
@@ -154,8 +145,17 @@ namespace Monster.AI.FSM
         /// AI의 몸 역할: 현재 상태(State)에 따라 실제 행동을 수행합니다.
         /// 기존의 모든 Handle...State() 메서드를 통합했습니다.
         /// </summary>
-        private void Act()
+        protected override void Act()
         {
+            if (!isEnabled) return;
+            if (blackboard?.State is null) return;
+
+            if (blackboard.IsAnySkillRunning)
+            {
+                // Debug.Log(blackboard.IsAnySkillRunning);
+                return; // 스킬이 실행 중이면 상태 전환을 하지 않음
+            }
+            
             string stateName = blackboard.State?.GetStates() ?? "None";
             
             switch (stateName)
@@ -181,21 +181,47 @@ namespace Monster.AI.FSM
             }
         }
         
+        // 상태 진입 시 1회 호출되는 초기화 메서드 (기존 코드와 동일)
+        protected override void EnterState(string stateName)
+        {
+            InitAnimationFlags();
+            blackboard.NavMeshAgent.isStopped = false;
+
+            switch (stateName)
+            {
+                case "Idle":
+                    blackboard.NavMeshAgent.isStopped = true;
+                    break;
+                case "Death":
+                    blackboard.AgentCollider.enabled = false;
+                    blackboard.AgentRigidbody.isKinematic = true;
+                    blackboard.NavMeshAgent.isStopped = true;
+                    blackboard.NavMeshAgent.ResetPath();
+                    blackboard.AnimatorParameterSetter.Animator.SetBool("IsDeath", true);
+                    break;
+                case "Patrol":
+                    blackboard.PatrolInfo.isPatrol = true;
+                    blackboard.PatrolInfo.CurrentWayPointIndex = blackboard.PatrolInfo.GetNextWayPointIndex();
+                    blackboard.NavMeshAgent.SetDestination(blackboard.PatrolInfo.GetCurrentWayPoint());
+                    blackboard.NavMeshAgent.speed = blackboard.WalkSpeed;
+                    blackboard.AnimatorParameterSetter.Animator.SetBool("IsWalk", true);
+                    break;
+                case "Chase":
+                    blackboard.NavMeshAgent.speed = blackboard.RunSpeed;
+                    blackboard.AnimatorParameterSetter.Animator.SetBool("IsRun", true);
+                    break;
+                case "Attack":
+                    blackboard.NavMeshAgent.isStopped = true;
+                    break;
+            }
+        }
+        
         #endregion
 
         #region State Actions (Act에서 호출되는 행동 함수들)
 
         private void ActDeath()
-        {
-            // 죽음 애니메이션이 끝나면 오브젝트를 비활성화합니다.
-            // AnimatorStateInfo animatorStateInfo = blackboard.AnimatorParameterSetter.CurrentAnimatorStateInfo;
-            // if (animatorStateInfo.IsName("Death") && animatorStateInfo.normalizedTime >= 1.0f)
-            // {
-            //     blackboard.DeathEffect?.SetActive(true);
-            //     isInit = false;
-            //     gameObject.SetActive(false);
-            // }
-            
+        { 
             // 1. 죽음 애니메이션을 가지고 있는지 확인
             foreach (var state in blackboard.AnimatorParameterSetter.BoolParameterNames)
             {
@@ -253,141 +279,17 @@ namespace Monster.AI.FSM
 
         private void ActAttack()
         {
-            if (_skillRowData is null || blackboard.Target is null) return;
+            if (_useSkill is null || blackboard.Target is null) return;
             
             // 타겟을 바라보게 합니다.
             transform.LookAt(blackboard.Target.transform);
-
-            int selectedSkillId = (int)_skillRowData.GetStat(EStatType.ID);
-            float skillCooldown = _skillRowData.GetStat(EStatType.CooldownTime);
-
-            switch (selectedSkillId)
-            {
-                case 4001: // 단일 공격
-                    if (!_isAttack)
-                    {
-                        _isAttack = true;
-                        // blackboard.AnimatorParameterSetter.Animator.SetBool("IsFire", true);
-                        blackboard.AnimatorParameterSetter.Animator.SetTrigger("Fire");
-                        blackboard.ApplyCooldown(selectedSkillId, skillCooldown);
-                    }
-                    break;
-                case 4002:
-                    if (!_isAttack)
-                    {
-                        _isAttack = true;
-                        StartCoroutine(ChargingNShoot());
-                        blackboard.ApplyCooldown(selectedSkillId, skillCooldown);
-                    }
-                    break;
-                case 4003:
-                    if (!_isAttack)
-                    {
-                        _isAttack = true;
-                        blackboard.AnimatorParameterSetter.Animator.SetTrigger("Fire");
-                        blackboard.ApplyCooldown(selectedSkillId, skillCooldown);
-                    }
-                    break;
-                case 4006:
-                    if (!_isAttack)
-                    {
-                        _isAttack = true;
-                        blackboard.AnimatorParameterSetter.Animator.SetTrigger("Smash");
-                        blackboard.ApplyCooldown(selectedSkillId, skillCooldown);
-                    }
-                    break;
-                // case 4002, 4003 등 다른 스킬 로직... (기존 코드와 유사하게 작성)
-            }
-        }
-
-        #endregion
-
-        #region State Management
-
-        // 상태 진입 시 1회 호출되는 초기화 메서드 (기존 코드와 동일)
-        private void EnterState(string stateName)
-        {
-            InitAnimationFlags();
-            blackboard.NavMeshAgent.isStopped = false;
-
-            switch (stateName)
-            {
-                case "Idle":
-                    blackboard.NavMeshAgent.isStopped = true;
-                    break;
-                case "Death":
-                    blackboard.AgentCollider.enabled = false;
-                    blackboard.AgentRigidbody.isKinematic = true;
-                    blackboard.NavMeshAgent.isStopped = true;
-                    blackboard.NavMeshAgent.ResetPath();
-                    blackboard.AnimatorParameterSetter.Animator.SetBool("IsDeath", true);
-                    break;
-                case "Patrol":
-                    blackboard.PatrolInfo.isPatrol = true;
-                    blackboard.PatrolInfo.CurrentWayPointIndex = blackboard.PatrolInfo.GetNextWayPointIndex();
-                    blackboard.NavMeshAgent.SetDestination(blackboard.PatrolInfo.GetCurrentWayPoint());
-                    blackboard.NavMeshAgent.speed = blackboard.WalkSpeed;
-                    blackboard.AnimatorParameterSetter.Animator.SetBool("IsWalk", true);
-                    break;
-                case "Chase":
-                    blackboard.NavMeshAgent.speed = blackboard.RunSpeed;
-                    blackboard.AnimatorParameterSetter.Animator.SetBool("IsRun", true);
-                    break;
-                case "Attack":
-                    blackboard.NavMeshAgent.isStopped = true;
-                    break;
-            }
-        }
             
-        // 상태 전환 메서드 (기존 코드와 거의 동일)
-        private void ChangeState(string stateName)
-        {
-            if (blackboard.State.GetStates() == stateName) return; // 같은 상태로의 변경 방지
-
-            int mask = DynamicState.GetStateMask(stateName);
-            if (mask == 0) return;
-            
-            blackboard.State.SetState(mask);
-            EnterState(stateName);
-            // Debug.Log($"State changed to: {stateName}");
+            _useSkill.Execute(blackboard);
         }
-        
+
         #endregion
 
         #region Helper & Event Methods
-        
-        private void Init()
-        {
-            blackboard.Init();
-            isInit = true;
-        }
-
-        private void InitAnimationFlags()
-        {
-            List<string> array = blackboard.AnimatorParameterSetter.BoolParameterNames;
-            Animator animator = blackboard.AnimatorParameterSetter.Animator;
-            foreach (string param in array)
-            {
-                animator.SetBool(param, false);
-            }
-        }
-        
-        public void ApplyDamage(LayerMask targetMask, float inDamage, float unitOfTime = 1.0f, float defenceIgnoreRate = 0.0f)
-        {
-            if ((targetMask & (LayerMask)(1 << gameObject.layer)) == 0) return;
-            OnHit(inDamage, defenceIgnoreRate, unitOfTime);
-        }
-        
-        public void OnHit(float damage, float defenceIgnoreRate, float unitOfTime)
-        {
-            if (blackboard is null) return;
-
-            float totalDamage = Utils.GetDamage(damage, defenceIgnoreRate, unitOfTime, blackboard.Map);
-            blackboard.CurrentHealth -= totalDamage;
-
-            // 피격 시 추적 상태로 즉시 전환하는 로직 추가 가능
-            // if (blackboard.CurrentHealth > 0) ChangeState("Chase");
-        }
         
         private void FireBullet(int bulletType = 0)
         {
@@ -395,18 +297,12 @@ namespace Monster.AI.FSM
             Vector3 targetPos = blackboard.Target.transform.position + Vector3.up * 1.5f;
             Vector3 direction = (targetPos - startPos).normalized;
             
-            blackboard.AttackInfo.Fire(bulletType, blackboard.Agent, blackboard.AttackInfo.firePoint.position, Vector3.zero, direction, _skillRowData.GetStat(EStatType.Damage));
-        }
-        
-        private IEnumerator ChargingNShoot()
-        {
-            yield return new WaitForSeconds(2f); // 2초 대기
-            blackboard.AnimatorParameterSetter.Animator.SetTrigger("Fire");
+            blackboard.AttackInfo.Fire(bulletType, blackboard.Agent, blackboard.AttackInfo.firePoint.position, Vector3.zero, direction, _useSkill.skillData.damage);
         }
         
         public void AnimationEvent_Fire()
         {
-            if ((int)_skillRowData.GetStat(EStatType.ID) == 4003)
+            if (_useSkill.skillData.skillID == 4003)
                 FireBullet(1);
             else
                 FireBullet();
@@ -414,17 +310,30 @@ namespace Monster.AI.FSM
         
         public void AnimationEvent_Melee()
         {
-            if (blackboard.Target == null || _skillRowData == null) return;
+            if (blackboard.Target == null || _useSkill == null) return;
 
-            float damage = _skillRowData.GetStat(EStatType.Damage);
-            // blackboard.DealDamage(blackboard.Target, damage);
-            Debug.Log($"");
+            float damage = _useSkill.skillData.damage;
+            // 콜라이더 박스를 생성하고 충돌한 Player에게 대미지를 준다.
+            // Vector3 boxCenter = blackboard.AttackInfo.meleePoint.position + blackboard.AttackInfo.meleePoint.forward * (blackboard.AttackInfo.meleeSize.z / 2);
+            // Collider[] hitColliders = Physics.OverlapBox(boxCenter, blackboard.AttackInfo.meleeSize / 2, blackboard.AttackInfo.meleePoint.rotation);
+            // foreach (var hitCollider in hitColliders)
+            // {
+            //     if (hitCollider.CompareTag("Player"))
+            //     {
+            //         // PlayerController player = hitCollider.GetComponent<PlayerController>();
+            //         // if (player != null)
+            //         // {
+            //         //     player.ApplyDamage(damage);
+            //         // }
+            //         Debug.Log($"Melee Hit: {hitCollider.name}, Damage: {damage}");
+            //     }
+            // }
         }
         
         public void OnAttackAnimationEnd()
         {
-            _isAttack = false;
-            _skillRowData = null; // 스킬 사용 완료
+            // _isAttack = false;
+            // _useSkill = null; // 스킬 사용 완료
             ChangeState("Idle");
         }
 
@@ -439,58 +348,6 @@ namespace Monster.AI.FSM
             isInit = false;
             // gameObject.SetActive(false);
             PoolManager.Instance.ReleaseObject(gameObject);
-        }
-        
-        private void OnDrawGizmos()
-        {
-            if (blackboard is null) return;
-            // 몬스터의 위치를 기준으로 인식 범위를 원으로 표시
-            if (blackboard.Agent is not null && blackboard.MaxDetectionRange > 0f)
-            {
-                // Gizmos의 색상을 설정
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(blackboard.Agent.transform.position, blackboard.MaxDetectionRange);
-            }
-
-            if (blackboard.Agent is not null &&
-                blackboard.MinDetectionRange > 0f)
-            {
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(blackboard.Agent.transform.position, blackboard.MinDetectionRange);
-            }
-            
-            // 몬스터의 스킬 사거리를 시각적으로 표시
-            if (blackboard.Skills is not null && blackboard.Skills.Count > 0)
-            {
-                foreach (var skill in blackboard.Skills)
-                {
-                    var skillRange = skill.Value.Stats[EStatType.Range].GetValue();
-                    if (skillRange <= 0f) continue;
-
-                    Gizmos.color = Color.blue;
-                    if (blackboard.Agent is not null)
-                        Gizmos.DrawWireSphere(blackboard.Agent.transform.position, skillRange);
-                }
-            }
-        
-            // Patrol Waypoints를 시각적으로 표시
-            if (blackboard.PatrolInfo.wayPoints is { Length: > 0 })
-            {
-                Gizmos.color = Color.yellow;
-                foreach (var t in blackboard.PatrolInfo.wayPoints)
-                {
-                    Gizmos.DrawSphere(t, 0.1f);
-                }
-            }
-            
-            // 몬스터의 배회 범위를 시각적으로 표시
-            if (blackboard.WanderInfo.wanderAreaRadius > 0f)
-            {
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(blackboard.WanderInfo.wanderAreaCenter, blackboard.WanderInfo.wanderAreaRadius);
-            }
-            
-            // 추가 정보는 아래에 추가
         }
 
         #endregion

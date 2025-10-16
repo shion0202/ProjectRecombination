@@ -1138,7 +1138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2328184194878600319}
   - component: {fileID: 2702245359674410893}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Weapon_Type_B_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1416,13 +1416,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4831244279255076990}
   - component: {fileID: 131382995791546867}
-  m_Layer: 0
+  - component: {fileID: 2208351768892212624}
+  m_Layer: 8
   m_Name: Heavy_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4831244279255076990
 Transform:
   m_ObjectHideFlags: 0
@@ -1458,7 +1459,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 2831cb18b4db6d9438488389c550c2f4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1493,6 +1494,34 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.12599257, y: -0.017251134, z: -0.079172626}
     m_Extent: {x: 0.40244934, y: 0.18232708, z: 0.10375275}
   m_DirtyAABB: 0
+--- !u!114 &2208351768892212624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510818583439032627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d0dfdfb39ed50419d33a3ad19572aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 2004
+  partType: 8
+  attackType: 3
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  staticRotation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
+  shootPrefab: {fileID: 169642, guid: fff13bebbd256b54db6f12ff5455bb45, type: 3}
+  orbPrefab: {fileID: 364168584227083269, guid: 23f7c226d30f55e48841c26e8087eb37,
+    type: 3}
+  backPart: {fileID: 7337849484052380514}
 --- !u!1 &520328507678621060
 GameObject:
   m_ObjectHideFlags: 0
@@ -2683,7 +2712,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5701941487223402446}
   - component: {fileID: 8338469583655035359}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Weapon_Type_A_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3644,7 +3673,7 @@ GameObject:
   - component: {fileID: 1448470909741801882}
   - component: {fileID: 4826885023590413386}
   - component: {fileID: 2745091840849369684}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3816,13 +3845,13 @@ GameObject:
   - component: {fileID: 7317914189683463746}
   - component: {fileID: 5611776988460484683}
   - component: {fileID: 6187711818022177378}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Weapon_Type_A_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &357683392625582358
 Transform:
   m_ObjectHideFlags: 0
@@ -3945,7 +3974,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.05, y: 0.05, z: 0}
+  m_DefaultVelocity: {x: 0.05, y: -0.05, z: 0}
 --- !u!114 &6187711818022177378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5520,7 +5549,7 @@ GameObject:
   - component: {fileID: 2814558966215782191}
   - component: {fileID: 5937490145842713949}
   - component: {fileID: 366806743843420304}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5987,7 +6016,7 @@ GameObject:
   - component: {fileID: 2150283058259853184}
   - component: {fileID: 8746337315998089085}
   - component: {fileID: 4757907869966855744}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6660,7 +6689,7 @@ GameObject:
   - component: {fileID: 8205890881684327763}
   - component: {fileID: 5322403097133166635}
   - component: {fileID: 2045806292682013937}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7059,7 +7088,7 @@ GameObject:
   - component: {fileID: 8715157799750823948}
   - component: {fileID: 7192306454213402611}
   - component: {fileID: 8940899229870552292}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Arm_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7204,7 +7233,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.01, y: 0.01, z: 0}
+  m_DefaultVelocity: {x: -0.01, y: -0.01, z: 0}
 --- !u!114 &8940899229870552292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8035,7 +8064,7 @@ MonoBehaviour:
   baseTransform: {fileID: 0}
   Hips: {fileID: 1771228319092322557}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.9768036
+  finalScaleReference: 0.97680306
   finalScaleReferenceSqrt: 0.1
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -8547,7 +8576,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5959085809123622303}
   - component: {fileID: 5490921990322010959}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Heavy_Sub_FrontWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8589,8 +8618,8 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6712808226183970476, guid: ce526c1c9fb032a44a27647395133367, type: 3}
-  - {fileID: 4689512624233924934, guid: ce526c1c9fb032a44a27647395133367, type: 3}
+  - {fileID: 2100000, guid: ed120fb13ac1b0b449cf2e983a4e6ac7, type: 2}
+  - {fileID: 2100000, guid: 1dca80f331c7cc244b0e6e8833945693, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9333,6 +9362,7 @@ MonoBehaviour:
   shootPrefab: {fileID: 169642, guid: fff13bebbd256b54db6f12ff5455bb45, type: 3}
   orbPrefab: {fileID: 364168584227083269, guid: 23f7c226d30f55e48841c26e8087eb37,
     type: 3}
+  backPart: {fileID: 0}
 --- !u!1 &3665898214991693643
 GameObject:
   m_ObjectHideFlags: 0
@@ -9612,13 +9642,13 @@ GameObject:
   - component: {fileID: 2739119703645786754}
   - component: {fileID: 3580212371023538820}
   - component: {fileID: 8798166411247846588}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3089084058478257988
 Transform:
   m_ObjectHideFlags: 0
@@ -9703,7 +9733,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ImpulseDefinition:
     m_ImpulseChannel: 1
-    m_ImpulseShape: 2
+    m_ImpulseShape: 3
     m_CustomImpulseShape:
       serializedVersion: 2
       m_Curve: []
@@ -9741,7 +9771,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.5, y: 0.5, z: 2}
+  m_DefaultVelocity: {x: 0, y: 0.5, z: -1.5}
 --- !u!114 &8798166411247846588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11098,13 +11128,13 @@ GameObject:
   - component: {fileID: 6319386632579999251}
   - component: {fileID: 4090443011834120264}
   - component: {fileID: 499274601923039658}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Weapon_Type_B_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7948829527587271484
 Transform:
   m_ObjectHideFlags: 0
@@ -11227,7 +11257,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.05, y: 0.05, z: 0}
+  m_DefaultVelocity: {x: 0.05, y: -0.05, z: 0}
 --- !u!114 &499274601923039658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11393,13 +11423,13 @@ GameObject:
   - component: {fileID: 882491012964179897}
   - component: {fileID: 9196005774819660590}
   - component: {fileID: 7871400268062431071}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &882491012964179897
 Transform:
   m_ObjectHideFlags: 0
@@ -11708,7 +11738,7 @@ GameObject:
   - component: {fileID: 8827336441993935105}
   - component: {fileID: 660375473663701829}
   - component: {fileID: 7717668962971297755}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Weapon_Type_A_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12456,7 +12486,7 @@ GameObject:
   - component: {fileID: 7933102474293577841}
   - component: {fileID: 3883511343923177781}
   - component: {fileID: 8781645696823523953}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12567,8 +12597,8 @@ MonoBehaviour:
   barrierPrefab: {fileID: 3292751394904765131, guid: 23f6b8aac39c0ec419e15ec5d4f991a5,
     type: 3}
   barrierSpawnPoint: {fileID: 1269817113424734754}
-  acceleration: 10
-  deceleration: 15
+  acceleration: 30
+  deceleration: 30
   hoverHeight: 0.5
   hoverRange: 0.2
   hoverSpeed: 2
@@ -12620,7 +12650,7 @@ GameObject:
   - component: {fileID: 6929333983712570891}
   - component: {fileID: 283571280043431369}
   - component: {fileID: 612423601616271799}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13147,7 +13177,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5a95bf9e23fa1e749a36dcdfb8963e49, type: 2}
+  - {fileID: 2100000, guid: a76f1555ef1cfac4684d6c4180156c33, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15288,7 +15318,7 @@ GameObject:
   - component: {fileID: 3555960968463239463}
   - component: {fileID: 8056503707607726518}
   - component: {fileID: 3191997609837632181}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16517,7 +16547,7 @@ GameObject:
   - component: {fileID: 6773539729574792244}
   - component: {fileID: 7795348296519219949}
   - component: {fileID: 4591260766107002937}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Weapon_Type_B_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16766,13 +16796,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6586911956167523671}
   - component: {fileID: 1099163915502755390}
-  m_Layer: 0
+  - component: {fileID: 4743347594136755630}
+  m_Layer: 8
   m_Name: Heavy_Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6586911956167523671
 Transform:
   m_ObjectHideFlags: 0
@@ -16808,7 +16839,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: cf6e64760f740be4c99cc44ca4b83cef, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -16842,6 +16873,27 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.111579046, y: 0.011627272, z: -0.000000044703484}
     m_Extent: {x: 0.13532542, y: 0.15468572, z: 0.1522418}
   m_DirtyAABB: 0
+--- !u!114 &4743347594136755630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5595167547388417856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57ee0dd864448be4d83c6d646f018b0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 2000
+  partType: 32
+  attackType: 3
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  staticRotation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &5597769987780313000
 GameObject:
   m_ObjectHideFlags: 0
@@ -16981,13 +17033,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4692226889177833419}
   - component: {fileID: 75507082525769662}
-  m_Layer: 0
+  - component: {fileID: 5310259473323542201}
+  m_Layer: 8
   m_Name: Heavy_Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4692226889177833419
 Transform:
   m_ObjectHideFlags: 0
@@ -17024,10 +17077,10 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6899094459978030342, guid: ce526c1c9fb032a44a27647395133367, type: 3}
-  - {fileID: -6712808226183970476, guid: ce526c1c9fb032a44a27647395133367, type: 3}
-  - {fileID: -4805254906022778692, guid: ce526c1c9fb032a44a27647395133367, type: 3}
-  - {fileID: 4689512624233924934, guid: ce526c1c9fb032a44a27647395133367, type: 3}
+  - {fileID: 2100000, guid: 5bc723bfd58fcee47a1f5e30b4034e73, type: 2}
+  - {fileID: 2100000, guid: ed120fb13ac1b0b449cf2e983a4e6ac7, type: 2}
+  - {fileID: 2100000, guid: 3f5a18f89cdcbbb44bef4d39a229ec17, type: 2}
+  - {fileID: 2100000, guid: 1dca80f331c7cc244b0e6e8833945693, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17081,6 +17134,40 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.24827366, y: -0.0000002682209, z: 0.071175784}
     m_Extent: {x: 0.716229, y: 0.7654022, z: 0.98163354}
   m_DirtyAABB: 0
+--- !u!114 &5310259473323542201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5656862155145172352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c26efaa3e327147b5cac29ae732f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 2014
+  partType: 4
+  attackType: 3
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  staticRotation: {x: 0, y: 0, z: -90}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  skillTime: 0.9
+  skillDuration: 4
+  skillCooldown: 12
+  maxSkillCount: 1
+  skillRange: 10
+  skillDamage: 300
+  impactEffectPrefab: {fileID: 2593114353627363549, guid: 572b6b5e5bc599f4eadc61d436e2be3a,
+    type: 3}
+  caterpillarMaterial: {fileID: 2100000, guid: 1dca80f331c7cc244b0e6e8833945693, type: 2}
+  turnMoveSpeed: 60
+  turnRotateSpeed: 20
+  backwardThreshold: -0.6
+  animSpeed: {x: 0, y: 1}
 --- !u!1 &5679917009612922302
 GameObject:
   m_ObjectHideFlags: 0
@@ -17580,7 +17667,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8691355165472062125}
   - component: {fileID: 3338876986717793714}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Heavy_Weapon_Type_B_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17622,7 +17709,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4c54457fbea0e61458d0a27e9e7bfdc3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19156,13 +19243,13 @@ GameObject:
   - component: {fileID: 5506863317177226687}
   - component: {fileID: 6890872151876609740}
   - component: {fileID: 6559179729170403908}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5506863317177226687
 Transform:
   m_ObjectHideFlags: 0
@@ -19624,7 +19711,7 @@ MonoBehaviour:
   shootBlockMask: 776
   zoomBlockMask: 768
   jumpVelocity: 30
-  rotationSpeed: 10
+  rotationSpeed: 20
   boxSize: {x: 0.2, y: 0.1, z: 0.2}
   gravityScale: 10
   groundLayerMask:
@@ -19753,13 +19840,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7337849484052380514}
   - component: {fileID: 8897169279355813056}
-  m_Layer: 0
+  - component: {fileID: 305407199975581578}
+  m_Layer: 8
   m_Name: Heavy_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7337849484052380514
 Transform:
   m_ObjectHideFlags: 0
@@ -19795,7 +19883,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: a1b5c8b4a4bc42746abe6968bc52d336, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19834,6 +19922,27 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.5503194, y: -0.347807, z: -0.00000031292439}
     m_Extent: {x: 0.6355348, y: 0.28812432, z: 0.194516}
   m_DirtyAABB: 0
+--- !u!114 &305407199975581578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6537306131871655555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 950b2aa0555b2154da42bec785f0f25b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 2000
+  partType: 16
+  attackType: 3
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  staticRotation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &6555187810617227663
 GameObject:
   m_ObjectHideFlags: 0
@@ -22408,7 +22517,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2651475683202358729}
   - component: {fileID: 1109767561763760007}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Weapon_Type_B_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24047,7 +24156,7 @@ GameObject:
   - component: {fileID: 7628288083547023267}
   - component: {fileID: 8562975770886135133}
   - component: {fileID: 5967596492761680866}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic_Arm_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24711,7 +24820,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8669990362777143464}
   - component: {fileID: 1001099187365293171}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Heavy_Weapon_Type_A_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24753,7 +24862,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 41bdf05698d7f79438fe45a48cae0874, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -26824,13 +26933,15 @@ GameObject:
   m_Component:
   - component: {fileID: 3949580699863688750}
   - component: {fileID: 3263173182874469968}
-  m_Layer: 0
+  - component: {fileID: 4991473347270972809}
+  - component: {fileID: 7609522006403282760}
+  m_Layer: 8
   m_Name: Heavy_Weapon_Type_B_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3949580699863688750
 Transform:
   m_ObjectHideFlags: 0
@@ -26866,7 +26977,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4c54457fbea0e61458d0a27e9e7bfdc3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -26900,6 +27011,99 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.2917485, y: -0.039645165, z: -0.121679544}
     m_Extent: {x: 0.36637577, y: 0.15899792, z: 0.14120466}
   m_DirtyAABB: 0
+--- !u!114 &4991473347270972809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8190897801200141357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0.1, y: 0.1, z: 0}
+--- !u!114 &7609522006403282760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8190897801200141357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a77ec5a05092e543b6ffe91c4c283f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 2011
+  partType: 2
+  attackType: 3
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  staticRotation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  bulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
+    type: 3}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
+  maxAmmo: 5
+  reloadTime: 0.1
+  muzzleFlashEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 100002, guid: c471ad8b46167e24582c34d4b5d5539f, type: 3}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 2
+  muzzleFlashPrefab: {fileID: 100000, guid: f91877145e39e3c4ba64812eb1fb9773, type: 3}
+  pelletCount: 12
+  denseSpreadAngle: 5
+  denseRange: 10
+  spreadAngle: 25
+  maxRange: 20
 --- !u!1 &8196507050459586191
 GameObject:
   m_ObjectHideFlags: 0
@@ -27312,7 +27516,7 @@ GameObject:
   - component: {fileID: 4972770680030948661}
   - component: {fileID: 2352769458451336158}
   - component: {fileID: 3608655437973292850}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27699,13 +27903,13 @@ GameObject:
   - component: {fileID: 825488600200170311}
   - component: {fileID: 8165352640613393385}
   - component: {fileID: 6312126877864074932}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &825488600200170311
 Transform:
   m_ObjectHideFlags: 0
@@ -27810,8 +28014,8 @@ MonoBehaviour:
   jumpEffectPrefab: {fileID: 6976133296840316091, guid: a5161cd459dbc4244992b9cbe6737df6,
     type: 3}
   landingEffectPrefab: {fileID: 100000, guid: a4751d3f155146f4b84da371ff294e56, type: 3}
-  acceleration: 10
-  deceleration: 10
+  acceleration: 25
+  deceleration: 25
   skateSpeed: 5.5
   skateSway: 1.5
   skateRadius: 50
@@ -28618,7 +28822,7 @@ MonoBehaviour:
   baseTransform: {fileID: 0}
   Hips: {fileID: 5996353152152767584}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.9814366
+  finalScaleReference: 0.9814365
   finalScaleReferenceSqrt: 0.1
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -29654,13 +29858,15 @@ GameObject:
   m_Component:
   - component: {fileID: 496946893198526267}
   - component: {fileID: 1964964186405707705}
-  m_Layer: 0
+  - component: {fileID: 2833924049096331305}
+  - component: {fileID: 1398500756383970154}
+  m_Layer: 8
   m_Name: Heavy_Weapon_Type_A_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &496946893198526267
 Transform:
   m_ObjectHideFlags: 0
@@ -29696,7 +29902,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 41bdf05698d7f79438fe45a48cae0874, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29731,6 +29937,95 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.29395038, y: -0.0278119, z: 0.16696027}
     m_Extent: {x: 0.370669, y: 0.19922715, z: 0.10105113}
   m_DirtyAABB: 0
+--- !u!114 &2833924049096331305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8794422784229295014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: -0.1, y: -0.1, z: 0}
+--- !u!114 &1398500756383970154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8794422784229295014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce7710354a0a3444e8d32339a17bae93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 2010
+  partType: 1
+  attackType: 3
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  staticRotation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  bulletPrefab: {fileID: 179992, guid: 87b0eccc2adc29948b134e65a4d45863, type: 3}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
+  maxAmmo: 5
+  reloadTime: 0.1
+  muzzleFlashEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 3
+  recoilY: 5
+  maxYawAngle: 20
+  maxPitchAngle: 10
+  targetRadius: 3
 --- !u!1 &8797289735867249085
 GameObject:
   m_ObjectHideFlags: 0
@@ -30002,13 +30297,13 @@ GameObject:
   - component: {fileID: 1384058787053260692}
   - component: {fileID: 2932107271745941408}
   - component: {fileID: 7863279728206472344}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rapid_Sub_ShoulderUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1384058787053260692
 Transform:
   m_ObjectHideFlags: 0
@@ -30214,7 +30509,7 @@ GameObject:
   m_Component:
   - component: {fileID: 128321191417599085}
   - component: {fileID: 4144661942766763555}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Laser_Weapon_Type_A_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}

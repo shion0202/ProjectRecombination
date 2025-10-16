@@ -159,6 +159,8 @@ public class GoogleSheetLoader : ScriptableObject
             { "range", EStatType.Range },                   // 스킬 사거리
             { "cooldownTime", EStatType.CooldownTime },     // 스킬 쿨타임
             { "animSpeed", EStatType.AnimSpeed },           // 애니메이션 속도
+            { "castTime", EStatType.CastTime},
+            { "desc", EStatType.Description},
             
             // monster2Skill
             { "charId", EStatType.ID},

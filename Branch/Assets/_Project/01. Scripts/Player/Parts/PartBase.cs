@@ -85,14 +85,14 @@ public abstract class PartBase : MonoBehaviour
         IDamagable monster = target.GetComponent<IDamagable>();
         if (monster != null)
         {
-            monster.ApplyDamage(targetMask, (_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
+            monster.ApplyDamage((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient), targetMask);
         }
         else
         {
             monster = target.transform.GetComponentInParent<IDamagable>();
             if (monster != null)
             {
-                monster.ApplyDamage(targetMask, (_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient));
+                monster.ApplyDamage((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient), targetMask);
             }
         }
     }

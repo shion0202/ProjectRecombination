@@ -136,7 +136,7 @@ Material:
     - _ParticleInstancing: 1
     - _RimLight: 1
     - _RimScale: 10
-    - _RimStrength: 15
+    - _RimStrength: 10
     - _RotateAngle: 0
     - _SecondColor: 1
     - _SmoothnessTextureChannel: 0
