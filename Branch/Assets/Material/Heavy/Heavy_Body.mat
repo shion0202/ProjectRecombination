@@ -160,7 +160,7 @@ Material:
     m_Colors:
     - _AnimSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 2.6785967, g: 3.4415908, b: 3.2128983, a: 1}
+    - _EmissionColor: {r: 1.6488694, g: 2.1185472, b: 1.9777706, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}
     - _RimColor: {r: 1, g: 1, b: 1, a: 0}

@@ -131,7 +131,7 @@ Material:
     - _MatCap: 1
     - _MatCapLighting: 1
     - _MatCapShadowMask: 0
-    - _MatcapAlpha: 0.058
+    - _MatcapAlpha: 0.2
     - _MatcapBlur: 0
     - _MatcapShadowMask: 0
     - _Metallic: 0

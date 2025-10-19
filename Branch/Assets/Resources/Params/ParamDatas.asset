@@ -92,6 +92,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: Player
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -104,6 +111,77 @@ MonoBehaviour:
         value:
           statType: 1
           stringValue: androidGuard
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 2
+        value:
+          statType: 2
+          stringValue: 
+          value: 200
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 15
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 4
+        value:
+          statType: 4
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 5
+        value:
+          statType: 5
+          stringValue: 
+          value: 7
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 6
+        value:
+          statType: 6
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 7
+        value:
+          statType: 7
+          stringValue: 
+          value: 12
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 8
+        value:
+          statType: 8
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC77C\uBC18 \uC6D0\uAC70\uB9AC \uBAAC\uC2A4\uD130"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 1003
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: androidGuardAce
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -156,68 +234,11 @@ MonoBehaviour:
           value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-    - statEntries:
-      - key: 0
+      - key: 22
         value:
-          statType: 0
-          stringValue: 
-          value: 1003
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 1
-        value:
-          statType: 1
-          stringValue: androidGuardAce
+          statType: 22
+          stringValue: "\uC77C\uBC18 \uC6D0\uAC70\uB9AC \uBAAC\uC2A4\uD130 \uBC14\uB9AC\uC5D0\uC774\uC158"
           value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 2
-        value:
-          statType: 2
-          stringValue: 
-          value: 300
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 3
-        value:
-          statType: 3
-          stringValue: 
-          value: 15
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 4
-        value:
-          statType: 4
-          stringValue: 
-          value: 4
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 5
-        value:
-          statType: 5
-          stringValue: 
-          value: 7
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 6
-        value:
-          statType: 6
-          stringValue: 
-          value: 0
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 7
-        value:
-          statType: 7
-          stringValue: 
-          value: 12
-          minValue: -3.4028235e+38
-          maxValue: 3.4028235e+38
-      - key: 8
-        value:
-          statType: 8
-          stringValue: 
-          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -239,7 +260,7 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 650
+          value: 450
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
@@ -284,6 +305,13 @@ MonoBehaviour:
           value: 3
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC77C\uBC18 \uADFC\uAC70\uB9AC \uBAAC\uC2A4\uD130"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -303,7 +331,7 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 750
+          value: 550
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
@@ -348,6 +376,13 @@ MonoBehaviour:
           value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC77C\uBC18 \uADFC\uAC70\uB9AC \uBAAC\uC2A4\uD130 \uBC14\uB9AC\uC5D0\uC774\uC158"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -367,7 +402,7 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 225
+          value: 250
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
@@ -410,6 +445,13 @@ MonoBehaviour:
           statType: 8
           stringValue: 
           value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC77C\uBC18 \uBE44\uD589 \uADFC\uAC70\uB9AC \uBAAC\uC2A4\uD130"
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -476,6 +518,14 @@ MonoBehaviour:
           value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC77C\uBC18 \uBE44\uD589 \uADFC\uAC70\uB9AC \uBAAC\uC2A4\uD130
+            \uBC14\uB9AC\uC5D0\uC774\uC158"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -495,7 +545,7 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 7000
+          value: 8000
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
@@ -540,6 +590,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC911\uAC04 \uBCF4\uC2A4 \uBAAC\uC2A4\uD130"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -559,7 +616,7 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 6000
+          value: 8000
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
@@ -604,6 +661,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB358\uC804 \uBCF4\uC2A4 \uBAAC\uC2A4\uD130 1 \uD398\uC774\uC988"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -623,7 +687,7 @@ MonoBehaviour:
         value:
           statType: 2
           stringValue: 
-          value: 11000
+          value: 15000
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 3
@@ -644,14 +708,14 @@ MonoBehaviour:
         value:
           statType: 5
           stringValue: 
-          value: 20
+          value: 13
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 6
         value:
           statType: 6
           stringValue: 
-          value: 5
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 7
@@ -665,6 +729,13 @@ MonoBehaviour:
         value:
           statType: 8
           stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB358\uC804 \uBCF4\uC2A4 \uBAAC\uC2A4\uD130 2 \uD398\uC774\uC988"
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -748,6 +819,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uAE30\uBCF8 \uC18C\uCCB4: \uC2A4\uD0AC \uC5C6\uC74C"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -823,6 +901,13 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB4F1&\uC5B4\uAE68 - \uB808\uC774\uC800 \uD30C\uCE20"
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -904,6 +989,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB4F1&\uC5B4\uAE68 - \uB798\uD53C\uB4DC \uD30C\uCE20"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -979,6 +1071,13 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB4F1&\uC5B4\uAE68 - \uD5E4\uBE44 \uD30C\uCE20"
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -1060,6 +1159,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uAE30\uBCF8 \uC18C\uCCB4"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -1136,6 +1242,13 @@ MonoBehaviour:
           statType: 16
           stringValue: 
           value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uD314 - \uB808\uC774\uC800 \uD30C\uCE20 01"
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -1216,6 +1329,13 @@ MonoBehaviour:
           value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uD314 - \uB808\uC774\uC800 \uD30C\uCE20 02"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -1291,6 +1411,14 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uD314 - \uB798\uD53C\uB4DC \uD30C\uCE20 01: \uAC1C\uD2C0\uB9C1
+            \uAC74"
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -1372,6 +1500,14 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uD314 - \uB798\uD53C\uB4DC \uD30C\uCE20 02: \uBC14\uC6B4\uC2A4
+            \uAC74"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -1448,6 +1584,13 @@ MonoBehaviour:
           statType: 16
           stringValue: 
           value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uD314 - \uD5E4\uBE44 \uD30C\uCE20 01: \uB85C\uCF13"
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -1528,6 +1671,13 @@ MonoBehaviour:
           value: 2
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uD314 - \uD5E4\uBE44 \uD30C\uCE20 02: \uC0B0\uD0C4\uCD1D"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -1606,6 +1756,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uAE30\uBCF8 \uC18C\uCCB4"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -1680,6 +1837,13 @@ MonoBehaviour:
       - key: 16
         value:
           statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -1762,6 +1926,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
@@ -1840,6 +2011,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
   - sheetKey: MonsterSkill
     rows:
     - statEntries:
@@ -1882,7 +2060,14 @@ MonoBehaviour:
         value:
           statType: 18
           stringValue: 
-          value: 1.45
+          value: 1.8
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 19
@@ -1896,6 +2081,13 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB2E8\uBC1C (\uAE30\uBCF8\uACF5\uACA9)"
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -1942,6 +2134,13 @@ MonoBehaviour:
           value: 5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1.65
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -1953,6 +2152,13 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC5F0\uBC1C \uC0AC\uACA9"
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -1999,6 +2205,13 @@ MonoBehaviour:
           value: 5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1.65
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2011,6 +2224,13 @@ MonoBehaviour:
           statType: 16
           stringValue: 
           value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC911\uB825\uD0C4 \uB2E8\uBC1C \uC0AC\uACA9"
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -2056,6 +2276,13 @@ MonoBehaviour:
           value: 2
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0.9
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2068,6 +2295,15 @@ MonoBehaviour:
           statType: 16
           stringValue: 
           value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uD314 \uD718\uB450\uB974\uAE30 - \uCE90\uB9AD\uD130\uAC00
+            \uC6D0\uAC70\uB9AC \uBAAC\uC2A4\uD130 \uD53C\uBD07 1.5\uBBF8\uD130 \uBC18\uACBD
+            \uB0B4\uC5D0 \uC704\uCE58\uD560 \uACBD\uC6B0 \uC6B0\uC120 \uC2DC\uC804"
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -2113,6 +2349,13 @@ MonoBehaviour:
           value: 2.45
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2123,6 +2366,13 @@ MonoBehaviour:
       - key: 16
         value:
           statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -2170,6 +2420,13 @@ MonoBehaviour:
           value: 1.1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0.85
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2182,6 +2439,13 @@ MonoBehaviour:
           statType: 16
           stringValue: 
           value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB784\uD504 \uAE30\uBCF8 \uACF5\uACA9"
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -2227,6 +2491,13 @@ MonoBehaviour:
           value: 7
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2239,6 +2510,13 @@ MonoBehaviour:
           statType: 16
           stringValue: 
           value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC544\uBAAC 1 \uD398\uC774\uC988 \uC2A4\uD0AC: \uB3CC\uC9C4"
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
     - statEntries:
@@ -2284,6 +2562,13 @@ MonoBehaviour:
           value: 15
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1.7
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2295,6 +2580,13 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC544\uBAAC 1 \uD398\uC774\uC988 \uC2A4\uD0AC: \uB09C\uC0AC"
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -2341,6 +2633,13 @@ MonoBehaviour:
           value: 4
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0.7
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2352,6 +2651,14 @@ MonoBehaviour:
         value:
           statType: 16
           stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC544\uBAAC 1 \uD398\uC774\uC988 \uC2A4\uD0AC: \uD154\uB808\uD3EC\uD2B8::
+            \uCE90\uB9AD\uD130 \uC8FC\uBCC0\uC73C\uB85C \uBB34\uC791\uC704 \uC774\uB3D9"
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
@@ -2398,6 +2705,13 @@ MonoBehaviour:
           value: 12
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1.4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2412,12 +2726,530 @@ MonoBehaviour:
           value: 5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC544\uBAAC 1 \uD398\uC774\uC988 \uC2A4\uD0AC: \uC601\uD63C
+            \uAD6C\uCCB4"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
           value: 4011
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: Dash
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 30
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 80
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 7
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC544\uBAAC 2 \uD398\uC774\uC988 \uC2A4\uD0AC: \uC9C8\uC8FC
+            :: 1 \uD398\uC774\uC988 \uC2A4\uD0AC: \uB3CC\uC9C4\uACFC \uB3D9\uC77C"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4012
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: WingSwipe
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 75
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1.2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\"\uC544\uBAAC 2 \uD398\uC774\uC988 \uC2A4\uD0AC: \uB0A0\uAC1C
+            \uD718\uB450\uB974\uAE30: 5\uBBF8\uD130 \uC774\uB0B4\uC5D0 \uC704\uCE58\uD55C
+            \uCE90\uB9AD\uD130\uC5D0\uAC8C \uD55C\uCABD \uB0A0\uAC1C\uB97C \uD718\uB450\uB984.
+            \uC88C"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4013
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: SoulSphere
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 35
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 60
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 12
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1.4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC544\uBAAC 2 \uD398\uC774\uC988 \uC2A4\uD0AC: \uC601\uD63C
+            \uAD6C\uCCB4"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4014
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: SoulOrb
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 2
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 50
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 100
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 10
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1.5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\"\uC544\uBAAC 2 \uD398\uC774\uC988 \uC2A4\uD0AC: \uC601\uD63C
+            \uBCF4\uC8FC:: \uCE90\uC2A4\uD305 \uC2DC\uAC04\uB3D9\uC548 \uB0A0\uAC1C\uCABD
+            \uAE30\uB465\uC5D0\uC11C \uCC28\uC9D5 \uD6C4"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4015
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: SoulAbsorption
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 4
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 200
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 20
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0.5
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uC544\uBAAC 2 \uD398\uC774\uC988 \uC2A4\uD0AC: \uC601\uD63C
+            \uD761\uC218:: \uCE90\uC2A4\uD305 \uC2DC\uAC04\uB3D9\uC548 \uBCC4\uB3C4\uC758
+            \uCCB4\uB825 \uAC12\uC744 \uAC00\uC9C4 \uBCF4\uD638\uB9C9\uC744 \uD65C\uC131\uD654\uD558\uC5EC
+            \uCE90\uB9AD\uD130\uB97C \uD5A5\uD574 \uBE60\uB974\uAC8C \uC811\uADFC\uD558\uC5EC
+            \uCCB4\uB825 \uD761\uC218."
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4016
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: LockDown
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 100
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 400
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 25
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 7
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\"\uC544\uBAAC 2 \uD398\uC774\uC988 \uC2A4\uD0AC: \uB77D\uB2E4\uC6B4::
+            \uBA38\uB9AC \uC704\uB85C \uBCC4\uB3C4\uC758 \uCCB4\uB825 \uAC12\uC744
+            \uAC00\uC9C4 \uAD6C\uCCB4\uB97C \uC0DD\uC131"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4017
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 1
+        value:
+          statType: 1
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 17
+        value:
+          statType: 17
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 20
+        value:
+          statType: 20
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 3
+        value:
+          statType: 3
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 18
+        value:
+          statType: 18
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 19
+        value:
+          statType: 19
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 16
+        value:
+          statType: 16
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
+    - statEntries:
+      - key: 0
+        value:
+          statType: 0
+          stringValue: 
+          value: 4018
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2455,6 +3287,13 @@ MonoBehaviour:
           value: 3.7
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 1.7
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2469,12 +3308,19 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4012
+          value: 4019
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2512,6 +3358,13 @@ MonoBehaviour:
           value: 4.5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 2.3
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2526,12 +3379,19 @@ MonoBehaviour:
           value: 1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB9DD\uB098\uB2C8 \uCC28\uC9D5 \uB808\uC774\uC800 \uC2A4\uD0AC"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4013
+          value: 4020
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2569,6 +3429,13 @@ MonoBehaviour:
           value: 12
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 3.1
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2583,12 +3450,20 @@ MonoBehaviour:
           value: 5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: "\uB9DD\uB098\uB2C8 \uB4F1 \uBD80\uC704 \uBBF8\uC0AC\uC77C
+            \uAD11\uC5ED \uC2A4\uD0AC"
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4014
+          value: 4021
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2626,6 +3501,13 @@ MonoBehaviour:
           value: 7.5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2640,12 +3522,19 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4015
+          value: 4022
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2683,6 +3572,13 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2697,12 +3593,19 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4016
+          value: 4023
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2740,6 +3643,13 @@ MonoBehaviour:
           value: 1.9
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2754,12 +3664,19 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4017
+          value: 4024
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2797,6 +3714,13 @@ MonoBehaviour:
           value: 16
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2811,12 +3735,19 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4018
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2854,6 +3785,13 @@ MonoBehaviour:
           value: 3.1
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2868,12 +3806,19 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4019
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2911,6 +3856,13 @@ MonoBehaviour:
           value: 60
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2925,12 +3877,19 @@ MonoBehaviour:
           value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
     - statEntries:
       - key: 0
         value:
           statType: 0
           stringValue: 
-          value: 4020
+          value: 0
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 1
@@ -2968,6 +3927,13 @@ MonoBehaviour:
           value: 7.5
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 21
+        value:
+          statType: 21
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
       - key: 19
         value:
           statType: 19
@@ -2982,6 +3948,13 @@ MonoBehaviour:
           value: 8
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
+      - key: 22
+        value:
+          statType: 22
+          stringValue: 
+          value: 0
+          minValue: -3.4028235e+38
+          maxValue: 3.4028235e+38
   - sheetKey: Monster2Skill
     rows:
     - statEntries:
@@ -2992,9 +3965,9 @@ MonoBehaviour:
           value: 1002
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 4001 4002
           value: 0
           minValue: -3.4028235e+38
@@ -3007,9 +3980,9 @@ MonoBehaviour:
           value: 1003
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 4001 4003
           value: 0
           minValue: -3.4028235e+38
@@ -3022,9 +3995,9 @@ MonoBehaviour:
           value: 1004
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 
           value: 4006
           minValue: -3.4028235e+38
@@ -3037,9 +4010,9 @@ MonoBehaviour:
           value: 1005
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -3052,9 +4025,9 @@ MonoBehaviour:
           value: 1006
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -3067,9 +4040,9 @@ MonoBehaviour:
           value: 1007
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -3082,9 +4055,9 @@ MonoBehaviour:
           value: 1008
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -3097,9 +4070,9 @@ MonoBehaviour:
           value: 1009
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 
           value: 0
           minValue: -3.4028235e+38
@@ -3112,9 +4085,9 @@ MonoBehaviour:
           value: 1010
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
-      - key: 21
+      - key: 23
         value:
-          statType: 21
+          statType: 23
           stringValue: 
           value: 0
           minValue: -3.4028235e+38

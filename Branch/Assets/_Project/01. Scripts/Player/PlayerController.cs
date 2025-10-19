@@ -795,7 +795,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
         else
         {
-            _currentPlayerState &= newState;
+            _currentPlayerState &= ~(newState);
         }
     }
     #endregion
