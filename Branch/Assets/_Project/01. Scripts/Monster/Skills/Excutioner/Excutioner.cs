@@ -1,3 +1,4 @@
+using FIMSpace.FProceduralAnimation;
 using Monster.AI.Blackboard;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ using UnityEngine.AI;
 
 public class Excutioner : MonoBehaviour
 {
+    private float slerpSpeed = 1.0f;
+
     [Header("Whip Strike")]
     [SerializeField] private GameObject attackRangePrefab;      // 부채꼴 공격 범위 시각화 프리팹
     [SerializeField] private Vector3 attackRangeOffset;
@@ -21,6 +24,27 @@ public class Excutioner : MonoBehaviour
     [SerializeField] private Transform shootPosition;
     [SerializeField] private AnimationClip shootClip;
 
+    [Header("Laser")]
+    [SerializeField] private GameObject laserPrefab;
+    [SerializeField] private Vector3 laserOffset;
+
+    [Header("Leg Strike")]
+    [SerializeField] private AnimationClip legClip;
+    [SerializeField] private Vector3 legCollisionScale;
+    [SerializeField] private Vector3 legCollisionOffset;
+    [SerializeField] private LegsAnimator legAnimator;
+
+    [Header("Launch")]
+    public Transform missileOrigin;          // 미사일 발사 위치 (등 부위)
+    [SerializeField] private GameObject missilePrefab;         // 미사일 프리팹
+    public GameObject aoeFieldPrefab;        // 원형 장판 프리팹
+    public int aoeFieldCount = 5;             // 생성할 장판 개수
+    public float aoeRadius = 3f;              // 장판 반경 (3x3 원형)
+    public float aoeDuration = 2f;            // 장판 지속 시간
+    public float missileFallSpeed = 10f;     // 미사일 낙하 속도
+    private GameObject spawnedMissile;
+    private GameObject[] aoeFields;
+
     [Header("임시 값")]
     [SerializeField] private bool _isActivate = false;
     [SerializeField] Blackboard blackboard;
@@ -28,10 +52,157 @@ public class Excutioner : MonoBehaviour
     private Animator _animator;
     private PlayerController _target;
 
+    private IEnumerator ExecutionerLaunch(Blackboard data)
+    {
+        // 1. 미사일 생성 및 발사 애니메이션 트리거 (별도 애니메이션 함수 호출 가능)
+        spawnedMissile = Utils.Instantiate(missilePrefab, missileOrigin.position, Quaternion.identity);
+
+        // 미사일 위로 발사
+        Vector3 targetPosition = missileOrigin.position + Vector3.up * 50.0f;
+        float travelTime = 0.5f;
+        float elapsed = 0f;
+        while (elapsed < travelTime)
+        {
+            spawnedMissile.transform.position = Vector3.Lerp(missileOrigin.position, targetPosition, elapsed / travelTime);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 2. 플레이어 주변에 장판 N개 원형 배치
+        aoeFields = new GameObject[aoeFieldCount];
+        for (int i = 0; i < aoeFieldCount; i++)
+        {
+            Vector3 randomOffset = Random.insideUnitCircle * aoeRadius;
+            Vector3 spawnPos = new Vector3(_target.transform.position.x + randomOffset.x, _target.transform.position.y, _target.transform.position.z + randomOffset.y);
+            aoeFields[i] = Instantiate(aoeFieldPrefab, spawnPos, Quaternion.identity);
+
+            // 장판 크기 조절 등 추가 작업 가능
+        }
+
+        // 3. 2초간 대기 (장판 유지)
+        yield return new WaitForSeconds(aoeDuration);
+
+        // 4. 미사일 낙하 및 데미지 적용
+        elapsed = 0f;
+        Vector3 fallStartPos = spawnedMissile.transform.position;
+        Vector3 fallEndPos = _target.transform.position; // 플레이어 위치 혹은 중앙 범위 위치 지정 가능
+
+        while (elapsed < travelTime)
+        {
+            spawnedMissile.transform.position = Vector3.Lerp(fallStartPos, fallEndPos, elapsed / travelTime);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        spawnedMissile.transform.position = fallEndPos;
+
+        // 장판 오브젝트 정리
+        for (int i = 0; i < aoeFieldCount; i++)
+        {
+            if (aoeFields[i] != null)
+            {
+                Utils.Destroy(aoeFields[i]);
+            }
+        }
+
+        if (spawnedMissile != null)
+        {
+            Utils.Destroy(spawnedMissile);
+        }
+    }
+
+    private IEnumerator ExecutionerLegStrike(Blackboard data)
+    {
+        float elapsed = 0f;
+        float castingTime = 1.0f;
+        while (elapsed < castingTime)
+        {
+            Vector3 lookDir = _target.transform.position - data.Agent.transform.position;
+            lookDir.y = 0;
+            if (lookDir.sqrMagnitude > 0.001f)
+            {
+                Quaternion now = data.Agent.transform.rotation;
+                Quaternion target = Quaternion.LookRotation(lookDir);
+                data.Agent.transform.rotation = Quaternion.Slerp(now, target, Time.deltaTime * slerpSpeed * 3.0f);
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        _meleeCollisionObject = Utils.Instantiate(meleeCollisionPrefab, data.Agent.transform);
+        _meleeCollisionObject.transform.localPosition = Vector3.zero;
+        _meleeCollisionObject.transform.localRotation = Quaternion.identity;
+
+        var meleeComp = _meleeCollisionObject.GetComponent<AmonMeleeCollision>();
+        if (meleeComp != null)
+        {
+            meleeComp.Init(100.0f, legCollisionScale, legCollisionOffset);
+        }
+
+        legAnimator.MainGlueBlend = 0.0f;
+        data.AnimatorParameterSetter.Animator.SetBool("isLegStrike", true);
+
+        // 공격 판정 오브젝트 지속 시간 대기 후 파괴
+        // To-do: 애니메이션 추가 후, 애니메이션 재생 + 시간 만큼 유지되도록 수정
+        yield return new WaitForSeconds(legClip.length / 2);
+
+        data.AnimatorParameterSetter.Animator.SetBool("isLegStrike", false);
+        Utils.Destroy(_meleeCollisionObject);
+        legAnimator.MainGlueBlend = 100.0f;
+    }
+
+    private IEnumerator ExecutionerLaser(Blackboard data)
+    {
+        float elapsed = 0f;
+
+        // 1. 캐스팅 중 레이저 본이 느리게 플레이어를 따라감
+        float castTime = 2.0f;
+        while (elapsed < castTime)
+        {
+            Vector3 lookDir = _target.transform.position - data.Agent.transform.position;
+            lookDir.y = 0;
+            if (lookDir.sqrMagnitude > 0.001f)
+            {
+                Quaternion now = data.Agent.transform.rotation;
+                Quaternion target = Quaternion.LookRotation(lookDir);
+                data.Agent.transform.rotation = Quaternion.Slerp(now, target, Time.deltaTime * slerpSpeed);
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 2. 캐스팅 완료 후, 현재 방향으로 레이저 발사
+        // 발사체가 전방으로 이동하도록 별도 스크립트(Projectile)에서 forward 방향 이동 처리
+        GameObject laser = Instantiate(laserPrefab, laserOffset, Quaternion.identity);
+        LineRenderer currentLaser = laser.GetComponent<LineRenderer>();
+        currentLaser.transform.position = data.Agent.transform.position + laserOffset;
+
+        float duration = 4.0f;
+        while (elapsed < duration)
+        {
+            Vector3 lookDir = _target.transform.position - data.Agent.transform.position;
+            currentLaser.transform.rotation = Quaternion.LookRotation(lookDir);
+            lookDir.y = 0;
+            if (lookDir.sqrMagnitude > 0.001f)
+            {
+                Quaternion now = data.Agent.transform.rotation;
+                Quaternion target = Quaternion.LookRotation(lookDir);
+                data.Agent.transform.rotation = Quaternion.Slerp(now, target, Time.deltaTime * slerpSpeed);
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        Utils.Destroy(laser);
+    }
+
     private IEnumerator ExecutionCriticalOneShoot(Blackboard data)
     {
         // 1. 팔 들기(캐스팅) 애니메이션 재생
         //data.AnimatorParameterSetter.Animator.SetTrigger("CastReady");
+        // 팔 IK 켜기/끄기
 
         float elapsed = 0f;
         float castingTime = 3.0f;
@@ -44,7 +215,6 @@ public class Excutioner : MonoBehaviour
             {
                 Quaternion now = data.Agent.transform.rotation;
                 Quaternion target = Quaternion.LookRotation(lookDir);
-                float slerpSpeed = 5.0f;
                 data.Agent.transform.rotation = Quaternion.Slerp(now, target, Time.deltaTime * slerpSpeed);
             }
 
@@ -74,18 +244,19 @@ public class Excutioner : MonoBehaviour
     private IEnumerator ExcutionWhipStrike(Blackboard data)
     {
         // 1. 부채꼴 공격 범위 표시 (예: 몬스터 앞에 표시)
-        _attackRangeInstance = Utils.Instantiate(attackRangePrefab, data.Agent.transform);
-        _attackRangeInstance.transform.localPosition = attackRangeOffset;
-        _attackRangeInstance.transform.localRotation = Quaternion.identity;
+        Vector3 targetDir = _target.transform.position - data.Agent.transform.position;
+        _attackRangeInstance = Utils.Instantiate(attackRangePrefab, data.Agent.transform.position, Quaternion.identity);
+        _attackRangeInstance.transform.localPosition += targetDir.normalized * attackRangeOffset.z;
+        _attackRangeInstance.transform.localRotation = Quaternion.LookRotation(targetDir);
 
         // 캐스팅 시간 동안 유지
         float elapsed = 0f;
-        float slerpSpeed = 2.0f;
         float castingTime = 3.0f;
+        Vector3 targetPos = _target.transform.position;
         while (elapsed < castingTime)
         {
             // 타겟까지의 방향 계산 (Y축만 회전: 수평 회전)
-            Vector3 lookDir = _target.transform.position - data.Agent.transform.position;
+            Vector3 lookDir = targetPos - data.Agent.transform.position;
             lookDir.y = 0;
             if (lookDir.sqrMagnitude > 0.001f)
             {
@@ -95,9 +266,6 @@ public class Excutioner : MonoBehaviour
                 // Slerp로 부드럽게 회전
                 data.Agent.transform.rotation = Quaternion.Slerp(current, target, Time.deltaTime * slerpSpeed);
             }
-
-            // 부채꼴 공격 표시 오브젝트도 agent 전방을 따라간다면 여기서 같이 회전
-            //_attackRangeInstance.transform.rotation = Quaternion.LookRotation(data.Agent.transform.forward);
 
             elapsed += Time.deltaTime;
             yield return null;
@@ -153,6 +321,21 @@ public class Excutioner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             StartCoroutine(ExecutionCriticalOneShoot(blackboard));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            StartCoroutine(ExecutionerLaser(blackboard));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            StartCoroutine(ExecutionerLegStrike(blackboard));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            StartCoroutine(ExecutionerLaunch(blackboard));
         }
     }
     #endregion

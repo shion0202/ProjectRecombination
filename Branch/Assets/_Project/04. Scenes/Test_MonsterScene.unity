@@ -720,7 +720,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 55ce9d67d290e0541a35a06d741c4c34,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 25
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 55ce9d67d290e0541a35a06d741c4c34,
         type: 3}
@@ -920,6 +920,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 55ce9d67d290e0541a35a06d741c4c34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 458370122}
     - targetCorrespondingSourceObject: {fileID: -2696647250303822754, guid: 55ce9d67d290e0541a35a06d741c4c34,
         type: 3}
       insertIndex: -1
@@ -1560,6 +1564,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 183164333}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &458370121
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 458370122}
+  m_Layer: 18
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &458370122
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458370121}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 6.92, z: 5.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 746614566}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &463797512 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5908925221267904255, guid: 55ce9d67d290e0541a35a06d741c4c34,
@@ -3013,18 +3048,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackRangePrefab: {fileID: 5441038580396050504, guid: 3f266889dfc1dc54f97c5b8ba5792605,
     type: 3}
-  attackRangeOffset: {x: 0, y: 0, z: 9}
+  attackRangeOffset: {x: 0, y: 0, z: 15}
   meleeCollisionPrefab: {fileID: 4070606023755049407, guid: 9738e5f867811414da87d99f8ce56023,
     type: 3}
-  collisionScale: {x: 15, y: 2, z: 5}
-  collisionOffset: {x: 0, y: 1, z: 9}
-  attackClip: {fileID: 5686553645976202475, guid: 73a45b4492680294599c249ed97976f1,
+  collisionScale: {x: 10, y: 2, z: 20}
+  collisionOffset: {x: 0, y: 1, z: 15}
+  attackClip: {fileID: 5686553645976202475, guid: be1c6f5d20d2c764e99316278b0a0132,
     type: 3}
   bulletPrefab: {fileID: 364168584227083269, guid: 70b77c7cced3b43418580c7560152aa0,
     type: 3}
   shootPosition: {fileID: 480999129}
-  shootClip: {fileID: 7766876665380483674, guid: a55ef3203dfff4a4390940d55eb4316c,
+  shootClip: {fileID: 7766876665380483674, guid: 0ee6bc03be94b294bb682fda382c3293,
     type: 3}
+  laserPrefab: {fileID: 1962479828434100, guid: a8fc40961f0745142a828fd724d7e5bd,
+    type: 3}
+  laserOffset: {x: 0, y: 6.6, z: 5}
+  legClip: {fileID: 3107565900998991493, guid: 99e03c774b45530448c930154a1f7a87, type: 3}
+  legCollisionScale: {x: 9, y: 2, z: 5}
+  legCollisionOffset: {x: 0, y: 1, z: 5}
+  legAnimator: {fileID: 746614565}
+  missileOrigin: {fileID: 458370122}
+  missilePrefab: {fileID: 123604, guid: 63e1958f59f7e124a90d4a650e52332f, type: 3}
+  aoeFieldPrefab: {fileID: 1072249392129668219, guid: dd164922c571bc94380a25e05baed80e,
+    type: 3}
+  aoeFieldCount: 10
+  aoeRadius: 10
+  aoeDuration: 2
+  missileFallSpeed: 10
   _isActivate: 0
   blackboard: {fileID: 746614560}
 --- !u!114 &746614565
@@ -3636,11 +3686,11 @@ MonoBehaviour:
   AnimationFloorLevel: 0.001
   _Editor_Foldout_Setup_LegsList: 1
   _Editor_EnsureCount: 0
-  _Editor_OnValidateTrigger: 0
+  _Editor_OnValidateTrigger: 1
   _EditorAllowAutoUpdateFeetParams: 1
-  _EditorCategory: 0
+  _EditorCategory: 1
   _EditorSetupCategory: 0
-  _EditorMotionCategory: 1
+  _EditorMotionCategory: 2
   _EditorExtraCategory: 0
   setupPose:
     MainHipsPose:
@@ -3690,6 +3740,12 @@ MonoBehaviour:
     type: 2}
   _Editor_LegHelperModule: {fileID: 11400000, guid: 0645fbea8059aec47aa6ae9d2c93c1d4,
     type: 2}
+--- !u!4 &746614566 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 55ce9d67d290e0541a35a06d741c4c34,
+    type: 3}
+  m_PrefabInstance: {fileID: 183164333}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &755404876 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -905270245147476530, guid: 55ce9d67d290e0541a35a06d741c4c34,
@@ -6850,10 +6906,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1178513573252441854, guid: 7bcd1d22746f24c44a0624a7e13723dc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5066967751120659555, guid: 7bcd1d22746f24c44a0624a7e13723dc,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2094756577}
   m_SourcePrefab: {fileID: 100100000, guid: 7bcd1d22746f24c44a0624a7e13723dc, type: 3}
 --- !u!1 &1693549569
 GameObject:
@@ -7749,6 +7810,27 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 183164333}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2094756572 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5066967751120659555, guid: 7bcd1d22746f24c44a0624a7e13723dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 1687663930}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2094756577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094756572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32cfd482b7a04c44a8efa74f263eed7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 650136967}
+  offset: {x: 0, y: 20, z: 0}
+  smoothSpeed: 0.125
 --- !u!4 &2098269557 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5208485999629375403, guid: 55ce9d67d290e0541a35a06d741c4c34,
