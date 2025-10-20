@@ -27,6 +27,7 @@ public class Excutioner : MonoBehaviour
     [Header("Laser")]
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private Vector3 laserOffset;
+    private Transform _shootPoint;
 
     [Header("Leg Strike")]
     [SerializeField] private AnimationClip legClip;
@@ -83,17 +84,7 @@ public class Excutioner : MonoBehaviour
         yield return new WaitForSeconds(aoeDuration);
 
         // 4. 미사일 낙하 및 데미지 적용
-        elapsed = 0f;
-        Vector3 fallStartPos = spawnedMissile.transform.position;
-        Vector3 fallEndPos = _target.transform.position; // 플레이어 위치 혹은 중앙 범위 위치 지정 가능
-
-        while (elapsed < travelTime)
-        {
-            spawnedMissile.transform.position = Vector3.Lerp(fallStartPos, fallEndPos, elapsed / travelTime);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        spawnedMissile.transform.position = fallEndPos;
+        
 
         // 장판 오브젝트 정리
         for (int i = 0; i < aoeFieldCount; i++)
@@ -144,7 +135,7 @@ public class Excutioner : MonoBehaviour
 
         // 공격 판정 오브젝트 지속 시간 대기 후 파괴
         // To-do: 애니메이션 추가 후, 애니메이션 재생 + 시간 만큼 유지되도록 수정
-        yield return new WaitForSeconds(legClip.length / 2);
+        yield return new WaitForSeconds(legClip.length);
 
         data.AnimatorParameterSetter.Animator.SetBool("isLegStrike", false);
         Utils.Destroy(_meleeCollisionObject);
@@ -172,17 +163,32 @@ public class Excutioner : MonoBehaviour
             yield return null;
         }
 
-        // 2. 캐스팅 완료 후, 현재 방향으로 레이저 발사
-        // 발사체가 전방으로 이동하도록 별도 스크립트(Projectile)에서 forward 방향 이동 처리
-        GameObject laser = Instantiate(laserPrefab, laserOffset, Quaternion.identity);
-        LineRenderer currentLaser = laser.GetComponent<LineRenderer>();
-        currentLaser.transform.position = data.Agent.transform.position + laserOffset;
+        /*
+         * To -do: 현재 TargetPos를 정확히 추적하고 있어 패턴을 피할 수 없는 상태
+         * 이전에 플레이어가 이동할 경우 서서히 플레이어를 추적하는 Auto target point에 대한 얘기가 나왔었는데,
+         * Monster Manager 등에서 해당 Transform 정보를 관리하도록 하고 몬스터가 조준할 Target Point를 해당 오브젝트로 설정하는 건 어떤지?
+         * 추후 얘기해보아야 하는데 까먹을 수 있어서 일단 주석으로도 작성해두겠음
+         */
+
+        // 2. 캐스팅 완료 후, 타겟 방향으로 레이저 발사
+        GameObject shootObject = Utils.Instantiate(new GameObject());
+        _shootPoint = shootObject.transform;
+        _shootPoint.transform.SetParent(data.Agent.transform);
+        _shootPoint.transform.localPosition = laserOffset;
+        _shootPoint.transform.localRotation = Quaternion.identity;
+
+        GameObject laser = Utils.Instantiate(laserPrefab, _shootPoint);
+        laser.transform.localPosition = Vector3.zero;
+        laser.transform.localRotation = Quaternion.identity;
+
+        data.AnimatorParameterSetter.Animator.SetBool("isLaser", true);
 
         float duration = 4.0f;
         while (elapsed < duration)
         {
+            laser.transform.rotation = Quaternion.LookRotation(_target.transform.position - _shootPoint.position);
+
             Vector3 lookDir = _target.transform.position - data.Agent.transform.position;
-            currentLaser.transform.rotation = Quaternion.LookRotation(lookDir);
             lookDir.y = 0;
             if (lookDir.sqrMagnitude > 0.001f)
             {
@@ -195,17 +201,20 @@ public class Excutioner : MonoBehaviour
             yield return null;
         }
 
+        data.AnimatorParameterSetter.Animator.SetBool("isLaser", false);
         Utils.Destroy(laser);
+        Utils.Destroy(shootObject);
+        _shootPoint = null;
     }
 
     private IEnumerator ExecutionCriticalOneShoot(Blackboard data)
     {
+        // To-do: 팔 IK 적용 필요 (Animation Rigging Package의 Multi-Aim Constraint 컴포넌트)
         // 1. 팔 들기(캐스팅) 애니메이션 재생
-        //data.AnimatorParameterSetter.Animator.SetTrigger("CastReady");
-        // 팔 IK 켜기/끄기
+        data.AnimatorParameterSetter.Animator.SetTrigger("shootCastingTrigger");
 
         float elapsed = 0f;
-        float castingTime = 3.0f;
+        float castingTime = 5.0f;
         while (elapsed < castingTime)
         {
             // 캐스팅 중에도 플레이어 방향으로 회전 가능하게 하려면 이 부분에서 회전
@@ -222,7 +231,7 @@ public class Excutioner : MonoBehaviour
             yield return null;
         }
 
-        // 2. 팔 내리기(공격) 애니메이션 재생
+        // 2. 사격 애니메이션 재생
         data.AnimatorParameterSetter.Animator.SetBool("isShoot", true);
 
         // 3. 불렛(원거리 공격체) 생성 및 발사
@@ -237,7 +246,6 @@ public class Excutioner : MonoBehaviour
         }
 
         yield return new WaitForSeconds(shootClip.length);
-
         data.AnimatorParameterSetter.Animator.SetBool("isShoot", false);
     }
 
