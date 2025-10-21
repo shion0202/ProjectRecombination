@@ -385,5 +385,36 @@ namespace _Project.Scripts.VisualScripting.Editor
             Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
             Selection.activeObject = go;
         }
+
+        [MenuItem("GameObject/VisualScripting/Output/PlaySound", false, 10)]
+        private static void CreatePlaySoundAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewPlaySound");
+            go.AddComponent<PlaySound>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
+
+        [MenuItem("GameObject/VisualScripting/Output/PlaySound_Simple", false, 10)]
+        private static void CreatePlaySoundSimpleAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewPlaySoundSimple");
+            go.AddComponent<PlaySoundSimple>();
+            
+            AudioSource source = go.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            source.spatialBlend = 1.0f;
+            source.rolloffMode = AudioRolloffMode.Linear;
+            source.minDistance = 1f;
+            source.maxDistance = 50f;
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
     }
 }
