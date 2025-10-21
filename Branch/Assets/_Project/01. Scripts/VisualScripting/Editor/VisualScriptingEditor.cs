@@ -416,5 +416,29 @@ namespace _Project.Scripts.VisualScripting.Editor
             Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
             Selection.activeObject = go;
         }
+
+        [MenuItem("GameObject/VisualScripting/Output/SetObjectText", false, 10)]
+        private static void CreateSetObjectTextAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewSetObjectText");
+            go.AddComponent<SetObjectText>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
+
+        [MenuItem("GameObject/VisualScripting/Output/ToggleInteractionHUD", false, 10)]
+        private static void CreateToggleInteractionHUDAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewToggleInteractionHUD");
+            go.AddComponent<ToggleInteractionHUD>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
     }
 }

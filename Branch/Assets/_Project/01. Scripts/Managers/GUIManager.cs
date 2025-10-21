@@ -42,6 +42,9 @@ namespace Managers
         [SerializeField] private GameObject interactionUI;
         [SerializeField] private TextMeshProUGUI interactionText;
 
+        [Header("Object UI")]
+        [SerializeField] private TextMeshProUGUI objectText;
+
         [Header("Radial UI")]
         // 꽤 급하게 작업하였으므로 리팩토링 필요
         [SerializeField] private GameObject radialUI;
@@ -65,6 +68,12 @@ namespace Managers
         {
             get => interactionText;
             set => interactionText = value;
+        }
+
+        public TextMeshProUGUI ObjectText
+        {
+            get => objectText;
+            set => objectText = value;
         }
 
         public void ToggleCrosshead()
@@ -320,6 +329,11 @@ namespace Managers
                     }
                     break;
             }
+        }
+
+        public void SetObjectText(string text)
+        {
+            objectText.text = text;
         }
 
         #region Fade In/Out
