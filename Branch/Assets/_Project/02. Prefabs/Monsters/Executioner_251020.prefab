@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 5753950803480881586}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 6.74, z: 4.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -479,8 +479,7 @@ MonoBehaviour:
   collisionOffset: {x: 0, y: 1, z: 15}
   attackClip: {fileID: 5686553645976202475, guid: 53b443f341aeaa2449d9fb7add3c7cc9,
     type: 3}
-  bulletPrefab: {fileID: 364168584227083269, guid: 70b77c7cced3b43418580c7560152aa0,
-    type: 3}
+  bulletPrefab: {fileID: 196044, guid: fbd797a2936860d429c9bba90eeed6c7, type: 3}
   shootPosition: {fileID: 8532726382927988032}
   shootClip: {fileID: 7766876665380483674, guid: 9732f8057adfa8040a6cf12145755157,
     type: 3}
@@ -495,7 +494,7 @@ MonoBehaviour:
   missilePrefab: {fileID: 123604, guid: 63e1958f59f7e124a90d4a650e52332f, type: 3}
   aoeFieldPrefab: {fileID: 1072249392129668219, guid: dd164922c571bc94380a25e05baed80e,
     type: 3}
-  aoeFieldCount: 10
+  missileCount: 10
   aoeRadius: 10
   aoeDuration: 2
   missileFallSpeed: 10

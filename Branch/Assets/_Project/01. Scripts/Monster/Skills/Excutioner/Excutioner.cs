@@ -39,12 +39,16 @@ public class Excutioner : MonoBehaviour
     public Transform missileOrigin;          // 미사일 발사 위치 (등 부위)
     [SerializeField] private GameObject missilePrefab;         // 미사일 프리팹
     public GameObject aoeFieldPrefab;        // 원형 장판 프리팹
-    public int aoeFieldCount = 5;             // 생성할 장판 개수
+    [SerializeField] private int missileCount;
     public float aoeRadius = 3f;              // 장판 반경 (3x3 원형)
-    public float aoeDuration = 2f;            // 장판 지속 시간
-    public float missileFallSpeed = 10f;     // 미사일 낙하 속도
-    private GameObject spawnedMissile;
     private GameObject[] aoeFields;
+    private GameObject[] activeMissiles;
+    private float missileRiseHeight = 30.0f;
+    private float missileRiseTime = 2.0f;
+    private float missileDropHeight = 30.0f;
+    private float missileDropTime = 1.0f;
+    [SerializeField] private GameObject missileExplosionPrefab;
+    public float missileInterval = 0.1f;
 
     [Header("임시 값")]
     [SerializeField] private bool _isActivate = false;
@@ -55,50 +59,109 @@ public class Excutioner : MonoBehaviour
 
     private IEnumerator ExecutionerLaunch(Blackboard data)
     {
-        // 1. 미사일 생성 및 발사 애니메이션 트리거 (별도 애니메이션 함수 호출 가능)
-        spawnedMissile = Utils.Instantiate(missilePrefab, missileOrigin.position, Quaternion.identity);
-
-        // 미사일 위로 발사
-        Vector3 targetPosition = missileOrigin.position + Vector3.up * 50.0f;
-        float travelTime = 0.5f;
-        float elapsed = 0f;
-        while (elapsed < travelTime)
+        // 1. 상승 연출용 미사일 여러 개 생성 및 발사
+        data.AnimatorParameterSetter.Animator.SetBool("isMissile", true);
+        for (int i = 0; i < missileCount; i++)
         {
-            spawnedMissile.transform.position = Vector3.Lerp(missileOrigin.position, targetPosition, elapsed / travelTime);
+            GameObject spawnedMissile = Instantiate(missilePrefab, missileOrigin.position, Quaternion.identity);
+            StartCoroutine(RaiseMissile(spawnedMissile));
+            yield return new WaitForSeconds(missileInterval);
+        }
+
+        // 2. 플레이어 주변에 공격 장판 생성
+        aoeFields = new GameObject[missileCount];
+        Vector3 spawnPos = new Vector3(
+                _target.transform.position.x,
+                _target.transform.position.y + 0.1f,
+                _target.transform.position.z
+            );
+        aoeFields[0] = Utils.Instantiate(aoeFieldPrefab, spawnPos, Quaternion.identity);
+        for (int i = 1; i < missileCount; i++)
+        {
+            Vector2 randomOffset = Random.insideUnitCircle * aoeRadius;
+            spawnPos = new Vector3(
+                _target.transform.position.x + randomOffset.x,
+                _target.transform.position.y + 0.1f,
+                _target.transform.position.z + randomOffset.y
+            );
+            aoeFields[i] = Utils.Instantiate(aoeFieldPrefab, spawnPos, Quaternion.identity);
+        }
+
+        // 3. 캐스팅 시간 대기
+        data.AnimatorParameterSetter.Animator.SetBool("isMissile", false);
+        float castTime = 2.0f;
+        yield return new WaitForSeconds(castTime);
+
+        // 4. 장판 위치에 낙하 미사일 생성 및 낙하 처리
+        activeMissiles = new GameObject[missileCount];
+        Vector3 missileSpawnPos = data.Agent.transform.position + Vector3.up * missileDropHeight;
+        for (int i = 0; i < missileCount; i++)
+        {
+            if (aoeFields[i] == null) continue;
+            GameObject fallMissile = Utils.Instantiate(missilePrefab, missileSpawnPos, Quaternion.identity);
+            activeMissiles[i] = fallMissile;
+            StartCoroutine(DropMissile(fallMissile, aoeFields[i].transform.position));
+            yield return new WaitForSeconds(missileInterval);
+        }
+
+        // 6. 장판 제거
+        yield return new WaitForSeconds(missileDropTime);
+
+        foreach (GameObject aoe in aoeFields)
+        {
+            if (aoe != null) Utils.Destroy(aoe);
+        }
+    }
+
+    private IEnumerator RaiseMissile(GameObject missile)
+    {
+        // 기본 상승 방향
+        Vector3 baseDir = Vector3.up;
+
+        // 랜덤 각도(예: 최대 ±15도 정도로 퍼뜨림)
+        float maxAngle = 15f;
+
+        // Vector3.up을 기준으로 랜덤 회전 생성 (X/Z축 기준으로 살짝 기울이기)
+        Vector3 randomAxis = Random.onUnitSphere;
+        Quaternion randomRot = Quaternion.AngleAxis(Random.Range(-maxAngle, maxAngle), randomAxis);
+
+        // 회전된 방향 적용
+        Vector3 randomDir = randomRot * baseDir;
+
+        // 목표 지점: 랜덤 방향으로 일정 높이 상승
+        Vector3 start = missile.transform.position;
+        Vector3 target = start + randomDir * missileRiseHeight;
+        missile.transform.LookAt(target);
+
+        float elapsed = 0f;
+        while (elapsed < missileRiseTime)
+        {
+            missile.transform.position = Vector3.Lerp(start, target, elapsed / missileRiseTime);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // 2. 플레이어 주변에 장판 N개 원형 배치
-        aoeFields = new GameObject[aoeFieldCount];
-        for (int i = 0; i < aoeFieldCount; i++)
-        {
-            Vector3 randomOffset = Random.insideUnitCircle * aoeRadius;
-            Vector3 spawnPos = new Vector3(_target.transform.position.x + randomOffset.x, _target.transform.position.y, _target.transform.position.z + randomOffset.y);
-            aoeFields[i] = Instantiate(aoeFieldPrefab, spawnPos, Quaternion.identity);
+        Utils.Destroy(missile);
+    }
 
-            // 장판 크기 조절 등 추가 작업 가능
+    private IEnumerator DropMissile(GameObject missile, Vector3 hitPoint)
+    {
+        Vector3 start = missile.transform.position;
+        Vector3 end = hitPoint;
+        float elapsed = 0f;
+        missile.transform.LookAt(end);
+
+        while (elapsed < missileDropTime)
+        {
+            missile.transform.position = Vector3.Lerp(start, end, elapsed / missileDropTime);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
-        // 3. 2초간 대기 (장판 유지)
-        yield return new WaitForSeconds(aoeDuration);
-
-        // 4. 미사일 낙하 및 데미지 적용
-        
-
-        // 장판 오브젝트 정리
-        for (int i = 0; i < aoeFieldCount; i++)
-        {
-            if (aoeFields[i] != null)
-            {
-                Utils.Destroy(aoeFields[i]);
-            }
-        }
-
-        if (spawnedMissile != null)
-        {
-            Utils.Destroy(spawnedMissile);
-        }
+        // 여기서 폭발 이펙트나 데미지 처리 가능
+        Utils.Destroy(Utils.Instantiate(missileExplosionPrefab, end, Quaternion.identity), 2.0f);
+        Debug.Log("미사일 낙하 완료: " + hitPoint);
+        Utils.Destroy(missile);
     }
 
     private IEnumerator ExecutionerLegStrike(Blackboard data)
