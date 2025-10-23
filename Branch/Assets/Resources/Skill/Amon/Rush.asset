@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillID: 4007
   skillName: Rush
-  skillDescription: "\uC544\uBAAC 1\uD398\uC774\uC988 \uC2A4\uD0AC: \uB3CC\uC9C4"
+  skillDescription: "\uC544\uBAAC 1 \uD398\uC774\uC988 \uC2A4\uD0AC: \uB3CC\uC9C4"
   damage: 60
   range: 30
   cooldown: 7
   castTime: 1
   animSpeed: 1
-  rushSpeed: 100
+  rushSpeed: 0

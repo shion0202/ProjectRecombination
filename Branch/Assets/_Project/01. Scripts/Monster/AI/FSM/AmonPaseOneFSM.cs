@@ -1,4 +1,5 @@
 using _Test.Skills;
+using Managers;
 using UnityEngine;
 
 namespace Monster.AI.FSM
@@ -30,7 +31,7 @@ namespace Monster.AI.FSM
             
             if (blackboard.IsAnySkillRunning) 
             {
-                Debug.Log(blackboard.IsAnySkillRunning);
+                // Debug.Log(blackboard.IsAnySkillRunning);
                 return; // 스킬이 실행 중이면 상태 전환을 하지 않음
             }
             
@@ -119,13 +120,27 @@ namespace Monster.AI.FSM
                     blackboard.Skills[3].Execute(blackboard);
                     break;
                 case "Death":
-                    // 사망 처리 로직은 별도의 메서드에서 처리
+                    ActDeath();
                     break;
                 default:
                     // 알 수 없는 상태에 대한 처리 (예: 로그 출력)
                     Debug.LogWarning($"Unknown state: {state}");
                     break;
             }
+        }
+
+        private void ActDeath()
+        {
+            // 사망 처리 로직
+            blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
+            blackboard.NavMeshAgent.isStopped = true;
+            blackboard.AgentRigidbody.velocity = Vector3.zero;
+            blackboard.AgentCollider.enabled = false;
+            blackboard.AgentRigidbody.isKinematic = true;
+            isEnabled = false; // FSM 비활성화
+            
+            // 2페이즈로 전환
+            DungeonManager.Instance.AmonSecondPhase();
         }
 
         protected override void EnterState(string stateName)

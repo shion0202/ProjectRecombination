@@ -85,12 +85,12 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 4df0694c5392fc94eae1677a8ceacf30,
         type: 3}
       propertyPath: m_Name
-      value: executioner
+      value: Executioner
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4df0694c5392fc94eae1677a8ceacf30,
         type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4df0694c5392fc94eae1677a8ceacf30,
         type: 3}
@@ -177,6 +177,10 @@ MonoBehaviour:
   - StatName: Range
     StatValue: 0
   - StatName: IdArray
+    StatValue: 0
+  - StatName: CastTime
+    StatValue: 0
+  - StatName: Description
     StatValue: 0
 --- !u!54 &-7610202489210408408
 Rigidbody:

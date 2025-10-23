@@ -41,6 +41,7 @@ namespace Monster.AI.Blackboard
         [SerializeField] private GameObject amonBody;
         [SerializeField] private GameObject amonShield;
         [SerializeField] private GameObject amonEnergyBall;
+        [SerializeField] private GameObject amonDeathModel;
         
         #endregion
         
@@ -139,6 +140,8 @@ namespace Monster.AI.Blackboard
         public AmonEnergyBall AmonEnergyBall => amonEnergyBall.GetComponent<AmonEnergyBall>();
 
         public Dictionary<string, object> Map => _map;
+        
+        public GameObject AmonDeathModel => amonDeathModel;
 
         #endregion
 

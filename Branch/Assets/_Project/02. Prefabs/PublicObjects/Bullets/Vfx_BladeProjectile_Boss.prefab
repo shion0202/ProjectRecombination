@@ -9933,7 +9933,7 @@ MonoBehaviour:
   lifeTime: 5
   targetMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   muzzleParticlePrefab: {fileID: 0}
   impactParticle: {fileID: 0}
   explosionEffectPrefab: {fileID: 0}

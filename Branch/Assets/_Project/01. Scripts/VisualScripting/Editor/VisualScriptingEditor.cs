@@ -417,6 +417,18 @@ namespace _Project.Scripts.VisualScripting.Editor
             Selection.activeObject = go;
         }
 
+        [MenuItem("GameObject/VisualScripting/Output/StopSound", false, 10)]
+        private static void CreateStopSoundAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewStopSound");
+            go.AddComponent<StopSound>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
+
         [MenuItem("GameObject/VisualScripting/Output/SetObjectText", false, 10)]
         private static void CreateSetObjectTextAsset(MenuCommand menuCommand)
         {
@@ -434,6 +446,42 @@ namespace _Project.Scripts.VisualScripting.Editor
         {
             GameObject go = new GameObject("NewToggleInteractionHUD");
             go.AddComponent<ToggleInteractionHUD>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
+
+        [MenuItem("GameObject/VisualScripting/Output/ToggleUI", false, 10)]
+        private static void CreateToggleUIAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewToggleUI");
+            go.AddComponent<ToggleUI>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
+
+        [MenuItem("GameObject/VisualScripting/Output/ReplaceMaterial", false, 10)]
+        private static void CreateReplaceMaterialAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewReplaceMaterial");
+            go.AddComponent<ReplaceMaterial>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
+
+        [MenuItem("GameObject/VisualScripting/Output/ReplaceLayer", false, 10)]
+        private static void CreateReplaceLayerAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewReplaceLayer");
+            go.AddComponent<ReplaceLayer>();
 
             GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
 

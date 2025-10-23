@@ -82,16 +82,11 @@ public class AmonP1Skill : MonoBehaviour
         {
             if (blackboard.Skills[3].CurrentState is not Skill.SkillState.isReady) return;
             
-            // StartCoroutine(blackboard.Skills[3].useSkill);
-            // blackboard.Skills[3].UseSkill(blackboard);
-            // StartCoroutine(blackboard.Skills[3].skillData.Activate(blackboard));
-            // blackboard.ApplyCooldown(blackboard.Skills[3]);
             blackboard.Skills[3].Execute(blackboard);
         }
         else if (state.Contains("Idle"))
         {
-            // Debug.Log("Idle 상태");
-            blackboard.AgentRigidbody.velocity = Vector3.zero;
+            
         }
     }
 }

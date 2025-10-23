@@ -28,6 +28,7 @@ public class ShoulderLaser : PartBaseShoulder
     private float _timer = 0.05f;
     private float _currentTimer = 0.0f;
     private CinemachineBasicMultiChannelPerlin noise;
+    private readonly Collider[] _hitResults = new Collider[20];
 
     protected void Start()
     {
@@ -43,8 +44,7 @@ public class ShoulderLaser : PartBaseShoulder
         _currentTimer = 0.0f;
 
         Vector3 origin = transform.position + (_owner.transform.right * beamOffset.x + _owner.transform.up * beamOffset.y + _owner.transform.forward * beamOffset.z);
-        RaycastHit[] hits;
-        Vector3 targetPoint = GetTargetPoint(origin, out hits);
+        Vector3 targetPoint = GetTargetPoint(origin);
 
         ShootBeamInDir(origin, targetPoint);
     }
@@ -74,7 +74,7 @@ public class ShoulderLaser : PartBaseShoulder
         }
     }
 
-    protected Vector3 GetTargetPoint(Vector3 origin, out RaycastHit[] hits)
+    protected Vector3 GetTargetPoint(Vector3 origin)
     {
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -90,22 +90,22 @@ public class ShoulderLaser : PartBaseShoulder
         }
         Vector3 targetDirection = targetPoint != Vector3.zero ? (targetPoint - origin).normalized : ray.direction;
 
-        // 제한된 범위 내 모든 충돌 정보 수집
-        hits = Physics.CapsuleCastAll(origin, origin, beamRadius, targetDirection, maxDistance, targetMask);
-
         // 적 데미지 처리
-        foreach (var hit in hits)
+        int hitCount = Physics.OverlapCapsuleNonAlloc(
+            origin,
+            origin + targetDirection * maxDistance,
+            beamRadius,
+            _hitResults,
+            targetMask
+        );
+        for (int i = 0; i < hitCount; i++)
         {
-            if (!hit.transform.TryGetComponent<IDamagable>(out var monster))
-            {
-                monster = hit.transform.GetComponentInParent<IDamagable>();
-            }
-            if (monster != null)
+            var collider = _hitResults[i];
+            if (collider.TryGetComponent<IDamagable>(out var monster))
             {
                 monster.ApplyDamage(beamDamage * _timer, targetMask, _timer, 0.0f);
+                Utils.Destroy(Utils.Instantiate(bulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
             }
-
-            Utils.Destroy(Utils.Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);
         }
 
         //DrawCapsule(origin, targetPoint, beamRadius, Color.yellow, 0.5f);

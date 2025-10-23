@@ -92,7 +92,7 @@ public class Missile : Bullet
         }
         if (impactParticle)
         {
-            CreateImpaceEffect(parent);
+            CreateImpaceEffect();
         }
     }
 

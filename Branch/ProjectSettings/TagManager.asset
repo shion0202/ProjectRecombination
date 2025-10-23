@@ -35,9 +35,9 @@ TagManager:
   - Bullet
   - Platform
   - Minimap
+  - Wall
   - Enemy
-  - 
-  - 
+  - Interaction
   - 
   - 
   - 

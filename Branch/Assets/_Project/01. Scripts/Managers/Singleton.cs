@@ -22,5 +22,10 @@ namespace Managers
                 return _instance;
             }
         }
+
+        public static bool IsAliveInstance()
+        {
+            return _instance != null;
+        }
     }
 }

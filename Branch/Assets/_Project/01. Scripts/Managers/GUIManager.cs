@@ -9,6 +9,9 @@ namespace Managers
 {
     public class GUIManager : Singleton<GUIManager>
     {
+        [Header("UI")]
+        [SerializeField] private GameObject GUI;
+
         [Header("Image Settings")] [SerializeField]
         private Image crosshead; // 조준점 이미지         
 
@@ -45,6 +48,13 @@ namespace Managers
         [Header("Object UI")]
         [SerializeField] private TextMeshProUGUI objectText;
 
+        [Header("For Base Parts")]
+        [SerializeField] private GameObject shoulderSkillImage;
+        [SerializeField] private GameObject rightArmRadialImage;
+
+        [Header("Buff UI")]
+        [SerializeField] private GameObject buffImage;
+
         [Header("Radial UI")]
         // 꽤 급하게 작업하였으므로 리팩토링 필요
         [SerializeField] private GameObject radialUI;
@@ -55,8 +65,15 @@ namespace Managers
         [SerializeField] private List<Button> rapidParts = new();
         [SerializeField] private List<Button> heavyParts = new();
         private int _selectedIndex = -1;
+        private int _selectedPartIndex = -1;
         private Color originalColor = Color.white;
         private Color selectedColor = new Color(0.09411765f, 0.1411765f, 0.1411765f);
+
+        public GameObject HUD
+        {
+            get => GUI;
+            set => GUI = value;
+        }
 
         public GameObject InteractionUI
         {
@@ -74,6 +91,30 @@ namespace Managers
         {
             get => objectText;
             set => objectText = value;
+        }
+
+        public GameObject ShoulderIcon
+        {
+            get => shoulderSkillImage;
+            set => shoulderSkillImage = value;
+        }
+
+        public GameObject RightArmRadial
+        {
+            get => rightArmRadialImage;
+            set => rightArmRadialImage = value;
+        }
+
+        public GameObject BuffIcon
+        {
+            get => buffImage;
+            set => buffImage = value;
+        }
+
+        public int SelectedPartIndex
+        {
+            get => _selectedPartIndex;
+            set => _selectedIndex = value;
         }
 
         public void ToggleCrosshead()
@@ -198,6 +239,7 @@ namespace Managers
                 partIcons[_selectedIndex].color = originalColor;
             }
             _selectedIndex = -1;
+            _selectedPartIndex = -1;
             ToggleBasePartButton(false);
         }
 
@@ -222,6 +264,13 @@ namespace Managers
             {
                 ToggleBasePartButton(false);
             }
+        }
+
+        public void UnselectPartPosition(int type)
+        {
+            selectedCircles[type].gameObject.SetActive(false);
+            partIcons[type].color = originalColor;
+            ToggleBasePartButton(false);
         }
 
         public void SelectShoulderPartType(int attackType)

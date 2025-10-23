@@ -90,34 +90,35 @@ namespace Monster.AI.FSM
             
             // 플레이어와의 거리 검사
             float distance = Vector3.Distance(transform.position, blackboard.Target.transform.position);
-            if (distance <= blackboard.MaxDetectionRange || blackboard.CurrentHealth < blackboard.MaxHealth)
+            // if (distance <= blackboard.MaxDetectionRange || blackboard.CurrentHealth < blackboard.MaxHealth)
+            // {
+            //     // 플레이어가 인지 범위 내에 있으나 최소 사거리 밖에 있는 경우 추격 상태로 전환
+            if (distance > blackboard.MinDetectionRange)
             {
-                // 플레이어가 인지 범위 내에 있으나 최소 사거리 밖에 있는 경우 추격 상태로 전환
-                if (distance > blackboard.MinDetectionRange)
-                {
-                    ChangeState("Chase");
-                }
-                else
-                {
-                    ChangeState("Idle");
-                }
-                return;
-            }
-            
-            // Manager로 부터 주변에 몬스터가 전투와 관련된 상태인지 확인
-            GameObject[] monsters = MonsterManager.Instance.GetBattleMonsters();
-            foreach (var monster in monsters)
-            {
-                // 자신이 아닌 몬스터만 검사
-                if (monster == gameObject) continue;
-
-                // 인지 범위 내에 있는지 검사
-                float dist = Vector3.Distance(transform.position, monster.transform.position);
-                if (dist > blackboard.MaxDetectionRange) continue;
-
                 ChangeState("Chase");
                 return;
             }
+            //     else
+            //     {
+            //         ChangeState("Idle");
+            //     }
+            //     return;
+            // }
+            
+            // Manager로 부터 주변에 몬스터가 전투와 관련된 상태인지 확인
+            // GameObject[] monsters = MonsterManager.Instance.GetBattleMonsters();
+            // foreach (var monster in monsters)
+            // {
+            //     // 자신이 아닌 몬스터만 검사
+            //     if (monster == gameObject) continue;
+            //
+            //     // 인지 범위 내에 있는지 검사
+            //     float dist = Vector3.Distance(transform.position, monster.transform.position);
+            //     if (dist > blackboard.MaxDetectionRange) continue;
+            //
+            //     ChangeState("Chase");
+            //     return;
+            // }
 
             if (blackboard.PatrolInfo.wayPoints is { Length: > 0 })
             {

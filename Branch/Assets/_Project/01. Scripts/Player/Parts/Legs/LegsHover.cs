@@ -30,7 +30,8 @@ public class LegsHover : PartBaseLegs
     {
         base.Awake();
 
-        _partModifiers.Add(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, 0.7f, this));
+        _partModifiers.Add(new 
+            (EStatType.WalkSpeed, EStackType.PercentMul, 0.7f, this));
         _partModifiers.Add(new StatModifier(EStatType.DamageReductionRate, EStackType.PercentMul, 0.7f, this));
 
         _legsAnimType = EAnimationType.Hover;

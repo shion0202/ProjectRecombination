@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private RigBuilder rigBuilder;
     [SerializeField] private LegsAnimator legsAnimator;
     [SerializeField] private CharacterController characterController;
+    [SerializeField] private CinemachineImpulseSource impulseSource;
 
     [Header("Scripts")]
     [SerializeField] private CharacterStat stats;
@@ -165,6 +166,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             characterController = GetComponentInChildren<CharacterController>();
         }
+
+        impulseSource = GetComponent<CinemachineImpulseSource>();
 
         stats = GetComponent<CharacterStat>();
         inventory = GetComponent<Inventory>();
@@ -377,6 +380,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnRadialMenu(InputAction.CallbackContext context)
     {
+        // 특정 상황에서 키 입력이 불가능하도록 설정
+
         if (context.started)
         {
             // UI 활성화 시 커서 보이기, 자유롭게
@@ -667,6 +672,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             //}
 
             stats.CurrentHealth -= damage;
+
+            float damageRatio = damage / stats.MaxHealth;
+            _followCamera.ApplyShake(impulseSource, damageRatio);
         }
         else
         {

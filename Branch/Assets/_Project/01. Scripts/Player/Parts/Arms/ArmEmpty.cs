@@ -11,6 +11,19 @@ public class ArmEmpty : PartBaseArm
         _isAnimating = false;
     }
 
+    private void OnEnable()
+    {
+        Managers.GUIManager.Instance.RightArmRadial.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            Managers.GUIManager.Instance.RightArmRadial.SetActive(true);
+        }
+    }
+
     public override void UseAbility()
     {
         // 경★아무것도안함★축

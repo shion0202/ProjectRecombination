@@ -1180,7 +1180,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e3b332ca420e00c498c2a12fdb436051, type: 2}
+  - {fileID: 2100000, guid: 8b8a80869cbec1647afc758a2d32a777, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1423,7 +1423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4831244279255076990
 Transform:
   m_ObjectHideFlags: 0
@@ -1459,7 +1459,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2831cb18b4db6d9438488389c550c2f4, type: 2}
+  - {fileID: 2100000, guid: f4c5e37f01fb1dd4aa7b2a50cb21bd72, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1508,7 +1508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2004
   partType: 8
-  attackType: 3
+  attackType: 8
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -2754,7 +2754,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 22d22b42bb9a56f4a85e21f96acea89a, type: 2}
+  - {fileID: 2100000, guid: 0ac24ab69c09ff1459871f68ce9b10ba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3763,7 +3763,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 32
-  attackType: 1
+  attackType: 2
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -3887,7 +3887,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 22d22b42bb9a56f4a85e21f96acea89a, type: 2}
+  - {fileID: 2100000, guid: 0ac24ab69c09ff1459871f68ce9b10ba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3989,7 +3989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2008
   partType: 1
-  attackType: 2
+  attackType: 4
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -5555,7 +5555,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2814558966215782191
 Transform:
   m_ObjectHideFlags: 0
@@ -5591,7 +5591,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
+  - {fileID: 2100000, guid: 2f8b9e110e6994e439b31ead93fe3f20, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5647,7 +5647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2012
   partType: 4
-  attackType: 0
+  attackType: 1
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -5778,7 +5778,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a76f1555ef1cfac4684d6c4180156c33, type: 2}
+  - {fileID: 2100000, guid: a9a0007b82a996748be0dd2232ac988b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6022,7 +6022,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2150283058259853184
 Transform:
   m_ObjectHideFlags: 0
@@ -6105,7 +6105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 32
-  attackType: 0
+  attackType: 1
   meshType: 1
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -6695,7 +6695,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8205890881684327763
 Transform:
   m_ObjectHideFlags: 0
@@ -6731,7 +6731,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
+  - {fileID: 2100000, guid: 2f8b9e110e6994e439b31ead93fe3f20, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6782,7 +6782,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2001
   partType: 8
-  attackType: 0
+  attackType: 1
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -7094,7 +7094,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8508221105109368884
 Transform:
   m_ObjectHideFlags: 0
@@ -7130,7 +7130,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
+  - {fileID: 2100000, guid: 2f8b9e110e6994e439b31ead93fe3f20, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7233,7 +7233,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: -0.01, y: -0.01, z: 0}
+  m_DefaultVelocity: {x: -0.01, y: 0.01, z: 0}
 --- !u!114 &8940899229870552292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7248,7 +7248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2005
   partType: 1
-  attackType: 0
+  attackType: 1
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -8064,7 +8064,7 @@ MonoBehaviour:
   baseTransform: {fileID: 0}
   Hips: {fileID: 1771228319092322557}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.97680306
+  finalScaleReference: 0.9768037
   finalScaleReferenceSqrt: 0.1
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -9771,7 +9771,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0, y: 0.5, z: -1.5}
+  m_DefaultVelocity: {x: 0, y: -0.5, z: -1.5}
 --- !u!114 &8798166411247846588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9786,7 +9786,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2003
   partType: 8
-  attackType: 2
+  attackType: 4
   meshType: 0
   staticOffset: {x: 0, y: 1.6, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -11170,7 +11170,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e3b332ca420e00c498c2a12fdb436051, type: 2}
+  - {fileID: 2100000, guid: 8b8a80869cbec1647afc758a2d32a777, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11257,7 +11257,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0.05, y: -0.05, z: 0}
+  m_DefaultVelocity: {x: -0.05, y: -0.05, z: 0}
 --- !u!114 &499274601923039658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11272,7 +11272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2009
   partType: 2
-  attackType: 2
+  attackType: 4
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -11514,7 +11514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 16
-  attackType: 2
+  attackType: 4
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -11884,7 +11884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2006
   partType: 1
-  attackType: 1
+  attackType: 2
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -12581,7 +12581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2015
   partType: 4
-  attackType: 1
+  attackType: 2
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -12656,7 +12656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6929333983712570891
 Transform:
   m_ObjectHideFlags: 0
@@ -12744,7 +12744,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 16
-  attackType: 0
+  attackType: 1
   meshType: 1
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -15416,7 +15416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 16
-  attackType: 1
+  attackType: 2
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -16589,7 +16589,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8b5e9442aed1d5e498ea69143b33b25d, type: 2}
+  - {fileID: 2100000, guid: 38cc60e9b803ff6449184a26b896a797, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -16691,7 +16691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2007
   partType: 2
-  attackType: 1
+  attackType: 2
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -16803,7 +16803,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6586911956167523671
 Transform:
   m_ObjectHideFlags: 0
@@ -16839,7 +16839,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cf6e64760f740be4c99cc44ca4b83cef, type: 2}
+  - {fileID: 2100000, guid: e53f2b3d6b5759a489c174b1d61b055b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -16887,7 +16887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 32
-  attackType: 3
+  attackType: 8
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -17034,13 +17034,14 @@ GameObject:
   - component: {fileID: 4692226889177833419}
   - component: {fileID: 75507082525769662}
   - component: {fileID: 5310259473323542201}
+  - component: {fileID: 2439263247558648671}
   m_Layer: 8
   m_Name: Heavy_Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4692226889177833419
 Transform:
   m_ObjectHideFlags: 0
@@ -17148,7 +17149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2014
   partType: 4
-  attackType: 3
+  attackType: 8
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: -90}
@@ -17168,6 +17169,59 @@ MonoBehaviour:
   turnRotateSpeed: 20
   backwardThreshold: -0.6
   animSpeed: {x: 0, y: 1}
+--- !u!114 &2439263247558648671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5656862155145172352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 3
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: 0.5, z: -2}
 --- !u!1 &5679917009612922302
 GameObject:
   m_ObjectHideFlags: 0
@@ -17709,7 +17763,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c54457fbea0e61458d0a27e9e7bfdc3, type: 2}
+  - {fileID: 2100000, guid: 89cb2868b07a5dc41a499a99048c8740, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19285,7 +19339,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 926300335a26be34d871106fec21bf0a, type: 2}
+  - {fileID: 2100000, guid: 8a772965781ee9e49a6cfce88b7000ef, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19333,7 +19387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 32
-  attackType: 2
+  attackType: 4
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -19713,7 +19767,7 @@ MonoBehaviour:
   jumpVelocity: 30
   rotationSpeed: 20
   boxSize: {x: 0.2, y: 0.1, z: 0.2}
-  gravityScale: 10
+  gravityScale: 20
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -19847,7 +19901,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7337849484052380514
 Transform:
   m_ObjectHideFlags: 0
@@ -19883,7 +19937,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a1b5c8b4a4bc42746abe6968bc52d336, type: 2}
+  - {fileID: 2100000, guid: c0dfe9f92666be64691b9f224415acec, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19936,7 +19990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 16
-  attackType: 3
+  attackType: 8
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -20250,7 +20304,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8aa374510b209fd4da42eb630cebdda4, type: 2}
+  - {fileID: 2100000, guid: d61382bb2d57a5749865858acbd4503f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -22517,6 +22571,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2651475683202358729}
   - component: {fileID: 1109767561763760007}
+  - component: {fileID: 202652069997812297}
+  - component: {fileID: 2606807911269092785}
   m_Layer: 8
   m_Name: Laser_Weapon_Type_B_L
   m_TagString: Untagged
@@ -22559,7 +22615,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8b5e9442aed1d5e498ea69143b33b25d, type: 2}
+  - {fileID: 2100000, guid: 38cc60e9b803ff6449184a26b896a797, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -22594,6 +22650,103 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.34825477, y: 0.015299151, z: -0.008629575}
     m_Extent: {x: 0.3281956, y: 0.07325392, z: 0.15110257}
   m_DirtyAABB: 0
+--- !u!114 &202652069997812297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7085238290985535540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0.3, y: 0.3, z: 0}
+--- !u!114 &2606807911269092785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7085238290985535540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ca404e20c629f479730a1fedd0ea1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 2007
+  partType: 2
+  attackType: 2
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  staticRotation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  bulletPrefab: {fileID: 8590510150710387984, guid: 5e260a095a0770e498dc0ad50676117b,
+    type: 3}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 32768
+  maxAmmo: 1
+  reloadTime: 0.01
+  muzzleFlashEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 2
+  minSpreadAngle: 10
+  maxSpreadAngle: 80
+  bulletPerShot: 5
+  chargeEffectPrefab: {fileID: 6799699376834545599, guid: ed672e191976a2348abca264f99b2529,
+    type: 3}
+  maxChargeTime: 1
+  chargeOffset: {x: 0, y: 0, z: 0}
+  targetPrefab: {fileID: 139102, guid: 4194ceaacbae66d4c82403180d035ff7, type: 3}
+  maxCastTime: 0
+  particleStopDelay: 0.9
 --- !u!1 &7088528145151997979
 GameObject:
   m_ObjectHideFlags: 0
@@ -24162,7 +24315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4527811881892388736
 Transform:
   m_ObjectHideFlags: 0
@@ -24198,7 +24351,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 94c29e4768278334c8a92279338ed522, type: 2}
+  - {fileID: 2100000, guid: 2f8b9e110e6994e439b31ead93fe3f20, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -24300,7 +24453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 2
-  attackType: 0
+  attackType: 1
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -24616,7 +24769,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5a95bf9e23fa1e749a36dcdfb8963e49, type: 2}
+  - {fileID: 2100000, guid: e50919656f37b524aadc9025f34ab51d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -24862,7 +25015,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 41bdf05698d7f79438fe45a48cae0874, type: 2}
+  - {fileID: 2100000, guid: 38fe2a0597c884b4eb1e4625068fed84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -26941,7 +27094,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3949580699863688750
 Transform:
   m_ObjectHideFlags: 0
@@ -26977,7 +27130,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c54457fbea0e61458d0a27e9e7bfdc3, type: 2}
+  - {fileID: 2100000, guid: 89cb2868b07a5dc41a499a99048c8740, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -27078,7 +27231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2011
   partType: 2
-  attackType: 3
+  attackType: 8
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -27609,7 +27762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2002
   partType: 8
-  attackType: 1
+  attackType: 2
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -27945,7 +28098,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d47f51ee81f5ff941b090b5b92f6af80, type: 2}
+  - {fileID: 2100000, guid: ea1d22984cd4ac84bb8c02128ac57d8e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -27996,7 +28149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2013
   partType: 4
-  attackType: 2
+  attackType: 4
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -28822,7 +28975,7 @@ MonoBehaviour:
   baseTransform: {fileID: 0}
   Hips: {fileID: 5996353152152767584}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.9814365
+  finalScaleReference: 0.9814367
   finalScaleReferenceSqrt: 0.1
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -29866,7 +30019,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &496946893198526267
 Transform:
   m_ObjectHideFlags: 0
@@ -29902,7 +30055,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 41bdf05698d7f79438fe45a48cae0874, type: 2}
+  - {fileID: 2100000, guid: 38fe2a0597c884b4eb1e4625068fed84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -30004,7 +30157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2010
   partType: 1
-  attackType: 3
+  attackType: 8
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -30393,7 +30546,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partId: 2000
   partType: 8
-  attackType: 2
+  attackType: 4
   meshType: 0
   staticOffset: {x: 0, y: 0, z: 0}
   staticRotation: {x: 0, y: 0, z: 0}
@@ -30509,6 +30662,8 @@ GameObject:
   m_Component:
   - component: {fileID: 128321191417599085}
   - component: {fileID: 4144661942766763555}
+  - component: {fileID: 6160385499388425112}
+  - component: {fileID: 2547982908715165217}
   m_Layer: 8
   m_Name: Laser_Weapon_Type_A_R
   m_TagString: Untagged
@@ -30588,6 +30743,99 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.39306155, y: -0.008665159, z: -0.040355712}
     m_Extent: {x: 0.4024215, y: 0.19042186, z: 0.16647214}
   m_DirtyAABB: 0
+--- !u!114 &6160385499388425112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9113624508135853413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0.5, y: 0.5, z: 0}
+--- !u!114 &2547982908715165217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9113624508135853413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26264740fffb63409249f250ebc1ad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partId: 2006
+  partType: 1
+  attackType: 2
+  meshType: 0
+  staticOffset: {x: 0, y: 0, z: 0}
+  staticRotation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 270337
+  bulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
+    type: 3}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 73729
+  maxAmmo: 1
+  reloadTime: 0.01
+  muzzleFlashEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 0}
+  projectileEffectPrefab: {fileID: 0}
+  shootingRange: 100
+  recoilX: 4
+  recoilY: 7
+  laserPrefab: {fileID: 1962479828434100, guid: a8fc40961f0745142a828fd724d7e5bd,
+    type: 3}
+  chargeEffectPrefab: {fileID: 6799699376834545599, guid: ed672e191976a2348abca264f99b2529,
+    type: 3}
+  maxChargeTime: 2
+  chargeOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &9176070691744533762
 GameObject:
   m_ObjectHideFlags: 0
