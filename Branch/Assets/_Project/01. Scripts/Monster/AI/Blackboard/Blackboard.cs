@@ -34,10 +34,6 @@ namespace Monster.AI.Blackboard
         // [SerializeField] private Transform firePoint;
 
         [Header("아몬 2페이즈 전용 변수")]
-        // [SerializeField] private GameObject lWing;
-        // [SerializeField] private GameObject rWing;
-        // [SerializeField] private GameObject body;
-        // [SerializeField] private GameObject energyBall;
         [SerializeField] private GameObject amonBody;
         [SerializeField] private GameObject amonShield;
         [SerializeField] private GameObject amonEnergyBall;
@@ -142,6 +138,8 @@ namespace Monster.AI.Blackboard
         public Dictionary<string, object> Map => _map;
         
         public GameObject AmonDeathModel => amonDeathModel;
+        public bool HasUsedSoulAbsorptionAt50Percent { get; set; }
+        public bool HasUsedSoulAbsorptionAt20Percent { get; set; }
 
         #endregion
 

@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class ExcutionerFSM : FSM
 {
+    [SerializeField] private GameObject spawnModel;
+    [SerializeField] private GameObject bodyModel;
+    
     // Init
     protected override void Init()
     {
@@ -27,7 +30,6 @@ public class ExcutionerFSM : FSM
             blackboard.NavMeshAgent.ResetPath();
         }
         
-        // isEnabled = true; // 인스턴스 즉시 FSM 활성화
         ChangeState("Spawn");
         isInit = true;
     }
@@ -145,7 +147,15 @@ public class ExcutionerFSM : FSM
         if (blackboard.Agent is null) return;
         // 사망 시 NavMeshAgent 멈추기
         blackboard.NavMeshAgent.isStopped = true;
+        blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
+        StartCoroutine(WaitDeathAnimation());
+    }
+
+    private IEnumerator WaitDeathAnimation()
+    {
+        yield return new WaitForSeconds(5f);
         
+        Destroy(gameObject);
     }
 
     private void ActChase()
@@ -163,24 +173,21 @@ public class ExcutionerFSM : FSM
         // 스폰 시 NavMeshAgent 멈추기
         blackboard.NavMeshAgent.isStopped = true;
         
+        spawnModel.SetActive(true);
+        bodyModel.SetActive(false);
+        
         // 스폰 애니메이션 재생
         StartCoroutine(WaitSpawnAnimation());
     }
     
     private IEnumerator WaitSpawnAnimation()
     {
-        blackboard.AnimatorParameterSetter.Animator.SetBool("isSpawn", true);
-        yield return new WaitForSeconds(0.1f);
+        // blackboard.AnimatorParameterSetter.Animator.SetBool("isSpawn", true);
+        yield return new WaitForSeconds(6f);
         
-        // 스폰 애니메이션 길이만큼 대기
-        Animator animator = blackboard.AnimatorParameterSetter.Animator;
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        float animationLength = stateInfo.length;
+        spawnModel.SetActive(false);
+        bodyModel.SetActive(true);
         
-        yield return new WaitForSeconds(animationLength);
-        
-        // 스폰 애니메이션 끝난 후 처리
-        blackboard.AnimatorParameterSetter.Animator.SetBool("isSpawn", false);
         isEnabled = true; // FSM 활성화
         ChangeState("Idle");
     }

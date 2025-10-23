@@ -45,8 +45,13 @@ public class PartBaseArm : PartBase
         {
             ignoreMask |= 1;
             ignoreMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Face"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Hair"));
             ignoreMask &= ~(1 << LayerMask.NameToLayer("Outline"));
             ignoreMask &= ~(1 << LayerMask.NameToLayer("Player"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("PlayerMesh"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Bullet"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Minimap"));
         }
 
         _currentAmmo = maxAmmo;

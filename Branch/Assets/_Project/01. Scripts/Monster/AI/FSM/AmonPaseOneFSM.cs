@@ -1,11 +1,16 @@
 using _Test.Skills;
 using Managers;
+using System.Collections;
 using UnityEngine;
 
 namespace Monster.AI.FSM
 {
     public class AmonPaseOneFSM : FSM
     {
+        [SerializeField] private GameObject body;
+        [SerializeField] private GameObject deathBody;
+        [SerializeField] private float deathAnimationDurationChar = 1.5f;
+        
         protected override void Think()
         {
             // Debug.Log(isEnabled);
@@ -132,14 +137,24 @@ namespace Monster.AI.FSM
         private void ActDeath()
         {
             // 사망 처리 로직
-            blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
+            // blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
             blackboard.NavMeshAgent.isStopped = true;
             blackboard.AgentRigidbody.velocity = Vector3.zero;
             blackboard.AgentCollider.enabled = false;
             blackboard.AgentRigidbody.isKinematic = true;
             isEnabled = false; // FSM 비활성화
+
+
+            StartCoroutine(WaitForDeathAnimation());
+        }
+
+        private IEnumerator WaitForDeathAnimation()
+        {
+            yield return null;
+            body.SetActive(false);
+            deathBody.SetActive(true);
+            yield return new WaitForSeconds(deathAnimationDurationChar);
             
-            // 2페이즈로 전환
             DungeonManager.Instance.AmonSecondPhase();
         }
 
@@ -153,13 +168,13 @@ namespace Monster.AI.FSM
             {
                 case "Idle":
                     // blackboard.AnimatorParameterSetter.SetBool("isIdle", true);
-                    blackboard.AgentRigidbody.velocity = Vector3.zero; // 물리 정지
-                    blackboard.NavMeshAgent.isStopped = true;
+                    // blackboard.AgentRigidbody.velocity = Vector3.zero; // 물리 정지
+                    // blackboard.NavMeshAgent.isStopped = true;
                     break;
                 case "UsingSkill1":
                     // blackboard.AnimatorParameterSetter.SetBool("isUsingSkill1", true);
-                    blackboard.NavMeshAgent.isStopped = true;
-                    blackboard.AgentRigidbody.velocity = Vector3.zero;
+                    // blackboard.NavMeshAgent.isStopped = true;
+                    // blackboard.AgentRigidbody.velocity = Vector3.zero;
                     break;
                 default:
                     break;

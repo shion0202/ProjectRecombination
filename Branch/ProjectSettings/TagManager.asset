@@ -38,8 +38,8 @@ TagManager:
   - Wall
   - Enemy
   - Interaction
-  - 
-  - 
+  - Damagable
+  - InteractionSecond
   - 
   - 
   - 

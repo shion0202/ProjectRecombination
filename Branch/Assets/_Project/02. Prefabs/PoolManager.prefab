@@ -45,16 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolsData:
-  - prefab: {fileID: 4893325145621265008, guid: fa69a2dc94d1e4a16979df19981f4516,
+  - prefab: {fileID: 4800409579581458399, guid: a3b7a957f3359479da8fe610b17d7633,
       type: 3}
     defaultSize: 10
     maxSize: 30
-  - prefab: {fileID: 1767193270611849016, guid: aad30f54ddcd843db80f18734e90308d,
-      type: 3}
-    defaultSize: 10
-    maxSize: 30
-  - prefab: {fileID: 2253381462771696274, guid: 655f26f8280f86c4dbd7273e9a91bb69,
-      type: 3}
+  - prefab: {fileID: 110370339717111256, guid: 17f96a004373c4230a855a06eacf4c6a, type: 3}
     defaultSize: 10
     maxSize: 30
   - prefab: {fileID: 196044, guid: 3762a5ec8feb04b7f8a3d403b9b745c3, type: 3}

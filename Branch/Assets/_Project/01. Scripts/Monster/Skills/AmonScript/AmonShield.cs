@@ -28,7 +28,7 @@ public class AmonShield : MonoBehaviour, IDamagable
         Debug.Log($"AmonShield took {damage} damage.");
     }
 
-    public void ApplyDamage(float inDamage, LayerMask targetMask = default, float unitOfTime = 1.0f, float defenceIgnoreRate = 0.0f)
+    public void ApplyDamage(float inDamage, LayerMask targetMask = default, float unitOfTime = 1, float defenceIgnoreRate = 0)
     {
         TakeDamage((int)(inDamage * skillData.damageReductionRatio));
     }

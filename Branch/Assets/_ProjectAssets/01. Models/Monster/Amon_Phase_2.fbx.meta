@@ -3,7 +3,47 @@ guid: 752d2b5efb3c9524fbfa5eb2d2dfbc56
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AmonAcc
+    second: {fileID: 2100000, guid: a54db752124e84fb2b31cbb36ffac39a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AmonHair
+    second: {fileID: 2100000, guid: 5d0eed66e2f3843db89f12b2f5b4a2ba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AmonHead
+    second: {fileID: 2100000, guid: 8152b012188c5430bb35ac94feb82d3b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AmonLeg
+    second: {fileID: 2100000, guid: a281c4411d4be4ca99c51a397600af04, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AmonSide_1
+    second: {fileID: 2100000, guid: 26e473822895b42f28d6af8f198ebc9c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AmonSide_2
+    second: {fileID: 2100000, guid: 357052e17da964b1f86a346066bbd6d5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AmonWing_1
+    second: {fileID: 2100000, guid: 350764b59422e441dae3e3008f80da7e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AmonWing_2
+    second: {fileID: 2100000, guid: 38c3c86023df147888004672afff71b1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

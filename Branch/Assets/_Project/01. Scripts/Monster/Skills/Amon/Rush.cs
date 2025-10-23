@@ -1,5 +1,4 @@
 using Monster.AI.Blackboard;
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -17,40 +16,80 @@ namespace _Test.Skills
     [CreateAssetMenu(fileName = "Rush", menuName = "MonsterSkills/Amon/Rush")]
     public class Rush : SkillData
     {
-        public float rushSpeed;
+        [Header("그 외 스킬 정보")]
+        [SerializeField] public float rushSpeed;
+        [SerializeField] public GameObject meleeCollisionPrefab;       // 근접 공격 범위를 판단할 프리팹 오브젝트
+        [SerializeField] public Vector3 collisionScale;                // 근접 공격 범위
+        [SerializeField] public Vector3 collisionOffset;               // 근접 공격 위치
+        [SerializeField] public float maxRushDistance;
+        
+        private GameObject _meleeCollision;
+        
 
         public override IEnumerator Activate(Blackboard data)
         {
             Debug.Log("돌진!");
-            Vector3 directionToTarget = (data.Target.transform.position - data.Agent.transform.position).normalized;
+            // Vector3 directionToTarget = (data.Target.transform.position - data.Agent.transform.position).normalized;
+            yield return null;
+            yield return new WaitForSeconds(data.AnimatorParameterSetter.Animator.GetCurrentAnimatorStateInfo(0).length);
             data.Agent.transform.LookAt(data.Target.transform);
             data.AnimatorParameterSetter.Animator.SetTrigger("Rush");
-            data.NavMeshAgent.enabled = false;
-            data.AgentRigidbody.isKinematic = false;
-            data.AgentRigidbody.velocity = directionToTarget * rushSpeed; // 돌진 속도 설정
-            // TODO: 돌진을 시도하고 일정 시간 충돌을 감지하고 멈추는 로직 구현
             
-            float rushDuration = 2.0f; // 돌진 지속 시간
+            _meleeCollision = Utils.Instantiate(meleeCollisionPrefab, data.Agent.transform);
+            AmonMeleeCollision meleeCollision = _meleeCollision.GetComponent<AmonMeleeCollision>();
+            if (meleeCollision)
+            {
+                meleeCollision.Init(damage, collisionScale, collisionOffset);
+            }
+            
+            Vector3 lookDir = data.Target.transform.position - data.Agent.transform.position;
+            lookDir.y = 0;
+            data.Agent.transform.rotation = Quaternion.LookRotation(lookDir);
+            
+            Vector3 rushStartPos = data.Agent.transform.position;
+            Vector3 targetPos = data.Target.transform.position + data.Agent.transform.forward * 2.0f;
+            float distance = Vector3.Distance(rushStartPos, targetPos);
+            
+            // data.NavMeshAgent.enabled = false;
+            // data.AgentRigidbody.velocity = data.Agent.transform.forward * rushSpeed;
+            
+            float rushDuration = distance / rushSpeed; // 돌진 지속 시간
             float elapsed = 0f;
+            // Vector3 rushDirection = data.Agent.transform.forward;
         
             while (elapsed < rushDuration)
             {
+                // agent 를 직접 transform 을 움직여서 이동
+                // data.Agent.transform.Translate(directionToTarget * (rushSpeed * Time.deltaTime), Space.World);
+                
                 // 장애물 충돌 체크
-                if (Physics.Raycast(data.Agent.transform.position, directionToTarget, out RaycastHit hit, 1f))
-                {
-                    Debug.Log("장애물에 부딪혀 돌진 취소");
-                    
-                    break; // 장애물에 부딪히면 취소
-                }
+                // if (Physics.Raycast(data.Agent.transform.position, directionToTarget, out RaycastHit hit, 1f))
+                // {
+                //     Debug.Log("장애물에 부딪혀 돌진 취소");
+                //     
+                //     break; // 장애물에 부딪히면 취소
+                // }
+                //
+                // elapsed += Time.deltaTime;
+                // yield return null;
+                Vector3 dir = (targetPos - data.Agent.transform.position).normalized;
+                dir.y = 0;
+                data.Agent.transform.position += dir * (rushSpeed * Time.deltaTime);
 
+                if (Vector3.Distance(data.Agent.transform.position, targetPos) <= maxRushDistance) break;
+                
                 elapsed += Time.deltaTime;
                 yield return null;
             }
             Debug.Log("돌진 완료");
-            data.AgentRigidbody.isKinematic = false;
+            // data.AgentRigidbody.isKinematic = false;
             data.AnimatorParameterSetter.Animator.SetTrigger("RushEnd");
-            data.AgentRigidbody.velocity = Vector3.zero;
-            data.NavMeshAgent.enabled = true;
+            yield return null;
+            yield return new WaitForSeconds(data.AnimatorParameterSetter.Animator.GetCurrentAnimatorStateInfo(0).length);
+            Utils.Destroy(_meleeCollision);
+            
+            // data.AgentRigidbody.velocity = Vector3.zero;
+            // data.NavMeshAgent.enabled = true;
         }
 
         public override IEnumerator Casting(Blackboard data)
@@ -63,6 +102,3 @@ namespace _Test.Skills
         }
     }
 }
-
-// TODO: 리지드바디를 이용해 돌진을 구현하였으나 물체와 충돌 후 멈추는 것이 자연스럽지 않음 (오히려 관성으로 더 멀리 감)
-// 제자리에 멈출 수 있는 방법이 무었이 있을까?

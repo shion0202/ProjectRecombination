@@ -587,7 +587,7 @@ MonoBehaviour:
         value:
           statType: 8
           stringValue: 
-          value: 0
+          value: 25
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 22
@@ -658,7 +658,7 @@ MonoBehaviour:
         value:
           statType: 8
           stringValue: 
-          value: 0
+          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 22
@@ -729,7 +729,7 @@ MonoBehaviour:
         value:
           statType: 8
           stringValue: 
-          value: 0
+          value: 10
           minValue: -3.4028235e+38
           maxValue: 3.4028235e+38
       - key: 22

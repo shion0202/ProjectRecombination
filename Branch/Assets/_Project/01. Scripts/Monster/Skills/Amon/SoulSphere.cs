@@ -1,5 +1,4 @@
 using Managers;
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -19,7 +18,6 @@ namespace _Test.Skills
         {
             Debug.Log("영혼 구체 생성!");
             
-            // DungeonManager.Instance.SpawnSoulSphere();
             for (int i = 0; i < numberOfSpheres; i++)
             {
                 // 직접 생성 ( 이때 풀 메니저를 사용 )

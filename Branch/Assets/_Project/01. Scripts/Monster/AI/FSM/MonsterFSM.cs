@@ -10,6 +10,8 @@ namespace Monster.AI.FSM
 {
     public class MonsterFSM : FSM
     {
+        [SerializeField] private GameObject ralphTwoHandsAttackCollider;
+        
         #region private Fields
         
         // 상태별 로직에 필요한 내부 변수들
@@ -18,6 +20,8 @@ namespace Monster.AI.FSM
         // private bool _isAttack;
         // private int _attackCount;
 
+        // private AmonMeleeCollision _amonMeleeCollision;
+        private AmonMeleeCollision _meleeCollision;
         #endregion
 
         #region Core FSM Methods: Think & Act (Overrided)
@@ -224,20 +228,27 @@ namespace Monster.AI.FSM
         private void ActDeath()
         { 
             // 1. 죽음 애니메이션을 가지고 있는지 확인
-            foreach (var state in blackboard.AnimatorParameterSetter.BoolParameterNames)
-            {
-                if (state == "IsDeath")
-                {
-                    AnimatorStateInfo animatorStateInfo = blackboard.AnimatorParameterSetter.CurrentAnimatorStateInfo;
-                    if (animatorStateInfo.IsName("Death") && animatorStateInfo.normalizedTime >= 1.0f)
-                    {
-                        blackboard.DeathEffect?.SetActive(true);
-                        isInit = false;
-                        gameObject.SetActive(false);
-                    }
-                    return; // 죽음 애니메이션이 있으면 여기서 종료
-                }
-            }
+            // foreach (var state in blackboard.AnimatorParameterSetter.BoolParameterNames)
+            // {
+            //     if (state == "IsDeath")
+            //     {
+            //         AnimatorStateInfo animatorStateInfo = blackboard.AnimatorParameterSetter.CurrentAnimatorStateInfo;
+            //         if (animatorStateInfo.IsName("Death") && animatorStateInfo.normalizedTime >= 1.0f)
+            //         {
+            //             blackboard.DeathEffect?.SetActive(true);
+            //             isInit = false;
+            //             gameObject.SetActive(false);
+            //         }
+            //         return; // 죽음 애니메이션이 있으면 여기서 종료
+            //     }
+            // }
+            
+            blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
+            
+            blackboard.NavMeshAgent.isStopped = true;
+            blackboard.AgentCollider.enabled = false;
+            blackboard.AgentRigidbody.isKinematic = true;
+            
             // 2. 죽음 이팩트가 있는지 확인
             if (blackboard.DeathEffect is not null)
             {
@@ -303,7 +314,7 @@ namespace Monster.AI.FSM
         
         public void AnimationEvent_Fire()
         {
-            if (_useSkill.skillData.skillID == 4003)
+            if (_useSkill.skillData.skillID is 4003 or 4002)
                 FireBullet(1);
             else
                 FireBullet();
@@ -314,27 +325,22 @@ namespace Monster.AI.FSM
             if (blackboard.Target == null || _useSkill == null) return;
 
             float damage = _useSkill.skillData.damage;
-            // 콜라이더 박스를 생성하고 충돌한 Player에게 대미지를 준다.
-            // Vector3 boxCenter = blackboard.AttackInfo.meleePoint.position + blackboard.AttackInfo.meleePoint.forward * (blackboard.AttackInfo.meleeSize.z / 2);
-            // Collider[] hitColliders = Physics.OverlapBox(boxCenter, blackboard.AttackInfo.meleeSize / 2, blackboard.AttackInfo.meleePoint.rotation);
-            // foreach (var hitCollider in hitColliders)
-            // {
-            //     if (hitCollider.CompareTag("Player"))
-            //     {
-            //         // PlayerController player = hitCollider.GetComponent<PlayerController>();
-            //         // if (player != null)
-            //         // {
-            //         //     player.ApplyDamage(damage);
-            //         // }
-            //         Debug.Log($"Melee Hit: {hitCollider.name}, Damage: {damage}");
-            //     }
-            // }
+            var amonMeleeCollision = Utils.Instantiate(ralphTwoHandsAttackCollider, blackboard.Agent.transform);
+            _meleeCollision = amonMeleeCollision.GetComponent<AmonMeleeCollision>();
+            if (_meleeCollision)
+            {
+                _meleeCollision.Init(damage, new Vector3(4f,4f,4f), new Vector3(1f,1f,2f));
+            }
         }
         
         public void OnAttackAnimationEnd()
         {
             // _isAttack = false;
             // _useSkill = null; // 스킬 사용 완료
+            if (_meleeCollision)
+            {
+                Utils.Destroy(_meleeCollision.gameObject);
+            }
             ChangeState("Idle");
         }
 

@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 7270007255789879844}
   - component: {fileID: 7914311242415265663}
   - component: {fileID: 6926763049112465161}
-  m_Layer: 18
+  m_Layer: 19
   m_Name: Amon_Phase_1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -68,6 +68,7 @@ Transform:
   - {fileID: 3457402983752080214}
   - {fileID: 4562171378221991593}
   - {fileID: 8766071682062951271}
+  - {fileID: 4233768132766875384}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &285460086832483030
@@ -85,6 +86,9 @@ MonoBehaviour:
   blackboard: {fileID: 7649363827161289517}
   isInit: 0
   isEnabled: 0
+  body: {fileID: 2643886890815275500}
+  deathBody: {fileID: 3754812550417488915}
+  deathAnimationDurationChar: 5
 --- !u!114 &3646957178891513591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,6 +176,54 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &7660121449487495184
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4233768132766875384}
+  - component: {fileID: 8474380550230011749}
+  m_Layer: 0
+  m_Name: TargetPoint
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4233768132766875384
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7660121449487495184}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -89.97842, y: 0.58996105, z: -201.96742}
+  m_LocalScale: {x: 45, y: 45, z: 45}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 13086790856645412}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8474380550230011749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7660121449487495184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53473501e43448441b25b232f2746fa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  positionOffset: {x: 0, y: 0, z: 0}
+  moveSpeed: 1
+  isFollow: 0
 --- !u!1 &8435933980132211738
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,6 +452,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Body
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 40e6aafb70cfab144a099217ef22cebe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 40e6aafb70cfab144a099217ef22cebe,
         type: 3}

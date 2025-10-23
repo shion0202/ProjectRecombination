@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: 81414125d3ac946c19f1c926c990fb28
+guid: ba6b2cbe5e6bca04c875bfc07ca55e6c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: executioner_body
+    second: {fileID: 2100000, guid: 2f507063c20ab57499088b5e6aa1a628, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: executioner_weapon
+    second: {fileID: 2100000, guid: ad64da0ad739ec54c8bad7cdc8076006, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

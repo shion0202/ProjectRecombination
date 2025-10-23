@@ -83,6 +83,7 @@ public class Bullet : MonoBehaviour
         if (targetMask == 0)
         {
             targetMask |= (1 << LayerMask.NameToLayer("Enemy"));
+            targetMask |= (1 << LayerMask.NameToLayer("Damagable"));
         }
     }
 

@@ -11,8 +11,8 @@ namespace _Test.Skills.Ranger
     [CreateAssetMenu(fileName = "ChargingShot", menuName = "MonsterSkills/Ranger/ChargingShot")]
     public class ChargingShot: SkillData
     {
-        public int bulletCount = 5; // 발사할 총알 수
-        public float bulletInterval = 0.2f; // 총알 발사 간격
+        // public int bulletCount = 1; // 발사할 총알 수
+        // public float bulletInterval = 0.0f; // 총알 발사 간격
         public override IEnumerator Casting(Monster.AI.Blackboard.Blackboard data)
         {
             // 캐스팅 시간 동안 움직이지 않고 플레이어를 향해 사격 자세 취함
@@ -23,13 +23,7 @@ namespace _Test.Skills.Ranger
         {
             Debug.Log("차징샷 시전!");
             
-            for (int i = 0; i < bulletCount; i++)
-            {
-                // 플레이어를 향해 총알 발사
-                data.AnimatorParameterSetter.Animator.SetTrigger("Fire");
-                // 총알 발사 간격 만큼 대기
-                yield return new WaitForSeconds(bulletInterval);
-            }
+            data.AnimatorParameterSetter.Animator.SetTrigger("Fire");
             yield return null;
         }
     }

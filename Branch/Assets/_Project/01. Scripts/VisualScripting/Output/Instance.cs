@@ -36,6 +36,8 @@ namespace _Project.Scripts.VisualScripting
 
             for (int i = 0; i < count; i++)
             {
+                Debug.Log("유니티야아프지마");
+                
                 // 부모 오브젝트의 위치를 기준으로 무작위 위치 계산
                 float randomX = Random.Range(-spawnArea.x / 2, spawnArea.x / 2);
                 float randomY = Random.Range(-spawnArea.y / 2, spawnArea.y / 2); // 2D라면 0 또는 고정값, 3D라면 필요한 범위

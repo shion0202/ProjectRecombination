@@ -1,217 +1,629 @@
 fileFormatVersion: 2
 guid: 5c9217cae3dae8a45ba78c32fa18dd24
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: ball_l
-    100004: ball_r
-    100006: belly
-    100008: breast_l
-    100010: breast_r
-    100012: calf_l
-    100014: calf_r
-    100016: Character Base
-    100018: clavicle_l
-    100020: clavicle_r
-    100022: cloth_back_1
-    100024: cloth_back_2
-    100026: cloth_back_3
-    100028: cloth_front_1
-    100030: cloth_front_2
-    100032: cloth_front_3
-    100034: cloth_l_1
-    100036: cloth_l_2
-    100038: cloth_l_3
-    100040: cloth_r_1
-    100042: cloth_r_2
-    100044: cloth_r_3
-    100046: ear_l
-    100048: ear_r
-    100050: eyeL
-    100052: eyeR
-    100054: foot_l
-    100056: foot_r
-    100058: hair1
-    100060: hair2
-    100062: hair3
-    100064: hair4
-    100066: hair5
-    100068: hand_l
-    100070: hand_r
-    100072: head
-    100074: ik_foot_l
-    100076: ik_foot_r
-    100078: ik_foot_root
-    100080: ik_hand_gun
-    100082: ik_hand_l
-    100084: ik_hand_r
-    100086: ik_hand_root
-    100088: index_01_l
-    100090: index_01_r
-    100092: index_02_l
-    100094: index_02_r
-    100096: index_03_l
-    100098: index_03_r
-    100100: jaw
-    100102: lowerarm_l
-    100104: lowerarm_r
-    100106: lowerarm_twist_01_l
-    100108: lowerarm_twist_01_r
-    100110: middle_01_l
-    100112: middle_01_r
-    100114: middle_02_l
-    100116: middle_02_r
-    100118: middle_03_l
-    100120: middle_03_r
-    100122: neck_01
-    100124: pelvis
-    100126: pinky_01_l
-    100128: pinky_01_r
-    100130: pinky_02_l
-    100132: pinky_02_r
-    100134: pinky_03_l
-    100136: pinky_03_r
-    100138: ring_01_l
-    100140: ring_01_r
-    100142: ring_02_l
-    100144: ring_02_r
-    100146: ring_03_l
-    100148: ring_03_r
-    100150: root
-    100152: spine_01
-    100154: spine_02
-    100156: spine_03
-    100158: tail1
-    100160: tail2
-    100162: tail3
-    100164: tail4
-    100166: tail5
-    100168: tail6
-    100170: tail7
-    100172: thigh_l
-    100174: thigh_r
-    100176: thumb_01_l
-    100178: thumb_01_r
-    100180: thumb_02_l
-    100182: thumb_02_r
-    100184: thumb_03_l
-    100186: thumb_03_r
-    100188: upperarm_l
-    100190: upperarm_r
-    100192: upperarm_twist_01_l
-    100194: upperarm_twist_01_r
-    100196: WeaponsL
-    100198: WeaponsR
-    400000: //RootNode
-    400002: ball_l
-    400004: ball_r
-    400006: belly
-    400008: breast_l
-    400010: breast_r
-    400012: calf_l
-    400014: calf_r
-    400016: Character Base
-    400018: clavicle_l
-    400020: clavicle_r
-    400022: cloth_back_1
-    400024: cloth_back_2
-    400026: cloth_back_3
-    400028: cloth_front_1
-    400030: cloth_front_2
-    400032: cloth_front_3
-    400034: cloth_l_1
-    400036: cloth_l_2
-    400038: cloth_l_3
-    400040: cloth_r_1
-    400042: cloth_r_2
-    400044: cloth_r_3
-    400046: ear_l
-    400048: ear_r
-    400050: eyeL
-    400052: eyeR
-    400054: foot_l
-    400056: foot_r
-    400058: hair1
-    400060: hair2
-    400062: hair3
-    400064: hair4
-    400066: hair5
-    400068: hand_l
-    400070: hand_r
-    400072: head
-    400074: ik_foot_l
-    400076: ik_foot_r
-    400078: ik_foot_root
-    400080: ik_hand_gun
-    400082: ik_hand_l
-    400084: ik_hand_r
-    400086: ik_hand_root
-    400088: index_01_l
-    400090: index_01_r
-    400092: index_02_l
-    400094: index_02_r
-    400096: index_03_l
-    400098: index_03_r
-    400100: jaw
-    400102: lowerarm_l
-    400104: lowerarm_r
-    400106: lowerarm_twist_01_l
-    400108: lowerarm_twist_01_r
-    400110: middle_01_l
-    400112: middle_01_r
-    400114: middle_02_l
-    400116: middle_02_r
-    400118: middle_03_l
-    400120: middle_03_r
-    400122: neck_01
-    400124: pelvis
-    400126: pinky_01_l
-    400128: pinky_01_r
-    400130: pinky_02_l
-    400132: pinky_02_r
-    400134: pinky_03_l
-    400136: pinky_03_r
-    400138: ring_01_l
-    400140: ring_01_r
-    400142: ring_02_l
-    400144: ring_02_r
-    400146: ring_03_l
-    400148: ring_03_r
-    400150: root
-    400152: spine_01
-    400154: spine_02
-    400156: spine_03
-    400158: tail1
-    400160: tail2
-    400162: tail3
-    400164: tail4
-    400166: tail5
-    400168: tail6
-    400170: tail7
-    400172: thigh_l
-    400174: thigh_r
-    400176: thumb_01_l
-    400178: thumb_01_r
-    400180: thumb_02_l
-    400182: thumb_02_r
-    400184: thumb_03_l
-    400186: thumb_03_r
-    400188: upperarm_l
-    400190: upperarm_r
-    400192: upperarm_twist_01_l
-    400194: upperarm_twist_01_r
-    400196: WeaponsL
-    400198: WeaponsR
-    2100000: BaseRig
-    4300000: Character Base
-    7400000: deathimpact
-    9500000: //RootNode
-    13700000: Character Base
-    2186277476908879412: ImportLogs
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: ball_l
+  - first:
+      1: 100004
+    second: ball_r
+  - first:
+      1: 100006
+    second: belly
+  - first:
+      1: 100008
+    second: breast_l
+  - first:
+      1: 100010
+    second: breast_r
+  - first:
+      1: 100012
+    second: calf_l
+  - first:
+      1: 100014
+    second: calf_r
+  - first:
+      1: 100016
+    second: Character Base
+  - first:
+      1: 100018
+    second: clavicle_l
+  - first:
+      1: 100020
+    second: clavicle_r
+  - first:
+      1: 100022
+    second: cloth_back_1
+  - first:
+      1: 100024
+    second: cloth_back_2
+  - first:
+      1: 100026
+    second: cloth_back_3
+  - first:
+      1: 100028
+    second: cloth_front_1
+  - first:
+      1: 100030
+    second: cloth_front_2
+  - first:
+      1: 100032
+    second: cloth_front_3
+  - first:
+      1: 100034
+    second: cloth_l_1
+  - first:
+      1: 100036
+    second: cloth_l_2
+  - first:
+      1: 100038
+    second: cloth_l_3
+  - first:
+      1: 100040
+    second: cloth_r_1
+  - first:
+      1: 100042
+    second: cloth_r_2
+  - first:
+      1: 100044
+    second: cloth_r_3
+  - first:
+      1: 100046
+    second: ear_l
+  - first:
+      1: 100048
+    second: ear_r
+  - first:
+      1: 100050
+    second: eyeL
+  - first:
+      1: 100052
+    second: eyeR
+  - first:
+      1: 100054
+    second: foot_l
+  - first:
+      1: 100056
+    second: foot_r
+  - first:
+      1: 100058
+    second: hair1
+  - first:
+      1: 100060
+    second: hair2
+  - first:
+      1: 100062
+    second: hair3
+  - first:
+      1: 100064
+    second: hair4
+  - first:
+      1: 100066
+    second: hair5
+  - first:
+      1: 100068
+    second: hand_l
+  - first:
+      1: 100070
+    second: hand_r
+  - first:
+      1: 100072
+    second: head
+  - first:
+      1: 100074
+    second: ik_foot_l
+  - first:
+      1: 100076
+    second: ik_foot_r
+  - first:
+      1: 100078
+    second: ik_foot_root
+  - first:
+      1: 100080
+    second: ik_hand_gun
+  - first:
+      1: 100082
+    second: ik_hand_l
+  - first:
+      1: 100084
+    second: ik_hand_r
+  - first:
+      1: 100086
+    second: ik_hand_root
+  - first:
+      1: 100088
+    second: index_01_l
+  - first:
+      1: 100090
+    second: index_01_r
+  - first:
+      1: 100092
+    second: index_02_l
+  - first:
+      1: 100094
+    second: index_02_r
+  - first:
+      1: 100096
+    second: index_03_l
+  - first:
+      1: 100098
+    second: index_03_r
+  - first:
+      1: 100100
+    second: jaw
+  - first:
+      1: 100102
+    second: lowerarm_l
+  - first:
+      1: 100104
+    second: lowerarm_r
+  - first:
+      1: 100106
+    second: lowerarm_twist_01_l
+  - first:
+      1: 100108
+    second: lowerarm_twist_01_r
+  - first:
+      1: 100110
+    second: middle_01_l
+  - first:
+      1: 100112
+    second: middle_01_r
+  - first:
+      1: 100114
+    second: middle_02_l
+  - first:
+      1: 100116
+    second: middle_02_r
+  - first:
+      1: 100118
+    second: middle_03_l
+  - first:
+      1: 100120
+    second: middle_03_r
+  - first:
+      1: 100122
+    second: neck_01
+  - first:
+      1: 100124
+    second: pelvis
+  - first:
+      1: 100126
+    second: pinky_01_l
+  - first:
+      1: 100128
+    second: pinky_01_r
+  - first:
+      1: 100130
+    second: pinky_02_l
+  - first:
+      1: 100132
+    second: pinky_02_r
+  - first:
+      1: 100134
+    second: pinky_03_l
+  - first:
+      1: 100136
+    second: pinky_03_r
+  - first:
+      1: 100138
+    second: ring_01_l
+  - first:
+      1: 100140
+    second: ring_01_r
+  - first:
+      1: 100142
+    second: ring_02_l
+  - first:
+      1: 100144
+    second: ring_02_r
+  - first:
+      1: 100146
+    second: ring_03_l
+  - first:
+      1: 100148
+    second: ring_03_r
+  - first:
+      1: 100150
+    second: root
+  - first:
+      1: 100152
+    second: spine_01
+  - first:
+      1: 100154
+    second: spine_02
+  - first:
+      1: 100156
+    second: spine_03
+  - first:
+      1: 100158
+    second: tail1
+  - first:
+      1: 100160
+    second: tail2
+  - first:
+      1: 100162
+    second: tail3
+  - first:
+      1: 100164
+    second: tail4
+  - first:
+      1: 100166
+    second: tail5
+  - first:
+      1: 100168
+    second: tail6
+  - first:
+      1: 100170
+    second: tail7
+  - first:
+      1: 100172
+    second: thigh_l
+  - first:
+      1: 100174
+    second: thigh_r
+  - first:
+      1: 100176
+    second: thumb_01_l
+  - first:
+      1: 100178
+    second: thumb_01_r
+  - first:
+      1: 100180
+    second: thumb_02_l
+  - first:
+      1: 100182
+    second: thumb_02_r
+  - first:
+      1: 100184
+    second: thumb_03_l
+  - first:
+      1: 100186
+    second: thumb_03_r
+  - first:
+      1: 100188
+    second: upperarm_l
+  - first:
+      1: 100190
+    second: upperarm_r
+  - first:
+      1: 100192
+    second: upperarm_twist_01_l
+  - first:
+      1: 100194
+    second: upperarm_twist_01_r
+  - first:
+      1: 100196
+    second: WeaponsL
+  - first:
+      1: 100198
+    second: WeaponsR
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: ball_l
+  - first:
+      4: 400004
+    second: ball_r
+  - first:
+      4: 400006
+    second: belly
+  - first:
+      4: 400008
+    second: breast_l
+  - first:
+      4: 400010
+    second: breast_r
+  - first:
+      4: 400012
+    second: calf_l
+  - first:
+      4: 400014
+    second: calf_r
+  - first:
+      4: 400016
+    second: Character Base
+  - first:
+      4: 400018
+    second: clavicle_l
+  - first:
+      4: 400020
+    second: clavicle_r
+  - first:
+      4: 400022
+    second: cloth_back_1
+  - first:
+      4: 400024
+    second: cloth_back_2
+  - first:
+      4: 400026
+    second: cloth_back_3
+  - first:
+      4: 400028
+    second: cloth_front_1
+  - first:
+      4: 400030
+    second: cloth_front_2
+  - first:
+      4: 400032
+    second: cloth_front_3
+  - first:
+      4: 400034
+    second: cloth_l_1
+  - first:
+      4: 400036
+    second: cloth_l_2
+  - first:
+      4: 400038
+    second: cloth_l_3
+  - first:
+      4: 400040
+    second: cloth_r_1
+  - first:
+      4: 400042
+    second: cloth_r_2
+  - first:
+      4: 400044
+    second: cloth_r_3
+  - first:
+      4: 400046
+    second: ear_l
+  - first:
+      4: 400048
+    second: ear_r
+  - first:
+      4: 400050
+    second: eyeL
+  - first:
+      4: 400052
+    second: eyeR
+  - first:
+      4: 400054
+    second: foot_l
+  - first:
+      4: 400056
+    second: foot_r
+  - first:
+      4: 400058
+    second: hair1
+  - first:
+      4: 400060
+    second: hair2
+  - first:
+      4: 400062
+    second: hair3
+  - first:
+      4: 400064
+    second: hair4
+  - first:
+      4: 400066
+    second: hair5
+  - first:
+      4: 400068
+    second: hand_l
+  - first:
+      4: 400070
+    second: hand_r
+  - first:
+      4: 400072
+    second: head
+  - first:
+      4: 400074
+    second: ik_foot_l
+  - first:
+      4: 400076
+    second: ik_foot_r
+  - first:
+      4: 400078
+    second: ik_foot_root
+  - first:
+      4: 400080
+    second: ik_hand_gun
+  - first:
+      4: 400082
+    second: ik_hand_l
+  - first:
+      4: 400084
+    second: ik_hand_r
+  - first:
+      4: 400086
+    second: ik_hand_root
+  - first:
+      4: 400088
+    second: index_01_l
+  - first:
+      4: 400090
+    second: index_01_r
+  - first:
+      4: 400092
+    second: index_02_l
+  - first:
+      4: 400094
+    second: index_02_r
+  - first:
+      4: 400096
+    second: index_03_l
+  - first:
+      4: 400098
+    second: index_03_r
+  - first:
+      4: 400100
+    second: jaw
+  - first:
+      4: 400102
+    second: lowerarm_l
+  - first:
+      4: 400104
+    second: lowerarm_r
+  - first:
+      4: 400106
+    second: lowerarm_twist_01_l
+  - first:
+      4: 400108
+    second: lowerarm_twist_01_r
+  - first:
+      4: 400110
+    second: middle_01_l
+  - first:
+      4: 400112
+    second: middle_01_r
+  - first:
+      4: 400114
+    second: middle_02_l
+  - first:
+      4: 400116
+    second: middle_02_r
+  - first:
+      4: 400118
+    second: middle_03_l
+  - first:
+      4: 400120
+    second: middle_03_r
+  - first:
+      4: 400122
+    second: neck_01
+  - first:
+      4: 400124
+    second: pelvis
+  - first:
+      4: 400126
+    second: pinky_01_l
+  - first:
+      4: 400128
+    second: pinky_01_r
+  - first:
+      4: 400130
+    second: pinky_02_l
+  - first:
+      4: 400132
+    second: pinky_02_r
+  - first:
+      4: 400134
+    second: pinky_03_l
+  - first:
+      4: 400136
+    second: pinky_03_r
+  - first:
+      4: 400138
+    second: ring_01_l
+  - first:
+      4: 400140
+    second: ring_01_r
+  - first:
+      4: 400142
+    second: ring_02_l
+  - first:
+      4: 400144
+    second: ring_02_r
+  - first:
+      4: 400146
+    second: ring_03_l
+  - first:
+      4: 400148
+    second: ring_03_r
+  - first:
+      4: 400150
+    second: root
+  - first:
+      4: 400152
+    second: spine_01
+  - first:
+      4: 400154
+    second: spine_02
+  - first:
+      4: 400156
+    second: spine_03
+  - first:
+      4: 400158
+    second: tail1
+  - first:
+      4: 400160
+    second: tail2
+  - first:
+      4: 400162
+    second: tail3
+  - first:
+      4: 400164
+    second: tail4
+  - first:
+      4: 400166
+    second: tail5
+  - first:
+      4: 400168
+    second: tail6
+  - first:
+      4: 400170
+    second: tail7
+  - first:
+      4: 400172
+    second: thigh_l
+  - first:
+      4: 400174
+    second: thigh_r
+  - first:
+      4: 400176
+    second: thumb_01_l
+  - first:
+      4: 400178
+    second: thumb_01_r
+  - first:
+      4: 400180
+    second: thumb_02_l
+  - first:
+      4: 400182
+    second: thumb_02_r
+  - first:
+      4: 400184
+    second: thumb_03_l
+  - first:
+      4: 400186
+    second: thumb_03_r
+  - first:
+      4: 400188
+    second: upperarm_l
+  - first:
+      4: 400190
+    second: upperarm_r
+  - first:
+      4: 400192
+    second: upperarm_twist_01_l
+  - first:
+      4: 400194
+    second: upperarm_twist_01_r
+  - first:
+      4: 400196
+    second: WeaponsL
+  - first:
+      4: 400198
+    second: WeaponsR
+  - first:
+      21: 2100000
+    second: BaseRig
+  - first:
+      43: 4300000
+    second: Character Base
+  - first:
+      74: 7400000
+    second: deathimpact
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: Character Base
+  - first:
+      41386430: 2186277476908879412
+    second: ImportLogs
   externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -220,21 +632,22 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
-      copied configuration does not match position in animation file:\n\t'jaw' : position
-      error = 17.589819 mm\n\t'eyeR' : position error = 2.880113 mm\n\t'eyeL' : position
-      error = 2.532171 mm\n"
+      copied configuration does not match position in animation file:\n\t'jaw' :
+      position error = 17.589819 mm\n\t'eyeR' : position error = 2.880113 mm\n\t'eyeL'
+      : position error = 2.532171 mm\n"
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'calf_r' has scale animation that will be discarded.\n\t'foot_r'
-      has scale animation that will be discarded.\n\t'lowerarm_l' has scale animation
-      that will be discarded.\n\t'lowerarm_r' has scale animation that will be discarded.\n\t'jaw'
-      has translation animation that will be discarded.\n\t'eyeR' has translation
-      animation that will be discarded.\n\t'eyeR' has scale animation that will be
-      discarded.\n\t'eyeL' has translation animation that will be discarded.\n\t'eyeL'
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'calf_r' has scale animation that will be
+      discarded.\n\t'foot_r' has scale animation that will be discarded.\n\t'lowerarm_l'
+      has scale animation that will be discarded.\n\t'lowerarm_r' has scale animation
+      that will be discarded.\n\t'jaw' has translation animation that will be discarded.\n\t'eyeR'
+      has translation animation that will be discarded.\n\t'eyeR' has scale animation
+      that will be discarded.\n\t'eyeL' has translation animation that will be discarded.\n\t'eyeL'
       has scale animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
@@ -251,6 +664,7 @@ ModelImporter:
     - serializedVersion: 16
       name: deathimpact
       takeName: Take 001
+      internalID: 0
       firstFrame: 700
       lastFrame: 736
       wrapMode: 0
@@ -262,12 +676,12 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -483,25 +897,36 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -510,10 +935,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 1
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human:
     - boneName: pelvis
       humanName: Hips
@@ -1465,14 +1890,20 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 4696d537231129a4aa325112bde3eb08,
     type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
+  avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

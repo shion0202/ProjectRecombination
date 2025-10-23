@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace _Test.Skills
 {
@@ -88,7 +89,7 @@ namespace _Test.Skills
 
             float x = UnityEngine.Random.Range(spawnTargetPositionX.x, spawnTargetPositionX.y);
             float z = UnityEngine.Random.Range(spawnTargetPositionZ.x, spawnTargetPositionZ.y);
-            Vector3 spawnPos = new Vector3(x, spawnTargetPositionY + 10.0f, z);
+            Vector3 spawnPos = new (x, spawnTargetPositionY + 10.0f, z);
             _safeZone = Utils.Instantiate(safeZonePrefab, spawnPos, Quaternion.identity);
 
             float elapsed = 0f;

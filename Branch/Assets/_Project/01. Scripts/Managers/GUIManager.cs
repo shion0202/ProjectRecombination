@@ -111,10 +111,22 @@ namespace Managers
             set => buffImage = value;
         }
 
+        public GameObject RadialUI
+        {
+            get => radialUI;
+            set => radialUI = value;
+        }
+
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set => _selectedIndex = value;
+        }
+
         public int SelectedPartIndex
         {
             get => _selectedPartIndex;
-            set => _selectedIndex = value;
+            set => _selectedPartIndex = value;
         }
 
         public void ToggleCrosshead()
@@ -230,33 +242,50 @@ namespace Managers
 
         public void ToggleRadialUI(bool isOpen)
         {
-            if (isOpen) radialUI.gameObject.SetActive(true);
-            else radialUI.gameObject.SetActive(false);
-
-            if (_selectedIndex >= 0 && _selectedIndex < selectedCircles.Count)
+            if (isOpen)
             {
-                selectedCircles[_selectedIndex].gameObject.SetActive(false);
-                partIcons[_selectedIndex].color = originalColor;
+                radialUI.gameObject.SetActive(true);
             }
-            _selectedIndex = -1;
-            _selectedPartIndex = -1;
-            ToggleBasePartButton(false);
+            else
+            {
+                for (int i = 0; i < selectedCircles.Count; ++i)
+                {
+                    selectedCircles[i].gameObject.SetActive(false);
+                    partIcons[i].color = originalColor;
+                }
+                ToggleBasePartButton(false);
+
+                _selectedIndex = -1;
+                _selectedPartIndex = -1;
+
+                Time.timeScale = 1.0f;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
+                Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>().SetMovable(true);
+                Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>().FollowCamera.SetCameraRotatable(true);
+
+                radialUI.gameObject.SetActive(false);
+            }
         }
 
         public void SelectPartPosition(int type)
         {
-            if (_selectedIndex >= 0 && _selectedIndex < selectedCircles.Count)
+            for (int i = 0; i < selectedCircles.Count; ++i)
             {
-                selectedCircles[_selectedIndex].gameObject.SetActive(false);
-                partIcons[_selectedIndex].color = originalColor;
+                if (i == type)
+                {
+                    selectedCircles[type].gameObject.SetActive(true);
+                    partIcons[type].color = selectedColor;
+                    continue;
+                }
+
+                selectedCircles[i].gameObject.SetActive(false);
+                partIcons[i].color = originalColor;
             }
 
-            _selectedIndex = type;
-            selectedCircles[_selectedIndex].gameObject.SetActive(true);
-            partIcons[_selectedIndex].color = selectedColor;
-
             // 왼팔 기본 파츠 X
-            if (_selectedIndex != 3)
+            if (type != 3)
             {
                 ToggleBasePartButton(true);
             }
@@ -264,6 +293,8 @@ namespace Managers
             {
                 ToggleBasePartButton(false);
             }
+
+            _selectedIndex = type;
         }
 
         public void UnselectPartPosition(int type)

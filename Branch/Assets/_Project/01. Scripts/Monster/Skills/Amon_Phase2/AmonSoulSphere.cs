@@ -1,7 +1,5 @@
 using Monster.AI.Blackboard;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace _Test.Skills
@@ -28,7 +26,7 @@ namespace _Test.Skills
 
         public override IEnumerator Activate(Blackboard data)
         {
-            Debug.Log("[Amon Phase 2] 영혼 구체 시작");
+            Debug.Log("영혼 구체 시작");
 
             // 3. 영혼 구체 N개 생성 (랜덤 위치)
             for (int i = 0; i < sphereCount; ++i)
@@ -48,13 +46,13 @@ namespace _Test.Skills
             mats[3] = originMaterial;
             _smr.materials = mats;
 
-            Debug.Log("[Amon Phase 2] 영혼 구체 종료");
+            Debug.Log("영혼 구체 종료");
             yield break;
         }
 
         public override IEnumerator Casting(Blackboard data)
         {
-            Debug.Log("[Amon Phase 2] 영혼 구체 준비");
+            Debug.Log("영혼 구체 준비");
 
             TargetRenderer targetRenderer = data.Agent.GetComponentInChildren<TargetRenderer>();
             if (targetRenderer)

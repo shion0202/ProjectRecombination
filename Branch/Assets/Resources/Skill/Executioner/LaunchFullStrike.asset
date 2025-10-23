@@ -27,4 +27,5 @@ MonoBehaviour:
   missileCount: 10
   aoeRadius: 10
   missileDropHeight: 30
-  missileDropTime: 1
+  missileDropTime: 0.5
+  missileInterval: 0.1

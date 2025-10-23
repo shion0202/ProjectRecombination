@@ -386,18 +386,21 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             // UI 활성화 시 커서 보이기, 자유롭게
             Managers.GUIManager.Instance.ToggleRadialUI(true);
-            
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            // To-do: 공격 등 다른 조작도 불가능하도록 설정
+            // 컨트롤러를 바꿔버리는 것도 방법인 듯
+            SetMovable(false);
+            _followCamera.SetCameraRotatable(false);
+
+            Time.timeScale = 0.1f;
         }
 
         if (context.canceled)
         {
-            // UI 비활성화 시 커서 숨기고 고정
-            Managers.GUIManager.Instance.ToggleRadialUI(false);
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            if (!Managers.GUIManager.Instance.RadialUI.activeSelf) return;
+            CloseRadialUI();
         }
     }
 
@@ -642,10 +645,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public void TakeDamage(float takeDamage, float defenceIgnoreRate, float unitOfTime)
     {
+        Debug.Log("hi!!!");
         if ((_currentPlayerState & EPlayerState.Spawning) != 0 || (_currentPlayerState & EPlayerState.Invincibility) != 0) return;
         if (stats.CurrentHealth <= 0) return;
 
         var damage = Utils.GetDamage(takeDamage, defenceIgnoreRate, unitOfTime,stats.TotalStats);
+        Debug.Log("으앙아픔: " + takeDamage + ", " + damage);
         if (damage > 0)
         {
             //if (stats.CurrentPartHealth > 0)        // 파츠 HP가 남아있으면 파츠를 우선 데미지 계산
@@ -805,6 +810,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             _currentPlayerState &= ~(newState);
         }
+    }
+
+    public void CloseRadialUI()
+    {
+        // UI 비활성화 시 커서 숨기고 고정
+        SelectAndChangePart(Managers.GUIManager.Instance.SelectedIndex, Managers.GUIManager.Instance.SelectedPartIndex);
+        Managers.GUIManager.Instance.ToggleRadialUI(false);
     }
     #endregion
 
@@ -1036,6 +1048,37 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (profile.TryGet<MotionBlur>(out var blur))   // MotionBlur 오버라이드 얻기
         {
             blur.active = isOn; // 또는 blur.intensity.overrideState = enabled;
+        }
+    }
+
+    public void SelectAndChangePart(int partType, int attackType)
+    {
+        if (attackType < 0) return;
+
+        PlayerController player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
+        if (player)
+        {
+            switch (partType)
+            {
+                case 0:
+                    // 등/어깨
+                    player.Inven.EquipItem(EPartType.Shoulder, (EAttackType)(1 << attackType));
+                    player.Inven.EquipItem(EPartType.Back, (EAttackType)(1 << attackType));
+                    player.Inven.EquipItem(EPartType.Mask, (EAttackType)(1 << attackType));
+                    break;
+                case 1:
+                    // 다리
+                    player.Inven.EquipItem(EPartType.Legs, (EAttackType)(1 << attackType));
+                    break;
+                case 2:
+                    // 왼팔
+                    player.Inven.EquipItem(EPartType.ArmL, (EAttackType)(1 << attackType));
+                    break;
+                case 3:
+                    // 오른팔
+                    player.Inven.EquipItem(EPartType.ArmR, (EAttackType)(1 << attackType));
+                    break;
+            }
         }
     }
 
