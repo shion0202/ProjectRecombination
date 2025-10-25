@@ -78,7 +78,7 @@ public class ShoulderLaser : PartBaseShoulder
     {
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward;
+        Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward * (Vector3.Distance(_owner.transform.position, _owner.FollowCamera.transform.position));
         float maxDistance = beamMaxDistance;
         Vector3 targetPoint = Vector3.zero;
 
@@ -104,11 +104,12 @@ public class ShoulderLaser : PartBaseShoulder
             if (collider.TryGetComponent<IDamagable>(out var monster))
             {
                 monster.ApplyDamage(beamDamage * _timer, targetMask, _timer, 0.0f);
-                Utils.Destroy(Utils.Instantiate(bulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
             }
+
+            Utils.Destroy(Utils.Instantiate(bulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
         }
 
-        //DrawCapsule(origin, targetPoint, beamRadius, Color.yellow, 0.5f);
+        DrawCapsule(origin, targetPoint, beamRadius, Color.yellow, 0.5f);
         return targetPoint;
     }
 
