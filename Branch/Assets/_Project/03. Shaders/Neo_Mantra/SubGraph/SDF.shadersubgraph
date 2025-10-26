@@ -716,6 +716,20 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
+                    "m_Id": "945f66be7ddb47f6a93dfbb91fc67342"
+                },
+                "m_SlotId": 1
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "a5ff51bbefcb460ebaef220cf1a5efab"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
                     "m_Id": "95eeeb35526242b9a652143a9d89fc03"
                 },
                 "m_SlotId": 2
@@ -919,20 +933,6 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "6b5d5c6b3814443d9e1926c09427001a"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "bc131e30343d4a1fb198daae4d0cc080"
-                },
-                "m_SlotId": 2
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "a5ff51bbefcb460ebaef220cf1a5efab"
                 },
                 "m_SlotId": 0
             }
@@ -5538,7 +5538,7 @@
     "m_Group": {
         "m_Id": "5f6195aa271b47eb9d187478e2f939d8"
     },
-    "m_Name": "GetMainLight (Custom Function)",
+    "m_Name": "GetMainLightForSDF (Custom Function)",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -5569,9 +5569,9 @@
         "m_SerializableColors": []
     },
     "m_SourceType": 1,
-    "m_FunctionName": "GetMainLight",
+    "m_FunctionName": "GetMainLightForSDF",
     "m_FunctionSource": "",
-    "m_FunctionBody": "#ifdef SHADERGRAPH_PREVIEW\n Color = float3(1,1,1);\n Direction = float3(0,0,0);\n#else\n Light light = GetMainLight();\n Color = light.color;\n Direction = light.direction;\n#endif"
+    "m_FunctionBody": "#ifdef SHADERGRAPH_PREVIEW\r\n    Direction = float3(0.5, 0.5, 0);\r\n    Color = float3(1, 1, 1);\r\r\n#else\r\n    Light mainLight = GetMainLight();\r\n    Direction = mainLight.direction;\r\n    Color = mainLight.color;\r\r\n#endif"
 }
 
 {

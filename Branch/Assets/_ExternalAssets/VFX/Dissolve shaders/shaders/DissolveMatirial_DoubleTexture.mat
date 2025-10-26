@@ -72,7 +72,7 @@ Material:
     - _visble_amount: 0
     m_Colors:
     - _DissolveDirection: {r: 0, g: 0.1, b: 0, a: 0}
-    - _DissolveOffset: {r: 0, g: 1.17, b: 0, a: 0}
+    - _DissolveOffset: {r: 0, g: 30.99, b: 0, a: 0}
     - _EdgeColor: {r: 32, g: 0, b: 0, a: 0}
     - _UVSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _edge_color: {r: 0, g: 11.96775, b: 16, a: 0}
