@@ -56,7 +56,6 @@ public class ShoulderRapid : PartBaseShoulder
 
         brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.3f);
         cutsceneCams[0].m_Priority = 100;
-        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", true);
 
         _skillCoroutine = StartCoroutine(CoLaunchTargetMissiles());
     }
@@ -149,6 +148,8 @@ public class ShoulderRapid : PartBaseShoulder
             // 타겟팅 후 다음 타겟팅 전까지 잠깐 대기
             yield return new WaitForSeconds(0.2f);
         }
+
+        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", true);
         yield return new WaitForSeconds(0.4f);
 
         // 5. 각 타겟에게 유도 미사일 발사

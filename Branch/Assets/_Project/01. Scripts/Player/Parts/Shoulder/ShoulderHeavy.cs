@@ -1,7 +1,9 @@
+using Cinemachine;
 using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class ShoulderHeavy : PartBaseShoulder
 {
@@ -11,6 +13,20 @@ public class ShoulderHeavy : PartBaseShoulder
     protected SkinnedMeshRenderer smr;
     private Coroutine _skillCoroutine = null;
     protected Coroutine _morphBlendRoutine = null;
+
+    [SerializeField] protected List<CinemachineVirtualCamera> cutsceneCams = new();
+    protected CinemachineBrain brain;
+    protected CinemachineBlendDefinition defaultBlend;
+    protected CinemachineImpulseSource source;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        brain = Camera.main.GetComponent<CinemachineBrain>();
+        defaultBlend = brain.m_DefaultBlend;
+        source = gameObject.GetComponent<CinemachineImpulseSource>();
+    }
 
     public override void UseAbility()
     {
@@ -32,12 +48,40 @@ public class ShoulderHeavy : PartBaseShoulder
             _owner.transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 
+    protected Vector3 GetTargetPoint(out RaycastHit hit)
+    {
+        Camera cam = Camera.main;
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward * (Vector3.Distance(_owner.transform.position, _owner.FollowCamera.transform.position));
+        Vector3 targetPoint = Vector3.zero;
+
+        if (Physics.Raycast(startPoint, ray.direction, out hit, 100.0f, ignoreMask))
+        {
+            targetPoint = hit.point;
+        }
+        else
+        {
+            targetPoint = ray.origin + ray.direction * 100.0f;
+        }
+
+        return targetPoint;
+    }
+
     protected IEnumerator CoShootOrb()
     {
         GUIManager.Instance.SetBackSkillIcon(true);
         _owner.FollowCamera.SetCameraRotatable(false);
         _owner.SetMovable(false);
         LookCameraDirection();
+
+        Vector3 spawnPoint = transform.position + _owner.transform.forward + Vector3.up * 2.5f;
+        Vector3 targetPoint = GetTargetPoint(out RaycastHit hit);
+        Vector3 camShootDirection = (targetPoint - spawnPoint);
+        camShootDirection.y = 0.0f;
+        camShootDirection.Normalize();
+
+        brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.3f);
+        cutsceneCams[0].m_Priority = 100;
 
         // 일정 시간 대기
         // To-do: 이펙트, 애니메이션 등 발사 준비 연출
@@ -62,13 +106,16 @@ public class ShoulderHeavy : PartBaseShoulder
         smr.SetBlendShapeWeight(0, max);
 
         // 오브 생성 및 발사
-        Destroy(Instantiate(shootPrefab, transform.position + _owner.transform.forward + Vector3.up, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(0.0f, 180.0f, 0.0f))), 2.0f);
-        GameObject orb = Instantiate(orbPrefab, transform.position + _owner.transform.forward + Vector3.up, Quaternion.identity);
+        _owner.FollowCamera.ApplyShake(source);
+        Utils.Destroy(Utils.Instantiate(shootPrefab, spawnPoint, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(0.0f, 180.0f, 0.0f))), 2.0f);
+        GameObject orb = Utils.Instantiate(orbPrefab, spawnPoint, Quaternion.identity);
         Bullet orbComp = orb.GetComponent<Bullet>();
         if (orbComp != null)
         {
-            orbComp.Init(_owner.gameObject, null, transform.position + _owner.transform.forward * 1.0f + Vector3.up, Vector3.zero, _owner.transform.forward, 50.0f);
+            orbComp.Init(_owner.gameObject, null, spawnPoint, Vector3.zero, camShootDirection, 200.0f);
         }
+
+        yield return new WaitForSeconds(0.4f);
 
         _owner.PlayerAnimator.SetBool("isPlayBackHeavyAnim", false);
         _owner.FollowCamera.SetCameraRotatable(true);
@@ -79,6 +126,9 @@ public class ShoulderHeavy : PartBaseShoulder
             StopCoroutine(_morphBlendRoutine);
         }
         _morphBlendRoutine = StartCoroutine(CoMorphBlend());
+
+        brain.m_DefaultBlend = defaultBlend;
+        cutsceneCams[0].m_Priority = 10;
 
         float time = 5.0f;
         GUIManager.Instance.SetBackSkillCooldown(true);

@@ -9860,7 +9860,7 @@ AudioSource:
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 0
+    m_RotationOrder: 4
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -9875,7 +9875,7 @@ AudioSource:
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 0
+    m_RotationOrder: 4
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -9890,7 +9890,7 @@ AudioSource:
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 0
+    m_RotationOrder: 4
 --- !u!199 &8590510150724035184
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -14684,6 +14684,9 @@ MonoBehaviour:
   bulletSpeed: 20
   explosionRadius: 2
   lifeTime: 5
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
   muzzleParticlePrefab: {fileID: 3000391901840267600, guid: 870431c7ffd0e8e458d7f9c3b74e96ef,
     type: 3}
   impactParticle: {fileID: 7890783640856150600, guid: 0cd6d5b7f00bde74eb68ed47003804ac,

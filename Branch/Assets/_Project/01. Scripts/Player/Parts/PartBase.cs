@@ -1,3 +1,4 @@
+using _Project._01._Scripts.Monster;
 using Monster;
 using Monster.AI;
 using System;
@@ -82,17 +83,24 @@ public abstract class PartBase : MonoBehaviour
 
     public void TakeDamage(Transform target, float coefficient = 1.0f)
     {
+        float hitZoneValue = 1.0f;
+        PartialBlow partialBlow = target.GetComponent<PartialBlow>();
+        if (partialBlow)
+        {
+            hitZoneValue = partialBlow.fValue;
+        }
+
         IDamagable monster = target.GetComponent<IDamagable>();
         if (monster != null)
         {
-            monster.ApplyDamage((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient), targetMask);
+            monster.ApplyDamage((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient * hitZoneValue), targetMask);
         }
         else
         {
             monster = target.transform.GetComponentInParent<IDamagable>();
             if (monster != null)
             {
-                monster.ApplyDamage((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient), targetMask);
+                monster.ApplyDamage((_owner.Stats.CombinedPartStats[partType][EStatType.Damage].value * coefficient * hitZoneValue), targetMask);
             }
         }
     }

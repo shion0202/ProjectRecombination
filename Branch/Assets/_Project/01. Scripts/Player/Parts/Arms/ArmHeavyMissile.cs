@@ -36,7 +36,7 @@ public class ArmHeavyMissile : PartBaseArm
 
         Vector3 randomDir = GetRandomDirection(camShootDirection);
 
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(randomDir));
+        GameObject bullet = Utils.Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.LookRotation(randomDir));
         Bullet bulletComp = bullet.GetComponent<Bullet>();
         if (bulletComp != null)
         {

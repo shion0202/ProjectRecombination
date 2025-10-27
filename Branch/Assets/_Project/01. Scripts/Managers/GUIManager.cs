@@ -52,6 +52,13 @@ namespace Managers
         [SerializeField] private GameObject shoulderSkillImage;
         [SerializeField] private GameObject rightArmRadialImage;
 
+        [Header("Indicator UI")]
+        [SerializeField] private Image indicatorImage;
+        public Transform targetObject;
+        private bool _isIndicationg = false;
+        private float screenMargin = 25.0f;
+        private Coroutine _indicatorFadeRoutine = null;
+
         [Header("Buff UI")]
         [SerializeField] private GameObject buffImage;
 
@@ -127,6 +134,21 @@ namespace Managers
         {
             get => _selectedPartIndex;
             set => _selectedPartIndex = value;
+        }
+
+        public bool IsIndicationg
+        {
+            get => _isIndicationg;
+            set => _isIndicationg = value;
+        }
+
+        private void Update()
+        {
+            if (_isIndicationg)
+            {
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(targetObject.position);
+                indicatorImage.rectTransform.position = screenPos;
+            }
         }
 
         public void ToggleCrosshead()
@@ -393,18 +415,21 @@ namespace Managers
                 case 0:
                     foreach (var button in laserParts)
                     {
+                        button.gameObject.SetActive(true);
                         button.interactable = true;
                     }
                     break;
                 case 1:
                     foreach (var button in rapidParts)
                     {
+                        button.gameObject.SetActive(true);
                         button.interactable = true;
                     }
                     break;
                 case 2:
                     foreach (var button in heavyParts)
                     {
+                        button.gameObject.SetActive(true);
                         button.interactable = true;
                     }
                     break;
@@ -414,6 +439,53 @@ namespace Managers
         public void SetObjectText(string text)
         {
             objectText.text = text;
+        }
+
+        public void SetIndicator(bool isActivate)
+        {
+            // 인디케이터 켜는 소리 필요
+            if (isActivate)
+            {
+                if (_indicatorFadeRoutine != null)
+                {
+                    StopCoroutine(_indicatorFadeRoutine);
+                    _indicatorFadeRoutine = null;
+                }
+
+                indicatorImage.color = Color.white;
+                indicatorImage.gameObject.SetActive(isActivate);
+                _isIndicationg = isActivate;
+            }
+            else
+            {
+                _indicatorFadeRoutine = StartCoroutine(CoFadeIndicator(0.5f));
+            }
+        }
+
+        public void SetIndicatorTarget(Transform target)
+        {
+            targetObject = target;
+        }
+
+        private IEnumerator CoFadeIndicator(float duration)
+        {
+            float elapsed = 0f;
+            Color color = indicatorImage.color;
+            float startAlpha = color.a;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                color.a = Mathf.Lerp(startAlpha, 0f, elapsed / duration);
+                indicatorImage.color = color;
+                yield return null;
+            }
+            // 마지막에 완전히 0으로 세팅
+            color.a = 0f;
+            indicatorImage.color = color;
+            indicatorImage.gameObject.SetActive(false);
+            _isIndicationg = false;
+            _indicatorFadeRoutine = null;
         }
 
         #region Fade In/Out

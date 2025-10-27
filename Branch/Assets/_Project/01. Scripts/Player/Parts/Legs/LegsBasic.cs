@@ -81,8 +81,8 @@ public class LegsBasic : PartBaseLegs
     {
         Vector3 direction = -_owner.DashDirection.normalized;
         Quaternion effectRotation = Quaternion.LookRotation(direction, Vector3.up);
-        GameObject go = Instantiate(dashEffectPrefab, _owner.transform.position + (Vector3.up * 1.0f) + (direction * -3.0f), effectRotation);
-        Destroy(go, 2.0f);
+        GameObject go = Utils.Instantiate(dashEffectPrefab, _owner.transform.position + (Vector3.up * 1.0f) + (direction * -3.0f), effectRotation);
+        Utils.Destroy(go, 2.0f);
         ++_currentSkillCount;
         if (_currentSkillCount >= maxSkillCount)
         {

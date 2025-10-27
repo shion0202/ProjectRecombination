@@ -17,26 +17,25 @@ public class ArmHeavyShotgun : PartBaseArm
 
     protected override void Shoot()
     {
+        Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward * (Vector3.Distance(_owner.transform.position, _owner.FollowCamera.transform.position));
         Vector3 origin = bulletSpawnPoint.position;
-        Vector3 forward = Camera.main.transform.forward;
+        Vector3 forward = _owner.FollowCamera.transform.forward;
 
         if (muzzleFlashPrefab)
         {
-            muzzleFlashEffect = Instantiate(muzzleFlashPrefab, transform.position, Quaternion.LookRotation(-_owner.transform.forward));
-            Destroy(muzzleFlashEffect, 0.5f); // Lifetime of muzzle effect.
+            muzzleFlashEffect = Utils.Instantiate(muzzleFlashPrefab, origin, Quaternion.LookRotation(-_owner.transform.forward));
+            Utils.Destroy(muzzleFlashEffect, 0.5f); // Lifetime of muzzle effect.
         }
 
         for (int i = 0; i < pelletCount; i++)
         {
             // 1. '좁은 탄착군' (bulletPosition 기준) ray
             Vector3 narrowDir = GetRandomConeDirection(forward, denseSpreadAngle);
-            Debug.DrawRay(origin, narrowDir * denseRange, Color.yellow, 1f);
 
-            if (Physics.Raycast(origin, narrowDir, out RaycastHit hit, denseRange))
+            if (Physics.Raycast(startPoint, narrowDir, out RaycastHit hit, denseRange, ignoreMask))
             {
                 // 밀집 히트 처리
-                ProcessPelletHit(hit, 10);
-                Debug.DrawRay(origin, narrowDir * hit.distance, Color.yellow, 1f);
+                ProcessPelletHit(hit, 0.5f);
                 continue;
             }
             else
@@ -45,13 +44,11 @@ public class ArmHeavyShotgun : PartBaseArm
 
                 // 2. '넓은 탄착군' (denseEndPos 기준) ray: narrowDir을 중심축 삼아 고르게 퍼짐!
                 Vector3 spreadDir = GetRandomConeDirection(narrowDir, spreadAngle);
-                Debug.DrawRay(denseEndPos, spreadDir * (maxRange - denseRange), Color.red, 1f);
 
-                if (Physics.Raycast(denseEndPos, spreadDir, out RaycastHit spreadHit, maxRange - denseRange))
+                if (Physics.Raycast(denseEndPos, spreadDir, out RaycastHit spreadHit, maxRange - denseRange, ignoreMask))
                 {
                     // 확산 히트 처리 etc.
-                    ProcessPelletHit(spreadHit, 15);
-                    Debug.DrawRay(denseEndPos, spreadDir * spreadHit.distance, Color.red, 1f);
+                    ProcessPelletHit(spreadHit);
                 }
             }
         }
@@ -84,10 +81,10 @@ public class ArmHeavyShotgun : PartBaseArm
     }
 
     // 히트 처리 함수 (적중 시 데미지, 이펙트 등)
-    private void ProcessPelletHit(RaycastHit hit, int damage)
+    private void ProcessPelletHit(RaycastHit hit, float coefficient = 1.0f)
     {
-        TakeDamage(hit.transform);
-        Destroy(Instantiate(hitEffectPrefab, hit.point, Quaternion.identity), 0.5f);
-        Destroy(Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);
+        TakeDamage(hit.transform, coefficient);
+        Utils.Destroy(Utils.Instantiate(hitEffectPrefab, hit.point, Quaternion.identity), 0.5f);
+        Utils.Destroy(Utils.Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);
     }
 }

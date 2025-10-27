@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 4285565}
   - component: {fileID: 4285564}
   - component: {fileID: 4285566}
+  - component: {fileID: 4285567}
   m_Layer: 5
   m_Name: Img_Start
   m_TagString: Untagged
@@ -255,6 +256,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4285567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4285562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be238e4f097547abb1445bade6d4479e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStarted: 0
+  isRunning: 0
 --- !u!1 &471648123
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,7 +416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleLogoImage: {fileID: 1747131103}
   titleLogoRectTransform: {fileID: 1747131102}
-  animationDuration: 4
+  animationDuration: 3
   startPositionX: -1200
   titleLogoIdleAnimation: {fileID: 1747131105}
   titleCharImage: {fileID: 1909836895}
@@ -409,6 +424,16 @@ MonoBehaviour:
   animationDurationChar: 1.5
   startPositionXChar: 1200
   titleCharIdleAnimation: {fileID: 1909836894}
+  titlePlayButtonImage: {fileID: 4285564}
+  titlePlayButtonText: {fileID: 1066791635}
+  titleExitButtonImage: {fileID: 1853522271}
+  titleExitButtonText: {fileID: 1936149396}
+  animationDurationButton: 2
+  titlePlayButtonIdleAnimation: {fileID: 4285567}
+  titleExitButtonIdleAnimation: {fileID: 1853522274}
+  isLogoAnimaEnd: 0
+  isCharAnimaEnd: 0
+  isButtonAnimaEnd: 0
 --- !u!4 &1024574665
 Transform:
   m_ObjectHideFlags: 0
@@ -564,9 +589,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: PLAY
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 22da000d0e689e244bf2c2b4302c03a9, type: 2}
-  m_sharedMaterial: {fileID: -6000343757364823440, guid: 22da000d0e689e244bf2c2b4302c03a9,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1243,6 +1267,7 @@ GameObject:
   - component: {fileID: 1853522272}
   - component: {fileID: 1853522271}
   - component: {fileID: 1853522273}
+  - component: {fileID: 1853522274}
   m_Layer: 5
   m_Name: Img_Resume
   m_TagString: Untagged
@@ -1364,6 +1389,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1853522274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853522269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be238e4f097547abb1445bade6d4479e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStarted: 0
+  isRunning: 0
 --- !u!1 &1909836893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1518,9 +1557,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: EXIT
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 22da000d0e689e244bf2c2b4302c03a9, type: 2}
-  m_sharedMaterial: {fileID: -6000343757364823440, guid: 22da000d0e689e244bf2c2b4302c03a9,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

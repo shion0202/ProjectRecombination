@@ -126,11 +126,6 @@ namespace Monster.AI.Blackboard
         public bool HasUsedSoulOrbAt80Percent { get; set; }
         public string CurrentState { get; set; }
         public bool IsAnySkillRunning {get; private set;}
-
-        // public GameObject LWing => lWing;
-        // public GameObject RWing => rWing;
-        // public GameObject Body => body;
-        // public GameObject EnergyBall => energyBall;
         public GameObject AmonBody => amonBody;
         public AmonShield AmonShield => amonShield.GetComponent<AmonShield>();
         public AmonEnergyBall AmonEnergyBall => amonEnergyBall.GetComponent<AmonEnergyBall>();
@@ -232,8 +227,8 @@ namespace Monster.AI.Blackboard
         public void Init()
         {
             InitMonsterStatsByID();
-            agentCollider.enabled = true;
-            agentRigidbody.isKinematic = false;
+            // agentCollider.enabled = true;
+            // agentRigidbody.isKinematic = false;
             NavMeshAgent.isStopped = false;
             NavMeshAgent.ResetPath();
             CurrentHealth = MaxHealth;

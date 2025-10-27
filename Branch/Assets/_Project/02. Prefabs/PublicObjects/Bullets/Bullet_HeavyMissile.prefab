@@ -14626,7 +14626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
-  bulletSpeed: 25
+  bulletSpeed: 20
   explosionRadius: 3
   lifeTime: 3
   targetMask:

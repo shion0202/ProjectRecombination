@@ -121,7 +121,7 @@ Material:
     - _DisplacementAmount: 0
     - _DisplacementFeature: 0
     - _DissolveFeature: 1
-    - _DissolveHide: 0
+    - _DissolveHide: 1
     - _EdgeLength: 15
     - _Float0: 1
     - _Float1: 1

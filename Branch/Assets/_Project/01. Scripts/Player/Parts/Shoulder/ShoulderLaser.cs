@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Managers;
 using Cinemachine;
+using _Project._01._Scripts.Monster;
 
 public class ShoulderLaser : PartBaseShoulder
 {
@@ -103,14 +104,21 @@ public class ShoulderLaser : PartBaseShoulder
             var collider = _hitResults[i];
             if (collider.TryGetComponent<IDamagable>(out var monster))
             {
-                monster.ApplyDamage(beamDamage * _timer, targetMask, _timer, 0.0f);
+                float hitZoneValue = 1.0f;
+                PartialBlow partialBlow = collider.GetComponent<PartialBlow>();
+                if (partialBlow)
+                {
+                    hitZoneValue = partialBlow.fValue;
+                }
+
+                monster.ApplyDamage(beamDamage * _timer * hitZoneValue, targetMask, _timer, 0.0f);
             }
 
             Utils.Destroy(Utils.Instantiate(bulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
         }
 
         DrawCapsule(origin, targetPoint, beamRadius, Color.yellow, 0.5f);
-        return targetPoint;
+        return origin + targetDirection * maxDistance;
     }
 
     void ShootBeamInDir(Vector3 start, Vector3 end)

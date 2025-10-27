@@ -31,6 +31,10 @@ public class Bouncer : Bullet
         IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
         if (damagable != null)
         {
+            Transform otherParent = GetTopParent(collision.gameObject).transform;
+            if (_damagedTargets.Contains(otherParent)) return;
+            _damagedTargets.Add(otherParent);
+
             damagable.ApplyDamage(Damage, targetMask);
         }
 

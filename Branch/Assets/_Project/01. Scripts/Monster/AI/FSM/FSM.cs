@@ -8,6 +8,7 @@ namespace Monster.AI.FSM
         public Blackboard.Blackboard blackboard;
         public bool isInit;
         public bool isEnabled;
+        public RigMonster ikAnimaton;
         
         public void OnHit(float damage)
         {
@@ -21,6 +22,7 @@ namespace Monster.AI.FSM
         {
             // To-do: Target Mask 로직 필요
             OnHit(inDamage);
+            // ikAnimaton.TakeHit(Vector3.back); // TODO: 피격 IK RnD
         }
         
         // 상태 전환 메서드 (기존 코드와 거의 동일)

@@ -1,5 +1,6 @@
 using Managers;
 using System.Collections;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class Missile : Bullet
@@ -79,6 +80,9 @@ public class Missile : Bullet
 
     protected override void DestroyBullet(Transform parent = null)
     {
+        if (_isCollided) return;
+        _isCollided = true;
+
         // 풀링 전 총알의 상태를 초기화
         _rb.velocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
@@ -98,6 +102,9 @@ public class Missile : Bullet
 
     protected override void DestroyBullet(Collision collision)
     {
+        if (_isCollided) return;
+        _isCollided = true;
+
         // 풀링 전 총알의 상태를 초기화
         _rb.velocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;

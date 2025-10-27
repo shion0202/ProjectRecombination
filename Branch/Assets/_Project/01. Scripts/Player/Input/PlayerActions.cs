@@ -189,6 +189,15 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Indicator"",
+                    ""type"": ""Button"",
+                    ""id"": ""7846b28c-71bf-4d07-8bf2-3177cb0814b9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -356,6 +365,17 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""action"": ""RadialMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4608d7d0-f429-4bc6-bb23-80c40d8e5483"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC_Keyboard"",
+                    ""action"": ""Indicator"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -515,6 +535,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_PlayerActionMap_MouseScroll = m_PlayerActionMap.FindAction("MouseScroll", throwIfNotFound: true);
         m_PlayerActionMap_ResetCamera = m_PlayerActionMap.FindAction("ResetCamera", throwIfNotFound: true);
         m_PlayerActionMap_RadialMenu = m_PlayerActionMap.FindAction("RadialMenu", throwIfNotFound: true);
+        m_PlayerActionMap_Indicator = m_PlayerActionMap.FindAction("Indicator", throwIfNotFound: true);
         // JumpAttackActionMap
         m_JumpAttackActionMap = asset.FindActionMap("JumpAttackActionMap", throwIfNotFound: true);
         m_JumpAttackActionMap_Move = m_JumpAttackActionMap.FindAction("Move", throwIfNotFound: true);
@@ -612,6 +633,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_MouseScroll;
     private readonly InputAction m_PlayerActionMap_ResetCamera;
     private readonly InputAction m_PlayerActionMap_RadialMenu;
+    private readonly InputAction m_PlayerActionMap_Indicator;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerActionMap".
     /// </summary>
@@ -667,6 +689,10 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActionMap/RadialMenu".
         /// </summary>
         public InputAction @RadialMenu => m_Wrapper.m_PlayerActionMap_RadialMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActionMap/Indicator".
+        /// </summary>
+        public InputAction @Indicator => m_Wrapper.m_PlayerActionMap_Indicator;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -726,6 +752,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @RadialMenu.started += instance.OnRadialMenu;
             @RadialMenu.performed += instance.OnRadialMenu;
             @RadialMenu.canceled += instance.OnRadialMenu;
+            @Indicator.started += instance.OnIndicator;
+            @Indicator.performed += instance.OnIndicator;
+            @Indicator.canceled += instance.OnIndicator;
         }
 
         /// <summary>
@@ -770,6 +799,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @RadialMenu.started -= instance.OnRadialMenu;
             @RadialMenu.performed -= instance.OnRadialMenu;
             @RadialMenu.canceled -= instance.OnRadialMenu;
+            @Indicator.started -= instance.OnIndicator;
+            @Indicator.performed -= instance.OnIndicator;
+            @Indicator.canceled -= instance.OnIndicator;
         }
 
         /// <summary>
@@ -1031,6 +1063,13 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRadialMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Indicator" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnIndicator(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "JumpAttackActionMap" which allows adding and removing callbacks.

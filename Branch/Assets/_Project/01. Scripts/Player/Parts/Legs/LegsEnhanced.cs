@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Monster.AI;
 using Managers;
+using _Project._01._Scripts.Monster;
 
 public class LegsEnhanced : PartBaseLegs
 {
@@ -20,6 +21,13 @@ public class LegsEnhanced : PartBaseLegs
     private float _skateTime = 0f;                              // 시간 누적 변수
     private bool _isCooldown = false;
     private float _currentCooldownTime = 0.0f;
+    private bool _isAttack = false;
+
+    public bool IsAttack
+    {
+        get => _isAttack;
+        set => _isAttack = value;
+    }
 
     protected override void Awake()
     {
@@ -59,14 +67,14 @@ public class LegsEnhanced : PartBaseLegs
         if (_currentCooldownTime > 0.0f || _isCooldown) return;
 
         // 점프 연출 이후 실행
-        Instantiate(jumpEffectPrefab, _owner.transform.position + Vector3.up * 2.0f, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f)));
+        Utils.Instantiate(jumpEffectPrefab, _owner.transform.position + Vector3.up * 2.0f, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f)));
 
-        GameObject go = Instantiate(RapidPlayerPrefab, _owner.transform.position, Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f)));
+        GameObject go = Utils.Instantiate(RapidPlayerPrefab, _owner.transform.position, Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f)));
         RapidPlayer rapidPlayer = go.GetComponent<RapidPlayer>();
         if (rapidPlayer != null)
         {
             _isCooldown = true;
-            rapidPlayer.Init(_owner, _owner.FollowCamera);
+            rapidPlayer.Init(_owner, this);
         }
     }
 
@@ -75,34 +83,38 @@ public class LegsEnhanced : PartBaseLegs
         // 쿨타임, 재등장/공격 이펙트, 데미지 판정 등
         GUIManager.Instance.SetLegsSkillIcon(true);
         GUIManager.Instance.SetLegsSkillCooldown(true);
-        Destroy(Instantiate(landingEffectPrefab, _owner.transform.position, Quaternion.identity), 0.5f);
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, skillRange);
-        foreach (Collider hit in hitColliders)
+        if (IsAttack)
         {
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddExplosionForce(10.0f, transform.position, skillRange);
-            }
+            Utils.Destroy(Utils.Instantiate(landingEffectPrefab, _owner.transform.position, Quaternion.identity), 0.5f);
 
-            IDamagable monster = hit.transform.GetComponent<IDamagable>();
-            if (monster != null)
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, skillRange);
+            foreach (Collider hit in hitColliders)
             {
-                monster.ApplyDamage(skillDamage, targetMask);
-            }
-            else
-            {
-                monster = hit.transform.GetComponentInParent<IDamagable>();
+                float hitZoneValue = 1.0f;
+                PartialBlow partialBlow = hit.GetComponent<PartialBlow>();
+                if (partialBlow)
+                {
+                    hitZoneValue = partialBlow.fValue;
+                }
+
+                IDamagable monster = hit.transform.GetComponent<IDamagable>();
                 if (monster != null)
                 {
-                    monster.ApplyDamage(skillDamage, targetMask);
+                    monster.ApplyDamage(skillDamage * hitZoneValue, targetMask);
+                }
+                else
+                {
+                    monster = hit.transform.GetComponentInParent<IDamagable>();
+                    if (monster != null)
+                    {
+                        monster.ApplyDamage(skillDamage * hitZoneValue, targetMask);
+                    }
                 }
             }
         }
 
-        // To-do: 현재는 쿨타임이 동일하지만, 취소할 경우 더 적은 쿨타임을 적용할 필요가 있음
-        _currentCooldownTime = skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value;
+        _currentCooldownTime = IsAttack ? (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) : (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) * 0.5f;
         _isCooldown = false;
     }
 
@@ -138,8 +150,14 @@ public class LegsEnhanced : PartBaseLegs
 
             if (isSkateStraight)
             {
-                float sideSway = Mathf.Sin(_skateTime) * skateSway;     // 0.25f: 진폭(좌우 흔들림 크기)
-                
+                // 이동 방향(앞/뒤)에 직교하는 벡터를 얻어 흔들림 적용
+                Vector3 moveDir = inputDirection.normalized;
+                Vector3 swayAxis = Vector3.Cross(Vector3.up, moveDir).normalized; // 월드 업 벡터 기준 오른쪽
+
+                float sideSway = Mathf.Sin(_skateTime) * skateSway;
+                inputDirection += swayAxis * sideSway;
+                inputDirection.Normalize();
+
                 Vector3 forwardBackward;
                 if (Vector3.Dot(camForward, inputDirection) >= 0)
                 {

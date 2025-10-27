@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using Monster.AI;
 using Managers;
+using _Project._01._Scripts.Monster;
 
 public class Bullet : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float lifeTime = 5f; // 총알의 생명 시간
     [SerializeField] protected LayerMask targetMask;
     private float _timer;
+    protected bool _isCollided = false;
+    protected List<Transform> _damagedTargets = new();
 
     [Header("Effects")]
     [SerializeField] protected GameObject muzzleParticlePrefab;
@@ -92,6 +95,18 @@ public class Bullet : MonoBehaviour
         _timer = lifeTime;
     }
 
+    protected void OnEnable()
+    {
+        _isCollided = false;
+        _damagedTargets.Clear();
+    }
+
+    protected void OnDisable()
+    {
+        _isCollided = false;
+        _damagedTargets.Clear();
+    }
+
     protected virtual void Update()
     {
         if (_timer > 0)
@@ -126,7 +141,7 @@ public class Bullet : MonoBehaviour
         }
         
         // 벽(또는 기타 오브젝트)에 닿은 경우
-        if (other && (other.CompareTag("Wall") || other.CompareTag("Obstacle")))
+        if (other && (other.CompareTag("Wall") || other.CompareTag("Obstacle") || other.CompareTag("Platform") || other.CompareTag("Breakable")))
         {
             ImpactObstacle(other);
             return;
@@ -166,6 +181,9 @@ public class Bullet : MonoBehaviour
     #region Public Methods
     public void Init(GameObject shooter, Transform target, Vector3 start, Vector3 end, Vector3 direction, float damage)
     {
+        _isCollided = false;
+        _damagedTargets.Clear();
+
         _from = shooter;
         _to = end;
         _targetDirection = direction;
@@ -190,6 +208,16 @@ public class Bullet : MonoBehaviour
             $"Bullet Direction: {_targetDirection}, Parent(Muzzle Flash): {_parent}, Damage: {_damage:F2}, Bullet Speed: {bulletSpeed:F2}, " +
             $"Explosion Radius: {explosionRadius:F2}, Max Life Time: {lifeTime:F2}, Current Life Time: {_timer:F2}";
         return log;
+    }
+
+    public GameObject GetTopParent(GameObject obj)
+    {
+        Transform current = obj.transform;
+        while (current.parent != null)
+        {
+            current = current.parent;
+        }
+        return current.gameObject;
     }
     #endregion
 
@@ -236,6 +264,9 @@ public class Bullet : MonoBehaviour
 
     protected virtual void DestroyBullet(Transform parent = null)
     {
+        if (_isCollided) return;
+        _isCollided = true;
+
         // 풀링 전 총알의 상태를 초기화
         _rb.velocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
@@ -257,6 +288,9 @@ public class Bullet : MonoBehaviour
 
     protected virtual void DestroyBullet(Collision collision)
     {
+        if (_isCollided) return;
+        _isCollided = true;
+
         // 풀링 전 총알의 상태를 초기화
         _rb.velocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
@@ -309,17 +343,34 @@ public class Bullet : MonoBehaviour
 
     protected void TakeDamage(Transform target, float coefficient = 1.0f)
     {
+        float hitZoneValue = 1.0f;
+        PartialBlow partialBlow = target.GetComponent<PartialBlow>();
+        if (partialBlow)
+        {
+            hitZoneValue = partialBlow.fValue;
+        }
+
         IDamagable enemy = target.GetComponent<IDamagable>();
         if (enemy != null)
         {
-            enemy.ApplyDamage(_damage * coefficient, targetMask);
+            Transform otherParent = GetTopParent(target.gameObject).transform;
+            if (_damagedTargets.Contains(otherParent)) return;
+            _damagedTargets.Add(otherParent);
+
+            enemy.ApplyDamage(_damage * coefficient * hitZoneValue, targetMask);
+            Debug.Log($"원본 데미지: {_damage * coefficient}, 육질 데미지: {_damage * coefficient * hitZoneValue}");
         }
         else
         {
             enemy = target.transform.GetComponentInParent<IDamagable>();
             if (enemy != null)
             {
-                enemy.ApplyDamage(_damage * coefficient, targetMask);
+                Transform otherParent = GetTopParent(target.gameObject).transform;
+                if (_damagedTargets.Contains(otherParent)) return;
+                _damagedTargets.Add(otherParent);
+
+                enemy.ApplyDamage(_damage * coefficient * hitZoneValue, targetMask);
+                Debug.Log($"원본 데미지: {_damage * coefficient}, 육질 데미지: {_damage * coefficient * hitZoneValue}");
             }
         }
     }

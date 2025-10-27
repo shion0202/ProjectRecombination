@@ -1,4 +1,5 @@
 using Cinemachine;
+using DG.Tweening;
 using FIMSpace.FProceduralAnimation;
 using Managers;
 using System;
@@ -35,12 +36,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private GameObject followCameraPrefab;
     [SerializeField] private Volume volume;
     private FollowCameraController _followCamera;
+    private MotionBlur _motionBlur;
 
     [Header("State")]
     [SerializeField] private EPlayerState movementBlockMask = EPlayerState.Dashing;
     [SerializeField] private EPlayerState dashBlockMask;
     [SerializeField] private EPlayerState shootBlockMask = EPlayerState.Dashing;
     [SerializeField] private EPlayerState zoomBlockMask = EPlayerState.Dashing;
+    [SerializeField] private EPlayerState partChangeBlockMask;
     private EPlayerState _currentPlayerState = EPlayerState.Idle;
     private EPlayerState _previousState = 0;
     private bool _isLeftAttackReady = false;
@@ -80,6 +83,15 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private List<BaseAnimation> animations = new();
     private EAnimationType _currentAnimType = EAnimationType.Base;
     private EAnimationType _postAnimType = EAnimationType.Base;
+
+    [Header("Parts Set")]
+    [SerializeField] private List<SkinnedMeshRenderer> bodyRenderers = new();
+    [SerializeField] private List<Material> basicMaterials = new();
+    [SerializeField] private List<Material> laserMaterials = new();
+    [SerializeField] private List<Material> rapidMaterials = new();
+    [SerializeField] private List<Material> heavyMaterials = new();
+
+    private Coroutine _indicatorRoutine = null;
     #endregion
 
     #region Properties
@@ -210,6 +222,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         SetOvrrideAnimator(EAnimationType.Base);
 
+        // VolumeProfile 가져오기
+        VolumeProfile profile = volume.profile;     // 공유 프로필을 쓸 경우 sharedProfile을 사용                      
+        profile.TryGet<MotionBlur>(out _motionBlur);   // MotionBlur 오버라이드 얻기
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -288,11 +304,15 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     #region Input Actions
     void PlayerActions.IPlayerActionMapActions.OnMove(InputAction.CallbackContext context)
     {
-        if ((_currentPlayerState & movementBlockMask) != 0) return;
-
         _moveInput = context.ReadValue<Vector2>();
-        if (_moveInput != null && _moveInput != Vector2.zero)
+        if (context.canceled)
         {
+            // 키를 뗐을 때 반드시 0으로
+            _postMoveInput = Vector2.zero;
+        }
+        else if (_moveInput != null && _moveInput != Vector2.zero)
+        {
+            // 키 입력이 있을 때만 갱신
             _postMoveInput = _moveInput;
         }
     }
@@ -381,6 +401,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     void PlayerActions.IPlayerActionMapActions.OnRadialMenu(InputAction.CallbackContext context)
     {
         // 특정 상황에서 키 입력이 불가능하도록 설정
+        if ((_currentPlayerState & partChangeBlockMask) != 0) return;
 
         if (context.started)
         {
@@ -401,6 +422,21 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             if (!Managers.GUIManager.Instance.RadialUI.activeSelf) return;
             CloseRadialUI();
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnIndicator(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Managers.GUIManager.Instance.SetIndicator(true);
+
+            if (_indicatorRoutine != null)
+            {
+                StopCoroutine(_indicatorRoutine);
+                _indicatorRoutine = null;
+            }
+            _indicatorRoutine = StartCoroutine(CoStartIndicatorTimer(5.0f));
         }
     }
 
@@ -1043,11 +1079,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void SetMotionBlur(bool isOn)
     {
-        // VolumeProfile 가져오기
-        VolumeProfile profile = volume.profile;     // 공유 프로필을 쓸 경우 sharedProfile을 사용                      
-        if (profile.TryGet<MotionBlur>(out var blur))   // MotionBlur 오버라이드 얻기
+        if (_motionBlur)
         {
-            blur.active = isOn; // 또는 blur.intensity.overrideState = enabled;
+            _motionBlur.active = isOn; // 또는 blur.intensity.overrideState = enabled;
         }
     }
 
@@ -1064,7 +1098,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                     // 등/어깨
                     player.Inven.EquipItem(EPartType.Shoulder, (EAttackType)(1 << attackType));
                     player.Inven.EquipItem(EPartType.Back, (EAttackType)(1 << attackType));
-                    player.Inven.EquipItem(EPartType.Mask, (EAttackType)(1 << attackType));
                     break;
                 case 1:
                     // 다리
@@ -1080,6 +1113,58 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                     break;
             }
         }
+
+        if (IsFullSet(inventory.EquippedItems[EPartType.Shoulder][0].AttackType,
+            inventory.EquippedItems[EPartType.ArmL][0].AttackType,
+            inventory.EquippedItems[EPartType.ArmR][0].AttackType,
+            inventory.EquippedItems[EPartType.Legs][0].AttackType)
+            )
+        {
+            player.Inven.EquipItem(EPartType.Mask, (EAttackType)(1 << attackType));
+
+            switch ((EAttackType)(1 << attackType))
+            {
+                case EAttackType.Basic:
+                    for (int i = 0; i < bodyRenderers.Count; ++i)
+                    {
+                        bodyRenderers[i].material = basicMaterials[i];
+                    }
+                    break;
+                case EAttackType.Laser:
+                    for (int i = 0; i < bodyRenderers.Count; ++i)
+                    {
+                        bodyRenderers[i].material = laserMaterials[i];
+                    }
+                    break;
+                case EAttackType.Rapid:
+                    for (int i = 0; i < bodyRenderers.Count; ++i)
+                    {
+                        bodyRenderers[i].material = rapidMaterials[i];
+                    }
+                    break;
+                case EAttackType.Heavy:
+                    for (int i = 0; i < bodyRenderers.Count; ++i)
+                    {
+                        bodyRenderers[i].material = heavyMaterials[i];
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            player.Inven.EquipItem(EPartType.Mask, EAttackType.Basic);
+            for (int i = 0; i < bodyRenderers.Count; ++i)
+            {
+                bodyRenderers[i].material = basicMaterials[i];
+            }
+
+            Debug.Log("다양한 타입의 파츠 착용 중입니다.");
+        }
+    }
+
+    private bool IsFullSet(EAttackType back, EAttackType leftArm, EAttackType rightArm, EAttackType leg)
+    {
+        return (back == leftArm) && (leftArm == rightArm) && (rightArm == leg);
     }
 
     private IEnumerator CoStartInvincibility(float duration)
@@ -1089,6 +1174,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         yield return new WaitForSeconds(duration);
 
         _currentPlayerState &= ~(EPlayerState.Invincibility);
+    }
+
+    private IEnumerator CoStartIndicatorTimer(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        Managers.GUIManager.Instance.SetIndicator(false);
+        _indicatorRoutine = null;
     }
     #endregion
 }

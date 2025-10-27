@@ -488,5 +488,17 @@ namespace _Project.Scripts.VisualScripting.Editor
             Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
             Selection.activeObject = go;
         }
+
+        [MenuItem("GameObject/VisualScripting/Output/SetIndicatorTarget", false, 10)]
+        private static void CreateSetIndicatorTargetAsset(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject("NewSetIndicatorTarget");
+            go.AddComponent<SetIndicatorTarget>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
     }
 }

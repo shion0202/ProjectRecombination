@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,18 +12,15 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
     private PlayerActions _playerActions;
 
     private PlayerController _owner;
-    private FollowCameraController _camera;
+    private LegsEnhanced _originalPart;
+
+    protected CinemachineBrain brain;
+    protected CinemachineBlendDefinition defaultBlend;
 
     public PlayerController Owner
     {
         get => _owner;
         set => _owner = value;
-    }
-
-    public FollowCameraController FollowCamera
-    {
-        get => _camera;
-        set => _camera = value;
     }
 
     private void Awake()
@@ -31,6 +29,10 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
 
         _playerActions = new PlayerActions();
         _playerActions.JumpAttackActionMap.SetCallbacks(this);
+
+        brain = Camera.main.GetComponent<CinemachineBrain>();
+        defaultBlend = brain.m_DefaultBlend;
+        brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.3f);
     }
 
     private void OnEnable()
@@ -47,7 +49,6 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
             inputComp.enabled = false;
         }
         _owner.gameObject.SetActive(false);
-        _camera.InitFollowCamera(gameObject);
     }
 
     private void OnDisable()
@@ -60,6 +61,12 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
         Move();
     }
 
+    public void Init(PlayerController owner, LegsEnhanced origin)
+    {
+        _owner = owner;
+        _originalPart = origin;
+    }
+
     private void Move()
     {
         if (_moveInput == Vector2.zero)
@@ -68,42 +75,27 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
             return;
         }
 
-        Vector3 camForward = _camera.transform.forward;
-        Vector3 camRight = _camera.transform.right;
-
-        camForward.y = 0f;
-        camRight.y = 0f;
-
-        camForward.Normalize();
-        camRight.Normalize();
-
-        Vector3 moveDirection = camForward * _moveInput.y + camRight * _moveInput.x;
+        Vector3 moveDirection = transform.up * -_moveInput.y + transform.right * _moveInput.x;
         rb.velocity = moveDirection.normalized * speed;
-    }
-
-    public void Init(PlayerController owner, FollowCameraController followCamera)
-    {
-        _owner = owner;
-        _camera = followCamera;
     }
 
     public void OnApply(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            //_owner.gameObject.SetActive(true);
             PlayerInput inputComp = _owner.GetComponent<PlayerInput>();
             if (inputComp != null)
             {
                 inputComp.enabled = true;
             }
-            _camera.InitFollowCamera(_owner.gameObject);
             _owner.Controller.enabled = false;
             _owner.transform.position = transform.position;
             _owner.Controller.enabled = true;
+            _originalPart.IsAttack = true;
+            brain.m_DefaultBlend = defaultBlend;
 
             _owner.gameObject.SetActive(true);
-            Destroy(gameObject);
+            Utils.Destroy(gameObject);
         }
     }
 
@@ -111,15 +103,16 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
     {
         if (context.started)
         {
-            _owner.gameObject.SetActive(true);
             PlayerInput inputComp = _owner.GetComponent<PlayerInput>();
             if (inputComp != null)
             {
                 inputComp.enabled = true;
             }
-            _camera.InitFollowCamera(_owner.gameObject);
+            _originalPart.IsAttack = false;
+            brain.m_DefaultBlend = defaultBlend;
 
-            Destroy(gameObject);
+            _owner.gameObject.SetActive(true);
+            Utils.Destroy(gameObject);
         }
     }
 

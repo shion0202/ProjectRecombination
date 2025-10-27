@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Indicator",
+                    "type": "Button",
+                    "id": "7846b28c-71bf-4d07-8bf2-3177cb0814b9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -268,6 +277,17 @@
                     "processors": "",
                     "groups": ";PC_Keyboard",
                     "action": "RadialMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4608d7d0-f429-4bc6-bb23-80c40d8e5483",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC_Keyboard",
+                    "action": "Indicator",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

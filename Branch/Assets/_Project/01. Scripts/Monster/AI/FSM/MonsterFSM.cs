@@ -17,8 +17,7 @@ namespace Monster.AI.FSM
         // 상태별 로직에 필요한 내부 변수들
         private float _waitTimer;
         private Skill _useSkill;
-        // private bool _isAttack;
-        // private int _attackCount;
+        private bool _isDeath;
 
         // private AmonMeleeCollision _amonMeleeCollision;
         private AmonMeleeCollision _meleeCollision;
@@ -39,6 +38,7 @@ namespace Monster.AI.FSM
         protected override void Think()
         {
             if (!isEnabled) return;
+            if (_isDeath) return;
             if (blackboard.State.GetStates() == "None")
             {
                 ChangeState("Idle");
@@ -47,22 +47,29 @@ namespace Monster.AI.FSM
             
             if (blackboard.CurrentHealth <= 0)
             {
-                if (blackboard.State.GetStates() != "Death") ChangeState("Death");
+                // if (blackboard.State.GetStates() != "Death") 
+                    ChangeState("Death");
                 return;
             }
             
-            // Debug.Log($"Current HP: {blackboard.CurrentHealth}/{blackboard.MaxHealth}");
-            
-            // 공격이 진행 중일 때는 다른 판단을 하지 않도록 하여 상태를 유지합니다.
-            // if (_isAttack)
-            // {
-            //     if (blackboard.State.GetStates() != "Attack") ChangeState("Attack");
-            //     return;
-            // }
+            // 전투 상태 일 때 상태 변경 체크
             if (blackboard.IsAnySkillRunning) 
             {
-                // Debug.Log(blackboard.IsAnySkillRunning);
-                return; // 스킬이 실행 중이면 상태 전환을 하지 않음
+                if (_isDeath)
+                {
+                    blackboard.StopAllCoroutines();
+                }
+                else
+                {
+                    float f = Vector3.Distance(blackboard.Agent.transform.position, blackboard.Target.transform.position);
+                    if (_useSkill is { CurrentState: not Skill.SkillState.isReady and Skill.SkillState.isEnded } &&
+                        f > _useSkill.skillData.range)
+                    {
+                        _useSkill = null;
+                        ChangeState("Chase");
+                    }
+                }
+                return;
             }
             
             // 사용 가능한 스킬 검사 (우선순위가 가장 높음)
@@ -94,35 +101,11 @@ namespace Monster.AI.FSM
             
             // 플레이어와의 거리 검사
             float distance = Vector3.Distance(transform.position, blackboard.Target.transform.position);
-            // if (distance <= blackboard.MaxDetectionRange || blackboard.CurrentHealth < blackboard.MaxHealth)
-            // {
-            //     // 플레이어가 인지 범위 내에 있으나 최소 사거리 밖에 있는 경우 추격 상태로 전환
             if (distance > blackboard.MinDetectionRange)
             {
                 ChangeState("Chase");
                 return;
             }
-            //     else
-            //     {
-            //         ChangeState("Idle");
-            //     }
-            //     return;
-            // }
-            
-            // Manager로 부터 주변에 몬스터가 전투와 관련된 상태인지 확인
-            // GameObject[] monsters = MonsterManager.Instance.GetBattleMonsters();
-            // foreach (var monster in monsters)
-            // {
-            //     // 자신이 아닌 몬스터만 검사
-            //     if (monster == gameObject) continue;
-            //
-            //     // 인지 범위 내에 있는지 검사
-            //     float dist = Vector3.Distance(transform.position, monster.transform.position);
-            //     if (dist > blackboard.MaxDetectionRange) continue;
-            //
-            //     ChangeState("Chase");
-            //     return;
-            // }
 
             if (blackboard.PatrolInfo.wayPoints is { Length: > 0 })
             {
@@ -154,10 +137,12 @@ namespace Monster.AI.FSM
         {
             if (!isEnabled) return;
             if (blackboard?.State is null) return;
+            if (_isDeath) return;
 
             if (blackboard.IsAnySkillRunning)
             {
-                // Debug.Log(blackboard.IsAnySkillRunning);
+                if (_isDeath)
+                    blackboard.StopAllCoroutines();
                 return; // 스킬이 실행 중이면 상태 전환을 하지 않음
             }
             
@@ -198,11 +183,14 @@ namespace Monster.AI.FSM
                     blackboard.NavMeshAgent.isStopped = true;
                     break;
                 case "Death":
-                    blackboard.AgentCollider.enabled = false;
-                    blackboard.AgentRigidbody.isKinematic = true;
+                    blackboard.StopAllCoroutines();
+                    
+                    if (blackboard.AgentCollider is not null)
+                        blackboard.AgentCollider.enabled = false;
+                    if (blackboard.AgentRigidbody is not null)
+                        blackboard.AgentRigidbody.isKinematic = true;
                     blackboard.NavMeshAgent.isStopped = true;
                     blackboard.NavMeshAgent.ResetPath();
-                    blackboard.AnimatorParameterSetter.Animator.SetBool("IsDeath", true);
                     break;
                 case "Patrol":
                     blackboard.PatrolInfo.isPatrol = true;
@@ -226,28 +214,11 @@ namespace Monster.AI.FSM
         #region State Actions (Act에서 호출되는 행동 함수들)
 
         private void ActDeath()
-        { 
-            // 1. 죽음 애니메이션을 가지고 있는지 확인
-            // foreach (var state in blackboard.AnimatorParameterSetter.BoolParameterNames)
-            // {
-            //     if (state == "IsDeath")
-            //     {
-            //         AnimatorStateInfo animatorStateInfo = blackboard.AnimatorParameterSetter.CurrentAnimatorStateInfo;
-            //         if (animatorStateInfo.IsName("Death") && animatorStateInfo.normalizedTime >= 1.0f)
-            //         {
-            //             blackboard.DeathEffect?.SetActive(true);
-            //             isInit = false;
-            //             gameObject.SetActive(false);
-            //         }
-            //         return; // 죽음 애니메이션이 있으면 여기서 종료
-            //     }
-            // }
+        {
+            if (_isDeath)  return;
+            _isDeath = true;
             
             blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
-            
-            blackboard.NavMeshAgent.isStopped = true;
-            blackboard.AgentCollider.enabled = false;
-            blackboard.AgentRigidbody.isKinematic = true;
             
             // 2. 죽음 이팩트가 있는지 확인
             if (blackboard.DeathEffect is not null)
@@ -257,18 +228,16 @@ namespace Monster.AI.FSM
                 // 이팩트가 있으면 활성화 시키고 이팩트가 종료 될때까지 대기
                 effect.SetActive(true);
                 var particleSystem = effect.GetComponent<ParticleSystem>();
-                if (particleSystem is not null)
-                {
-                    if (!particleSystem.isPlaying)
-                        particleSystem.Play();
-                    
-                    StartCoroutine(WaitForParticleEnd(particleSystem));
-                }
+                if (particleSystem is null) return;
+
+                if (!particleSystem.isPlaying)
+                    particleSystem.Play();
             }
         }
 
         private void ActPatrol()
         {
+            if (_isDeath)  return;
             // 목표 지점에 도착했는지 확인하고 다음 행동을 결정합니다.
             if (blackboard.NavMeshAgent.remainingDistance <= blackboard.NavMeshAgent.stoppingDistance && !blackboard.NavMeshAgent.pathPending)
             {
@@ -279,6 +248,7 @@ namespace Monster.AI.FSM
 
         private void ActChase()
         {
+            if (_isDeath)  return;
             // 추격 상태의 행동: 매 프레임 타겟의 위치로 목적지를 갱신합니다.
             blackboard.NavMeshAgent.SetDestination(blackboard.Target.transform.position);
             
@@ -292,6 +262,7 @@ namespace Monster.AI.FSM
         private void ActAttack()
         {
             if (_useSkill is null || blackboard.Target is null) return;
+            if (_isDeath)  return;
             
             // 타겟을 바라보게 합니다.
             transform.LookAt(blackboard.Target.transform);
@@ -332,16 +303,26 @@ namespace Monster.AI.FSM
                 _meleeCollision.Init(damage, new Vector3(4f,4f,4f), new Vector3(1f,1f,2f));
             }
         }
+
+        public void AnimationEvent_Death()
+        {
+            // 파티클이 재생 중일 수 있으므로, 파티클도 함께 비활성화합니다.
+            if (blackboard.DeathEffect is not null)
+            {
+                blackboard.DeathEffect.SetActive(false);
+            }
+            
+            isInit = false;
+            // gameObject.SetActive(false); // 풀 매니저를 사용하므로 이쪽을 권장
+            PoolManager.Instance.ReleaseObject(gameObject);
+        }
         
         public void OnAttackAnimationEnd()
         {
-            // _isAttack = false;
-            // _useSkill = null; // 스킬 사용 완료
             if (_meleeCollision)
             {
                 Utils.Destroy(_meleeCollision.gameObject);
             }
-            ChangeState("Idle");
         }
 
         private IEnumerator WaitForParticleEnd(ParticleSystem ps)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class TitleLogoDT : MonoBehaviour
 {
@@ -26,7 +27,23 @@ public class TitleLogoDT : MonoBehaviour
     private float _endPositionXChar;
     
     public DTBase titleCharIdleAnimation;
+    
+    [Header("Title Button")]
+    public Image titlePlayButtonImage;
+    public TMP_Text titlePlayButtonText;
+    public Image titleExitButtonImage;
+    public TMP_Text titleExitButtonText;
+    
+    public float animationDurationButton = 1.5f;
+    
+    public DTBase titlePlayButtonIdleAnimation;
+    public DTBase titleExitButtonIdleAnimation;
 
+
+    public bool isLogoAnimaEnd;
+    public bool isCharAnimaEnd;
+    public bool isButtonAnimaEnd;
+    
     private void Awake()
     {
         DOTween.Init();
@@ -44,7 +61,6 @@ public class TitleLogoDT : MonoBehaviour
     {
         // 타이틀 로고 설정
         titleLogoImage.color = new Color(titleLogoImage.color.r, titleLogoImage.color.g, titleLogoImage.color.b, 0f);
-        
         titleLogoRectTransform.anchoredPosition = new Vector2(startPositionX, titleLogoRectTransform.anchoredPosition.y);
 
         StartCoroutine(AnimationTitleLogo());
@@ -54,6 +70,41 @@ public class TitleLogoDT : MonoBehaviour
         titleCharRectTransform.anchoredPosition = new Vector2(startPositionXChar, titleCharRectTransform.anchoredPosition.y);
 
         StartCoroutine(AnimationTitleChar());
+        
+        // 타이틀 버튼 설정
+        titlePlayButtonImage.color = new Color(titleCharImage.color.r, titleCharImage.color.g, titleCharImage.color.b, 0f);
+        titlePlayButtonText.color = new Color(titleCharImage.color.r, titleCharImage.color.g, titleCharImage.color.b, 0f);
+        titleExitButtonImage.color = new Color(titleCharImage.color.r, titleCharImage.color.g, titleCharImage.color.b, 0f);
+        titleExitButtonText.color = new Color(titleCharImage.color.r, titleCharImage.color.g, titleCharImage.color.b, 0f);
+    }
+
+    private void Update()
+    {
+        if (!isLogoAnimaEnd || !isCharAnimaEnd) return;
+        if (isButtonAnimaEnd) return;
+        isButtonAnimaEnd = true;
+        StartCoroutine(AnimationTitleButton());
+    }
+
+    private IEnumerator AnimationTitleButton()
+    {
+        // 애니메이션 A: 알파 값을 원래 상태로 전환
+        titlePlayButtonImage.DOFade(1.0f, animationDurationButton) // 1.0f (불투명) 상태로 변경
+            .SetEase(Ease.InSine); // Ease 효과: 서서히 나타나기 시작
+        
+        titlePlayButtonText.DOFade(1.0f, animationDurationButton)
+            .SetEase(Ease.InSine);
+        
+        titleExitButtonImage.DOFade(1.0f, animationDurationButton)
+            .SetEase(Ease.InSine);
+        
+        titleExitButtonText.DOFade(1.0f, animationDurationButton)
+            .SetEase(Ease.InSine);
+        
+        yield return new WaitForSeconds(animationDurationButton);
+        
+        titlePlayButtonIdleAnimation.AnimaStart();
+        titleExitButtonIdleAnimation.AnimaStart();
     }
 
     private IEnumerator AnimationTitleChar()
@@ -71,6 +122,7 @@ public class TitleLogoDT : MonoBehaviour
         // titleCharIdleAnimation.isStarted = true;
         yield return new WaitForSeconds(animationDuration);
         titleCharIdleAnimation.AnimaStart();
+        isCharAnimaEnd = true;
     }
 
     private IEnumerator AnimationTitleLogo()
@@ -91,5 +143,6 @@ public class TitleLogoDT : MonoBehaviour
         //     .SetLoops(-1, LoopType.Yoyo);
         yield return new WaitForSeconds(animationDuration);
         titleLogoIdleAnimation.AnimaStart();
+        isLogoAnimaEnd = true;
     }
 }

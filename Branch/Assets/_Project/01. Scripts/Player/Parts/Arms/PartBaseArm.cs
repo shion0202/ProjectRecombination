@@ -43,7 +43,10 @@ public class PartBaseArm : PartBase
 
         if (ignoreMask == 0)
         {
-            ignoreMask |= 1;
+            ignoreMask = ~0;
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("TransparentFX"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("Water"));
+            ignoreMask &= ~(1 << LayerMask.NameToLayer("UI"));
             ignoreMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
             ignoreMask &= ~(1 << LayerMask.NameToLayer("Face"));
             ignoreMask &= ~(1 << LayerMask.NameToLayer("Hair"));
@@ -162,9 +165,10 @@ public class PartBaseArm : PartBase
     {
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward * (Vector3.Distance(_owner.transform.position, _owner.FollowCamera.transform.position));
         Vector3 targetPoint = Vector3.zero;
 
-        if (Physics.Raycast(ray, out hit, shootingRange, ignoreMask))
+        if (Physics.Raycast(startPoint, ray.direction, out hit, shootingRange, ignoreMask))
         {
             targetPoint = hit.point;
         }
@@ -180,9 +184,10 @@ public class PartBaseArm : PartBase
     {
         Camera cam = Camera.main;
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward * (Vector3.Distance(_owner.transform.position, _owner.FollowCamera.transform.position));
         Vector3 targetPoint = Vector3.zero;
 
-        hits = Physics.RaycastAll(ray.origin, ray.direction, shootingRange, ignoreMask);
+        hits = Physics.RaycastAll(startPoint, ray.direction, shootingRange, ignoreMask);
         if (hits.Length > 0)
         {
             targetPoint = hits[0].point;

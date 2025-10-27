@@ -9827,7 +9827,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -9913,7 +9913,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2928742226071571492
 MonoBehaviour:
@@ -9927,23 +9927,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220d592571ed78c4c994000c19fafc11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 5034418649630953092}
+  _rb: {fileID: 0}
   bulletSpeed: 5
-  isCheckCollisionByBullet: 1
+  explosionRadius: 10
   lifeTime: 5
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  muzzleParticlePrefab: {fileID: 0}
+  impactParticle: {fileID: 0}
   explosionEffectPrefab: {fileID: 197368, guid: 992d56df7c560f84f916b4b55bbbd763,
     type: 3}
-  explosionRange: 10
-  explosionRadius: 10
-  muzzleParticle: {fileID: 0}
-  impactParticle: {fileID: 0}
   bladePrefab: {fileID: 364168584227083269, guid: daa6bfb8616c03f49b1588149cf34075,
     type: 3}
   collisionBulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
     type: 3}
-  bladeInterval: 0.1
-  bladesOnDeath: 5
-  bladeSpeed: 10
+  bladeInterval: 0.05
+  bladesOnDeath: 14
 --- !u!1 &364168584227093103
 GameObject:
   m_ObjectHideFlags: 0
@@ -9955,6 +9955,7 @@ GameObject:
   - component: {fileID: 364168584226917011}
   - component: {fileID: 364168584232984033}
   - component: {fileID: 364168584233666263}
+  - component: {fileID: 7617815865078193448}
   m_Layer: 0
   m_Name: Point light
   m_TagString: Untagged
@@ -10056,6 +10057,29 @@ MonoBehaviour:
   amplitude: 0.4
   phase: 0
   frequency: 7
+--- !u!114 &7617815865078193448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364168584227093103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &364168584227113207
 GameObject:
   m_ObjectHideFlags: 0
