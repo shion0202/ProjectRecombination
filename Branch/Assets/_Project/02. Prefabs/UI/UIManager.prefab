@@ -268,6 +268,8 @@ MonoBehaviour:
   testGameOverPanel: {fileID: 2201213023173146818}
   ammoLeftBar: {fileID: 3200764325976378042}
   ammoRightBar: {fileID: 574232648774748563}
+  fillLeft: {fileID: 6320087692673098791}
+  fillRight: {fileID: 3603136102939769224}
   legsSkillCooldownImage: {fileID: 3986326392165312282}
   backSkillCooldownImage: {fileID: 6149008000126187747}
   legsSkillCooldownText: {fileID: 612516930812225429}
@@ -1187,7 +1189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2663,7 +2665,7 @@ GameObject:
   - component: {fileID: 4503131138049836502}
   - component: {fileID: 641226987773612781}
   - component: {fileID: 485851430926871289}
-  - component: {fileID: 1914960575837049771}
+  - component: {fileID: 1894556184035150992}
   m_Layer: 5
   m_Name: Button_Base
   m_TagString: Untagged
@@ -2784,7 +2786,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1914960575837049771
+--- !u!114 &1894556184035150992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2793,7 +2795,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3142563957899533765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8379127b35d2d4da8747b140a1b5d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c130c92d6ffa034294ae4fa201c8017, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partIndex: 0
@@ -6149,7 +6151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

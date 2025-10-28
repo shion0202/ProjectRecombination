@@ -55,7 +55,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
-        m_Texture: {fileID: 2800000, guid: d066aad0c2dbfbd4bbc505b3beaac5ec, type: 3}
+        m_Texture: {fileID: 2800000, guid: 456be780a79710845bf0115e1ea30544, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GradientTexture:
+        m_Texture: {fileID: 2800000, guid: ee03655c18ff9f34e8f228011e87c222, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _METALNESS_MAP:
@@ -91,7 +95,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SDFMask:
-        m_Texture: {fileID: 2800000, guid: b05719e6ed8a54daaa1509641b2c6737, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TRANSPARENCY_MAP:
@@ -112,6 +116,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - BOOLEAN_USE_WROLDSPACE: 0
+    - BOOLEAN_USE_WROLDSPACE_ON_1: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _BASE_COLOR_WEIGHT: 1
@@ -141,7 +147,7 @@ Material:
     - _MatCap: 1
     - _MatCapLighting: 1
     - _MatCapShadowMask: 0
-    - _MatcapAlpha: 0.608
+    - _MatcapAlpha: 0.23
     - _MatcapBlur: 0
     - _MatcapShadowMask: 0
     - _Metallic: 0
@@ -181,8 +187,10 @@ Material:
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 0.7353569, g: 0.7353569, b: 0.7353569, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DissolveOffset: {r: 0, g: 0.2, b: 0, a: 0}
+    - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _EMISSION_COLOR: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColor: {r: 1.8443024, g: 1.8443024, b: 1.8443024, a: 1}
+    - _EmissionColor: {r: 1.3228418, g: 1.3228418, b: 1.3228418, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}
     - _REFLECTIONS_COLOR: {r: 1, g: 1, b: 1, a: 1}

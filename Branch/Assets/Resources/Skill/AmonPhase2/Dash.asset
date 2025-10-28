@@ -23,9 +23,9 @@ MonoBehaviour:
   animSpeed: 1
   meleeCollisionPrefab: {fileID: 4070606023755049407, guid: 9738e5f867811414da87d99f8ce56023,
     type: 3}
+  collisionScale: {x: 1.3, y: 2.2, z: 1.5}
+  collisionOffset: {x: 0, y: 1.1, z: 0}
   clip: {fileID: 1827226128182048838, guid: 995956e9ab54a2044a0eb7ed617a0766, type: 3}
   dashSpeed: 30
   forwardDistanceOffset: 4
   arrivalDistance: 1
-  collisionScale: {x: 1.3, y: 2.2, z: 1.5}
-  collisionOffset: {x: 0, y: 1.1, z: 0}

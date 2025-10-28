@@ -34,6 +34,8 @@ namespace Managers
         [Header("Test Crosshair UI")]
         [SerializeField] private Slider ammoLeftBar;
         [SerializeField] private Slider ammoRightBar;
+        [SerializeField] private Image fillLeft;
+        [SerializeField] private Image fillRight;
 
         [Header("Test Skill UI")]
         [SerializeField] private Image legsSkillCooldownImage;
@@ -142,6 +144,18 @@ namespace Managers
             set => _isIndicationg = value;
         }
 
+        public Image FillLeft
+        {
+            get => fillLeft;
+            set => fillLeft = value;
+        }
+
+        public Image FillRight
+        {
+            get => fillRight;
+            set => fillRight = value;
+        }
+
         private void Update()
         {
             if (_isIndicationg)
@@ -199,6 +213,22 @@ namespace Managers
         {
             float rate = current / max;
             ammoRightBar.value = rate;
+        }
+
+        public void SetAmmoColor(EPartType type, Color color)
+        {
+            Image image = null;
+            if (type == EPartType.ArmL)
+            {
+                image = ammoLeftBar.GetComponentInChildren<Image>();
+            }
+            else
+            {
+                image = ammoRightBar.GetComponentInChildren<Image>();
+            }
+            if (image == null) return;
+
+            image.color = color;
         }
 
         public void SetAmmoColor(EPartType type, bool isOverheat)

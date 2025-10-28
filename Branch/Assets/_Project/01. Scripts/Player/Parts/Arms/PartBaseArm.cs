@@ -19,6 +19,7 @@ public class PartBaseArm : PartBase
     protected float _currentReloadTime = 0.0f;
     protected bool _isOverheat = false;
     protected bool _isUseOverheat = false;
+    protected bool _isUseAmmo = false;
 
     [Header("이펙트")]
     [SerializeField] protected GameObject muzzleFlashEffectPrefab;

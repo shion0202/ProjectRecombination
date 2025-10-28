@@ -35,15 +35,20 @@ public class ArmLaserMultiple : PartBaseArm
         defaultImpulseValue = impulseSource.m_DefaultVelocity;
     }
 
+    protected void OnEnable()
+    {
+        GUIManager.Instance.SetAmmoColor(partType, Color.blue);
+    }
+
     protected override void Update()
     {
         if (partType == EPartType.ArmL)
         {
-            GUIManager.Instance.SetAmmoLeftSlider(_currentAmmo, maxAmmo);
+            GUIManager.Instance.SetAmmoLeftSlider(_currentShootTime, maxChargeTime);
         }
         else
         {
-            GUIManager.Instance.SetAmmoRightSlider(_currentAmmo, maxAmmo);
+            GUIManager.Instance.SetAmmoRightSlider(_currentShootTime, maxChargeTime);
         }
 
         if (!_isShooting)
@@ -205,7 +210,6 @@ public class ArmLaserMultiple : PartBaseArm
         {
             //CancleShootState(partType == EPartType.ArmL ? true : false);
             _isOverheat = true;
-            GUIManager.Instance.SetAmmoColor(partType, true);
         }
     }
 

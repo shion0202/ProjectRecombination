@@ -139,9 +139,16 @@ namespace Monster.AI.FSM
             // 사망 처리 로직
             // blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
             blackboard.NavMeshAgent.isStopped = true;
-            blackboard.AgentRigidbody.velocity = Vector3.zero;
-            blackboard.AgentCollider.enabled = false;
-            blackboard.AgentRigidbody.isKinematic = true;
+            
+            if (blackboard.AgentCollider is not null)
+                blackboard.AgentCollider.enabled = false;
+            
+            if (blackboard.AgentRigidbody is not null)
+            {
+                blackboard.AgentRigidbody.isKinematic = true;
+                blackboard.AgentRigidbody.velocity = Vector3.zero;
+            }
+            
             isEnabled = false; // FSM 비활성화
 
 

@@ -30,15 +30,20 @@ public class ArmLaserCharge : PartBaseArm
         defaultImpulseValue = impulseSource.m_DefaultVelocity;
     }
 
+    protected void OnEnable()
+    {
+        GUIManager.Instance.SetAmmoColor(partType, Color.blue);
+    }
+
     protected override void Update()
     {
         if (partType == EPartType.ArmL)
         {
-            GUIManager.Instance.SetAmmoLeftSlider(_currentAmmo, maxAmmo);
+            GUIManager.Instance.SetAmmoLeftSlider(_currentShootTime, maxChargeTime);
         }
         else
         {
-            GUIManager.Instance.SetAmmoRightSlider(_currentAmmo, maxAmmo);
+            GUIManager.Instance.SetAmmoRightSlider(_currentShootTime, maxChargeTime);
         }
 
         if (!_isShooting)
@@ -53,7 +58,6 @@ public class ArmLaserCharge : PartBaseArm
             if (_currentAmmo >= maxAmmo)
             {
                 _isOverheat = false;
-                GUIManager.Instance.SetAmmoColor(partType, false);
             }
 
             return;
@@ -212,7 +216,6 @@ public class ArmLaserCharge : PartBaseArm
         if (_currentAmmo <= 0)
         {
             _isOverheat = true;
-            GUIManager.Instance.SetAmmoColor(partType, true);
         }
 
         if (_morphBlendRoutine != null)

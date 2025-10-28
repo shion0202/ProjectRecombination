@@ -180,7 +180,7 @@ Material:
     - _AnimSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveDirection: {r: 0, g: 1, b: 0, a: 0}
-    - _DissolveOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _DissolveOffset: {r: 0, g: -0.47, b: 0, a: 0}
     - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _DissolveUVSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _DissovleEdgeColor: {r: 1, g: 0, b: 0, a: 0}

@@ -102,16 +102,25 @@ public class ShoulderLaser : PartBaseShoulder
         for (int i = 0; i < hitCount; i++)
         {
             var collider = _hitResults[i];
-            if (collider.TryGetComponent<IDamagable>(out var monster))
+            float hitZoneValue = 1.0f;
+            PartialBlow partialBlow = collider.GetComponent<PartialBlow>();
+            if (partialBlow)
             {
-                float hitZoneValue = 1.0f;
-                PartialBlow partialBlow = collider.GetComponent<PartialBlow>();
-                if (partialBlow)
-                {
-                    hitZoneValue = partialBlow.fValue;
-                }
+                hitZoneValue = partialBlow.fValue;
+            }
 
-                monster.ApplyDamage(beamDamage * _timer * hitZoneValue, targetMask, _timer, 0.0f);
+            IDamagable enemy = collider.GetComponent<IDamagable>();
+            if (enemy != null)
+            {
+                enemy.ApplyDamage(beamDamage * _timer * hitZoneValue, targetMask, _timer, 0.0f);
+            }
+            else
+            {
+                enemy = collider.transform.GetComponentInParent<IDamagable>();
+                if (enemy != null)
+                {
+                    enemy.ApplyDamage(beamDamage * _timer * hitZoneValue, targetMask, _timer, 0.0f);
+                }
             }
 
             Utils.Destroy(Utils.Instantiate(bulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);

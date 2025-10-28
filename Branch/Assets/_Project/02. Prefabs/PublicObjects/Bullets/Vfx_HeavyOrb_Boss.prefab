@@ -9827,7 +9827,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -9944,6 +9944,7 @@ MonoBehaviour:
     type: 3}
   bladeInterval: 0.075
   bladesOnDeath: 10
+  bladeSpeed: 10
 --- !u!1 &364168584227093103
 GameObject:
   m_ObjectHideFlags: 0

@@ -126,9 +126,7 @@ Material:
     m_Ints: []
     m_Floats:
     - BOOLEAN_DIRECTION_FROM_EULERANGLE: 0
-    - BOOLEAN_DIRECTION_FROM_EULERANGLE_ON_1: 0
     - BOOLEAN_USE_WROLDSPACE: 1
-    - BOOLEAN_USE_WROLDSPACE_ON_1: 0
     - BOOLEAN_WORLDORIGIN: 0
     - _BLEND_MODE: 0
     - _Base: 1
@@ -137,7 +135,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DissolveEdgePower: 1
     - _DissolveEdgeScale: 10
-    - _DissolveEdgeWidth: 0.05
+    - _DissolveEdgeWidth: 0.01
     - _DissolveNoiseScale: 30
     - _DstBlend: 0
     - _Emission: 1
@@ -180,8 +178,7 @@ Material:
     - _AnimSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveDirection: {r: 0, g: 1, b: 0, a: 0}
-    - _DissolveOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
+    - _DissolveOffset: {r: 0, g: -1.19, b: 0, a: 0}
     - _DissolveUVSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _DissovleEdgeColor: {r: 1, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}

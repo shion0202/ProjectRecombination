@@ -20,7 +20,8 @@ MonoBehaviour:
   cooldown: 3
   castTime: 1.1
   animSpeed: 1
-  meleeCollisionPrefab: {fileID: 0}
+  meleeCollisionPrefab: {fileID: 4070606023755049407, guid: 9738e5f867811414da87d99f8ce56023,
+    type: 3}
   collisionScale: {x: 9, y: 2, z: 5}
   collisionOffset: {x: 0, y: 1, z: 5}
   legClip: {fileID: 3107565900998991493, guid: 88a941ea97e39a8499c6aa007ea9658f, type: 3}

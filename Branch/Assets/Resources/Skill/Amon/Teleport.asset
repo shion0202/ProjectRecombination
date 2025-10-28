@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillID: 4009
   skillName: Teleport
-  skillDescription: "\uC544\uBAAC 1\uD398\uC774\uC988 \uC2A4\uD0AC: \uD154\uB808\uD3EC\uD2B8"
+  skillDescription: "\uC544\uBAAC 1 \uD398\uC774\uC988 \uC2A4\uD0AC: \uD154\uB808\uD3EC\uD2B8::
+    \uCE90\uB9AD\uD130 \uC8FC\uBCC0\uC73C\uB85C \uBB34\uC791\uC704 \uC774\uB3D9"
   damage: 0
   range: 20
   cooldown: 4

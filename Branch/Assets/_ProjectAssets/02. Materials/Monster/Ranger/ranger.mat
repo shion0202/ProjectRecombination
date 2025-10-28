@@ -47,7 +47,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: b436608ee15663543ae16fae0545c330, type: 3}
+        m_Texture: {fileID: 2800000, guid: c2ca52a34cbb99548b61d4ad9b603bca, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EMISSION_COLOR_MAP:
@@ -56,6 +56,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
         m_Texture: {fileID: 2800000, guid: efec739bc4f2f4040906be2ce750e7c5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GradientTexture:
+        m_Texture: {fileID: 2800000, guid: 48a4171023932f24197d9a6c66f094e6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _METALNESS_MAP:
@@ -112,6 +116,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - BOOLEAN_USE_WROLDSPACE: 0
+    - BOOLEAN_USE_WROLDSPACE_ON_1: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _BASE_COLOR_WEIGHT: 1
@@ -158,7 +164,7 @@ Material:
     - _ReceiveShadows: 1
     - _RecieveShadow: 0
     - _RimAlpha: 1
-    - _RimLight: 1
+    - _RimLight: 0
     - _RimLightBackfaceMask: 0
     - _RimLightShadowMask: 0.5
     - _RimPower: 38.8
@@ -181,6 +187,8 @@ Material:
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DissolveOffset: {r: 0, g: 0.2, b: 0, a: 0}
+    - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _EMISSION_COLOR: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 5.5908804, b: 5.327437, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}

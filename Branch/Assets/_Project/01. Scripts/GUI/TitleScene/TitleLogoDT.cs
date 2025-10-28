@@ -57,7 +57,7 @@ public class TitleLogoDT : MonoBehaviour
         _endPositionX = titleLogoRectTransform.anchoredPosition.x;
         _endPositionXChar = titleCharRectTransform.anchoredPosition.x;
     }
-    void Start()
+    private void Start()
     {
         // 타이틀 로고 설정
         titleLogoImage.color = new Color(titleLogoImage.color.r, titleLogoImage.color.g, titleLogoImage.color.b, 0f);

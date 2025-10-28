@@ -22,6 +22,7 @@ public class LegsEnhanced : PartBaseLegs
     private bool _isCooldown = false;
     private float _currentCooldownTime = 0.0f;
     private bool _isAttack = false;
+    protected List<Transform> _damagedTargets = new();
 
     public bool IsAttack
     {
@@ -101,6 +102,9 @@ public class LegsEnhanced : PartBaseLegs
                 IDamagable monster = hit.transform.GetComponent<IDamagable>();
                 if (monster != null)
                 {
+                    Transform otherParent = GetTopParent(hit.gameObject).transform;
+                    if (_damagedTargets.Contains(otherParent)) return;
+                    _damagedTargets.Add(otherParent);
                     monster.ApplyDamage(skillDamage * hitZoneValue, targetMask);
                 }
                 else
@@ -108,6 +112,9 @@ public class LegsEnhanced : PartBaseLegs
                     monster = hit.transform.GetComponentInParent<IDamagable>();
                     if (monster != null)
                     {
+                        Transform otherParent = GetTopParent(hit.gameObject).transform;
+                        if (_damagedTargets.Contains(otherParent)) return;
+                        _damagedTargets.Add(otherParent);
                         monster.ApplyDamage(skillDamage * hitZoneValue, targetMask);
                     }
                 }
@@ -116,6 +123,16 @@ public class LegsEnhanced : PartBaseLegs
 
         _currentCooldownTime = IsAttack ? (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) : (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) * 0.5f;
         _isCooldown = false;
+    }
+
+    public GameObject GetTopParent(GameObject obj)
+    {
+        Transform current = obj.transform;
+        while (current.parent != null)
+        {
+            current = current.parent;
+        }
+        return current.gameObject;
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
