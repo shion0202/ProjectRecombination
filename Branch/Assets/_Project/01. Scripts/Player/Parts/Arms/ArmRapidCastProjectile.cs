@@ -14,6 +14,12 @@ public class ArmRapidCastProjectile : PartBaseArm
     private float _currentCastTime = 0.0f;
     private GameObject castEffect;
 
+    protected void OnEnable()
+    {
+        GUIManager.Instance.SetAmmoColor(partType, Color.green);
+        Managers.GUIManager.Instance.SetAmmoColor(partType, false);
+    }
+
     protected override void Update()
     {
         if (partType == EPartType.ArmL)

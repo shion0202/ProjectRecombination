@@ -20,20 +20,73 @@ public class ShoulderLaser : PartBaseShoulder
     [SerializeField] protected float beamRadius = 1.0f;
     [SerializeField] protected LayerMask obstacleMask;
 
+    private CinemachineBasicMultiChannelPerlin noise;
+    private readonly Collider[] _hitResults = new Collider[20];
+    private float _timer = 0.05f;
+
     private GameObject beamStart;
     private GameObject beamEnd;
     private GameObject beam;
     private LineRenderer line;
     private bool _isShooting = false;
     private Coroutine _skillCoroutine = null;
-    private float _timer = 0.05f;
     private float _currentTimer = 0.0f;
-    private CinemachineBasicMultiChannelPerlin noise;
-    private readonly Collider[] _hitResults = new Collider[20];
-
+    
     protected void Start()
     {
         noise = _owner.FollowCamera.VCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
+
+    protected void OnEnable()
+    {
+        _currentTimer = 0.0f;
+        _owner.PlayerAnimator.SetBool("isPlayBackLaserAnim", false);
+        _owner.PlayerAnimator.SetBool("isPlayBackShootAnim", false);
+        _isShooting = false;
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+
+        if (beamStart) Utils.Destroy(beamStart);
+        if (beamEnd) Utils.Destroy(beamEnd);
+        if (beam) Utils.Destroy(beam);
+        line = null;
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        GUIManager.Instance.SetBackSkillIcon(false);
+        GUIManager.Instance.SetBackSkillCooldown(0.0f);
+        GUIManager.Instance.SetBackSkillCooldown(false);
+    }
+
+    protected void OnDisable()
+    {
+        noise.m_AmplitudeGain = 0.0f;
+        _currentTimer = 0.0f;
+        _owner.PlayerAnimator.SetBool("isPlayBackLaserAnim", false);
+        _owner.PlayerAnimator.SetBool("isPlayBackShootAnim", false);
+        _isShooting = false;
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+
+        if (beamStart) Utils.Destroy(beamStart);
+        if (beamEnd) Utils.Destroy(beamEnd);
+        if (beam) Utils.Destroy(beam);
+        line = null;
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            GUIManager.Instance.SetBackSkillIcon(false);
+            GUIManager.Instance.SetBackSkillCooldown(0.0f);
+            GUIManager.Instance.SetBackSkillCooldown(false);
+        }
     }
 
     protected void Update()
@@ -109,7 +162,7 @@ public class ShoulderLaser : PartBaseShoulder
                 hitZoneValue = partialBlow.fValue;
             }
 
-            IDamagable enemy = collider.GetComponent<IDamagable>();
+            IDamagable enemy = collider.transform.GetComponent<IDamagable>();
             if (enemy != null)
             {
                 enemy.ApplyDamage(beamDamage * _timer * hitZoneValue, targetMask, _timer, 0.0f);
@@ -126,7 +179,6 @@ public class ShoulderLaser : PartBaseShoulder
             Utils.Destroy(Utils.Instantiate(bulletPrefab, collider.transform.position, Quaternion.identity), 0.1f);
         }
 
-        DrawCapsule(origin, targetPoint, beamRadius, Color.yellow, 0.5f);
         return origin + targetDirection * maxDistance;
     }
 
@@ -151,28 +203,6 @@ public class ShoulderLaser : PartBaseShoulder
     protected void ApplyLaserShake(float gain)
     {
         noise.m_AmplitudeGain = gain;
-    }
-
-    void DrawCapsule(Vector3 point1, Vector3 point2, float radius, Color color, float duration = 0)
-    {
-        int segments = 16; // 원의 세그먼트 수 (원에 가까울수록 정밀)
-        float angleStep = 360f / segments;
-
-        // 캡슐 축선 그리기
-        Debug.DrawLine(point1, point2, color, duration);
-
-        // 각 끝점에 원 그리기 (XY 평면 기준 예시)
-        for (int i = 0; i < segments; i++)
-        {
-            float angle1 = Mathf.Deg2Rad * i * angleStep;
-            float angle2 = Mathf.Deg2Rad * (i + 1) * angleStep;
-
-            Vector3 offset1 = new Vector3(Mathf.Cos(angle1), Mathf.Sin(angle1), 0) * radius;
-            Vector3 offset2 = new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2), 0) * radius;
-
-            Debug.DrawLine(point1 + offset1, point1 + offset2, color, duration);
-            Debug.DrawLine(point2 + offset1, point2 + offset2, color, duration);
-        }
     }
 
     private IEnumerator CoStopAndCooldown()
@@ -227,4 +257,27 @@ public class ShoulderLaser : PartBaseShoulder
         Debug.Log("쿨타임 종료");
         _skillCoroutine = null;
     }
+
+    void DrawCapsule(Vector3 point1, Vector3 point2, float radius, Color color, float duration = 0)
+    {
+        int segments = 16; // 원의 세그먼트 수 (원에 가까울수록 정밀)
+        float angleStep = 360f / segments;
+
+        // 캡슐 축선 그리기
+        Debug.DrawLine(point1, point2, color, duration);
+
+        // 각 끝점에 원 그리기 (XY 평면 기준 예시)
+        for (int i = 0; i < segments; i++)
+        {
+            float angle1 = Mathf.Deg2Rad * i * angleStep;
+            float angle2 = Mathf.Deg2Rad * (i + 1) * angleStep;
+
+            Vector3 offset1 = new Vector3(Mathf.Cos(angle1), Mathf.Sin(angle1), 0) * radius;
+            Vector3 offset2 = new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2), 0) * radius;
+
+            Debug.DrawLine(point1 + offset1, point1 + offset2, color, duration);
+            Debug.DrawLine(point2 + offset1, point2 + offset2, color, duration);
+        }
+    }
+
 }

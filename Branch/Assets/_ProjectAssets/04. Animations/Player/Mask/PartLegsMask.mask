@@ -389,7 +389,7 @@ AvatarMask:
   - m_Path: Bip001/Bip001 Pelvis/HeavyLeg001/HeavyLeg2/MidwheelL1_1/BWheelUp1/BLegLUpL1/BLegLUpL2/BLegL1_1/BLegL1_2/BLegL1_3/BLegL1_4
     m_Weight: 1
   - m_Path: Bip001/Bip001 Pelvis/HeavyLeg001/HeavyLeg2/MidwheelL1_1/BWheelUp1/BWheelUp2
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Bip001/Bip001 Pelvis/HeavyLeg001/HeavyLeg2/MidwheelL1_1/MidwheelL1_2
     m_Weight: 1
   - m_Path: Bip001/Bip001 Pelvis/HeavyLeg001/HeavyLeg2/MidwheelL1_1/MidwheelL1_2/BarrelL1

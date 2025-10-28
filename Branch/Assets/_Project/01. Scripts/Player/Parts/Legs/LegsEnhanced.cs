@@ -4,6 +4,7 @@ using UnityEngine;
 using Monster.AI;
 using Managers;
 using _Project._01._Scripts.Monster;
+using Cinemachine;
 
 public class LegsEnhanced : PartBaseLegs
 {
@@ -23,6 +24,7 @@ public class LegsEnhanced : PartBaseLegs
     private float _currentCooldownTime = 0.0f;
     private bool _isAttack = false;
     protected List<Transform> _damagedTargets = new();
+    protected CinemachineImpulseSource source;
 
     public bool IsAttack
     {
@@ -34,27 +36,86 @@ public class LegsEnhanced : PartBaseLegs
     {
         base.Awake();
         _legsAnimType = EAnimationType.Roller;
+        source = gameObject.GetComponent<CinemachineImpulseSource>();
     }
 
     protected void OnEnable()
     {
+        // 스킬 사용 시와 파츠 교체 시를 구분
         if (_isCooldown)
         {
             JumpAttackFinish();
+
+            _currentCooldownTime = IsAttack ? (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) : (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) * 0.5f;
+            _isAttack = false;
+            _isCooldown = false;
+        }
+        else
+        {
+            _currentSkillCount = 0;
+            _currentCooldownTime = 0.0f;
+            _currentVelocity = Vector3.zero;
+            _skateTime = 0.0f;
+            _isCooldown = false;
+            _isAttack = false;
+
+            for (int i = 0; i < _damagedTargets.Count; ++i)
+            {
+                _damagedTargets[i] = null;
+            }
+
+            if (_skillCoroutine != null)
+            {
+                StopCoroutine(_skillCoroutine);
+                _skillCoroutine = null;
+            }
+
+            GUIManager.Instance.SetLegsSkillIcon(false);
+            GUIManager.Instance.SetLegsSkillCooldown(0.0f);
+            GUIManager.Instance.SetLegsSkillCooldown(false);
+        }
+    }
+
+    protected void OnDisable()
+    {
+        if (!_isCooldown)
+        {
+            _currentSkillCount = 0;
+            _currentCooldownTime = 0.0f;
+            _currentVelocity = Vector3.zero;
+            _skateTime = 0.0f;
+            _isCooldown = false;
+            _isAttack = false;
+
+            for (int i = 0; i < _damagedTargets.Count; ++i)
+            {
+                _damagedTargets[i] = null;
+            }
+
+            if (_skillCoroutine != null)
+            {
+                StopCoroutine(_skillCoroutine);
+                _skillCoroutine = null;
+            }
+
+            if (Managers.GUIManager.IsAliveInstance())
+            {
+                GUIManager.Instance.SetLegsSkillIcon(false);
+                GUIManager.Instance.SetLegsSkillCooldown(0.0f);
+                GUIManager.Instance.SetLegsSkillCooldown(false);
+            }
         }
     }
 
     private void Update()
     {
-        if (_currentCooldownTime > 0.0f)
+        _currentCooldownTime -= Time.deltaTime;
+
+        GUIManager.Instance.SetLegsSkillCooldown(_currentCooldownTime);
+        if (_currentCooldownTime <= 0.0f)
         {
-            _currentCooldownTime -= Time.deltaTime;
-            GUIManager.Instance.SetLegsSkillCooldown(_currentCooldownTime);
-            if (_currentCooldownTime <= 0.0f)
-            {
-                GUIManager.Instance.SetLegsSkillIcon(false);
-                GUIManager.Instance.SetLegsSkillCooldown(false);
-            }
+            GUIManager.Instance.SetLegsSkillIcon(false);
+            GUIManager.Instance.SetLegsSkillCooldown(false);
         }
     }
 
@@ -85,9 +146,10 @@ public class LegsEnhanced : PartBaseLegs
         GUIManager.Instance.SetLegsSkillIcon(true);
         GUIManager.Instance.SetLegsSkillCooldown(true);
 
-        if (IsAttack)
+        if (_isAttack)
         {
             Utils.Destroy(Utils.Instantiate(landingEffectPrefab, _owner.transform.position, Quaternion.identity), 0.5f);
+            _owner.FollowCamera.ApplyShake(source);
 
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, skillRange);
             foreach (Collider hit in hitColliders)
@@ -120,9 +182,6 @@ public class LegsEnhanced : PartBaseLegs
                 }
             }
         }
-
-        _currentCooldownTime = IsAttack ? (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) : (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) * 0.5f;
-        _isCooldown = false;
     }
 
     public GameObject GetTopParent(GameObject obj)

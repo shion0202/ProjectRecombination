@@ -65,6 +65,7 @@ namespace Monster.AI.FSM
                     if (_useSkill is { CurrentState: not Skill.SkillState.isReady and Skill.SkillState.isEnded } &&
                         f > _useSkill.skillData.range)
                     {
+                        blackboard.StopAllCoroutines();
                         _useSkill = null;
                         ChangeState("Chase");
                     }
@@ -89,13 +90,6 @@ namespace Monster.AI.FSM
                         ChangeState("Attack");
                         return;
                     }
-                        
-                    // 사거리 밖에 있으면 추격 상태로 전환
-                    if (distanceToPlayer > skillRange && distanceToPlayer <= blackboard.MaxDetectionRange)
-                    {
-                        ChangeState("Chase");
-                        return;
-                    }
                 }
             }
             
@@ -107,26 +101,7 @@ namespace Monster.AI.FSM
                 return;
             }
 
-            if (blackboard.PatrolInfo.wayPoints is { Length: > 0 })
-            {
-                // 위의 모든 조건이 아닐 경우, 기본 행동(순찰 또는 대기)으로 돌아갑니다.
-                if (blackboard.PatrolInfo.isPatrol)
-                {
-                    ChangeState("Patrol");
-                    return;
-                }
-
-                if (_waitTimer <= 0f)
-                {
-                    ChangeState("Patrol");
-                    _waitTimer = Random.Range(3f, 7f);
-                }
-            }
-            else
-            {
-                ChangeState("Idle");
-                _waitTimer -= Time.deltaTime;
-            }
+            ChangeState("Idle");
         }
 
         /// <summary>

@@ -42,26 +42,55 @@ public class LegsHover : PartBaseLegs
         _currentMoveDirection = Vector3.zero;
         previousGroundY = groundY;
         isInit = false;
+
+        if (_currentBarrier != null)
+        {
+            Utils.Destroy(_currentBarrier);
+            _currentBarrier = null;
+        }
+        _owner.Stats.RemoveModifier(this);
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        GUIManager.Instance.SetLegsSkillIcon(false);
+        GUIManager.Instance.SetLegsSkillCooldown(0.0f);
+        GUIManager.Instance.SetLegsSkillCooldown(false);
+    }
+
+    protected void OnDisable()
+    {
+        _currentMoveDirection = Vector3.zero;
+        isInit = false;
+        _currentSkillCount = 0;
+
+        if (_currentBarrier != null)
+        {
+            Utils.Destroy(_currentBarrier);
+            _currentBarrier = null;
+        }
+        _owner.Stats.RemoveModifier(this);
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            GUIManager.Instance.SetLegsSkillIcon(false);
+            GUIManager.Instance.SetLegsSkillCooldown(0.0f);
+            GUIManager.Instance.SetLegsSkillCooldown(false);
+        }
     }
 
     public override void UseAbility()
     {
         CreateBarrier();
-    }
-
-    public override void FinishActionForced()
-    {
-        base.FinishActionForced();
-
-        if (_currentBarrier != null)
-        {
-            Destroy(_currentBarrier);
-            _currentBarrier = null;
-        }
-        _owner.Stats.RemoveModifier(this);
-
-        GUIManager.Instance.SetLegsSkillIcon(false);
-        GUIManager.Instance.SetLegsSkillCooldown(false);
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
@@ -138,7 +167,7 @@ public class LegsHover : PartBaseLegs
     {
         GUIManager.Instance.SetLegsSkillIcon(true);
         // 스킬 사용 시 보호막 생성
-        _currentBarrier = Instantiate(barrierPrefab, barrierSpawnPoint.position - new Vector3(0.0f, 0.2f, 0.0f), Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f)), transform);
+        _currentBarrier = Utils.Instantiate(barrierPrefab, barrierSpawnPoint.position - new Vector3(0.0f, 0.2f, 0.0f), Quaternion.Euler(new Vector3(-90.0f, 0.0f, 0.0f)), transform);
         Debug.Log("호버링 보호막 생성 및 버프");
 
         // 이동 속도 증가 및 받는 피해 감소 = Modifier 적용
@@ -154,7 +183,6 @@ public class LegsHover : PartBaseLegs
             Destroy(_currentBarrier);
             _currentBarrier = null;
         }
-
         _owner.Stats.RemoveModifier(this);
 
         float time = skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value;

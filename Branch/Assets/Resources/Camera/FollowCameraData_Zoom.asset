@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: FollowCameraData_Zoom
   m_EditorClassIdentifier: 
   FOV: 65
-  screenX: 0.315
-  screenY: 0.625
-  cameraDistance: 1.75
+  screenX: 0.3
+  screenY: 0.6
+  cameraDistance: 2
   trackedOffset: {x: 0, y: 0, z: 0}
   lookaheadTime: 0.01
   lookaheadSmoothing: 3

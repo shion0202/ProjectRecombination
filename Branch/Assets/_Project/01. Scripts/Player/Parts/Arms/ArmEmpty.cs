@@ -14,6 +14,8 @@ public class ArmEmpty : PartBaseArm
     private void OnEnable()
     {
         Managers.GUIManager.Instance.RightArmRadial.SetActive(false);
+        Managers.GUIManager.Instance.SetAmmoColor(partType, Color.black);
+        Managers.GUIManager.Instance.SetAmmoColor(partType, true);
     }
 
     private void OnDisable()

@@ -38,6 +38,7 @@ public class ArmLaserMultiple : PartBaseArm
     protected void OnEnable()
     {
         GUIManager.Instance.SetAmmoColor(partType, Color.blue);
+        Managers.GUIManager.Instance.SetAmmoColor(partType, false);
     }
 
     protected override void Update()
@@ -67,7 +68,6 @@ public class ArmLaserMultiple : PartBaseArm
             if (_currentAmmo >= maxAmmo)
             {
                 _isOverheat = false;
-                GUIManager.Instance.SetAmmoColor(partType, false);
             }
 
             return;
@@ -275,7 +275,6 @@ public class ArmLaserMultiple : PartBaseArm
         {
             //CancleShootState(partType == EPartType.ArmL ? true : false);
             _isOverheat = true;
-            GUIManager.Instance.SetAmmoColor(partType, true);
         }
     }
 

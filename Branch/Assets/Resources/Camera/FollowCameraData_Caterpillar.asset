@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: FollowCameraData_Caterpillar
   m_EditorClassIdentifier: 
   FOV: 70
-  screenX: 0.325
-  screenY: 0.675
-  cameraDistance: 3
+  screenX: 0.375
+  screenY: 0.605
+  cameraDistance: 3.5
   trackedOffset: {x: 0, y: 0, z: 0}
   lookaheadTime: 0.01
-  lookaheadSmoothing: 2
+  lookaheadSmoothing: 3
   ignoreLookaheadY: 1
   dampingX: 0
   dampingY: 0

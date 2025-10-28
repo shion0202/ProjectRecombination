@@ -59,7 +59,7 @@ public class UI_Prologue : MonoBehaviour
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;    // 에디터에서는 플레이 중단
 #else
-                Application.Quit();                                         // 빌드에서는 프로그램 종료
+                Application.Quit();                                 // 빌드에서는 프로그램 종료
 #endif
                 return;
             }
@@ -112,7 +112,9 @@ public class UI_Prologue : MonoBehaviour
                 speaker.imageScene.color = new Color(color.r, color.g, color.b, 1.0f);
 
                 ++_currentDialogIndex;
+                videoPlayer.Stop();
                 videoPlayer.clip = dialogs[_currentDialogIndex].video;
+                videoPlayer.Play();
                 StartCoroutine("CoTypeText");
 
                 return false;
@@ -151,7 +153,7 @@ public class UI_Prologue : MonoBehaviour
     private void SetNextDialog()
     {
         // 다음 씬 영상이 없을 경우
-        if (_isFirst || (_currentDialogIndex + 1 < dialogs.Length
+        if (!_isFirst && (_currentDialogIndex + 1 < dialogs.Length
             && !dialogs[_currentDialogIndex + 1].video))
         {
             // 페이드 아웃 없이 바로 진행
@@ -226,10 +228,10 @@ public class UI_Prologue : MonoBehaviour
         yield return _fadeRoutine;
         _isFadeOut = false;
 
-        //if (isFirst)
-        //{
-        //    speaker.imageScene.gameObject.SetActive(true);
-        //}
+        if (isFirst)
+        {
+            speaker.imageScene.gameObject.SetActive(true);
+        }
 
         ++_currentDialogIndex;
         videoPlayer.Stop();

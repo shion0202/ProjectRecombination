@@ -5,8 +5,18 @@ using UnityEngine;
 
 public class ArmBasic : PartBaseArm
 {
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _isZooming = false;
+    }
+
     protected void OnEnable()
     {
+        GUIManager.Instance.SetAmmoColor(partType, Color.white);
+        Managers.GUIManager.Instance.SetAmmoColor(partType, false);
+
         if (partType == EPartType.ArmL)
         {
             GUIManager.Instance.SetAmmoLeftSlider(0, 0);

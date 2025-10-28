@@ -244,7 +244,7 @@ MonoBehaviour:
     objectArrow: {fileID: 1314636447}
     fadePanel: {fileID: 1307420041}
   dialogs:
-  - video: {fileID: 32900000, guid: 368b281ddbebd474c83b8b8d4f099b3f, type: 3}
+  - video: {fileID: 32900000, guid: d3bcc556bb8c1f144aa5f260414ec500, type: 3}
     dialog: "21\uC138\uAE30 \uB9D0, \uBBF8\uC9C0\uC758 \uACF5\uAC04\uC73C\uB85C\uBD80\uD130
       \uB098\uD0C0\uB09C \uAE30\uACC4 \uAD70\uB2E8\uC5D0 \uC758\uD574\n\uC138\uC0C1\uC740
       \uC1A1\uB450\uB9AC\uC9F8 \uBCC0\uD574\uBC84\uB9AC\uACE0 \uB9D0\uC558\uB2E4."
@@ -252,24 +252,22 @@ MonoBehaviour:
     dialog: "\uADF8\uB4E4\uC740 \uC778\uAC04\uC758 \uC601\uD63C\uC744 \uB3D9\uB825\uC6D0\uC73C\uB85C
       \uC0BC\uC558\uACE0,\n\uACC4\uC18D\uD574\uC11C \uC778\uB958\uC758 \uD3C9\uD654\uB97C
       \uD30C\uAD34\uD574 \uB098\uAC14\uB2E4."
-  - video: {fileID: 32900000, guid: 42ec3236757c2364d851f242238673a9, type: 3}
+  - video: {fileID: 32900000, guid: 5fff680c734a29b459f47c330e7caa66, type: 3}
     dialog: "\uC778\uB958\uB294 \uC624\uB79C \uC2DC\uAC04 \uC800\uD56D\uD558\uBA70\n\uADF8\uB4E4\uC5D0\uAC8C
       \uB9DE\uC124 \uC548\uB4DC\uB85C\uC774\uB4DC \uC18C\uCCB4\uB97C \uAC00\uB3D9\uD55C\uB2E4."
   - video: {fileID: 0}
     dialog: "\uADF8\uC758 \uC774\uB984\uC740 U.R.A."
-  - video: {fileID: 32900000, guid: 368b281ddbebd474c83b8b8d4f099b3f, type: 3}
+  - video: {fileID: 32900000, guid: d7076315bd978e1409671509ff0014c8, type: 3}
     dialog: "\uC778\uB958\uB294 U.R.A.\uB97C \uC2DC\uC124 \uB0B4\uBD80\uB85C \uD22C\uC785\uC2DC\uCF1C
       \uAD70\uB2E8\uC744 \uC12C\uBA78\uD558\uACE0\n\uADF8\uB4E4\uC758 \uC9C4\uC6D0\uC9C0\uB97C
       \uCC3E\uC544\uB0B4\uACE0\uC790 \uD55C\uB2E4."
-  - video: {fileID: 32900000, guid: 42ec3236757c2364d851f242238673a9, type: 3}
+  - video: {fileID: 32900000, guid: 1aa3006582ef17a4985cd70bb9351216, type: 3}
     dialog: "\uBAA8\uB4E0 \uAC83\uC774 \uADF8\uB4E4 \uC190\uC5D0 \uD30C\uAD34\uB418\uAE30
       \uC804\uC5D0..."
-  - video: {fileID: 32900000, guid: 368b281ddbebd474c83b8b8d4f099b3f, type: 3}
-    dialog: 
   videoPlayer: {fileID: 1749902551}
   nextSceneName: GameScene
   isAutoStart: 1
-  typeSpeed: 0.05
+  typeSpeed: 0.04
   fadeDuration: 1
 --- !u!1 &851666300
 GameObject:
@@ -306,7 +304,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 30}
   m_SizeDelta: {x: -200, y: 190}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &851666302
@@ -360,19 +358,19 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 40
+  m_lineSpacing: 20
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -802,7 +800,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 50}
+  m_AnchoredPosition: {x: 0, y: 20}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1314636449
@@ -948,7 +946,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1749902550}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 8af5dcd78994a764185b0203df1d8699, type: 3}
+  m_VideoClip: {fileID: 0}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}

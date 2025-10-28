@@ -198,7 +198,7 @@ namespace Monster.AI.Blackboard
                     if (skillDatas[i] is null) continue;
                     Skills[i] = new Skill(skillDatas[i], this);
                     // 각 스킬의 활성화 및 비활성화 이벤트에 핸들러 등록
-                    Skills[i].OnActivate += HandleSkillActivation;
+                    Skills[i].OnCast += HandleSkillActivation;
                     Skills[i].OnDeactivate += HandleSkillDeactivation;
                 }
             }

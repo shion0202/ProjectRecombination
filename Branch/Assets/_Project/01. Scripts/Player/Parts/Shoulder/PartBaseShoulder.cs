@@ -30,7 +30,7 @@ public class PartBaseShoulder : PartBase
 
     public override void FinishActionForced()
     {
-        GUIManager.Instance.ResetSkillCooldown();
+        //GUIManager.Instance.ResetSkillCooldown();
     }
 
     public override void UseAbility()

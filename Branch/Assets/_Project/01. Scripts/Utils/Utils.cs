@@ -55,7 +55,7 @@ public class Utils
 
     public static void Destroy(GameObject go, float delay = 0.0f)
     {
-        if (go == null) return;
+        if (!go) return;
 
         if (PoolManager.Instance.IsPooledObject(go).Item1)
         {

@@ -9,6 +9,12 @@ public class ArmRapidBounce : PartBaseArm
     [SerializeField] protected float maxYawAngle = 90f; // 좌우 방향 최대 90도씩 = 180도 범위
     [SerializeField] protected float maxPitchAngle = 10f; // 상하 각도 범위 (조절 가능)
 
+    protected void OnEnable()
+    {
+        GUIManager.Instance.SetAmmoColor(partType, Color.green);
+        Managers.GUIManager.Instance.SetAmmoColor(partType, false);
+    }
+
     protected override void Shoot()
     {
         Vector3 targetPoint = GetTargetPoint(out RaycastHit hit);

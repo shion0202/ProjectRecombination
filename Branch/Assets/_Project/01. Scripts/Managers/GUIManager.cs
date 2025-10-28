@@ -220,11 +220,11 @@ namespace Managers
             Image image = null;
             if (type == EPartType.ArmL)
             {
-                image = ammoLeftBar.GetComponentInChildren<Image>();
+                image = fillLeft.GetComponentInChildren<Image>();
             }
             else
             {
-                image = ammoRightBar.GetComponentInChildren<Image>();
+                image = fillRight.GetComponentInChildren<Image>();
             }
             if (image == null) return;
 
@@ -246,11 +246,11 @@ namespace Managers
 
             if (isOverheat)
             {
-                image.color = Color.white;
+                image.color = Color.black;
             }
             else
             {
-                image.color = Color.black;
+                image.color = Color.white;
             }
         }
 

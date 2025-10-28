@@ -18,22 +18,51 @@ public class LegsBasic : PartBaseLegs
         _legsAnimType = EAnimationType.Base;
     }
 
+    protected void OnEnable()
+    {
+        _currentSkillCount = 0;
+        _isCooldown = false;
+
+        if (_owner)
+        {
+            _owner.FinishDash();
+        }
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        GUIManager.Instance.SetLegsSkillIcon(false);
+        GUIManager.Instance.SetLegsSkillCooldown(0.0f);
+        GUIManager.Instance.SetLegsSkillCooldown(false);
+    }
+
+    protected void OnDisable()
+    {
+        _currentSkillCount = 0;
+        _isCooldown = false;
+        _owner.FinishDash();
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            GUIManager.Instance.SetLegsSkillIcon(false);
+            GUIManager.Instance.SetLegsSkillCooldown(0.0f);
+            GUIManager.Instance.SetLegsSkillCooldown(false);
+        }
+    }
+
     public override void UseAbility()
     {
         if (_currentSkillCount >= maxSkillCount) return;
         Dash();
-    }
-
-    public override void FinishActionForced()
-    {
-        base.FinishActionForced();
-
-        _owner.FinishDash();
-        GUIManager.Instance.SetLegsSkillIcon(false);
-        GUIManager.Instance.SetLegsSkillCooldown(false);
-        _currentSkillCount = 0;
-        _isCooldown = false;
-        _skillCoroutine = null;
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)

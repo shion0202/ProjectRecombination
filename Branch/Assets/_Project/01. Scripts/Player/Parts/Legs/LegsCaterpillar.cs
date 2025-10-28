@@ -17,12 +17,15 @@ public class LegsCaterpillar : PartBaseLegs
     private bool _isBackward = false;
     private Quaternion _originalRotation;
     protected CinemachineImpulseSource source;
+    private bool _isSiegeMode = false;
+    private bool _isCooldown = false;
 
     protected override void Awake()
     {
         base.Awake();
         _legsAnimType = EAnimationType.Caterpillar;
         _isAnimating = false;
+        _isSiegeMode = false;
         source = gameObject.GetComponent<CinemachineImpulseSource>();
     }
 
@@ -34,23 +37,28 @@ public class LegsCaterpillar : PartBaseLegs
         }
     }
 
-    protected void OnDrawGizmos()
+    protected void OnDisable()
     {
-        if (_owner == null) return;
+        _currentSkillCount = 0;
+        _owner.SetMovable(true);
 
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(_owner.transform.position, skillRange);
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            GUIManager.Instance.SetLegsSkillIcon(false);
+            GUIManager.Instance.SetLegsSkillCooldown(0.0f);
+            GUIManager.Instance.SetLegsSkillCooldown(false);
+        }
     }
 
     public override void UseAbility()
     {
         Impact();
-    }
-
-    public override void FinishActionForced()
-    {
-        base.FinishActionForced();
-        _owner.SetMovable(true);
     }
 
     public override Vector3 GetMoveDirection(Vector2 moveInput, Transform characterTransform, Transform cameraTransform)
@@ -110,8 +118,30 @@ public class LegsCaterpillar : PartBaseLegs
 
     protected void Impact()
     {
-        if (_skillCoroutine != null) return;
-        _skillCoroutine = StartCoroutine(CoImpartRoutine());
+        if (_isCooldown) return;
+
+        if (!_isSiegeMode)
+        {
+            // 시즈 모드 진입 애니메이션 재생
+            // 일정 시간 대기
+            if (_skillCoroutine != null)
+            {
+                StopCoroutine(_skillCoroutine);
+                _skillCoroutine = null;
+            }
+            _skillCoroutine = StartCoroutine(CoPlaySiegeMode(true));
+            _isSiegeMode = true;
+        }
+        else
+        {
+            // 시즈 모드 해제 애니메이션 재생
+            if (_skillCoroutine != null)
+            {
+                StopCoroutine(_skillCoroutine);
+                _skillCoroutine = null;
+            }
+            _skillCoroutine = StartCoroutine(CoPlaySiegeMode(false));
+        }
     }
 
     public void HandleCylinderDirection(Vector3 moveDirection)
@@ -143,39 +173,83 @@ public class LegsCaterpillar : PartBaseLegs
             Time.deltaTime * turnRotateSpeed);
     }
 
+    protected void LookCameraDirection()
+    {
+        Camera cam = Camera.main;
+        Vector3 lookDirection = cam.transform.forward;
+        lookDirection.y = 0; // 수평 방향으로만 회전
+        if (lookDirection != Vector3.zero)
+            _owner.transform.rotation = Quaternion.LookRotation(lookDirection);
+
+        _currentMoveDirection = _owner.transform.forward;
+    }
+
+    protected IEnumerator CoPlaySiegeMode(bool isActivate)
+    {
+        if (isActivate)
+        {
+            LookCameraDirection();
+
+            _owner.PlayerAnimator.SetBool("isPlayLegsAnim", true);
+            _owner.SetPlayerState(EPlayerState.Skilling, true);
+            GUIManager.Instance.SetLegsSkillIcon(true);
+            _owner.SetMovable(false);
+            _owner.FollowCamera.SetCameraRotatable(false);
+            yield return new WaitForSeconds(2.5f);
+
+            _owner.FollowCamera.SetCameraRotatable(true);
+            _owner.SetMovable(false, true);
+        }
+        else
+        {
+            _isCooldown = true;
+            _owner.PlayerAnimator.SetBool("isPlayLegsAnim", false);
+            _owner.SetMovable(false);
+            yield return new WaitForSeconds(2.5f);
+
+            _currentMoveDirection = _owner.transform.forward;
+            _owner.SetPlayerState(EPlayerState.Skilling, false);
+            _owner.SetMovable(true);
+            _owner.FollowCamera.SetCameraRotatable(true);
+            _isSiegeMode = false;
+
+            // 스킬 쿨타임
+            float time = 5.0f;
+            GUIManager.Instance.SetLegsSkillCooldown(true);
+            GUIManager.Instance.SetLegsSkillCooldown(time);
+            while (true)
+            {
+                yield return new WaitForSeconds(0.1f);
+
+                time -= 0.1f;
+                GUIManager.Instance.SetLegsSkillCooldown(time);
+                if (time <= 0.0f)
+                {
+                    break;
+                }
+            }
+
+            GUIManager.Instance.SetLegsSkillIcon(false);
+            GUIManager.Instance.SetLegsSkillCooldown(false);
+            _isCooldown = false;
+            Debug.Log("쿨타임 종료");
+        }
+
+        _skillCoroutine = null;
+    }
+
     protected IEnumerator CoImpartRoutine()
     {
         GUIManager.Instance.SetLegsSkillIcon(true);
         _owner.PlayerAnimator.SetBool("isPlayLegsAnim", true);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3.0f);
 
         _owner.PlayerAnimator.SetTrigger("heavyShootTrigger");
         _owner.FollowCamera.ApplyShake(source);
         Destroy(Instantiate(impactEffectPrefab, _owner.transform.position, Quaternion.Euler(_owner.transform.rotation.eulerAngles + new Vector3(-90.0f, 0.0f, 0.0f))), 5.0f);
 
-        // 적 탐지 및 데미지 적용
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, skillRange);
-        foreach (Collider hit in hitColliders)
-        {
-            IDamagable monster = hit.transform.GetComponent<IDamagable>();
-            if (monster != null)
-            {
-                monster.ApplyDamage(skillDamage, targetMask);
-                // TODO: 적 기절 (2초)
-            }
-            else
-            {
-                monster = hit.transform.GetComponentInParent<IDamagable>();
-                if (monster != null)
-                {
-                    monster.ApplyDamage(skillDamage, targetMask);
-                    // TODO: 적 기절 (2초)
-                }
-            }
-        }
-
         // 이동 불가 적용
-        _owner.SetMovable(false);
+        _owner.SetMovable(false, true);
         Debug.Log("캐터필러 스킬 효과: 이동 불가");
         yield return new WaitForSeconds(skillDuration);
 

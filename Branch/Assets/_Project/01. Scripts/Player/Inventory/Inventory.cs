@@ -140,12 +140,6 @@ public class Inventory : MonoBehaviour
                 //Managers.GUIManager.Instance.UnlockParts(2);
             }
         }
-
-        foreach (PartBase part in baseParts)
-        {
-            GetItem(part);
-            EquipItem(part);
-        }
     }
 
     //private void Update()
@@ -170,6 +164,15 @@ public class Inventory : MonoBehaviour
     #endregion
 
     #region Public Methods
+    public void Init()
+    {
+        foreach (PartBase part in baseParts)
+        {
+            GetItem(part);
+            EquipItem(part);
+        }
+    }
+
     public void GetItem(PartBase newItem)
     {
         if (!_items[newItem.PartType][newItem.AttackType].Contains(newItem))
@@ -192,6 +195,7 @@ public class Inventory : MonoBehaviour
     public void EquipItem(PartBase equipItem)
     {
         if (!_items[equipItem.PartType][equipItem.AttackType].Contains(equipItem)) return;
+        if (_equippedItems[equipItem.PartType].Count > 0 && _equippedItems[equipItem.PartType][0].Equals(equipItem)) return;
 
         foreach (var part in _equippedItems[equipItem.PartType])
         {
@@ -230,6 +234,7 @@ public class Inventory : MonoBehaviour
         {
             // 다리 파츠 (애니메이션 변경)
             owner.SetOvrrideAnimator(legs.LegsAnimType);
+            owner.FollowCamera.CurrentCameraState = (ECameraState)(legs.LegsAnimType);
         }
     }
 

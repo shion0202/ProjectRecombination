@@ -15,6 +15,56 @@ public class ArmHeavyShotgun : PartBaseArm
     [SerializeField] private float maxRange = 20f;              // 전체 사거리
     protected GameObject muzzleFlashEffect;
 
+    protected void OnEnable()
+    {
+        GUIManager.Instance.SetAmmoColor(partType, Color.red);
+        Managers.GUIManager.Instance.SetAmmoColor(partType, false);
+
+        if (_owner && !_owner.Stats.CombinedPartStats[partType].IsEmpty() && _owner.Stats.CombinedPartStats[partType][EStatType.IntervalBetweenShots] != null)
+        {
+            _currentShootTime = (_owner.Stats.CombinedPartStats[partType][EStatType.IntervalBetweenShots].value);
+        }
+    }
+
+    protected override void Update()
+    {
+        if (partType == EPartType.ArmL)
+        {
+            GUIManager.Instance.SetAmmoLeftSlider(_currentShootTime, (_owner.Stats.CombinedPartStats[partType][EStatType.IntervalBetweenShots].value));
+        }
+        else
+        {
+            GUIManager.Instance.SetAmmoRightSlider(_currentShootTime, (_owner.Stats.CombinedPartStats[partType][EStatType.IntervalBetweenShots].value));
+        }
+
+        _currentShootTime += Time.deltaTime;
+
+        if (!_isShooting)
+        {
+            if (_currentAmmo >= maxAmmo) return;
+
+            _currentReloadTime -= Time.deltaTime;
+            if (_currentReloadTime > 0.0f) return;
+
+            _currentAmmo = Mathf.Clamp(_currentAmmo + 1, 0, maxAmmo);
+            _currentReloadTime = reloadTime;
+            if (_currentAmmo >= maxAmmo)
+            {
+                _isOverheat = false;
+            }
+
+            return;
+        }
+        if ((_owner.CurrentPlayerState & EPlayerState.Rotating) != 0) return;
+
+        if (_currentAmmo <= 0) return;
+        if (_currentShootTime >= (_owner.Stats.CombinedPartStats[partType][EStatType.IntervalBetweenShots].value))
+        {
+            Shoot();
+            _currentShootTime = 0.0f;
+        }
+    }
+
     protected override void Shoot()
     {
         Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward * (Vector3.Distance(_owner.transform.position, _owner.FollowCamera.transform.position));

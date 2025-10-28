@@ -33,6 +33,74 @@ public class ShoulderRapid : PartBaseShoulder
         source = gameObject.GetComponent<CinemachineImpulseSource>();
     }
 
+    protected void OnEnable()
+    {
+        GUIManager.Instance.SetBackSkillIcon(false);
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        for (int i = 0; i < targetingInstances.Count; ++i)
+        {
+            Utils.Destroy(targetingInstances[i]);
+        }
+        targetingInstances.Clear();
+
+        brain.m_DefaultBlend = defaultBlend;
+        _owner.FollowCamera.SetCameraRotatable(true);
+        _owner.SetMovable(true);
+        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", false);
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+
+        for (int i = 0; i < cutsceneCams.Count; ++i)
+        {
+            cutsceneCams[i].m_Priority = 10;
+        }
+
+        GUIManager.Instance.SetBackSkillIcon(false);
+        GUIManager.Instance.SetBackSkillCooldown(0.0f);
+        GUIManager.Instance.SetBackSkillCooldown(false);
+        StartCoroutine(SetBackSkillIcon());
+    }
+
+    protected void OnDisable()
+    {
+        GUIManager.Instance.SetBackSkillIcon(false);
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        for (int i = 0; i < targetingInstances.Count; ++i)
+        {
+            Utils.Destroy(targetingInstances[i]);
+        }
+        targetingInstances.Clear();
+
+        brain.m_DefaultBlend = defaultBlend;
+        _owner.FollowCamera.SetCameraRotatable(true);
+        _owner.SetMovable(true);
+        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", false);
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+
+        for (int i = 0; i < cutsceneCams.Count; ++i)
+        {
+            cutsceneCams[i].m_Priority = 10;
+        }
+
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            GUIManager.Instance.SetBackSkillIcon(false);
+            GUIManager.Instance.SetBackSkillCooldown(0.0f);
+            GUIManager.Instance.SetBackSkillCooldown(false);
+        }
+    }
+
     public override void UseAbility()
     {
         LaunchTargetMissiles();
@@ -46,16 +114,17 @@ public class ShoulderRapid : PartBaseShoulder
         // 타겟팅된 적에게 미사일 발사, 최대 수치가 아닐 경우 남은 미사일은 타겟팅된 적들에게 균등 분배
         if (_skillCoroutine != null) return;
 
-        GUIManager.Instance.SetBackSkillIcon(true);
         // 1. 스킬 시전 중 플레이어와 카메라 조작 불가
         _owner.FollowCamera.SetCameraRotatable(false);
         _owner.SetMovable(false);
+        _owner.SetPlayerState(EPlayerState.Skilling, true);
 
         // 2. 플레이어가 카메라 방향 바라봄
         LookCameraDirection();
 
         brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.3f);
         cutsceneCams[0].m_Priority = 100;
+        GUIManager.Instance.SetBackSkillIcon(true);
 
         _skillCoroutine = StartCoroutine(CoLaunchTargetMissiles());
     }
@@ -149,27 +218,39 @@ public class ShoulderRapid : PartBaseShoulder
             yield return new WaitForSeconds(0.2f);
         }
 
-        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", true);
-        yield return new WaitForSeconds(0.4f);
-
         // 5. 각 타겟에게 유도 미사일 발사
         // Count된 적이 없을 경우 종료
         int targetCount = targets.Count;
         if (targetCount <= 0)
-        {
-            _owner.FollowCamera.SetCameraRotatable(true);
-            _owner.SetMovable(true);
+            if (targetCount <= 0)
+            {
+                for (int i = 0; i < targetingInstances.Count; ++i)
+                {
+                    Utils.Destroy(targetingInstances[i]);
+                }
+                targetingInstances.Clear();
 
-            GUIManager.Instance.SetBackSkillIcon(false);
-            GUIManager.Instance.SetBackSkillCooldown(false);
+                brain.m_DefaultBlend = defaultBlend;
+                _owner.FollowCamera.SetCameraRotatable(true);
+                _owner.SetMovable(true);
+                _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", false);
+                _owner.SetPlayerState(EPlayerState.Skilling, false);
 
-            brain.m_DefaultBlend = defaultBlend;
-            cutsceneCams[0].m_Priority = 10;
-            _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", false);
+                for (int i = 0; i < cutsceneCams.Count; ++i)
+                {
+                    cutsceneCams[i].m_Priority = 10;
+                }
 
-            _skillCoroutine = null;
-            yield break;
-        }
+                GUIManager.Instance.SetBackSkillIcon(false);
+                GUIManager.Instance.SetBackSkillCooldown(0.0f);
+                GUIManager.Instance.SetBackSkillCooldown(false);
+
+                _skillCoroutine = null;
+                yield break;
+            }
+
+        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", true);
+        yield return new WaitForSeconds(0.4f);
 
         brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.1f);
         cutsceneCams[0].m_Priority = 10;
@@ -208,10 +289,18 @@ public class ShoulderRapid : PartBaseShoulder
         }
 
         // 6. 플레이어와 카메라의 조작 재개
+        targetingInstances.Clear();
+
         brain.m_DefaultBlend = defaultBlend;
-        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", false);
         _owner.FollowCamera.SetCameraRotatable(true);
         _owner.SetMovable(true);
+        _owner.PlayerAnimator.SetBool("isPlayShoulderAnim", false);
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+
+        for (int i = 0; i < cutsceneCams.Count; ++i)
+        {
+            cutsceneCams[i].m_Priority = 10;
+        }
 
         GUIManager.Instance.SetBackSkillCooldown(true);
         GUIManager.Instance.SetBackSkillCooldown(skillCooldown);
@@ -228,6 +317,7 @@ public class ShoulderRapid : PartBaseShoulder
         }
 
         GUIManager.Instance.SetBackSkillIcon(false);
+        GUIManager.Instance.SetBackSkillCooldown(0.0f);
         GUIManager.Instance.SetBackSkillCooldown(false);
         Debug.Log("쿨타임 종료");
         _skillCoroutine = null;
@@ -241,5 +331,11 @@ public class ShoulderRapid : PartBaseShoulder
         {
             ps.Pause();
         }
+    }
+
+    private IEnumerator SetBackSkillIcon()
+    {
+        yield return null;
+        GUIManager.Instance.SetBackSkillIcon(false);
     }
 }

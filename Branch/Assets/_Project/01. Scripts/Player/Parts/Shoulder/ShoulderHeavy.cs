@@ -10,7 +10,7 @@ public class ShoulderHeavy : PartBaseShoulder
     [SerializeField] protected GameObject shootPrefab;
     [SerializeField] protected GameObject orbPrefab;
     [SerializeField] protected Transform backPart;
-    protected SkinnedMeshRenderer smr;
+    //protected SkinnedMeshRenderer smr;
     private Coroutine _skillCoroutine = null;
     protected Coroutine _morphBlendRoutine = null;
 
@@ -26,6 +26,73 @@ public class ShoulderHeavy : PartBaseShoulder
         brain = Camera.main.GetComponent<CinemachineBrain>();
         defaultBlend = brain.m_DefaultBlend;
         source = gameObject.GetComponent<CinemachineImpulseSource>();
+    }
+
+    protected void OnEnable()
+    {
+        brain.m_DefaultBlend = defaultBlend;
+        _owner.FollowCamera.SetCameraRotatable(true);
+        _owner.SetMovable(true);
+        _owner.PlayerAnimator.SetBool("isPlayBackHeavyAnim", false);
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+        SkinnedMeshRenderer smr = backPart.GetComponent<SkinnedMeshRenderer>();
+        smr.SetBlendShapeWeight(0, 0.0f);
+
+        for (int i = 0; i < cutsceneCams.Count; ++i)
+        {
+            cutsceneCams[i].m_Priority = 10;
+        }
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        if (_morphBlendRoutine != null)
+        {
+            StopCoroutine(_morphBlendRoutine);
+            _morphBlendRoutine = null;
+        }
+
+        GUIManager.Instance.SetBackSkillIcon(false);
+        GUIManager.Instance.SetBackSkillCooldown(0.0f);
+        GUIManager.Instance.SetBackSkillCooldown(false);
+    }
+
+    protected void OnDisable()
+    {
+        brain.m_DefaultBlend = defaultBlend;
+        _owner.FollowCamera.SetCameraRotatable(true);
+        _owner.SetMovable(true);
+        _owner.PlayerAnimator.SetBool("isPlayBackHeavyAnim", false);
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+        SkinnedMeshRenderer smr = backPart.GetComponent<SkinnedMeshRenderer>();
+        smr.SetBlendShapeWeight(0, 0.0f);
+
+        for (int i = 0; i < cutsceneCams.Count; ++i)
+        {
+            cutsceneCams[i].m_Priority = 10;
+        }
+
+        if (_skillCoroutine != null)
+        {
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
+
+        if (_morphBlendRoutine != null)
+        {
+            StopCoroutine(_morphBlendRoutine);
+            _morphBlendRoutine = null;
+        }
+
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            GUIManager.Instance.SetBackSkillIcon(false);
+            GUIManager.Instance.SetBackSkillCooldown(0.0f);
+            GUIManager.Instance.SetBackSkillCooldown(false);
+        }
     }
 
     public override void UseAbility()
@@ -69,6 +136,7 @@ public class ShoulderHeavy : PartBaseShoulder
 
     protected IEnumerator CoShootOrb()
     {
+        _owner.SetPlayerState(EPlayerState.Skilling, true);
         GUIManager.Instance.SetBackSkillIcon(true);
         _owner.FollowCamera.SetCameraRotatable(false);
         _owner.SetMovable(false);
@@ -117,6 +185,7 @@ public class ShoulderHeavy : PartBaseShoulder
 
         yield return new WaitForSeconds(0.4f);
 
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
         _owner.PlayerAnimator.SetBool("isPlayBackHeavyAnim", false);
         _owner.FollowCamera.SetCameraRotatable(true);
         _owner.SetMovable(true);

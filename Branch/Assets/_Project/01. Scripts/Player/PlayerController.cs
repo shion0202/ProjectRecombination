@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private Vector3 _moveDirection;
     private Vector3 _totalDirection = Vector3.zero;
     private bool _canMove = true;
+    private bool _canRotatable = true;
     private ILegsMovement _currentMovement;
     private Vector2 _postMoveInput = Vector2.zero;
     private Vector2 _currentMoveInput = Vector2.zero;
@@ -82,7 +83,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [Header("Animation")]
     [SerializeField] private List<BaseAnimation> animations = new();
     private EAnimationType _currentAnimType = EAnimationType.Base;
-    private EAnimationType _postAnimType = EAnimationType.Base;
+    private EAnimationType _shootAnimType = EAnimationType.ShootingBase;
 
     [Header("Parts Set")]
     [SerializeField] private List<SkinnedMeshRenderer> bodyRenderers = new();
@@ -136,12 +137,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         get { return _dashSpeed; }
         set { _dashSpeed = value; }
-    }
-
-    public EAnimationType PostAnimType
-    {
-        get { return _postAnimType; }
-        set { _postAnimType = value; }
     }
 
     public bool IsGrounded
@@ -199,6 +194,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
         _followCamera.InitFollowCamera(gameObject);
+        inventory.Init();
 
         // 비트 마스크 방식으로 레이케스트를 관리할 레이어를 설정
         // 마스크 값이 비어있다면 기본 값(모든 레이어 - 일부 레이어)로 설정
@@ -471,19 +467,19 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     // 정식 빌드에서는 삭제될 예정
     void PlayerActions.IPlayerActionMapActions.OnJump(InputAction.CallbackContext context)
     {
-        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+        //if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
 
-        if (context.started)
-        {
-            // 바닥에 있을 때만 점프 실행
-            if (_isGrounded || _isOnPlatform)
-            {
-                _fallVelocity.y = jumpVelocity;
+        //if (context.started)
+        //{
+        //    // 바닥에 있을 때만 점프 실행
+        //    if (_isGrounded || _isOnPlatform)
+        //    {
+        //        _fallVelocity.y = jumpVelocity;
 
-                // 점프 상태 갱신
-                _currentPlayerState |= EPlayerState.Falling;
-            }
-        }
+        //        // 점프 상태 갱신
+        //        _currentPlayerState |= EPlayerState.Falling;
+        //    }
+        //}
     }
 
     // 마우스 휠을 통한 줌 기능 (임시)
@@ -546,11 +542,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         animator.SetBool("isLeftAttack", false);
         _isLeftAttackReady = false;
         Stats.RemoveModifier(this);
-        SetOvrrideAnimator(_postAnimType);
 
         inventory.EquippedItems[EPartType.ArmR][0].UseCancleAbility();
         animator.SetBool("isRightAttack", false);
-        SetOvrrideAnimator(_postAnimType);
+        SetOvrrideAnimator(_currentAnimType);
     }
 
     // To-do: 추후 애니메이션 이벤트로 변경할 것
@@ -578,6 +573,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     public void SetMovable(bool canMove)
     {
         _canMove = canMove;
+        _canRotatable = canMove;
+    }
+
+    public void SetMovable(bool canMove, bool canRotatable)
+    {
+        _canMove = canMove;
+        _canRotatable = canRotatable;
     }
 
     public void Dash(float dashSpeed)
@@ -666,7 +668,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if ((_currentPlayerState & EPlayerState.ShootState) == 0)
         {
             Stats.RemoveModifier(this);
-            SetOvrrideAnimator(_postAnimType);
+            SetOvrrideAnimator(_currentAnimType);
             _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
     }
@@ -681,7 +683,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public void TakeDamage(float takeDamage, float defenceIgnoreRate, float unitOfTime)
     {
-        Debug.Log("hi!!!");
         if ((_currentPlayerState & EPlayerState.Spawning) != 0 || (_currentPlayerState & EPlayerState.Invincibility) != 0) return;
         if (stats.CurrentHealth <= 0) return;
 
@@ -752,6 +753,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (animations.Count <= (int)type) return false;
 
         _currentAnimType = type;
+        _shootAnimType = type + 4;
 
         animator.runtimeAnimatorController = animations[(int)type].overrideController;
         animator.SetBool("isOnlyLoop", animations[(int)type].isOnlyLoop);
@@ -782,6 +784,26 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         return true;
     }
 
+    public bool SetOvrrideAnimator()
+    {
+        animator.runtimeAnimatorController = animations[(int)_shootAnimType].overrideController;
+        animator.SetBool("isOnlyLoop", animations[(int)_shootAnimType].isOnlyLoop);
+
+        animator.Rebind(); // Animator 상태 완전 리셋
+        animator.Update(0f); // 일부 경우, 즉시 반영 위해 0프레임 강제 반영
+
+        rigBuilder.enabled = false;
+        rigBuilder.enabled = true;
+
+        if ((_currentPlayerState & EPlayerState.Spawning) == 0)
+        {
+            rigAimController.SmoothChangeBaseWeight(true);
+        }
+
+        SwitchStateToIdle();
+
+        return true;
+    }
 
     public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY)
     {
@@ -912,7 +934,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void DashMove()
     {
         if (!_canMove) return;
-        if (_currentPlayerState != EPlayerState.Dashing) return;
+        if ((_currentPlayerState & EPlayerState.Dashing) == 0) return;
 
         _totalDirection += _dashDirection * _dashSpeed;
         _followCamera.CameraTarget.position = transform.position + new Vector3(0.0f, 1.2f, 0.0f);
@@ -975,7 +997,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void RotateCharacter()
     {
-        if (!_canMove) return;
+        if (!_canRotatable) return;
 
         if ((_currentPlayerState & EPlayerState.RotateState) == 0)
         {
@@ -1028,14 +1050,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // 특정 로직의 중복 실행을 막기 위함이며 Shoot 함수가 실행될 떄 사격 상태가 아닌 경우는 없으므로 그 부분은 고려하지 않았음
         if ((_currentPlayerState & EPlayerState.ShootState) != EPlayerState.ShootState)
         {
-            _postAnimType = _currentAnimType;
-            SetOvrrideAnimator(_postAnimType + 4);
-            _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
+            SetOvrrideAnimator();
             stats.AddModifier(new StatModifier(EStatType.WalkSpeed, EStackType.PercentMul, -0.3f, this));
         }
 
         if ((_currentPlayerState & EPlayerState.LeftShooting) != 0)
         {
+            if (inventory.EquippedItems[EPartType.ArmL][0].IsZooming)
+            {
+                _followCamera.CurrentCameraState = (ECameraState)(_shootAnimType);
+            }
+
             if (inventory.EquippedItems[EPartType.ArmL][0].IsAnimating)
             {
                 animator.SetBool("isLeftAttack", true);
@@ -1044,6 +1069,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.RightShooting) != 0)
         {
+            if (inventory.EquippedItems[EPartType.ArmR][0].IsZooming)
+            {
+                _followCamera.CurrentCameraState = (ECameraState)(_shootAnimType);
+            }
+
             if (inventory.EquippedItems[EPartType.ArmR][0].IsAnimating)
             {
                 animator.SetBool("isRightAttack", true);

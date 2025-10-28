@@ -14,20 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FOV: 70
   screenX: 0.375
-  screenY: 0.6125
-  cameraDistance: 2.5
+  screenY: 0.625
+  cameraDistance: 2.8
   trackedOffset: {x: 0, y: 0, z: 0}
   lookaheadTime: 0.01
-  lookaheadSmoothing: 3
+  lookaheadSmoothing: 10
   ignoreLookaheadY: 1
-  dampingX: 0
+  dampingX: 0.5
   dampingY: 0
-  dampingZ: 0
+  dampingZ: 0.5
   targetMovementOnly: 0
-  deadZoneWidth: 0
+  deadZoneWidth: 0.1
   deadZoneHeight: 0
   deadZoneDepth: 0
-  softZoneWidth: 0
+  softZoneWidth: 0.1
   softZoneHeight: 0
   softZoneOffsetX: 0
   softZoneOffsetY: 0

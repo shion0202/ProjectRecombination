@@ -22,6 +22,7 @@ public abstract class PartBase : MonoBehaviour
     protected List<StatModifier> _partModifiers = new();
 
     protected bool _isAnimating = true;
+    protected bool _isZooming = true;
 
     public EPartType PartType => partType;
     public EAttackType AttackType => attackType;
@@ -29,6 +30,7 @@ public abstract class PartBase : MonoBehaviour
     public StatDictionary Stats => _stats;
     public List<StatModifier> PartModifiers => _partModifiers;
     public bool IsAnimating => _isAnimating;
+    public bool IsZooming => _isZooming;
     public Vector3 StaticOffset => staticOffset;
     public Vector3 StaticRotation => staticRotation;
 

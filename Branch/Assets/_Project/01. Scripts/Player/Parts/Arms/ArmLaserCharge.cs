@@ -33,6 +33,7 @@ public class ArmLaserCharge : PartBaseArm
     protected void OnEnable()
     {
         GUIManager.Instance.SetAmmoColor(partType, Color.blue);
+        Managers.GUIManager.Instance.SetAmmoColor(partType, false);
     }
 
     protected override void Update()
