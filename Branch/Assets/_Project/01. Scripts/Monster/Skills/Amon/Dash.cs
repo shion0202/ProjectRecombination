@@ -19,7 +19,7 @@ namespace _Test.Skills
         {
             Debug.Log("질주 시전!");
             // 목표 지점 설정 (플레이어 위치의 바닥)
-            data.AgentRigidbody.isKinematic = true;
+            // data.AgentRigidbody.isKinematic = true;
             Vector3 targetPosition = new (data.Target.transform.position.x, data.Target.transform.position.y, data.Target.transform.position.z);
             
             // 질주 방향 설정
@@ -37,8 +37,8 @@ namespace _Test.Skills
                 yield return null;
             }
             Debug.Log("질주 완료");
-            data.AgentRigidbody.velocity = Vector3.zero;
-            data.AgentRigidbody.isKinematic = false;
+            // data.AgentRigidbody.velocity = Vector3.zero;
+            // data.AgentRigidbody.isKinematic = false;
             // data.LWing.SetActive(true);
             // data.RWing.SetActive(true);
             // data.Body.SetActive(true);
@@ -85,7 +85,7 @@ namespace _Test.Skills
             // data.Body.SetActive(false);
             // data.EnergyBall.SetActive(true);
             data.AmonBody.SetActive(false);
-            data.AgentCollider.isTrigger = true; // 충돌체를 트리거로 변경
+            // data.AgentCollider.isTrigger = true; // 충돌체를 트리거로 변경
             data.AmonEnergyBall.gameObject.SetActive(true);
             data.AmonEnergyBall.skillData = this;
             Debug.Log("질주 시전 준비 완료!");

@@ -25,6 +25,7 @@ namespace Managers
 
         [Header("Test HP Bar UI")] [SerializeField]
         private Slider testHpBar;
+        [SerializeField] private TextMeshProUGUI playerHpText;
 
         [Header("Test GameOver UI")] [SerializeField]
         private Image testGameOverPanel;
@@ -73,10 +74,19 @@ namespace Managers
         [SerializeField] private List<Button> laserParts = new();
         [SerializeField] private List<Button> rapidParts = new();
         [SerializeField] private List<Button> heavyParts = new();
+        [SerializeField] private TextMeshProUGUI constraintText;
+        [SerializeField] private List<Button> setButtons = new();
         private int _selectedIndex = -1;
         private int _selectedPartIndex = -1;
         private Color originalColor = Color.white;
         private Color selectedColor = new Color(0.09411765f, 0.1411765f, 0.1411765f);
+        private List<bool> _unlockSets = new();
+
+        [Header("Help UI")]
+        [SerializeField] private GameObject helpUI;
+
+        [Header("Pasue UI")]
+        [SerializeField] private GameObject pauseUI;
 
         public GameObject HUD
         {
@@ -156,6 +166,31 @@ namespace Managers
             set => fillRight = value;
         }
 
+        public List<bool> UnlockSets
+        {
+            get => _unlockSets;
+        }
+
+        public GameObject HelpUI
+        {
+            get => helpUI;
+            set => helpUI = value;
+        }
+
+        public GameObject PauseUI
+        {
+            get => pauseUI;
+            set => pauseUI = value;
+        }
+
+        private void Start()
+        {
+            for (int i = 0; i < setButtons.Count; ++i)
+            {
+                _unlockSets.Add(false);
+            }
+        }
+
         private void Update()
         {
             if (_isIndicationg)
@@ -191,6 +226,7 @@ namespace Managers
             float rate = currentHealth / maxHealth;
 
             testHpBar.value = rate;
+            playerHpText.text = $"{currentHealth} / {maxHealth}";
         }
 
         public void OnGameOverPanel()
@@ -464,6 +500,9 @@ namespace Managers
                     }
                     break;
             }
+
+            setButtons[index].interactable = true;
+            _unlockSets[index] = true;
         }
 
         public void SetObjectText(string text)
@@ -497,6 +536,11 @@ namespace Managers
             targetObject = target;
         }
 
+        public void SetConstraintMessage(string message)
+        {
+            constraintText.text = message;
+        }
+
         private IEnumerator CoFadeIndicator(float duration)
         {
             float elapsed = 0f;
@@ -516,6 +560,21 @@ namespace Managers
             indicatorImage.gameObject.SetActive(false);
             _isIndicationg = false;
             _indicatorFadeRoutine = null;
+        }
+
+        public void Resume()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            GUI.SetActive(true);
+            pauseUI.SetActive(false);
+            Time.timeScale = 1.0f;
+        }
+
+        public void Shutdown()
+        {
+            Application.Quit();
         }
 
         #region Fade In/Out

@@ -53,6 +53,12 @@ namespace Monster.AI.FSM
         {
             Init();
         }
+        
+        private void OnEnable()
+        {
+            if (!isInit)
+                Init();
+        }
 
         // 1. 판단(Think)은 Update에서 처리합니다.
         private void Update()

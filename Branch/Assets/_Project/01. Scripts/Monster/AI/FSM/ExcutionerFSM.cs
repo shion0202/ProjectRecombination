@@ -1,4 +1,5 @@
 using _Test.Skills;
+using Managers;
 using Monster.AI.FSM;
 using System.Collections;
 using UnityEngine;
@@ -7,7 +8,9 @@ public class ExcutionerFSM : FSM
 {
     [SerializeField] private GameObject spawnModel;
     [SerializeField] private GameObject bodyModel;
-    
+    private Skill _useSkill;
+    private bool _isDeath;
+
     // Init
     protected override void Init()
     {
@@ -118,18 +121,23 @@ public class ExcutionerFSM : FSM
                 // 대기 상태에서 특별한 행동이 필요하지 않음
                 break;
             case "UsingSkill1":
+                _useSkill = blackboard.Skills[0];
                 blackboard.Skills[0].Execute(blackboard);
                 break;
             case "UsingSkill2":
+                _useSkill = blackboard.Skills[1];
                 blackboard.Skills[1].Execute(blackboard);
                 break;
             case "UsingSkill3":
+                _useSkill = blackboard.Skills[2];
                 blackboard.Skills[2].Execute(blackboard);
                 break;
             case "UsingSkill4":
+                _useSkill = blackboard.Skills[3];
                 blackboard.Skills[3].Execute(blackboard);
                 break;
             case "UsingSkill5":
+                _useSkill = blackboard.Skills[4];
                 blackboard.Skills[4].Execute(blackboard);
                 break;
             case "Chase":
@@ -144,18 +152,63 @@ public class ExcutionerFSM : FSM
 
     private void ActDeath()
     {
-        if (blackboard.Agent is null) return;
+        if (_isDeath) return;
+        _isDeath = true;
         // 사망 시 NavMeshAgent 멈추기
         blackboard.NavMeshAgent.isStopped = true;
-        blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
-        StartCoroutine(WaitDeathAnimation());
+        // blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
+        blackboard.StopAllCoroutines();
+        blackboard.RagdollController.ActivateRagdoll();
+        StartCoroutine(PoolReleaseAfterDeathEffect());
     }
 
-    private IEnumerator WaitDeathAnimation()
+    private void ResetForPool()
     {
-        yield return new WaitForSeconds(5f);
-        
-        Destroy(gameObject);
+        // 모든 코루틴 정지
+        try { StopAllCoroutines(); } catch { }
+
+        // 블랙보드 관련 코루틴/상태 정리
+        if (blackboard != null)
+        {
+            try { blackboard.StopAllCoroutines(); } catch { }
+
+            // Ragdoll 비활성화
+            if (blackboard.RagdollController != null)
+                blackboard.RagdollController.DeactivateRagdoll();
+
+            // NavMeshAgent 초기화
+            if (blackboard.NavMeshAgent != null)
+            {
+                blackboard.NavMeshAgent.isStopped = true;
+                blackboard.NavMeshAgent.ResetPath();
+            }
+
+            // Animator 플래그 초기화
+            if (blackboard.AnimatorParameterSetter?.Animator != null)
+            {
+                var animator = blackboard.AnimatorParameterSetter.Animator;
+                animator.SetBool("isMoving", false);
+                animator.Rebind();
+                animator.Update(0f);
+            }
+
+            // 스킬/타깃 정리
+            _useSkill = null;
+            // blackboard.IsAnySkillRunning = false; // 블랙보드에 이런 필드가 있다면 초기화
+            // 필요한 추가 초기화가 있다면 blackboard.Init()으로 처리
+            blackboard.Init();
+        }
+
+        // FSM 플래그 초기화
+        _isDeath = false;
+        isInit = false;
+    }
+
+    private IEnumerator PoolReleaseAfterDeathEffect()
+    {
+        yield return new WaitForSeconds(10f);
+        ResetForPool();
+        PoolManager.Instance.ReleaseObject(gameObject);
     }
 
     private void ActChase()

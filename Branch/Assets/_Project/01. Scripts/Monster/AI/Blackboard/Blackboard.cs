@@ -20,11 +20,12 @@ namespace Monster.AI.Blackboard
         [Header("Dependency")] // 의존성 주입
         [SerializeField] private NavMeshAgent navMeshAgent;
         [SerializeField] private GameObject agent;          // AI 에이전트 (몬스터)
-        [SerializeField] private Collider agentCollider;
-        [SerializeField] private Rigidbody agentRigidbody;
+        // [SerializeField] private Collider agentCollider;
+        // [SerializeField] private Rigidbody agentRigidbody;
         [SerializeField] private AnimatorParameterSetter animatorParameterSetter;
         [SerializeField] private GameObject target;
         [SerializeField] private GameObject deathEffect;    // 몬스터 사망 이펙트 프리팹
+        [SerializeField] private RagdollController ragdollController;
         
         [SerializeField] private MonsterPatrol patrolInfo; // 몬스터 순찰 스크립트
         [SerializeField] private MonsterWander wanderInfo; // 몬스터 방황 스크립트
@@ -61,17 +62,17 @@ namespace Monster.AI.Blackboard
             set => agent = value;
         }
         
-        public Collider AgentCollider
-        {
-            get => agentCollider;
-            set => agentCollider = value;
-        }
-        
-        public Rigidbody AgentRigidbody
-        {
-            get => agentRigidbody;
-            set => agentRigidbody = value;
-        }
+        // public Collider AgentCollider
+        // {
+        //     get => agentCollider;
+        //     set => agentCollider = value;
+        // }
+        //
+        // public Rigidbody AgentRigidbody
+        // {
+        //     get => agentRigidbody;
+        //     set => agentRigidbody = value;
+        // }
         
         public AnimatorParameterSetter AnimatorParameterSetter
         {
@@ -135,6 +136,7 @@ namespace Monster.AI.Blackboard
         public GameObject AmonDeathModel => amonDeathModel;
         public bool HasUsedSoulAbsorptionAt50Percent { get; set; }
         public bool HasUsedSoulAbsorptionAt20Percent { get; set; }
+        public RagdollController RagdollController { get => ragdollController; set => ragdollController = value; }
 
         #endregion
 
@@ -227,8 +229,8 @@ namespace Monster.AI.Blackboard
         public void Init()
         {
             InitMonsterStatsByID();
-            // agentCollider.enabled = true;
-            // agentRigidbody.isKinematic = false;
+            // DeathEffect?.SetActive(false);
+            // RagdollController?.DeactivateRagdoll();
             NavMeshAgent.isStopped = false;
             NavMeshAgent.ResetPath();
             CurrentHealth = MaxHealth;
@@ -239,6 +241,15 @@ namespace Monster.AI.Blackboard
         public void Clear()
         {
             _map.Clear();
+        }
+        
+        public void RealeseObjectToPool()
+        {
+            RagdollController?.DeactivateRagdoll();
+            DeathEffect?.SetActive(false);
+            Init();
+            
+            PoolManager.Instance.ReleaseObject(Agent);
         }
         
         #endregion

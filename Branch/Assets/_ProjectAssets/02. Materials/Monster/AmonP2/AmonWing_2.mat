@@ -190,7 +190,7 @@ Material:
     - _DissolveOffset: {r: 0, g: 0.2, b: 0, a: 0}
     - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _EMISSION_COLOR: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColor: {r: 1.3228418, g: 1.3228418, b: 1.3228418, a: 1}
+    - _EmissionColor: {r: 3.6886053, g: 3.6886053, b: 3.6886053, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}
     - _REFLECTIONS_COLOR: {r: 1, g: 1, b: 1, a: 1}

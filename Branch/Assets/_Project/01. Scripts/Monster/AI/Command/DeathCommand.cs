@@ -32,19 +32,19 @@ namespace Monster.AI.Command
                 return false;
             }
 
-            _collider = blackboard.AgentCollider;
-            if (_collider is null)
-            {
-                Debug.LogError("Collider is null. Cannot execute DeathCommand.");
-                return false;
-            }
-
-            _rigidbody = blackboard.AgentRigidbody;
-            if (_rigidbody is null)
-            {
-                Debug.LogError("Rigidbody is null. Cannot execute DeathCommand.");
-                return false;
-            }
+            // _collider = blackboard.AgentCollider;
+            // if (_collider is null)
+            // {
+            //     Debug.LogError("Collider is null. Cannot execute DeathCommand.");
+            //     return false;
+            // }
+            //
+            // _rigidbody = blackboard.AgentRigidbody;
+            // if (_rigidbody is null)
+            // {
+            //     Debug.LogError("Rigidbody is null. Cannot execute DeathCommand.");
+            //     return false;
+            // }
 
             return true;
         }

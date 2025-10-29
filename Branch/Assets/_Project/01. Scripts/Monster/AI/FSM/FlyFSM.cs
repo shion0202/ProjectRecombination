@@ -148,17 +148,6 @@ namespace Monster.AI.FSM
             _isDeath = true;
             
             blackboard.NavMeshAgent.isStopped = true;
-            blackboard.AnimatorParameterSetter.Animator.SetTrigger("Death");
-            
-            if (blackboard.AgentCollider is not null)
-            {
-                blackboard.AgentCollider.enabled = false;
-            }
-
-            if (blackboard.AgentRigidbody is not null)
-            {
-                blackboard.AgentRigidbody.isKinematic = false;
-            }
             
             if (blackboard.DeathEffect is not null)
             {
@@ -172,11 +161,65 @@ namespace Monster.AI.FSM
                 if (!particleSystem.isPlaying)
                     particleSystem.Play();
             }
+            
+            blackboard.RagdollController.ActivateRagdoll();
+            
+            StartCoroutine(PoolReleaseAfterDeathEffect());
+        }
+        
+        private void ResetForPool()
+        {
+            // 모든 코루틴 정지
+            try { StopAllCoroutines(); } catch { }
+
+            // 블랙보드 관련 코루틴/상태 정리
+            if (blackboard != null)
+            {
+                try { blackboard.StopAllCoroutines(); } catch { }
+
+                // Ragdoll 비활성화
+                if (blackboard.RagdollController != null)
+                    blackboard.RagdollController.DeactivateRagdoll();
+
+                // NavMeshAgent 초기화
+                if (blackboard.NavMeshAgent != null)
+                {
+                    blackboard.NavMeshAgent.isStopped = true;
+                    blackboard.NavMeshAgent.ResetPath();
+                }
+
+                // Animator 플래그 초기화
+                if (blackboard.AnimatorParameterSetter?.Animator != null)
+                {
+                    var animator = blackboard.AnimatorParameterSetter.Animator;
+                    animator.SetBool("isMoving", false);
+                    animator.Rebind();
+                    animator.Update(0f);
+                }
+
+                // 스킬/타깃 정리
+                _useSkill = null;
+                // blackboard.IsAnySkillRunning = false; // 블랙보드에 이런 필드가 있다면 초기화
+                // 필요한 추가 초기화가 있다면 blackboard.Init()으로 처리
+                blackboard.Init();
+            }
+
+            // FSM 플래그 초기화
+            _isDeath = false;
+            isInit = false;
+        }
+
+        private IEnumerator PoolReleaseAfterDeathEffect()
+        {
+            yield return new WaitForSeconds(10f);
+            ResetForPool();
+            PoolManager.Instance.ReleaseObject(gameObject);
         }
 
         private void ActIdle()
         {
-            throw new System.NotImplementedException();
+            blackboard.AnimatorParameterSetter.Animator.SetBool("isMoving", false);
+            blackboard.NavMeshAgent.isStopped = true;
         }
 
         protected override void EnterState(string stateName)

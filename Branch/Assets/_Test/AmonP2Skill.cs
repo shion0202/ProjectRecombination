@@ -114,7 +114,7 @@ public class AmonP2Skill : MonoBehaviour
                 animator.SetBool(param, false);
             }
             
-            blackboard.AgentRigidbody.velocity = Vector3.zero;
+            // blackboard.AgentRigidbody.velocity = Vector3.zero;
         }
     }
     

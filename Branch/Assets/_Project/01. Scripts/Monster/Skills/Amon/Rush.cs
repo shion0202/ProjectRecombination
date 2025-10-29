@@ -59,19 +59,6 @@ namespace _Test.Skills
         
             while (elapsed < rushDuration)
             {
-                // agent 를 직접 transform 을 움직여서 이동
-                // data.Agent.transform.Translate(directionToTarget * (rushSpeed * Time.deltaTime), Space.World);
-                
-                // 장애물 충돌 체크
-                // if (Physics.Raycast(data.Agent.transform.position, directionToTarget, out RaycastHit hit, 1f))
-                // {
-                //     Debug.Log("장애물에 부딪혀 돌진 취소");
-                //     
-                //     break; // 장애물에 부딪히면 취소
-                // }
-                //
-                // elapsed += Time.deltaTime;
-                // yield return null;
                 Vector3 dir = (targetPos - data.Agent.transform.position).normalized;
                 dir.y = 0;
                 data.Agent.transform.position += dir * (rushSpeed * Time.deltaTime);
@@ -87,16 +74,13 @@ namespace _Test.Skills
             yield return null;
             yield return new WaitForSeconds(data.AnimatorParameterSetter.Animator.GetCurrentAnimatorStateInfo(0).length);
             Utils.Destroy(_meleeCollision);
-            
-            // data.AgentRigidbody.velocity = Vector3.zero;
-            // data.NavMeshAgent.enabled = true;
         }
 
         public override IEnumerator Casting(Blackboard data)
         {
             Debug.Log("돌진 시전 준비!");
-            data.AgentRigidbody.velocity = Vector3.zero;
-            data.AgentRigidbody.isKinematic = true;
+            // data.AgentRigidbody.velocity = Vector3.zero;
+            // data.AgentRigidbody.isKinematic = true;
             data.AnimatorParameterSetter.Animator.SetTrigger("RushReady");
             return base.Casting(data);
         }

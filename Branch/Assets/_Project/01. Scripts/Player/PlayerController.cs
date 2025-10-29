@@ -244,11 +244,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-
         AnimCheckShoot();
 
         // Debug.Log("Player HP: " + stats.CurrentHealth);
@@ -398,6 +393,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     {
         // 특정 상황에서 키 입력이 불가능하도록 설정
         if ((_currentPlayerState & partChangeBlockMask) != 0) return;
+        if (Managers.GUIManager.Instance.HelpUI.activeSelf) return;
+        if (Managers.GUIManager.Instance.PauseUI.activeSelf) return;
 
         if (context.started)
         {
@@ -421,6 +418,51 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
+    void PlayerActions.IPlayerActionMapActions.OnLaserSet(InputAction.CallbackContext context)
+    {
+        if (!Managers.GUIManager.Instance.RadialUI.activeSelf) return;
+        if (!Managers.GUIManager.Instance.UnlockSets[0]) return;
+
+        if (context.started)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                SelectAndChangePart(i, 1);
+            }
+            Managers.GUIManager.Instance.ToggleRadialUI(false);
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnRapidSet(InputAction.CallbackContext context)
+    {
+        if (!Managers.GUIManager.Instance.RadialUI.activeSelf) return;
+        if (!Managers.GUIManager.Instance.UnlockSets[1]) return;
+
+        if (context.started)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                SelectAndChangePart(i, 2);
+            }
+            Managers.GUIManager.Instance.ToggleRadialUI(false);
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnHeavySet(InputAction.CallbackContext context)
+    {
+        if (!Managers.GUIManager.Instance.RadialUI.activeSelf) return;
+        if (!Managers.GUIManager.Instance.UnlockSets[2]) return;
+
+        if (context.started)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                SelectAndChangePart(i, 3);
+            }
+            Managers.GUIManager.Instance.ToggleRadialUI(false);
+        }
+    }
+
     void PlayerActions.IPlayerActionMapActions.OnIndicator(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -433,6 +475,56 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 _indicatorRoutine = null;
             }
             _indicatorRoutine = StartCoroutine(CoStartIndicatorTimer(5.0f));
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnHelp(InputAction.CallbackContext context)
+    {
+        if (Managers.GUIManager.Instance.RadialUI.activeSelf) return;
+        if (Managers.GUIManager.Instance.PauseUI.activeSelf) return;
+
+        if (context.started)
+        {
+            if (!Managers.GUIManager.Instance.HelpUI.activeSelf)
+            {
+                Managers.GUIManager.Instance.HelpUI.SetActive(true);
+                Managers.GUIManager.Instance.HUD.SetActive(false);
+                Time.timeScale = 0.0f;
+            }
+            else
+            {
+                Managers.GUIManager.Instance.HelpUI.SetActive(false);
+                Managers.GUIManager.Instance.HUD.SetActive(true);
+                Time.timeScale = 1.0f;
+            }
+        }
+    }
+
+    void PlayerActions.IPlayerActionMapActions.OnPause(InputAction.CallbackContext context)
+    {
+        if (Managers.GUIManager.Instance.RadialUI.activeSelf) return;
+        if (Managers.GUIManager.Instance.HelpUI.activeSelf) return;
+
+        if (context.started)
+        {
+            if (!Managers.GUIManager.Instance.PauseUI.activeSelf)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                Managers.GUIManager.Instance.PauseUI.SetActive(true);
+                Managers.GUIManager.Instance.HUD.SetActive(false);
+                Time.timeScale = 0.0f;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
+                Managers.GUIManager.Instance.PauseUI.SetActive(false);
+                Managers.GUIManager.Instance.HUD.SetActive(true);
+                Time.timeScale = 1.0f;
+            }
         }
     }
 
@@ -667,8 +759,8 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if ((_currentPlayerState & EPlayerState.ShootState) == 0)
         {
-            Stats.RemoveModifier(this);
             SetOvrrideAnimator(_currentAnimType);
+            Stats.RemoveModifier(this);
             _followCamera.CurrentCameraState = (ECameraState)(_currentAnimType);
         }
     }
@@ -786,11 +878,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public bool SetOvrrideAnimator()
     {
+        // 기본 팔 파츠일 경우 애니메이션 전환 X
+
         animator.runtimeAnimatorController = animations[(int)_shootAnimType].overrideController;
         animator.SetBool("isOnlyLoop", animations[(int)_shootAnimType].isOnlyLoop);
-
-        animator.Rebind(); // Animator 상태 완전 리셋
-        animator.Update(0f); // 일부 경우, 즉시 반영 위해 0프레임 강제 반영
 
         rigBuilder.enabled = false;
         rigBuilder.enabled = true;

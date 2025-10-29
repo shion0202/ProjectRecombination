@@ -87,6 +87,7 @@ MonoBehaviour:
   blackboard: {fileID: 7649363827161289517}
   isInit: 0
   isEnabled: 0
+  ikAnimaton: {fileID: 0}
   body: {fileID: 2643886890815275500}
   deathBody: {fileID: 3754812550417488915}
   deathAnimationDurationChar: 5
@@ -286,11 +287,10 @@ MonoBehaviour:
   id: 1009
   navMeshAgent: {fileID: 7270007255789879844}
   agent: {fileID: 7373134389740238114}
-  agentCollider: {fileID: 7914311242415265663}
-  agentRigidbody: {fileID: 6926763049112465161}
   animatorParameterSetter: {fileID: 3646957178891513591}
   target: {fileID: 0}
   deathEffect: {fileID: 0}
+  ragdollController: {fileID: 0}
   patrolInfo:
     isPatrol: 0
     minPatrolTime: 0

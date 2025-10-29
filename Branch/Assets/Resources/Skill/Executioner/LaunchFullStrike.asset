@@ -17,8 +17,8 @@ MonoBehaviour:
   skillDescription: "\uB9DD\uB098\uB2C8 \uAD11\uC5ED \uBBF8\uC0AC\uC77C \uC2A4\uD0AC"
   damage: 150
   range: 100
-  cooldown: 15
-  castTime: 3
+  cooldown: 7
+  castTime: 0.5
   animSpeed: 1
   missilePrefab: {fileID: 179992, guid: b596421918a79674d8468171eb46617f, type: 3}
   missileOffset: {x: 0, y: 3, z: -1.1}

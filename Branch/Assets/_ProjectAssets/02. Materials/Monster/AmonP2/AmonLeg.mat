@@ -55,7 +55,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
-        m_Texture: {fileID: 2800000, guid: 029a5e3ddb48b71439b76dfa55c12756, type: 3}
+        m_Texture: {fileID: 2800000, guid: ca8fd37c33e63a3479af2a7e2ffe2f0a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GradientTexture:
@@ -168,7 +168,7 @@ Material:
     - _RimLightBackfaceMask: 0
     - _RimLightShadowMask: 0.5
     - _RimPower: 3.5
-    - _Shadow: 0
+    - _Shadow: 1
     - _ShadowBorder: 0.5
     - _ShodowIntensity: 1
     - _Smoothness: 0

@@ -168,7 +168,7 @@ Material:
     - _RimLightBackfaceMask: 0
     - _RimLightShadowMask: 0.5
     - _RimPower: 3.5
-    - _Shadow: 0
+    - _Shadow: 1
     - _ShadowBorder: 0.518
     - _ShodowIntensity: 1
     - _Smoothness: 0
@@ -190,7 +190,7 @@ Material:
     - _DissolveOffset: {r: 0, g: 0.2, b: 0, a: 0}
     - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _EMISSION_COLOR: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColor: {r: 1.3228418, g: 1.3228418, b: 1.3228418, a: 1}
+    - _EmissionColor: {r: 3.2873485, g: 3.2873485, b: 3.2873485, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}
     - _REFLECTIONS_COLOR: {r: 1, g: 1, b: 1, a: 1}

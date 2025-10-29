@@ -168,7 +168,7 @@ Material:
     - _RimLightBackfaceMask: 0
     - _RimLightShadowMask: 0.5
     - _RimPower: 3.5
-    - _Shadow: 0
+    - _Shadow: 1
     - _ShadowBorder: 0.5
     - _ShodowIntensity: 1
     - _Smoothness: 0

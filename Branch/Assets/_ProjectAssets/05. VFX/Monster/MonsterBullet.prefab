@@ -9795,15 +9795,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a45f9fe1b584274b65a063dceb6ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: -4830170890156966244}
+  _rb: {fileID: 0}
   bulletSpeed: 40
-  isCheckCollisionByBullet: 1
-  lifeTime: 5
-  explosionEffectPrefab: {fileID: 0}
-  explosionRange: 1
   explosionRadius: 2
-  muzzleParticle: {fileID: 143842, guid: 8dffde1b192d9514293ee897be080612, type: 3}
+  lifeTime: 5
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 512
+  muzzleParticlePrefab: {fileID: 0}
   impactParticle: {fileID: 106912, guid: 2fb06bf04935a764581c88a65a3850bc, type: 3}
+  explosionEffectPrefab: {fileID: 0}
 --- !u!136 &7022424023409057718
 CapsuleCollider:
   m_ObjectHideFlags: 0
