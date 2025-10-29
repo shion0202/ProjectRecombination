@@ -26,17 +26,23 @@ namespace _Test.Skills
         [SerializeField] private AnimationClip legClip;
         [SerializeField] private float rotateSpeed = 4.0f;
         private GameObject _meleeCollisionObject;
+        
+        [Header("Audio Clips")]
+        [SerializeField] private AudioClip legStrikeAudioClip;
 
         public override IEnumerator Activate(Blackboard data)
         {
             Debug.Log("[Executioner] Leg Strike 시작");
 
             // LegsAnimator를 적용 중일 경우, Glue 옵션으로 인해 다리를 드는 애니메이션이 뭉개지는 문제가 있으므로 접근 필요
-            LegsAnimator legsAnimator = data.Agent.GetComponent<LegsAnimator>();
-            if (legsAnimator)
+            // data.LegAnimator;
+            float mainGlueBlend = 0;
+            if (data.LegAnimator)
             {
-                legsAnimator.MainGlueBlend = 0.0f;
+                mainGlueBlend = data.LegAnimator.MainGlueBlend;
+                data.LegAnimator.MainGlueBlend = 0.0f;
             }
+            data.AudioSource.PlayOneShot(legStrikeAudioClip);
             data.AnimatorParameterSetter.Animator.SetBool("isLegStrike", true);
 
             _meleeCollisionObject = Utils.Instantiate(meleeCollisionPrefab, data.Agent.transform);
@@ -51,9 +57,9 @@ namespace _Test.Skills
 
             yield return new WaitForSeconds(legClip.length);
 
-            if (legsAnimator)
+            if (data.LegAnimator)
             {
-                legsAnimator.MainGlueBlend = 100.0f;
+                data.LegAnimator.MainGlueBlend = mainGlueBlend;
             }
             data.AnimatorParameterSetter.Animator.SetBool("isLegStrike", false);
             Utils.Destroy(_meleeCollisionObject);

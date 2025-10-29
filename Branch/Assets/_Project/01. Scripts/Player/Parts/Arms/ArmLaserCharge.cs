@@ -11,6 +11,7 @@ public class ArmLaserCharge : PartBaseArm
     [SerializeField] protected GameObject chargeEffectPrefab;
     [SerializeField] protected float maxChargeTime = 2.0f;
     [SerializeField] protected Vector3 chargeOffset = Vector3.zero;
+    [SerializeField] protected List<AudioClip> chargeClips = new();
     protected float _currentChargeTime = 0.0f;
     private GameObject currentLaserObject;
     private LineRenderer currentLaser;
@@ -18,6 +19,7 @@ public class ArmLaserCharge : PartBaseArm
     protected Vector3 defaultImpulseValue;
     protected SkinnedMeshRenderer smr;
     protected bool isMaxCharge = false;
+    protected AudioSource _audioSource;
 
     protected Coroutine _recoilRoutine = null;
     protected Coroutine _morphBlendRoutine = null;
@@ -28,6 +30,7 @@ public class ArmLaserCharge : PartBaseArm
         base.Awake();
 
         defaultImpulseValue = impulseSource.m_DefaultVelocity;
+        _audioSource = GetComponent<AudioSource>();
     }
 
     protected void OnEnable()
@@ -170,6 +173,11 @@ public class ArmLaserCharge : PartBaseArm
         if (_currentShootTime > maxChargeTime)
         {
             _currentShootTime = maxChargeTime;
+            _audioSource.clip = chargeClips[1];
+        }
+        else
+        {
+            _audioSource.clip = chargeClips[0];
         }
         _currentChargeTime = (_currentShootTime / maxChargeTime);
 
@@ -205,6 +213,7 @@ public class ArmLaserCharge : PartBaseArm
             }
         }
 
+        _audioSource.Play();
         impulseSource.m_DefaultVelocity = (defaultImpulseValue * 0.5f) + defaultImpulseValue * _currentChargeTime * 0.5f;
         _owner.ApplyRecoil(impulseSource, recoilX * _currentChargeTime, recoilY * _currentChargeTime);
         if (_recoilRoutine != null)

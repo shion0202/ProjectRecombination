@@ -26,7 +26,6 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - BOOLEAN_USE_WROLDSPACE_ON
   - _BLEND_MODE_ADD
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -40,7 +39,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: e21f72f57f9348642bcf001c2a77ac55, type: 3}
+        m_Texture: {fileID: 2800000, guid: eccda6b3c8b9780479987ce256021e92, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -68,11 +67,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
-        m_Texture: {fileID: 2800000, guid: 49147a885c576ad40be2f78f78b274bd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 48fc83f237b95014381cb29c9aecd7fa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionTexture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GradientTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 90a91765f3f109445a3bd1ceecf29e72, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -80,11 +83,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatcapMask:
-        m_Texture: {fileID: 2800000, guid: 2cdf41980198c9e45baeed8f0f88b494, type: 3}
+        m_Texture: {fileID: 2800000, guid: c6bcb2f115d493c439c4cb9779e0f314, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatcapTexture:
-        m_Texture: {fileID: 2800000, guid: b63cbf560614f5a45965dcfe19d10205, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8412dd4c5fd888544be6c6e82ebb3e6f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -126,7 +129,7 @@ Material:
     m_Ints: []
     m_Floats:
     - BOOLEAN_DIRECTION_FROM_EULERANGLE: 0
-    - BOOLEAN_USE_WROLDSPACE: 1
+    - BOOLEAN_USE_WROLDSPACE: 0
     - BOOLEAN_USE_WROLDSPACE_ON_1: 0
     - BOOLEAN_WORLDORIGIN: 0
     - _BLEND_MODE: 0
@@ -148,7 +151,7 @@ Material:
     - _MatCap: 1
     - _MatCapLighting: 1
     - _MatCapShadowMask: 0
-    - _MatcapAlpha: 0.037
+    - _MatcapAlpha: 0.05
     - _MatcapBlur: 0
     - _MatcapShadowMask: 0
     - _Metallic: 0
@@ -179,7 +182,7 @@ Material:
     - _AnimSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveDirection: {r: 0, g: 1, b: 0, a: 0}
-    - _DissolveOffset: {r: 0, g: -1.19, b: 0, a: 0}
+    - _DissolveOffset: {r: 0, g: 0.2, b: 0, a: 0}
     - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _DissolveUVSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _DissovleEdgeColor: {r: 1, g: 0, b: 0, a: 0}

@@ -25,3 +25,5 @@ MonoBehaviour:
   shootClip: {fileID: 7766876665380483674, guid: 9732f8057adfa8040a6cf12145755157,
     type: 3}
   rotateSpeed: 2
+  loadAudioClip: {fileID: 8300000, guid: 49d17e42b3acc4c948ff8722cadc48e3, type: 3}
+  shootAudioClip: {fileID: 8300000, guid: 4ab7f5a1a0dca439090bb45b70d32e32, type: 3}

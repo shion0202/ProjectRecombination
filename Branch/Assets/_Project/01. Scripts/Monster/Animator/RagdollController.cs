@@ -26,7 +26,9 @@ public class RagdollController : MonoBehaviour
     private void SetRagdollState(bool b)
     {
         if (animator is not null)
+        {
             animator.enabled = !b;
+        }
         
         if (mainRigidbody is not null)
             mainRigidbody.isKinematic = b;

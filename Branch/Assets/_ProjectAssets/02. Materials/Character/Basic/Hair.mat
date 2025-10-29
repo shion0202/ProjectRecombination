@@ -27,7 +27,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: eb6cfa3abec8e3d469fe798d5aae5bbe, type: 3}
+        m_Texture: {fileID: 2800000, guid: cd481a11eecbfee4bb90a8070122a53d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -55,11 +55,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
-        m_Texture: {fileID: 2800000, guid: 9355c02dc73c03f4d97ac787f382e948, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8dfba3c8ef85bcc458e0c68453a4ea1a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionTexture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GradientTexture:
-        m_Texture: {fileID: 2800000, guid: 4d0e210feba59ed49a3368b9359d6841, type: 3}
+        m_Texture: {fileID: 2800000, guid: 91221e6344c67fd42a073a128ba6af83, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -171,7 +175,7 @@ Material:
     - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _DissolveUVSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _DissovleEdgeColor: {r: 1, g: 0, b: 0, a: 0}
-    - _EmissionColor: {r: 5.4819484, g: 11.805839, b: 15.920179, a: 1}
+    - _EmissionColor: {r: 5.4819484, g: 11.805839, b: 15.920179, a: 0.7529412}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}
     - _RimColor: {r: 1, g: 1, b: 1, a: 0}

@@ -10,6 +10,10 @@ public class ExcutionerFSM : FSM
     [SerializeField] private GameObject bodyModel;
     private Skill _useSkill;
     private bool _isDeath;
+    
+    [Header("오디오 클립")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip walkClip;
 
     // Init
     protected override void Init()
@@ -209,6 +213,7 @@ public class ExcutionerFSM : FSM
         yield return new WaitForSeconds(10f);
         ResetForPool();
         PoolManager.Instance.ReleaseObject(gameObject);
+        // gameObject.SetActive(false);
     }
 
     private void ActChase()
@@ -275,4 +280,17 @@ public class ExcutionerFSM : FSM
                 break;
         }
     }
+
+    #region 오디오 재생 메서드
+
+    public void AnimationEvent_PlayWalkSound()
+    {
+        if (audioSource != null && walkClip != null)
+        {
+            // blackboard.AudioSource.PlayOneShot(walkClip);
+            audioSource.PlayOneShot(walkClip);
+        }
+    }
+
+    #endregion
 }

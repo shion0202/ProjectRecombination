@@ -133,6 +133,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _GradientTexture:
+        m_Texture: {fileID: 2800000, guid: 5802d29c7308ad743a7af0a6672180d8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Main2ndBlendMask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -303,6 +307,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - BOOLEAN_USE_WROLDSPACE: 0
+    - BOOLEAN_USE_WROLDSPACE_ON_1: 0
     - _AAStrength: 1
     - _AlphaBoostFA: 10
     - _AlphaMaskMode: 0
@@ -741,6 +747,8 @@ Material:
     - _Color3rd: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveColor: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveNoiseMask_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}
+    - _DissolveOffset: {r: 0, g: 0.2, b: 0, a: 0}
+    - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _DissolveParams: {r: 0, g: 0, b: 0.5, a: 0.1}
     - _DissolvePos: {r: 0, g: 0, b: 0, a: 0}
     - _DistanceFade: {r: 0.1, g: 0.01, b: 0, a: 0}

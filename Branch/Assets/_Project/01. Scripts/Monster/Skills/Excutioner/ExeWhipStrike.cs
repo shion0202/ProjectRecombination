@@ -26,6 +26,10 @@ namespace _Test.Skills
         [SerializeField] private Vector3 collisionOffset;           // 공격 판정 오프셋
         [SerializeField] private AnimationClip attackClip;          // 공격 애니메이션(chainsword) 클립
         [SerializeField] private float rotateSpeed = 1.0f;          // 망나니 회전 속도
+        
+        [Header("Audio Clips")]
+        [SerializeField] private AudioClip whipStrikeAudioClip;     // 채찍 공격 사운드 클립
+        
         private GameObject _attackRangeInstance;
         private GameObject _meleeCollisionObject;
 
@@ -37,6 +41,7 @@ namespace _Test.Skills
             Utils.Destroy(_attackRangeInstance);
 
             // 3. 공격 애니메이션 재생
+            data.AudioSource.PlayOneShot(whipStrikeAudioClip);
             data.AnimatorParameterSetter.Animator.SetBool("isChainsword", true);
 
             // 4. 공격 판정 오브젝트 생성 후 초기화

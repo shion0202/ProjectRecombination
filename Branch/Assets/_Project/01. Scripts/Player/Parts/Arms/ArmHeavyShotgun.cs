@@ -13,7 +13,16 @@ public class ArmHeavyShotgun : PartBaseArm
     [SerializeField] private float denseRange = 10f;            // 밀집 구간 최대 거리
     [SerializeField] private float spreadAngle = 25f;           // 확산 최대 각도
     [SerializeField] private float maxRange = 20f;              // 전체 사거리
+    [SerializeField] private List<AudioClip> shootClips = new();
     protected GameObject muzzleFlashEffect;
+    protected AudioSource _audioSource;
+    protected Coroutine _soundRoutine = null;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     protected void OnEnable()
     {
@@ -65,6 +74,17 @@ public class ArmHeavyShotgun : PartBaseArm
         }
     }
 
+    public override void FinishActionForced()
+    {
+        base.FinishActionForced();
+        
+        if (_soundRoutine != null)
+        {
+            StopCoroutine(_soundRoutine);
+            _soundRoutine = null;
+        }
+    }
+
     protected override void Shoot()
     {
         Vector3 startPoint = _owner.FollowCamera.transform.position + _owner.FollowCamera.transform.forward * (Vector3.Distance(_owner.transform.position, _owner.FollowCamera.transform.position));
@@ -103,6 +123,17 @@ public class ArmHeavyShotgun : PartBaseArm
             }
         }
 
+        _audioSource.Stop();
+        _audioSource.clip = shootClips[0];
+        _audioSource.Play();
+
+        if (_soundRoutine != null)
+        {
+            StopCoroutine(_soundRoutine);
+            _soundRoutine = null;
+        }
+        _soundRoutine = StartCoroutine(CoPlayReloadClip());
+
         _owner.ApplyRecoil(impulseSource, recoilX, recoilY);
 
         _currentAmmo = Mathf.Clamp(_currentAmmo - 1, 0, maxAmmo);
@@ -136,5 +167,14 @@ public class ArmHeavyShotgun : PartBaseArm
         TakeDamage(hit.transform, coefficient);
         Utils.Destroy(Utils.Instantiate(hitEffectPrefab, hit.point, Quaternion.identity), 0.5f);
         Utils.Destroy(Utils.Instantiate(bulletPrefab, hit.point, Quaternion.identity), 0.1f);
+    }
+
+    private IEnumerator CoPlayReloadClip()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        _audioSource.Stop();
+        _audioSource.clip = shootClips[1];
+        _audioSource.Play();
     }
 }

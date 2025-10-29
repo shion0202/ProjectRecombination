@@ -25,8 +25,9 @@ MonoBehaviour:
   attackRangeOffset: {x: 0, y: 0, z: 15}
   meleeCollisionPrefab: {fileID: 4070606023755049407, guid: 9738e5f867811414da87d99f8ce56023,
     type: 3}
-  collisionScale: {x: 5, y: 2, z: 15}
+  collisionScale: {x: 10, y: 0.1, z: 20}
   collisionOffset: {x: 0, y: 1, z: 15}
   attackClip: {fileID: 5686553645976202475, guid: 53b443f341aeaa2449d9fb7add3c7cc9,
     type: 3}
   rotateSpeed: 2
+  whipStrikeAudioClip: {fileID: 8300000, guid: 67cf67c29cd404d0582c5a9fc7e22d53, type: 3}

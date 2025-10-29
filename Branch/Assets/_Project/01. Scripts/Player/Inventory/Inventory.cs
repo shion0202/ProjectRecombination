@@ -140,6 +140,12 @@ public class Inventory : MonoBehaviour
                 //Managers.GUIManager.Instance.UnlockParts(2);
             }
         }
+
+        foreach (PartBase part in baseParts)
+        {
+            GetItem(part);
+            EquipItem(part);
+        }
     }
 
     //private void Update()
@@ -164,15 +170,6 @@ public class Inventory : MonoBehaviour
     #endregion
 
     #region Public Methods
-    public void Init()
-    {
-        foreach (PartBase part in baseParts)
-        {
-            GetItem(part);
-            EquipItem(part);
-        }
-    }
-
     public void GetItem(PartBase newItem)
     {
         if (!_items[newItem.PartType][newItem.AttackType].Contains(newItem))

@@ -4885,8 +4885,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 447816}
   - {fileID: 432262}
@@ -9820,9 +9820,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
   bulletSpeed: 40
-  explosionRange: 1
   explosionRadius: 2
   lifeTime: 5
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
   muzzleParticlePrefab: {fileID: 150096, guid: 9cd6ac71e1191a44fb66645bc89b9879, type: 3}
   impactParticle: {fileID: 162022, guid: e863b67a78ba926499aa78af47b294df, type: 3}
   explosionEffectPrefab: {fileID: 0}

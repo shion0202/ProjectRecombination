@@ -4708,7 +4708,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 96e25441a01166c4ba2186b4e3492dea, type: 2}
+  - {fileID: 2100000, guid: 2abc1d3d69d1b1b4083e4fff83979437, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4805,7 +4805,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0, g: 0.5034485, b: 1, a: 1}
+  m_Color: {r: 0.5, g: 0, b: 1, a: 1}
   m_Intensity: 2
   m_Range: 7
   m_SpotAngle: 30
@@ -4912,8 +4912,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 428946}
   - {fileID: 416604}
@@ -9802,8 +9802,8 @@ MonoBehaviour:
   targetMask:
     serializedVersion: 2
     m_Bits: 512
-  muzzleParticlePrefab: {fileID: 158132, guid: 74ad75b782bd48a408074ee224c28435, type: 3}
-  impactParticle: {fileID: 106912, guid: 18c03f316fa6d1040ab46baf6e46a105, type: 3}
+  muzzleParticlePrefab: {fileID: 151534, guid: 26c9be2521f9c9a439c5eed1a1b3830e, type: 3}
+  impactParticle: {fileID: 106912, guid: 2838cc08db66ab94ab129b6fa5d29692, type: 3}
   explosionEffectPrefab: {fileID: 0}
 --- !u!136 &7022424023409057718
 CapsuleCollider:

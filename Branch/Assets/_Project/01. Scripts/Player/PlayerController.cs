@@ -92,6 +92,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private List<Material> rapidMaterials = new();
     [SerializeField] private List<Material> heavyMaterials = new();
 
+    [Header("Sounds")]
+    [SerializeField] private List<AudioClip> hitClips = new();
+    [SerializeField] private AudioClip deadClip;
+    [SerializeField] private AudioSource seSource;
+
     private Coroutine _indicatorRoutine = null;
     #endregion
 
@@ -194,7 +199,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
         _followCamera.InitFollowCamera(gameObject);
-        inventory.Init();
 
         // 비트 마스크 방식으로 레이케스트를 관리할 레이어를 설정
         // 마스크 값이 비어있다면 기본 값(모든 레이어 - 일부 레이어)로 설정
@@ -615,6 +619,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public void Die()
     {
+        seSource.Stop();
+        seSource.clip = deadClip;
+        seSource.Play();
+
         // 사망 로직
         _currentPlayerState = 0;
         _currentPlayerState |= EPlayerState.Dead;
@@ -779,13 +787,17 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (stats.CurrentHealth <= 0) return;
 
         var damage = Utils.GetDamage(takeDamage, defenceIgnoreRate, unitOfTime,stats.TotalStats);
-        Debug.Log("으앙아픔: " + takeDamage + ", " + damage);
         if (damage > 0)
         {
+            seSource.Stop();
+            int randIndex = UnityEngine.Random.Range(0, hitClips.Count);
+            seSource.clip = hitClips[randIndex];
+            seSource.Play();
+
             //if (stats.CurrentPartHealth > 0)        // 파츠 HP가 남아있으면 파츠를 우선 데미지 계산
             //{
             //    stats.CurrentPartHealth -= damage;  
-                
+
             //    // 계산 후 파츠 HP가 음수가 된 경우
             //    if (stats.CurrentPartHealth < 0)
             //    {

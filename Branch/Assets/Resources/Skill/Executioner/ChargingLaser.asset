@@ -20,8 +20,9 @@ MonoBehaviour:
   cooldown: 12
   castTime: 2.2
   animSpeed: 1
-  laserPrefab: {fileID: 1962479828434100, guid: a8fc40961f0745142a828fd724d7e5bd,
-    type: 3}
+  laserPrefab: {fileID: 100000, guid: dbb29de15054545239c5e47d1a526eb4, type: 3}
   laserOffset: {x: 0, y: 7.7, z: 5}
   attackDuration: 4
   rotateSpeed: 2
+  chargingLaserAudioClip: {fileID: 8300000, guid: b14b51b9211c04e95bda0b206c5a509a,
+    type: 3}

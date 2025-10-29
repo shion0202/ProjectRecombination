@@ -39,7 +39,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: fb54e31bdd5a1964aa3120f04de2b451, type: 3}
+        m_Texture: {fileID: 2800000, guid: c99ba56f769cf474c8557957874efa7d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -58,12 +58,24 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DissolveTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
-        m_Texture: {fileID: 2800000, guid: 6db66abe75badf64ba071c8129cda4da, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8e5d9ae7807cb904482f8814fa382066, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GradientTexture:
+        m_Texture: {fileID: 2800000, guid: 0e1b146f76a431b4781a9d25f37a4fda, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -71,11 +83,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatcapMask:
-        m_Texture: {fileID: 2800000, guid: 568a5244a9d48d541a54d60ea18ae66e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 04e80571eb38cff4fbd83341cf4897cf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatcapTexture:
-        m_Texture: {fileID: 2800000, guid: b63cbf560614f5a45965dcfe19d10205, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8412dd4c5fd888544be6c6e82ebb3e6f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -116,11 +128,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - BOOLEAN_DIRECTION_FROM_EULERANGLE: 0
+    - BOOLEAN_USE_WROLDSPACE: 0
+    - BOOLEAN_USE_WROLDSPACE_ON_1: 0
+    - BOOLEAN_WORLDORIGIN: 0
     - _BLEND_MODE: 2
     - _Base: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _DissolveEdgePower: 1
+    - _DissolveEdgeScale: 10
+    - _DissolveEdgeWidth: 0.01
+    - _DissolveNoiseScale: 30
     - _DstBlend: 0
     - _Emission: 1
     - _EnableLighting: 1
@@ -156,10 +176,16 @@ Material:
     - _SrcBlend: 1
     - _UVAnim: 0
     - _UVSec: 0
+    - _VisibleAmount: 0.5
     - _ZWrite: 1
     m_Colors:
     - _AnimSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DissolveDirection: {r: 0, g: 1, b: 0, a: 0}
+    - _DissolveOffset: {r: 0, g: -1, b: 0, a: 0}
+    - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
+    - _DissolveUVSpeed: {r: 1, g: 1, b: 0, a: 0}
+    - _DissovleEdgeColor: {r: 1, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 5.9921575, g: 5.9921575, b: 5.9921575, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}

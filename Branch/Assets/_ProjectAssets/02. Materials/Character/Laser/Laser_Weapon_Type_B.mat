@@ -39,7 +39,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 663d05d677e7ec944bcd54e4cd0eac7d, type: 3}
+        m_Texture: {fileID: 2800000, guid: cdca8a524682cfc47aeea212ed1a266e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -63,7 +63,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
-        m_Texture: {fileID: 2800000, guid: 514a3e6f45ee33d4aacb25644e2e4352, type: 3}
+        m_Texture: {fileID: 2800000, guid: a52f8f5cc2076aa43b2aa25f04cd9a71, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GradientTexture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -71,11 +75,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatcapMask:
-        m_Texture: {fileID: 2800000, guid: b5b6c9607ab40a943950a0a1feb4be41, type: 3}
+        m_Texture: {fileID: 2800000, guid: e6608c5ef884b324dbb673fc30df990c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatcapTexture:
-        m_Texture: {fileID: 2800000, guid: b63cbf560614f5a45965dcfe19d10205, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8412dd4c5fd888544be6c6e82ebb3e6f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -116,6 +120,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - BOOLEAN_USE_WROLDSPACE: 0
+    - BOOLEAN_USE_WROLDSPACE_ON_1: 0
     - _BLEND_MODE: 0
     - _Base: 1
     - _BumpScale: 1
@@ -160,6 +166,8 @@ Material:
     m_Colors:
     - _AnimSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DissolveOffset: {r: 0, g: 0.2, b: 0, a: 0}
+    - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
     - _EmissionColor: {r: 4.5660377, g: 8, b: 7.5125985, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}

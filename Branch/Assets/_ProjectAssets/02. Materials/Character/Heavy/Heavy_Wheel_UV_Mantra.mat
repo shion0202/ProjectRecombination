@@ -142,7 +142,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GradientTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 4c6f0e4292ecd8a41960d09c45718235, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main2ndBlendMask:
@@ -745,7 +745,7 @@ Material:
     - _lilShadowCasterBias: 0
     - _lilToonVersion: 45
     m_Colors:
-    - _AnimSpeed: {r: -0, g: 1, b: 0, a: 0}
+    - _AnimSpeed: {r: 0, g: -1, b: 0, a: 0}
     - _AudioLinkDefaultValue: {r: 0, g: 0, b: 2, a: 0.75}
     - _AudioLinkLocalMapParams: {r: 120, g: 1, b: 0, a: 0}
     - _AudioLinkMask_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}

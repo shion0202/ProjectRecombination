@@ -1,5 +1,6 @@
 using _Project._01._Scripts.Monster.Animator;
 using _Test.Skills;
+using FIMSpace.FProceduralAnimation;
 using Managers;
 using Monster.AI.Command;
 using System.Collections.Generic;
@@ -31,6 +32,13 @@ namespace Monster.AI.Blackboard
         [SerializeField] private MonsterWander wanderInfo; // 몬스터 방황 스크립트
         [SerializeField] private MonsterAttack attackInfo; // 몬스터 공격 스크립트
 
+        [Header("오디오 리소스")]
+        [SerializeField] private AudioSource audioSource;
+        
+        [Header("Leg Animator")]
+        [SerializeField] private LegsAnimator legAnimator;
+        // [SerializeField] private AudioClip[] clips;
+        
         // [Header("원거리 몬스터 전용 변수")] 
         // [SerializeField] private Transform firePoint;
 
@@ -137,6 +145,9 @@ namespace Monster.AI.Blackboard
         public bool HasUsedSoulAbsorptionAt50Percent { get; set; }
         public bool HasUsedSoulAbsorptionAt20Percent { get; set; }
         public RagdollController RagdollController { get => ragdollController; set => ragdollController = value; }
+        public AudioSource AudioSource { get => audioSource; set => audioSource = value; }
+        public LegsAnimator LegAnimator { get => legAnimator; set => legAnimator = value; }
+        // public AudioClip[] Clips { get => clips; set => clips = value; }
 
         #endregion
 

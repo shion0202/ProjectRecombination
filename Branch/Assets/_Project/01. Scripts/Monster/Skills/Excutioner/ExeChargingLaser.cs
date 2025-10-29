@@ -24,6 +24,9 @@ namespace _Test.Skills
         [SerializeField] private float attackDuration;
         [SerializeField] private float rotateSpeed = 2.0f;
         private Transform _shootPoint;
+        
+        [Header("Audio Clips")]
+        [SerializeField] private AudioClip chargingLaserAudioClip;
 
         public override IEnumerator Activate(Blackboard data)
         {
@@ -46,7 +49,8 @@ namespace _Test.Skills
             GameObject laser = Utils.Instantiate(laserPrefab, _shootPoint);
             laser.transform.localPosition = Vector3.zero;
             laser.transform.localRotation = Quaternion.identity;
-
+            
+            data.AudioSource.PlayOneShot(chargingLaserAudioClip);
             data.AnimatorParameterSetter.Animator.SetBool("isLaser", true);
 
             float elapsed = 0f;

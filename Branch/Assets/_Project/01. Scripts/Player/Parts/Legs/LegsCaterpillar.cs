@@ -19,6 +19,7 @@ public class LegsCaterpillar : PartBaseLegs
     protected CinemachineImpulseSource source;
     private bool _isSiegeMode = false;
     private bool _isCooldown = false;
+    protected AudioSource _audioSource;
 
     protected override void Awake()
     {
@@ -27,6 +28,7 @@ public class LegsCaterpillar : PartBaseLegs
         _isAnimating = false;
         _isSiegeMode = false;
         source = gameObject.GetComponent<CinemachineImpulseSource>();
+        _audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     protected void OnEnable()
@@ -35,6 +37,9 @@ public class LegsCaterpillar : PartBaseLegs
         {
             _currentMoveDirection = _owner.transform.forward;
         }
+
+        _audioSource.volume = 0.0f;
+        _audioSource.Play();
     }
 
     protected void OnDisable()
@@ -54,6 +59,9 @@ public class LegsCaterpillar : PartBaseLegs
             GUIManager.Instance.SetLegsSkillCooldown(0.0f);
             GUIManager.Instance.SetLegsSkillCooldown(false);
         }
+
+        _audioSource.volume = 1.0f;
+        _audioSource.Stop();
     }
 
     public override void UseAbility()
@@ -70,6 +78,8 @@ public class LegsCaterpillar : PartBaseLegs
                 caterpillarMaterial.SetVector("_AnimSpeed", Vector2.zero);
             }
 
+            _audioSource.volume = 0.0f;
+
             return Vector3.zero;
         }
 
@@ -83,6 +93,8 @@ public class LegsCaterpillar : PartBaseLegs
         Vector3 targetDirection = (camForward * moveInput.y + camRight * moveInput.x).normalized;
         Debug.DrawRay(_owner.transform.position + Vector3.up, targetDirection * 5.0f, Color.red);
         Debug.DrawRay(_owner.transform.position + Vector3.up, transform.TransformDirection(-transform.forward) * 5.0f, Color.green);
+
+        _audioSource.volume = 1.0f;
 
         // 현재 하체(캐릭터) 정면 방향과 목표 방향 각도(dot) 계산
         // 후진 모드 전환: dot가 threshold(예: -0.7) 이하이면 true로, threshold 이상이면 false로 딱 한 번만 전환

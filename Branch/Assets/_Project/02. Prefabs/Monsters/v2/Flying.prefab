@@ -955,7 +955,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2254997533802779997, guid: 553b7d776d5c0ec4f9dbd18248c13b84, type: 3}
+  - {fileID: 2100000, guid: ddf113ac477f1d24d9fe1b8901457c5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3097,7 +3097,7 @@ GameObject:
   - component: {fileID: 927776249837869199}
   - component: {fileID: 6244172276215934021}
   - component: {fileID: 2603575782607717194}
-  - component: {fileID: 431471939342257650}
+  - component: {fileID: 9185388235083396467}
   m_Layer: 19
   m_Name: Flying
   m_TagString: Enemy
@@ -3200,7 +3200,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &431471939342257650
+--- !u!114 &9185388235083396467
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

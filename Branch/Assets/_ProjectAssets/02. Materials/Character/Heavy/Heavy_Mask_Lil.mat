@@ -37,7 +37,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _AlphaMask:
-        m_Texture: {fileID: 2800000, guid: 6341e362a9e35b4458b3a780ef5f4bde, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3532e5907e836ed41a82c6232c84bc42, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyScaleMask:
@@ -65,11 +65,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: fb54e31bdd5a1964aa3120f04de2b451, type: 3}
+        m_Texture: {fileID: 2800000, guid: c99ba56f769cf474c8557957874efa7d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: fb54e31bdd5a1964aa3120f04de2b451, type: 3}
+        m_Texture: {fileID: 2800000, guid: c99ba56f769cf474c8557957874efa7d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Bump2ndMap:
@@ -129,7 +129,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 6db66abe75badf64ba071c8129cda4da, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8e5d9ae7807cb904482f8814fa382066, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
@@ -185,7 +185,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: fb54e31bdd5a1964aa3120f04de2b451, type: 3}
+        m_Texture: {fileID: 2800000, guid: c99ba56f769cf474c8557957874efa7d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatCap2ndBlendMask:
@@ -672,7 +672,7 @@ Material:
     - _ShadowBlurMaskLOD: 0
     - _ShadowBorder: 0.329
     - _ShadowBorderMaskLOD: 0
-    - _ShadowBorderRange: 0.08
+    - _ShadowBorderRange: 0
     - _ShadowColorType: 0
     - _ShadowEnvStrength: 0
     - _ShadowFlatBlur: 1
@@ -834,12 +834,12 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 0}
     - _RimIndirColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimShadeColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _Shadow2ndColor: {r: 0.68, g: 0.65999997, b: 0.78999996, a: 1}
+    - _Shadow2ndColor: {r: 0.68, g: 0.65999997, b: 0.78999996, a: 0}
     - _Shadow3rdColor: {r: 0, g: 0, b: 0, a: 0}
     - _ShadowAOShift: {r: 1, g: 0, b: 1, a: 0}
     - _ShadowAOShift2: {r: 1, g: 0, b: 1, a: 0}
     - _ShadowBorderColor: {r: 1, g: 0.09999997, b: 0, a: 1}
-    - _ShadowColor: {r: 0.82, g: 0.76, b: 0.85, a: 1}
+    - _ShadowColor: {r: 0.8679245, g: 0.5444998, b: 0.56834114, a: 1}
     - _e2ga0: {r: 1, g: 0, b: 0, a: 0}
     - _e2ga1: {r: 1, g: 0, b: 0, a: 1}
     - _e2ga2: {r: 1, g: 0, b: 0, a: 0}

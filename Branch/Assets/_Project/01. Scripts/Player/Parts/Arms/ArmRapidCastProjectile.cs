@@ -13,6 +13,13 @@ public class ArmRapidCastProjectile : PartBaseArm
     protected float _currentChargeTime = 0.0f;
     private float _currentCastTime = 0.0f;
     private GameObject castEffect;
+    protected AudioSource _audioSource;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     protected void OnEnable()
     {
@@ -87,6 +94,8 @@ public class ArmRapidCastProjectile : PartBaseArm
         {
             castEffect = Utils.Instantiate(castEffectPrefab, bulletSpawnPoint.position + castOffset, Quaternion.identity, bulletSpawnPoint);
         }
+
+        _audioSource.Play();
     }
 
     public override void UseCancleAbility()
@@ -100,6 +109,8 @@ public class ArmRapidCastProjectile : PartBaseArm
             Utils.Destroy(castEffect);
             castEffect = null;
         }
+
+        _audioSource.Stop();
     }
 
     public override void FinishActionForced()
@@ -111,6 +122,8 @@ public class ArmRapidCastProjectile : PartBaseArm
             Utils.Destroy(castEffect);
             castEffect = null;
         }
+
+        _audioSource.Stop();
     }
 
     protected override void Shoot()

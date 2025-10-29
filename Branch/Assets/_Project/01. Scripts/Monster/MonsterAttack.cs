@@ -25,8 +25,8 @@ namespace Monster.AI.Command
                 return;
             }
             
-            GameObject bullet = PoolManager.Instance.GetObject(bulletPrefab[bulletType], firePoint.position, firePoint.rotation);
-            bullet.transform.LookAt(direction * -1);
+            GameObject bullet = PoolManager.Instance.GetObject(bulletPrefab[bulletType], firePoint.position, Quaternion.LookRotation(direction));
+            // bullet.transform.LookAt(direction * -1);
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
             if (bulletComponent != null)
             {

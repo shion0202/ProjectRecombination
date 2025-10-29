@@ -23,6 +23,8 @@ namespace _Test.Skills
         [SerializeField] private Vector3 shootOffset;
         [SerializeField] private AnimationClip shootClip;
         [SerializeField] private float rotateSpeed = 2.0f;
+        [SerializeField] private AudioClip loadAudioClip;
+        [SerializeField] private AudioClip shootAudioClip;
         private Transform _shootPoint;
 
         public override IEnumerator Activate(Blackboard data)
@@ -30,6 +32,7 @@ namespace _Test.Skills
             Debug.Log("[Executioner] One In The Pipe 시작");
 
             // 2. 사격 애니메이션 재생
+            data.AudioSource.PlayOneShot(shootAudioClip);
             data.AnimatorParameterSetter.Animator.SetBool("isShoot", true);
 
             // 3. 불렛(원거리 공격체) 생성 및 발사
@@ -62,6 +65,7 @@ namespace _Test.Skills
 
             // To-do: 팔 IK 적용 필요 (Animation Rigging Package의 Multi-Aim Constraint 컴포넌트)
             // 1. 팔 들기(캐스팅) 애니메이션 재생
+            data.AudioSource.PlayOneShot(loadAudioClip);
             data.AnimatorParameterSetter.Animator.SetTrigger("shootCastingTrigger");
 
             float elapsed = 0f;
