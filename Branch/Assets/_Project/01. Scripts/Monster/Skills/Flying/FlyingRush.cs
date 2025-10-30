@@ -17,6 +17,9 @@ namespace _Test.Skills.Flying
         [SerializeField] public Vector3 collisionOffset;               // 근접 공격 위치
         [SerializeField] public float maxRushDistance;
         
+        [Header("오디오 클립")]
+        [SerializeField] private AudioClip rushAudioClip;
+        
         private GameObject _meleeCollision;
         
         public override IEnumerator Casting(Blackboard data)
@@ -33,6 +36,7 @@ namespace _Test.Skills.Flying
             data.Agent.transform.LookAt(data.Target.transform);
             
             // 돌진 애니메이션 재생
+            data.AudioSource.PlayOneShot(rushAudioClip);
             data.AnimatorParameterSetter.Animator.SetTrigger("Rush");
             
             // 근접 공격 콜라이더 생성

@@ -39,6 +39,7 @@ Transform:
   - {fileID: 4438216852759112691}
   - {fileID: 1668075918883214526}
   - {fileID: 2165354408613133896}
+  - {fileID: 6934971082663175168}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8692566434091195596
@@ -59,6 +60,11 @@ MonoBehaviour:
   ikAnimaton: {fileID: 0}
   ralphTwoHandsAttackCollider: {fileID: 4070606023755049407, guid: 1d08471516cb44f0e9b9982cc56ecad6,
     type: 3}
+  audioSource: {fileID: 1514892074835764487}
+  spawnClip: {fileID: 8300000, guid: 72033b124609d42c5af68fa50cc27de2, type: 3}
+  deathClip: {fileID: 8300000, guid: 5f232b086921f48889d8f3cb697e9e5b, type: 3}
+  walkClip: {fileID: 8300000, guid: 7cde35bc2bf0b40639c4cf9e629f1270, type: 3}
+  meleeAudioClip: {fileID: 8300000, guid: 2f775c7de7d534a29a983103600daf35, type: 3}
 --- !u!114 &677858020193021959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,6 +910,8 @@ MonoBehaviour:
   attackInfo:
     bulletPrefab: []
     firePoint: {fileID: 0}
+  audioSource: {fileID: 1514892074835764487}
+  legAnimator: {fileID: 0}
   amonBody: {fileID: 0}
   amonShield: {fileID: 0}
   amonEnergyBall: {fileID: 0}
@@ -911,6 +919,134 @@ MonoBehaviour:
   skillDatas:
   - {fileID: 11400000, guid: a2efeef93809f43c4a444510fc458982, type: 2}
   Skills: []
+--- !u!1 &8575127945110251280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6934971082663175168}
+  - component: {fileID: 1514892074835764487}
+  m_Layer: 19
+  m_Name: AudioSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6934971082663175168
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575127945110251280}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4066035202101780709}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1514892074835764487
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575127945110251280}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.2
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8609288017007081948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,6 +1718,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: -1206874426333947015, guid: 982508876250e1f4cb66aa4287e230f8,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 331e42c612eb143fe9e79ee1cbd2c855, type: 2}
     - target: {fileID: -722503897777339668, guid: 982508876250e1f4cb66aa4287e230f8,
         type: 3}
       propertyPath: m_Layer

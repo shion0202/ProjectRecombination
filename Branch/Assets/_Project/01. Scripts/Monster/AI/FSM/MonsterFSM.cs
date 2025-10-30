@@ -12,6 +12,13 @@ namespace Monster.AI.FSM
     {
         [SerializeField] private GameObject ralphTwoHandsAttackCollider;
         
+        [Header("Audio Clips")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip spawnClip;
+        [SerializeField] private AudioClip deathClip;
+        [SerializeField] private AudioClip walkClip;
+        [SerializeField] private AudioClip meleeAudioClip;
+        
         #region private Fields
         
         // 상태별 로직에 필요한 내부 변수들
@@ -37,18 +44,12 @@ namespace Monster.AI.FSM
         /// </summary>
         protected override void Think()
         {
-            if (!isEnabled) return;
-            if (_isDeath) return;
-            if (blackboard.State.GetStates() == "None")
-            {
-                ChangeState("Idle");
-                return;
-            }
+            if (!isEnabled || _isDeath) return;
+            if (blackboard.State.GetStates() == "Spawn") return; // 스폰 상태에서는 판단을 하지 않음
             
             if (blackboard.CurrentHealth <= 0)
             {
-                // if (blackboard.State.GetStates() != "Death") 
-                    ChangeState("Death");
+                ChangeState("Death");
                 return;
             }
             
@@ -110,9 +111,7 @@ namespace Monster.AI.FSM
         /// </summary>
         protected override void Act()
         {
-            if (!isEnabled) return;
-            if (blackboard?.State is null) return;
-            if (_isDeath) return;
+            if (!isEnabled || blackboard?.State is null || _isDeath) return;
 
             if (blackboard.IsAnySkillRunning)
             {
@@ -127,6 +126,9 @@ namespace Monster.AI.FSM
             {
                 case "None":
                     // 아무 것도 하지 않음
+                    break;
+                case "Spawn":
+                    ActSpawn();
                     break;
                 case "Idle":
                     // Idle 상태에서는 특별한 행동이 없으므로 EnterState에서 처리한 isStopped = true가 유지됩니다.
@@ -145,12 +147,13 @@ namespace Monster.AI.FSM
                     break;
             }
         }
-        
+
         // 상태 진입 시 1회 호출되는 초기화 메서드 (기존 코드와 동일)
         protected override void EnterState(string stateName)
         {
             InitAnimationFlags();
             blackboard.NavMeshAgent.isStopped = false;
+            Debug.Log("Entered " + stateName);
 
             switch (stateName)
             {
@@ -158,12 +161,6 @@ namespace Monster.AI.FSM
                     blackboard.NavMeshAgent.isStopped = true;
                     break;
                 case "Death":
-                    //blackboard.StopAllCoroutines();
-                    
-                    // if (blackboard.AgentCollider is not null)
-                    //     blackboard.AgentCollider.enabled = false;
-                    // if (blackboard.AgentRigidbody is not null)
-                    //     blackboard.AgentRigidbody.isKinematic = true;
                     blackboard.NavMeshAgent.isStopped = true;
                     blackboard.NavMeshAgent.ResetPath();
                     break;
@@ -187,7 +184,14 @@ namespace Monster.AI.FSM
         #endregion
 
         #region State Actions (Act에서 호출되는 행동 함수들)
-
+        
+        private void ActSpawn()
+        {
+            // 스폰 사운드 클립 재생
+            audioSource.PlayOneShot(spawnClip);
+            ChangeState("Idle");
+        }
+        
         private void ActDeath()
         {
             if (_isDeath)  return;
@@ -208,7 +212,9 @@ namespace Monster.AI.FSM
                 if (!particleSystem.isPlaying)
                     particleSystem.Play();
             }
-            Debug.Log("Ragdoll Activated");
+            
+            audioSource.PlayOneShot(deathClip);
+            if (blackboard.LegAnimator) blackboard.LegAnimator.enabled = false;
             blackboard.RagdollController.ActivateRagdoll();
             
             StartCoroutine(PoolReleaseAfterDeathEffect());
@@ -330,6 +336,23 @@ namespace Monster.AI.FSM
             {
                 _meleeCollision.Init(damage, new Vector3(4f,4f,4f), new Vector3(1f,1f,2f));
             }
+            
+            audioSource.PlayOneShot(meleeAudioClip);
+        }
+
+        public void AnimationEvent_OnHandAttack()
+        {
+            if (blackboard.Target == null || _useSkill == null) return;
+
+            float damage = _useSkill.skillData.damage;
+            var amonMeleeCollision = Utils.Instantiate(ralphTwoHandsAttackCollider, blackboard.Agent.transform);
+            _meleeCollision = amonMeleeCollision.GetComponent<AmonMeleeCollision>();
+            if (_meleeCollision)
+            {
+                _meleeCollision.Init(damage, new Vector3(2f,2f,4f), new Vector3(1f,1f,2f));
+            }
+            
+            audioSource.PlayOneShot(meleeAudioClip);
         }
 
         public void AnimationEvent_Death()
@@ -343,6 +366,11 @@ namespace Monster.AI.FSM
             isInit = false;
             // gameObject.SetActive(false); // 풀 매니저를 사용하므로 이쪽을 권장
             PoolManager.Instance.ReleaseObject(gameObject);
+        }
+        
+        public void AnimationEvent_WalkSound()
+        {
+            audioSource.PlayOneShot(walkClip);
         }
         
         public void OnAttackAnimationEnd()

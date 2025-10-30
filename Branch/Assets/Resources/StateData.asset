@@ -49,3 +49,5 @@ MonoBehaviour:
     bitIndex: 16
   - stateName: Moving
     bitIndex: 17
+  - stateName: UsingSkill7
+    bitIndex: 18

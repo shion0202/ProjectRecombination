@@ -9,6 +9,13 @@ namespace Monster.AI.FSM
     public class FlyFSM : FSM
     {
         [SerializeField] private GameObject attackCollider;
+        
+        [Header("Audio Clips")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip spawnClip;
+        [SerializeField] private AudioClip deathClip;
+        [SerializeField] private AudioClip attackClip;
+        
         private AmonMeleeCollision _attackCollider;
 
         private bool _isDeath;
@@ -24,14 +31,7 @@ namespace Monster.AI.FSM
         protected override void Think()
         {
             if (!isEnabled || _isDeath) return;
-            
-            Debug.Log($"currentState: {blackboard.State.GetStates()}");
-            
-            if (blackboard.State.GetStates() == "None")
-            {
-                ChangeState("Idle");
-                return;
-            }
+            if (blackboard.State.GetStates() == "Spawn") return;
 
             // 0 순위: 사망 체크
             if (blackboard.CurrentHealth <= 0)
@@ -119,6 +119,9 @@ namespace Monster.AI.FSM
                 case "Idle":
                     ActIdle();
                     break;
+                case "Spawn":
+                    ActSpawn();
+                    break;
                 case "Death":
                     ActDeath();
                     break;
@@ -134,8 +137,24 @@ namespace Monster.AI.FSM
             }
         }
 
+        private void ActSpawn()
+        {
+            audioSource.PlayOneShot(spawnClip);
+            ChangeState("Idle");
+        }
+
         private void ActChase()
         {
+            float distanceToTarget = Vector3.Distance(blackboard.Agent.transform.position, blackboard.Target.transform.position);
+
+            if (distanceToTarget <= blackboard.MinDetectionRange)
+            {
+                // ChangeState("Idle");
+                blackboard.NavMeshAgent.isStopped = true;
+                blackboard.NavMeshAgent.ResetPath();
+                return;
+            }
+            
             blackboard.AnimatorParameterSetter.Animator.SetBool("isMoving", true);
             blackboard.NavMeshAgent.speed = blackboard.RunSpeed;
             blackboard.NavMeshAgent.SetDestination(blackboard.Target.transform.position);
@@ -162,6 +181,7 @@ namespace Monster.AI.FSM
                     particleSystem.Play();
             }
             
+            audioSource.PlayOneShot(deathClip);
             blackboard.RagdollController.ActivateRagdoll();
             
             StartCoroutine(PoolReleaseAfterDeathEffect());
@@ -250,6 +270,8 @@ namespace Monster.AI.FSM
             if (_attackCollider)
                 _attackCollider.Init(damage, new Vector3(2f, 2f, 2f), new Vector3(0f, 2f, 1f));
             
+            audioSource.PlayOneShot(attackClip);
+            
             StartCoroutine(MeleeCollisionDisableDelay());
         }
 
@@ -268,6 +290,13 @@ namespace Monster.AI.FSM
             if (blackboard.DeathEffect is not null)
             {
                 blackboard.DeathEffect.SetActive(false);
+            }
+            
+            // 자식 오브젝트들 중 AmonMeleeCollision 컴포넌트를 찾아 모두 제거
+            AmonMeleeCollision[] meleeCollisions = GetComponentsInChildren<AmonMeleeCollision>();
+            foreach (AmonMeleeCollision meleeCollision in meleeCollisions)
+            {
+                Destroy(meleeCollision.gameObject);
             }
             
             isInit = false;

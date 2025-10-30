@@ -199,6 +199,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _followCamera = cameraObject.GetComponent<FollowCameraController>();
         }
         _followCamera.InitFollowCamera(gameObject);
+        inventory.Init();
 
         // 비트 마스크 방식으로 레이케스트를 관리할 레이어를 설정
         // 마스크 값이 비어있다면 기본 값(모든 레이어 - 일부 레이어)로 설정

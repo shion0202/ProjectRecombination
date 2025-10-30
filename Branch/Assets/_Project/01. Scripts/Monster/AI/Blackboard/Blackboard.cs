@@ -245,7 +245,7 @@ namespace Monster.AI.Blackboard
             NavMeshAgent.isStopped = false;
             NavMeshAgent.ResetPath();
             CurrentHealth = MaxHealth;
-            State.SetState("Idle");
+            State.SetState("Spawn");
             Target = MonsterManager.Instance.Player;
         }
 

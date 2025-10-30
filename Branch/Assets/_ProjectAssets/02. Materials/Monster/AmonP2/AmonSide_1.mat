@@ -37,20 +37,12 @@ Material:
         m_Texture: {fileID: 2800000, guid: bc4ad043386db4703bf6b5da6ceb59c3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _DissolveTexture:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _EMISSION_COLOR_MAP:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
         m_Texture: {fileID: 2800000, guid: 88c054204fd8b7a4d9b104c4dcea1f1c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionTexture:
-        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GradientTexture:
@@ -111,10 +103,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - BOOLEAN_DIRECTION_FROM_EULERANGLE: 0
     - BOOLEAN_USE_WROLDSPACE: 0
     - BOOLEAN_USE_WROLDSPACE_ON_1: 0
-    - BOOLEAN_WORLDORIGIN: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _BASE_COLOR_WEIGHT: 1
@@ -130,10 +120,6 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DissolveEdgePower: 1
-    - _DissolveEdgeScale: 10
-    - _DissolveEdgeWidth: 0.01
-    - _DissolveNoiseScale: 30
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EMISSION_WEIGHT: 1
@@ -181,7 +167,6 @@ Material:
     - _TRANSPARENCY: 0
     - _UVAnim: 0
     - _UVSec: 0
-    - _VisibleAmount: 0.5
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
@@ -189,11 +174,8 @@ Material:
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 0.7353569, g: 0.7353569, b: 0.7353569, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DissolveDirection: {r: 0, g: 1, b: 0, a: 0}
     - _DissolveOffset: {r: 0, g: 0.2, b: 0, a: 0}
     - _DissolveOffset_1: {r: 0, g: 0.2, b: 0, a: 0}
-    - _DissolveUVSpeed: {r: 1, g: 1, b: 0, a: 0}
-    - _DissovleEdgeColor: {r: 1, g: 0, b: 0, a: 0}
     - _EMISSION_COLOR: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 2.433572, g: 2.433572, b: 2.433572, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 0}
