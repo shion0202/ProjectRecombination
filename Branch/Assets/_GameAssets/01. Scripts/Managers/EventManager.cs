@@ -12,15 +12,6 @@ namespace Managers
         // object: 이벤트와 함께 전달되는 추가 데이터(Param)
         private Dictionary<EEventType, Action<EEventType, Component, object>> listeners = new ();
 
-        private static EventManager _instance;
-        private static object _lock = new();
-        private static bool applicationQuitting;
-
-        private void OnDestroy()
-        {
-            applicationQuitting = true;
-        }
-
         // 특정 이벤트 타입이 실행될 때 호출할 리스너(액션)을 등록하는 함수
         public void AddListener(EEventType eventType, Action<EEventType, Component, object> action)
         {

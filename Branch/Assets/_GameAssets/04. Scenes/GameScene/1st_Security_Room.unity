@@ -67998,7 +67998,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!208 &795367611
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -79909,8 +79909,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 3.2341764, y: 1.2024878, z: 1.2722775}
+  m_Center: {x: -0.98362535, y: 0.082136154, z: 0.12633772}
 --- !u!4 &915740450
 Transform:
   m_ObjectHideFlags: 0
@@ -134267,8 +134267,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 3.338216, y: 1.1772097, z: 1.4873658}
+  m_Center: {x: -0.9939392, y: -0.019143138, z: 0.114045426}
 --- !u!4 &1482461159
 Transform:
   m_ObjectHideFlags: 0
@@ -164093,12 +164093,12 @@ GameObject:
   - component: {fileID: 1837703036}
   - component: {fileID: 1837703037}
   m_Layer: 0
-  m_Name: Conditional_Activate_HB1stRoom
+  m_Name: (Not_Used)Conditional_Activate_HB1stRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1837703036
 Transform:
   m_ObjectHideFlags: 0

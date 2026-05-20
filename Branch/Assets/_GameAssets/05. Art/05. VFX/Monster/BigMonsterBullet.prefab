@@ -4928,7 +4928,8 @@ AudioSource:
   m_GameObject: {fileID: 196044}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3255133022743001703, guid: 61a5faa6522bc9b4a9fde3fa6711f734,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 66362109d38707e41966aad33585e4bc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -9801,7 +9802,8 @@ MonoBehaviour:
   lifeTime: 5
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 136315392
+  collisionTags: []
   muzzleParticlePrefab: {fileID: 0}
   impactParticle: {fileID: 106912, guid: 2fb06bf04935a764581c88a65a3850bc, type: 3}
   explosionEffectPrefab: {fileID: 0}

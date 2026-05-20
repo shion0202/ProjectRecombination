@@ -82,6 +82,7 @@ namespace Managers
                     actionOnRelease: obj =>
                     {
                         OnRelease(obj);
+                        obj.name = poolData.prefab.name;
                         var poolable = obj.GetComponent<PoolableObject>();
                         if (poolable != null)
                             poolable.OnReturnToPool();
@@ -99,10 +100,27 @@ namespace Managers
                     _poolParents.Add(key, parent);
                 }
 
-                for (int i = 0; i < poolData.defaultSize; i++)
+                for (int i = 0; i < poolData.defaultSize; ++i)
                 {
-                    GameObject obj = InstantiateObject(poolData.prefab); // 컴포넌트 부착까지 보장
-                    AddPoolableComponent(obj); // PoolableObject 부착 안 되어있으면 부착
+                    GameObject obj = InstantiateObject(poolData.prefab);
+                    AddPoolableComponent(obj);
+
+                    // 유니티 풀의 Release를 거치지 않고 수동으로 세팅
+                    obj.transform.SetParent(_poolParents[key]);
+                    obj.name = poolData.prefab.name;
+
+                    var poolable = obj.GetComponent<PoolableObject>();
+                    if (poolable != null)
+                    {
+                        poolable.OnReturnToPool();
+                    }
+
+                    obj.SetActive(false);
+
+                    // pool.Release(obj) 대신 내장 풀 내부 버퍼에 안전하게 수동 주입하거나, 
+                    // 사실 가장 깔끔한 것은 그냥 이 상태로 둔 뒤, 처음 Get()이 일어날 때 풀이 알아서 
+                    // 개수를 채우거나 createFunc를 타게 만드는 것입니다.
+                    // 만약 유니티 내장 풀에 '정석'으로 미리 집어넣고 싶다면 아래 한 줄만 호출합니다.
                     pool.Release(obj);
                 }
 
@@ -133,7 +151,7 @@ namespace Managers
         /// </summary>
         public GameObject GetObject(GameObject prefab)
         {
-            string key = prefab.name;
+            string key = GetOriginalKey(prefab.name);
 
             if (_pools.TryGetValue(key, out var pool))
             {
@@ -159,7 +177,7 @@ namespace Managers
 
         public GameObject GetObject(GameObject prefab, Transform parent)
         {
-            string key = prefab.name;
+            string key = GetOriginalKey(prefab.name);
             GameObject go = null;
 
             if (_pools.TryGetValue(key, out var pool))
@@ -196,7 +214,7 @@ namespace Managers
         
         public GameObject GetObject(GameObject prefab, Vector3 position, Quaternion rotation)
         {
-            string key = prefab.name;
+            string key = GetOriginalKey(prefab.name);
             GameObject go = null;
 
             if (_pools.TryGetValue(key, out var pool))
@@ -215,7 +233,7 @@ namespace Managers
 
         public GameObject GetObject(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
         {
-            string key = prefab.name;
+            string key = GetOriginalKey(prefab.name);
             GameObject go = null;
 
             if (_pools.TryGetValue(key, out var pool))
@@ -253,7 +271,7 @@ namespace Managers
                 return;
             }
 
-            string key = obj.name;
+            string key = GetOriginalKey(obj.name);
 
             if (_pools.ContainsKey(key))
             {
@@ -275,7 +293,7 @@ namespace Managers
 
         public void OnRelease(GameObject go)
         {
-            string key = go.name.Replace("(Clone)", "").Trim();
+            string key = GetOriginalKey(go.name);
             if (_poolParents.TryGetValue(key, out Transform parent))
             {
                 go.transform.SetParent(parent);
@@ -290,7 +308,7 @@ namespace Managers
 
         public (bool, string) IsPooledObject(GameObject o)
         {
-            string key = o.name.Replace("(Clone)", "").Trim();
+            string key = GetOriginalKey(o.name);
             return (_pools.ContainsKey(key), key);
         }
 
@@ -328,6 +346,11 @@ namespace Managers
             _pools.Clear();
 
             IsInitialized = false;
+        }
+
+        private string GetOriginalKey(string name)
+        {
+            return name.Replace("(Clone)", "").Trim();
         }
     }
 }

@@ -3,6 +3,8 @@ using System;
 public enum EEventType
 {
     Interaction,
+    SensitivityChangeX,
+    SensitivityChangeY,
 }
 
 // Unit(플레이어, 몬스터) 스탯 종류

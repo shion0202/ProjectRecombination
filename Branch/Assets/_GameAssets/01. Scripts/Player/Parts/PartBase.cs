@@ -74,12 +74,12 @@ public abstract class PartBase : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"Part Stat Index({partId}) 데이터가 없습니다.");
+                //Debug.LogWarning($"Part Stat Index({partId}) 데이터가 없습니다.");
             }
         }
         else
         {
-            Debug.LogWarning("파츠 파라미터 데이터가 없습니다.");
+            //Debug.LogWarning("파츠 파라미터 데이터가 없습니다.");
         }
     }
 

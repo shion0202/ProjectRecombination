@@ -626,15 +626,15 @@ namespace Managers
                 indicator.IsOn = true;
                 partIndicator.IsOn = true;
 
-                if (isNaviOn)
-                {
-                    var player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
-                    if (player)
-                    {
-                        player.Navi.gameObject.SetActive(true);
-                        player.Navi.MoveToTarget();
-                    }
-                }
+                //if (isNaviOn)
+                //{
+                //    var player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
+                //    if (player)
+                //    {
+                //        player.Navi.gameObject.SetActive(true);
+                //        player.Navi.MoveToTarget();
+                //    }
+                //}
             }
             else
             {
@@ -642,11 +642,11 @@ namespace Managers
                 indicator.IsOn = false;
                 partIndicator.IsOn = false;
 
-                var player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
-                if (player)
-                {
-                    player.Navi.StopEffect();
-                }
+                //var player = Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>();
+                //if (player)
+                //{
+                //    player.Navi.StopEffect();
+                //}
             }
         }
 

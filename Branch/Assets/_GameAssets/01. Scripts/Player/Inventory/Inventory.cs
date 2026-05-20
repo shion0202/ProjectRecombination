@@ -13,7 +13,6 @@ public class Inventory : MonoBehaviour
     [SerializeField] private List<PartBase> baseParts = new ();
     private Dictionary<EPartType, Dictionary<EAttackType, List<PartBase>>> _items = new ();
     private Dictionary<EPartType, List<PartBase>> _equippedItems = new();
-    private int partIndex = 0;
 
     [Header("Mesh and Bone Data")]
     [SerializeField] private Transform boneRoot;

@@ -1,9 +1,11 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UI;
 using UnityEngine;
-using DG.Tweening;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace Managers
 {
@@ -62,6 +64,8 @@ namespace Managers
                 Console.WriteLine(e);
                 throw;
             }
+
+            AutoDetectHardwarePerformance();
         }
         
         private static void CheckValidation(EUIType uiType, GameObject uiInstance)
@@ -127,6 +131,62 @@ namespace Managers
                     CreditUI.SetActive(true);
                     break;
             }
+        }
+
+        private void AutoDetectHardwarePerformance()
+        {
+            bool isHDREnabled = false;
+
+            // 이미 사용자가 설정을 변경한 적이 있는지 확인 (저장된 값이 있으면 자동 설정 건너뜀)
+            if (PlayerPrefs.HasKey("HDREnabled"))
+            {
+                isHDREnabled = PlayerPrefs.GetInt("HDREnabled") == 1;
+                SetHDR(isHDREnabled);
+                return;
+            }
+
+            // 하드웨어 정보 읽기
+            int vram = SystemInfo.graphicsMemorySize; // GPU 메모리 (MB 단위)
+            int cpuCount = SystemInfo.processorCount; // CPU 코어 수
+
+            // 고사양 기준 설정
+#if UNITY_EDITOR || UNITY_STANDALONE
+            // PC 기준: 1660Ti 기준 6GB 모델이 존재하며, 1060은 3GB 모델도 존재
+            if (vram > 3000 && cpuCount >= 6)
+            {
+                isHDREnabled = true;
+            }
+            else
+            {
+                isHDREnabled = false; // 저사양으로 간주하여 HDR 비활성화
+            }
+#else
+            // 모바일 기준: 기기 특성상 Vram 인식 수치가 유동적이므로, CPU 코어 수를 더 중점적으로 판단
+            if (vram > 1500 && cpuCount >= 8)
+            {
+                isHDREnabled = true;
+            }
+            else
+            {
+                isHDREnabled = false; // 저사양으로 간주하여 HDR 비활성화
+            }
+#endif
+
+            // 결정된 기본값 저장
+            PlayerPrefs.SetInt("HDREnabled", isHDREnabled ? 1 : 0);
+            SetHDR(isHDREnabled);
+        }
+
+        public void SetHDR(bool enable)
+        {
+            // 현재 사용 중인 Render Pipeline Asset을 가져옵니다.
+            UniversalRenderPipelineAsset urpAsset = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+            if (urpAsset != null)
+            {
+                // HDR 설정을 변경합니다.
+                urpAsset.supportsHDR = enable;
+            }
+            PlayerPrefs.SetInt("HDREnabled", enable ? 1 : 0);
         }
 
         /// <summary>
