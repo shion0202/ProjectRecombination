@@ -3,6 +3,7 @@ using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActions
@@ -18,9 +19,13 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
     private PlayerController _owner;
     private LegsEnhanced _originalPart;
 
+    protected CinemachineVirtualCamera vcam; // 컴포넌트 직접 캐싱을 위해 변경
     protected CinemachinePOV pov;
     protected CinemachineBrain brain;
     protected CinemachineBlendDefinition defaultBlend;
+
+    private bool _isExiting = false;
+    private Vector3 _originalPlayerPos; // 취소 시 복귀를 위한 위치 백업
 
     public PlayerController Owner
     {
@@ -33,12 +38,13 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
         rb = GetComponent<Rigidbody>();
         _cam = Camera.main;
 
+        // 기존 인풋 에셋 생성 및 콜백 연결 구조 유지
         _playerActions = new PlayerActions();
         _playerActions.JumpAttackActionMap.SetCallbacks(this);
 
         if (pov == null)
         {
-            var vcam = gameObject.GetComponentInChildren<CinemachineVirtualCamera>();
+            vcam = gameObject.GetComponentInChildren<CinemachineVirtualCamera>();
             if (vcam != null)
             {
                 pov = vcam.GetCinemachineComponent<CinemachinePOV>();
@@ -47,7 +53,7 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
 
         brain = Camera.main.GetComponent<CinemachineBrain>();
         defaultBlend = brain.m_DefaultBlend;
-        brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.EaseInOut, 0.3f);
+        brain.m_DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Style.Cut, 0.0f);
     }
 
     private void OnEnable()
@@ -58,14 +64,6 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
 
     private void Start()
     {
-        // 캐릭터가 사라지는 효과
-        PlayerInput inputComp = _owner.GetComponent<PlayerInput>();
-        if (inputComp != null)
-        {
-            inputComp.enabled = false;
-        }
-        _owner.gameObject.SetActive(false);
-
         GUIManager.Instance.GameUIController.SetLegsSkillTimer(new Color(0.45f, 0.59f, 0.59f));
         GUIManager.Instance.GameUIController.SetLegsSkillIcon(true);
         GUIManager.Instance.GameUIController.SetLegsSkillCooldown(true);
@@ -79,6 +77,8 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
 
     private void Update()
     {
+        if (_isExiting) return;
+
         _currentTime -= Time.deltaTime;
         GUIManager.Instance.GameUIController.SetLegsSkillCooldown(_currentTime);
         GUIManager.Instance.GameUIController.SetRapidCooldownText(_currentTime);
@@ -94,16 +94,32 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
     {
         _owner = owner;
         _originalPart = origin;
+        _originalPlayerPos = _owner.transform.position;
 
-        if (pov == null)
+        if (vcam != null && pov == null)
         {
-            var vcam = gameObject.GetComponentInChildren<CinemachineVirtualCamera>();
-            if (vcam != null)
-            {
-                pov = vcam.GetCinemachineComponent<CinemachinePOV>();
-                pov.m_HorizontalAxis.Value = horizontalValue;
-            }
+            pov = vcam.GetCinemachineComponent<CinemachinePOV>();
         }
+        if (pov != null)
+        {
+            pov.m_HorizontalAxis.Value = horizontalValue;
+        }
+
+        if (_owner != null && _owner.FollowCamera != null && pov != null)
+        {
+            _owner.FollowCamera.SetTargetPOV(pov);
+        }
+
+        if (_owner != null)
+        {
+            _owner.Controller.enabled = false;
+            _owner.transform.position = Vector3.down * 9999f;
+            _owner.Controller.enabled = true;
+        }
+
+        // 시네머신 브레인이 이 카메라의 존재를 인지하고 화면을 완전히 장악할 수 있도록 
+        // 플레이어를 지하로 보내는 타이밍만 코루틴으로 '딱 1프레임' 뒤로 미룹니다.
+        //StartCoroutine(TeleportOwnerToUndergroundNextFrame());
     }
 
     private void Move()
@@ -128,38 +144,34 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
 
     private void Apply()
     {
-        PlayerInput inputComp = _owner.GetComponent<PlayerInput>();
-        if (inputComp != null)
-            inputComp.enabled = false;   // 일단 확실히 OFF
+        if (_isExiting) return;
+        _isExiting = true;
 
+        // 지하에 있던 플레이어를 지상(현재 스킬 최종 위치)으로 먼저 소환
         _owner.Controller.enabled = false;
         _owner.transform.position = transform.position;
+        _owner.ResetGravityAndFalling();
+        Physics.SyncTransforms();
         _owner.Controller.enabled = true;
+
         _originalPart.IsAttack = true;
-        brain.m_DefaultBlend = defaultBlend;
+        RestoreCameraAngle();
 
-        // 1) 스킬 카메라의 "실제 월드 forward" 구하기
-        // pov가 붙어 있는 vcam의 Transform 사용
-        Transform skillVcamTransform = pov.VirtualCamera.transform;
-        Vector3 worldForward = skillVcamTransform.forward;
-        float yaw = GetYawFromForward(worldForward);
-
-        // 2) 플레이어 POV에 같은 Yaw를 세팅
-        var playerPov = _owner.FollowCamera.CameraAim;
-        playerPov.m_HorizontalAxis.Value = Mathf.Clamp(
-            yaw,
-            playerPov.m_HorizontalAxis.m_MinValue,
-            playerPov.m_HorizontalAxis.m_MaxValue
-        );
-
-        _owner.gameObject.SetActive(true);
-        Utils.Destroy(gameObject);
-
-        // 3) 다음 프레임에 인풋 다시 켜기 (축이 확정된 후)
-        if (inputComp != null)
+        // 주도권을 돌려주기 전, 플레이어 카메라 내부의 지하 잔상 데이터를 완벽하게 워프 세탁합니다.
+        // 복귀하기 전에 제어 대상을 다시 원래 플레이어 POV로 원상복구
+        if (_owner.FollowCamera != null)
         {
-            StartCoroutine(ReEnableInputNextFrame(inputComp));
+            _owner.FollowCamera.SetTargetPOV(null);
+            _owner.FollowCamera.WarpToTarget();
         }
+
+        // 플레이어가 완전히 지상에 올라온 것을 확인한 뒤 우선순위를 원복하여 카메라 블렌딩 유도
+        if (vcam != null) vcam.Priority = 0;
+
+        _originalPart.OnJumpAttackWindowClosed();
+
+        brain.m_DefaultBlend = defaultBlend;
+        Utils.Destroy(gameObject);
     }
 
     public void OnApply(InputAction.CallbackContext context)
@@ -174,21 +186,56 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
     {
         if (context.started)
         {
-            PlayerInput inputComp = _owner.GetComponent<PlayerInput>();
-            if (inputComp != null)
-            {
-                inputComp.enabled = true;
-            }
-            _originalPart.IsAttack = false;
-            brain.m_DefaultBlend = defaultBlend;
+            if (_isExiting) return;
+            _isExiting = true;
 
-            _owner.gameObject.SetActive(true);
+            // 1) 취소 시 플레이어를 원래 시전했던 제자리로 먼저 소환
+            _owner.Controller.enabled = false;
+            _owner.transform.position = _originalPlayerPos;
+            _owner.ResetGravityAndFalling();
+            Physics.SyncTransforms();
+            _owner.Controller.enabled = true;
+
+            _originalPart.IsAttack = false;
+            RestoreCameraAngle();
+
+            if (_owner.FollowCamera != null)
+            {
+                _owner.FollowCamera.SetTargetPOV(null);
+                _owner.FollowCamera.WarpToTarget();
+            }
+
+            // 2) 플레이어 지상 안착 후 카메라 주도권 반환
+            if (vcam != null) vcam.Priority = 0;
+
+            _originalPart.OnJumpAttackWindowClosed();
+
+            brain.m_DefaultBlend = defaultBlend;
             Utils.Destroy(gameObject);
+        }
+    }
+
+    private void RestoreCameraAngle()
+    {
+        if (pov != null && _owner.FollowCamera != null)
+        {
+            Transform skillVcamTransform = pov.VirtualCamera.transform;
+            Vector3 worldForward = skillVcamTransform.forward;
+            float yaw = GetYawFromForward(worldForward);
+
+            var playerPov = _owner.FollowCamera.CameraAim;
+            playerPov.m_HorizontalAxis.Value = Mathf.Clamp(
+                yaw,
+                playerPov.m_HorizontalAxis.m_MinValue,
+                playerPov.m_HorizontalAxis.m_MaxValue
+            );
         }
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (_isExiting) return;
+
         if (context.canceled)
         {
             _moveInput = Vector2.zero;
@@ -200,27 +247,11 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
 
     public void OnLook(InputAction.CallbackContext context)
     {
-
     }
 
     float GetYawFromForward(Vector3 forward)
     {
-        // XZ 평면에서의 각도
         float yaw = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
-        // -180 ~ 180 정규화
         return Mathf.DeltaAngle(0f, yaw);
-    }
-
-    private IEnumerator ReEnableInputNextFrame(PlayerInput inputComp)
-    {
-        // 한 프레임 쉬고
-        yield return null;
-
-        if (inputComp != null)
-        {
-            inputComp.enabled = true;
-        }
-
-        Utils.Destroy(gameObject);
     }
 }

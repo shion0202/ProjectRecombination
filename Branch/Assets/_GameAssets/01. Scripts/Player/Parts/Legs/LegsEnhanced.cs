@@ -42,34 +42,25 @@ public class LegsEnhanced : PartBaseLegs
 
     protected void OnEnable()
     {
-        // 스킬 사용 시와 파츠 교체 시를 구분
-        if (_isCooldown)
+        _currentSkillCount = 0;
+        _currentVelocity = Vector3.zero;
+        _skateTime = 0.0f;
+        _isCooldown = false;
+        _isAttack = false;
+
+        _damagedTargets.Clear();
+
+        if (_skillCoroutine != null)
         {
-            JumpAttackFinish();
-
-            _currentCooldown = IsAttack ? (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) : (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) * 0.5f;
-            _isAttack = false;
-            _isCooldown = false;
-        }
-        else
-        {
-            _currentSkillCount = 0;
-            _currentVelocity = Vector3.zero;
-            _skateTime = 0.0f;
-            _isCooldown = false;
-            _isAttack = false;
-
-            _damagedTargets.Clear();
-
-            if (_skillCoroutine != null)
-            {
-                StopCoroutine(_skillCoroutine);
-                _skillCoroutine = null;
-            }
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
         }
 
-        GUIManager.Instance.GameUIController.SetLegsSkillTimer(Color.white);
-        GUIManager.Instance.GameUIController.RapidInfo.SetActive(false);
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            GUIManager.Instance.GameUIController.SetLegsSkillTimer(Color.white);
+            GUIManager.Instance.GameUIController.RapidInfo.SetActive(false);
+        }
 
         _audioSource.volume = 0.0f;
         _audioSource.Play();
@@ -77,28 +68,25 @@ public class LegsEnhanced : PartBaseLegs
 
     protected void OnDisable()
     {
-        if (!_isCooldown)
+        _currentSkillCount = 0;
+        _currentVelocity = Vector3.zero;
+        _skateTime = 0.0f;
+        _isCooldown = false;
+        _isAttack = false;
+
+        _damagedTargets.Clear();
+
+        if (_skillCoroutine != null)
         {
-            _currentSkillCount = 0;
-            _currentVelocity = Vector3.zero;
-            _skateTime = 0.0f;
-            _isCooldown = false;
-            _isAttack = false;
+            StopCoroutine(_skillCoroutine);
+            _skillCoroutine = null;
+        }
 
-            _damagedTargets.Clear();
-
-            if (_skillCoroutine != null)
-            {
-                StopCoroutine(_skillCoroutine);
-                _skillCoroutine = null;
-            }
-
-            if (Managers.GUIManager.IsAliveInstance())
-            {
-                GUIManager.Instance.GameUIController.SetLegsSkillIcon(false);
-                GUIManager.Instance.GameUIController.SetLegsSkillCooldown(0.0f);
-                GUIManager.Instance.GameUIController.SetLegsSkillCooldown(false);
-            }
+        if (Managers.GUIManager.IsAliveInstance())
+        {
+            GUIManager.Instance.GameUIController.SetLegsSkillIcon(false);
+            GUIManager.Instance.GameUIController.SetLegsSkillCooldown(0.0f);
+            GUIManager.Instance.GameUIController.SetLegsSkillCooldown(false);
         }
 
         _audioSource.volume = 1.0f;
@@ -151,6 +139,8 @@ public class LegsEnhanced : PartBaseLegs
         GUIManager.Instance.GameUIController.SetLegsSkillTimer(Color.white);
         GUIManager.Instance.GameUIController.RapidInfo.SetActive(false);
 
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+
         _audioSource.volume = 0.0f;
         _audioSource.Play();
     }
@@ -167,19 +157,21 @@ public class LegsEnhanced : PartBaseLegs
             GUIManager.Instance.GameUIController.SetLegsSkillCooldown(true);
             GUIManager.Instance.GameUIController.SetLegsSkillCooldown(_currentCooldown);
         }
-
-        if (!_owner) return;
     }
 
     protected void JumpAttack()
     {
         if (_currentCooldown > 0.0f || _isCooldown) return;
 
+        _audioSource.volume = 1.0f;
+        _audioSource.Stop();
+
         // 점프 연출 이후 실행
         Utils.Destroy(
             Utils.Instantiate(jumpEffectPrefab, _owner.transform.position + Vector3.up * 10.0f, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))), 1.0f);
 
         _owner.Inven.EquippedItems[EPartType.Shoulder][0].PreserveCurrentCooldown(EPartType.Shoulder);
+        _owner.SetPlayerState(EPlayerState.Skilling, true);
 
         GameObject go = Utils.Instantiate(RapidPlayerPrefab, _owner.transform.position, _owner.transform.rotation);
         RapidPlayer rapidPlayer = go.GetComponent<RapidPlayer>();
@@ -188,6 +180,28 @@ public class LegsEnhanced : PartBaseLegs
             _isCooldown = true;
             rapidPlayer.Init(_owner, this, _owner.FollowCamera.CameraAim.m_HorizontalAxis.Value);
         }
+    }
+
+    /// 스킬이 완료되거나 취소되어 플레이어가 지하에서 복귀할 때, RapidPlayer가 명시적으로 호출해 줄 함수입니다.
+    /// 기존 OnEnable에 있던 조건부 복구 로직이 이쪽으로 이동했습니다.
+    public void OnJumpAttackWindowClosed()
+    {
+        // 데미지 판정, 이펙트 생성 등 기존 종료 연산 수행
+        JumpAttackFinish();
+
+        // 성공(IsAttack) 여부에 따른 차등 쿨타임 계산 적용
+        _currentCooldown = IsAttack ? (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) : (skillCooldown - _owner.Stats.TotalStats[EStatType.CooldownReduction].value) * 0.5f;
+        _owner.SetPlayerState(EPlayerState.Skilling, false);
+
+        // 플래그 리셋 및 UI 초기화
+        _isAttack = false;
+        _isCooldown = false;
+
+        GUIManager.Instance.GameUIController.SetLegsSkillTimer(Color.white);
+        GUIManager.Instance.GameUIController.RapidInfo.SetActive(false);
+
+        _audioSource.volume = 1.0f;
+        _audioSource.Stop();
     }
 
     protected void JumpAttackFinish()

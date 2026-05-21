@@ -11,8 +11,8 @@ using UnityEngine.InputSystem;
 [ExecuteInEditMode]
 public class FollowCameraController : MonoBehaviour
 {
-    #region Variables
-    [Header("Camera Settings")]
+    #region Variables
+    [Header("Camera Settings")]
     private CinemachineVirtualCamera vcam;
     private CinemachineFramingTransposer _cameraBody;
     private CinemachinePOV _cameraAim;
@@ -36,12 +36,12 @@ public class FollowCameraController : MonoBehaviour
     private Coroutine _quickTurnCoroutine = null;
     private float dragSensitivityX = 150.0f;
     private float dragSensitivityY = 150.0f;
-    private int _dragFingerId = -1;                             // 현재 카메라를 드래그 중인 손가락 ID
-    private Vector2 _lastMousePosition;                         // 이전 프레임의 터치 위치
-    [SerializeField] private float assistRadius = 150.0f;       // 화면 중심으로부터의 픽셀 반경
-    [SerializeField] private float assistStrength = 0.2f;       // 보정 강도 (0~1)
-    [SerializeField] private LayerMask targetLayer;             // 보정을 할 타겟 레이어
-    private Coroutine _aimAssistCoroutine = null;
+    private int _dragFingerId = -1;                             // 현재 카메라를 드래그 중인 손가락 ID
+    private Vector2 _lastMousePosition;                         // 이전 프레임의 터치 위치
+    [SerializeField] private float assistRadius = 150.0f;       // 화면 중심으로부터의 픽셀 반경
+    [SerializeField] private float assistStrength = 0.2f;       // 보정 강도 (0~1)
+    [SerializeField] private LayerMask targetLayer;             // 보정을 할 타겟 레이어
+    private Coroutine _aimAssistCoroutine = null;
     private Transform _currentAssistTarget = null;
     private bool _isContinuousAssist = false;
 
@@ -53,10 +53,10 @@ public class FollowCameraController : MonoBehaviour
     [Header("Gizmos")]
     private Color deadZoneColor = Color.red;
     private Color softZoneColor = Color.blue;
-    #endregion
+    #endregion
 
-    #region Properties
-    public CinemachineVirtualCamera VCam
+    #region Properties
+    public CinemachineVirtualCamera VCam
     {
         get => vcam;
         set => vcam = value;
@@ -75,8 +75,8 @@ public class FollowCameraController : MonoBehaviour
             if (currentCameraState != value)
             {
                 currentCameraState = value;
-                //ApplyCameraSettings();
-            }
+                //ApplyCameraSettings();
+            }
         }
     }
 
@@ -112,10 +112,16 @@ public class FollowCameraController : MonoBehaviour
         get { return _scrollY; }
         set { _scrollY = value; }
     }
-    #endregion
 
-    #region Editor Methods
-    private void Awake()
+    public CinemachinePOV ActiveCameraAim
+    {
+        get => _cameraAim;
+        set => _cameraAim = value;
+    }
+    #endregion
+
+    #region Editor Methods
+    private void Awake()
     {
         vcam = gameObject.GetComponent<CinemachineVirtualCamera>();
         _cameraBody = vcam.GetCinemachineComponent<CinemachineFramingTransposer>();
@@ -127,18 +133,18 @@ public class FollowCameraController : MonoBehaviour
     {
         if (_isLockedByUI)
         {
-            // 축 값 고정
-            _cameraAim.m_HorizontalAxis.Value = _lockedValue.x;
-            _cameraAim.m_VerticalAxis.Value = _lockedValue.y;
+            // 축 값 고정
+            ActiveCameraAim.m_HorizontalAxis.Value = _lockedValue.x;
+            ActiveCameraAim.m_VerticalAxis.Value = _lockedValue.y;
 
-            // 입력값은 0으로 유지해 회전 입력 중지
-            _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
-            _cameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
+            // 입력값은 0으로 유지해 회전 입력 중지
+            ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
+            ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
         }
     }
 
 #if UNITY_EDITOR
-    private void Update()
+    private void Update()
     {
         foreach (ECameraState state in Enum.GetValues(typeof(ECameraState)))
         {
@@ -158,12 +164,12 @@ public class FollowCameraController : MonoBehaviour
         Camera cam = Camera.main;
         if (cam == null) return;
 
-        // Dead Zone
-        Gizmos.color = deadZoneColor;
+        // Dead Zone
+        Gizmos.color = deadZoneColor;
         DrawScreenRect(cam, framingTransposer.m_DeadZoneWidth, framingTransposer.m_DeadZoneHeight, framingTransposer.m_CameraDistance);
 
-        // Soft Zone
-        Gizmos.color = softZoneColor;
+        // Soft Zone
+        Gizmos.color = softZoneColor;
         DrawScreenRect(cam, framingTransposer.m_SoftZoneWidth, framingTransposer.m_SoftZoneHeight, framingTransposer.m_CameraDistance);
     }
 
@@ -178,10 +184,10 @@ public class FollowCameraController : MonoBehaviour
         Gizmos.DrawWireCube(center, new Vector3(w, h, 0.01f));
     }
 #endif
-    #endregion
+    #endregion
 
-    #region Public Methods
-    public void InitFollowCamera(GameObject owner)
+    #region Public Methods
+    public void InitFollowCamera(GameObject owner)
     {
         _owner = owner;
 
@@ -207,7 +213,7 @@ public class FollowCameraController : MonoBehaviour
             _cameraSettings[state] = Resources.Load<FollowCameraData>($"Camera/FollowCameraData_{state}");
         }
 
-        _cameraAim.m_HorizontalAxis.Value = owner.transform.localEulerAngles.y;
+        ActiveCameraAim.m_HorizontalAxis.Value = owner.transform.localEulerAngles.y;
 
         dragSensitivityX = PlayerPrefs.GetFloat("SensitivityX", 150.0f);
         dragSensitivityY = PlayerPrefs.GetFloat("SensitivityY", 150.0f);
@@ -217,35 +223,35 @@ public class FollowCameraController : MonoBehaviour
 
         ApplyCameraSettings();
 
-        // 현재 기획자 편의를 반영하여 Update 단에서 카메라 설정이 적용되고 있으므로, Camera State가 바뀔 때마다 Default 값 변경 필요
-        _defaultCameraDistance = _cameraSettings[currentCameraState].cameraDistance;
+        // 현재 기획자 편의를 반영하여 Update 단에서 카메라 설정이 적용되고 있으므로, Camera State가 바뀔 때마다 Default 값 변경 필요
+        _defaultCameraDistance = _cameraSettings[currentCameraState].cameraDistance;
     }
 
-    // Update에서 매 프레임마다 실행되는 카메라 관련 함수
-    public void UpdateFollowCamera()
+    // Update에서 매 프레임마다 실행되는 카메라 관련 함수
+    public void UpdateFollowCamera()
     {
         HandleGamepadLook();
         HandleMobileCameraDrag();
         SmoothChangeCamera();
         ZoomCamera();
         HandleRecoil();
-        //HandleContinuousAimAssist();
+        //HandleContinuousAimAssist();
 
-        _cameraAim.m_HorizontalAxis.m_InputAxisName = ""; // 입력 비활성화
-        _cameraAim.m_VerticalAxis.m_InputAxisName = "";
+        ActiveCameraAim.m_HorizontalAxis.m_InputAxisName = ""; // 입력 비활성화
+        ActiveCameraAim.m_VerticalAxis.m_InputAxisName = "";
 
         if (_isLock)
         {
-            //_cameraAim.m_HorizontalAxis.m_InputAxisName = "";
-            //_cameraAim.m_VerticalAxis.m_InputAxisName = "";
-            _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
-            _cameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
+            //_cameraAim.m_HorizontalAxis.m_InputAxisName = "";
+            //_cameraAim.m_VerticalAxis.m_InputAxisName = "";
+            ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
+            ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
         }
         else
         {
-            //_cameraAim.m_HorizontalAxis.m_InputAxisName = "Mouse X";
-            //_cameraAim.m_VerticalAxis.m_InputAxisName = "Mouse Y";
-        }
+            //_cameraAim.m_HorizontalAxis.m_InputAxisName = "Mouse X";
+            //_cameraAim.m_VerticalAxis.m_InputAxisName = "Mouse Y";
+        }
     }
 
     public void ApplyRecoil(CinemachineImpulseSource source, float recoilX, float recoilY, float force = 1.0f)
@@ -295,16 +301,16 @@ public class FollowCameraController : MonoBehaviour
     {
         if (_inputProvider)
         {
-            _inputProvider.enabled = false;  // 입력 비활성화
-        }
+            _inputProvider.enabled = false;  // 입력 비활성화
+        }
 
-        if (_cameraAim != null)
+        if (ActiveCameraAim != null)
         {
-            _lockedValue.x = _cameraAim.m_HorizontalAxis.Value;
-            _lockedValue.y = _cameraAim.m_VerticalAxis.Value;
+            _lockedValue.x = ActiveCameraAim.m_HorizontalAxis.Value;
+            _lockedValue.y = ActiveCameraAim.m_VerticalAxis.Value;
 
-            _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
-            _cameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
+            ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
+            ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
         }
 
         _isLockedByUI = true;
@@ -314,8 +320,8 @@ public class FollowCameraController : MonoBehaviour
     {
         if (_inputProvider)
         {
-            _inputProvider.enabled = true;  // 입력 비활성화
-        }
+            _inputProvider.enabled = true;  // 입력 비활성화
+        }
 
         _isLockedByUI = false;
     }
@@ -331,47 +337,47 @@ public class FollowCameraController : MonoBehaviour
             currentSetting = setting;
         }
 
-        // 일부 주요 정보만 표시
-        string settingInfo = currentSetting != null
-            ? $"Distance: {currentSetting.cameraDistance:F2}, FOV: {currentSetting.FOV:F2}, DeadZone: ({currentSetting.deadZoneWidth:F2}, " +
-            $"{currentSetting.deadZoneHeight:F2}), SoftZone: ({currentSetting.softZoneWidth:F2}, {currentSetting.softZoneHeight:F2})" : "Null";
+        // 일부 주요 정보만 표시
+        string settingInfo = currentSetting != null
+      ? $"Distance: {currentSetting.cameraDistance:F2}, FOV: {currentSetting.FOV:F2}, DeadZone: ({currentSetting.deadZoneWidth:F2}, " +
+      $"{currentSetting.deadZoneHeight:F2}), SoftZone: ({currentSetting.softZoneWidth:F2}, {currentSetting.softZoneHeight:F2})" : "Null";
 
         return $"[{gameObject.name} ({GetType().Name})] State: {currentCameraState}, Owner: {ownerName}, Target: {targetName}, IsLock: {_isLock}, " +
-               $"ScrollY: {_scrollY:F2}, CurrentRecoilX: {_currentRecoilX:F2}, CurrentRecoilY: {_currentRecoilY:F2}, CameraSetting: [{settingInfo}]";
+           $"ScrollY: {_scrollY:F2}, CurrentRecoilX: {_currentRecoilX:F2}, CurrentRecoilY: {_currentRecoilY:F2}, CameraSetting: [{settingInfo}]";
     }
 
     public void StartQuickTurn()
     {
         if (_quickTurnCoroutine != null) return;
 
-        // Quick Turn 중 카메라 회전, 공격, 스킬 사용 불가
-        // 카메라 회전, 공격 중일 경우 취소하고 Quick Turn하며, 스킬 사용 중에는 불가능하도록 구현
-        _quickTurnCoroutine = StartCoroutine(QuickTurnCoroutine());
+        // Quick Turn 중 카메라 회전, 공격, 스킬 사용 불가
+        // 카메라 회전, 공격 중일 경우 취소하고 Quick Turn하며, 스킬 사용 중에는 불가능하도록 구현
+        _quickTurnCoroutine = StartCoroutine(QuickTurnCoroutine());
     }
 
     public void ApplyAimAssist()
     {
         return; // 일단은 보류
 
-        // 화면 중앙 좌표 계산
-        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        // 화면 중앙 좌표 계산
+        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
 
-        // 가장 가까운 타겟 탐색
-        Collider[] targets = Physics.OverlapSphere(_cameraTarget.position, 30f, targetLayer);
+        // 가장 가까운 타겟 탐색
+        Collider[] targets = Physics.OverlapSphere(_cameraTarget.position, 30f, targetLayer);
         Transform bestTarget = null;
         float closestScreenDistance = assistRadius;
 
         foreach (var target in targets)
         {
-            // 적의 중심부 위치 계산
-            Vector3 targetPos = target.bounds.center;
+            // 적의 중심부 위치 계산
+            Vector3 targetPos = target.bounds.center;
             Vector3 screenPos = Camera.main.WorldToScreenPoint(targetPos);
 
-            // 카메라 뒤에 있는 적 제외
-            if (screenPos.z < 0) continue;
+            // 카메라 뒤에 있는 적 제외
+            if (screenPos.z < 0) continue;
 
-            // 화면 중앙과의 거리 계산
-            float dist = Vector2.Distance(screenCenter, new Vector2(screenPos.x, screenPos.y));
+            // 화면 중앙과의 거리 계산
+            float dist = Vector2.Distance(screenCenter, new Vector2(screenPos.x, screenPos.y));
 
             if (dist < closestScreenDistance)
             {
@@ -380,8 +386,8 @@ public class FollowCameraController : MonoBehaviour
             }
         }
 
-        // 타겟이 있다면 카메라 축 값을 부드럽게 보정
-        if (bestTarget != null)
+        // 타겟이 있다면 카메라 축 값을 부드럽게 보정
+        if (bestTarget != null)
         {
             if (_aimAssistCoroutine != null)
             {
@@ -392,34 +398,79 @@ public class FollowCameraController : MonoBehaviour
         }
     }
 
-    // 외부 호출용: 보정 시작/중지
-    public void SetContinuousAimAssist(bool enable)
+    // 외부 호출용: 보정 시작/중지
+    public void SetContinuousAimAssist(bool enable)
     {
         _isContinuousAssist = enable;
         if (enable)
         {
             _currentAssistTarget = FindBestTarget(); // 기존 ApplyAimAssist의 타겟 탐색 로직 분리 필요
-        }
+        }
         else
         {
             _currentAssistTarget = null;
         }
     }
-    #endregion
 
-    #region Private Methods
-    private void ApplyCameraSettings()
+    public void SetTargetPOV(CinemachinePOV targetPOV)
     {
-        _cameraAim.m_HorizontalAxis.m_MaxValue = _cameraSettings[currentCameraState].maxAimRangeX;
-        _cameraAim.m_HorizontalAxis.m_MinValue = _cameraSettings[currentCameraState].minAimRangeX;
-        _cameraAim.m_VerticalAxis.m_MaxValue = _cameraSettings[currentCameraState].maxAimRangeY;
-        _cameraAim.m_VerticalAxis.m_MinValue = _cameraSettings[currentCameraState].minAimRangeY;
-        _cameraAim.m_HorizontalAxis.m_MaxSpeed = _cameraSettings[currentCameraState].sensitivityX;
-        _cameraAim.m_VerticalAxis.m_MaxSpeed = _cameraSettings[currentCameraState].sensitivityY;
-        _cameraAim.m_HorizontalAxis.m_AccelTime = _cameraSettings[currentCameraState].accelTimeX;
-        _cameraAim.m_HorizontalAxis.m_DecelTime = _cameraSettings[currentCameraState].decelTimeX;
-        _cameraAim.m_VerticalAxis.m_AccelTime = _cameraSettings[currentCameraState].accelTimeY;
-        _cameraAim.m_VerticalAxis.m_DecelTime = _cameraSettings[currentCameraState].decelTimeY;
+        if (targetPOV != null)
+        {
+            // 외부 POV가 들어오면 해당 POV를 타겟으로 설정
+            ActiveCameraAim = targetPOV;
+        }
+        else
+        {
+            if (vcam != null)
+            {
+                ActiveCameraAim = vcam.GetCinemachineComponent<CinemachinePOV>();
+            }
+        }
+    }
+
+    public void WarpToTarget()
+    {
+        if (vcam == null || _cameraBody == null || _cameraTarget == null) return;
+
+        // 1. 댐핑 관성으로 인해 카메라 몸체가 굳어버리는 현상을 방지하기 위해 
+        //    가상 카메라 컴포넌트를 순간적으로 껐다 켜서 내부 캐시 상태를 강제 리셋합니다.
+        vcam.enabled = false;
+
+        // 2. SmoothChangeCamera()에 의해 보간되던 카메라 트랙킹 인자들을 
+        //    현재 카메라 상태 데이터(SO)의 원본 값으로 즉시 강제 갱신합니다.
+        if (_cameraSettings != null && _cameraSettings.TryGetValue(currentCameraState, out var currentData))
+        {
+            vcam.m_Lens.FieldOfView = currentData.FOV;
+            _cameraBody.m_ScreenX = currentData.screenX;
+            _cameraBody.m_ScreenY = currentData.screenY;
+            _cameraBody.m_CameraDistance = currentData.cameraDistance;
+        }
+
+        // 3. 카메라 오브젝트의 실시간 물리 위치와 회전을 타겟(플레이어 앵커) 위치에 오프셋 없이 즉시 동기화합니다.
+        vcam.transform.position = _cameraTarget.position;
+        vcam.transform.rotation = _cameraTarget.rotation;
+
+        vcam.enabled = true;
+
+        // 4. 강제로 바뀐 위치 버퍼를 시네머신 파이프라인의 내부 상태 엔진에 즉시 구워 넣습니다.
+        //    이 코드가 수행되면 지하 9999m의 잔상이 완전히 세탁됩니다.
+        vcam.InternalUpdateCameraState(Vector3.up, Time.deltaTime);
+    }
+    #endregion
+
+    #region Private Methods
+    private void ApplyCameraSettings()
+    {
+        ActiveCameraAim.m_HorizontalAxis.m_MaxValue = _cameraSettings[currentCameraState].maxAimRangeX;
+        ActiveCameraAim.m_HorizontalAxis.m_MinValue = _cameraSettings[currentCameraState].minAimRangeX;
+        ActiveCameraAim.m_VerticalAxis.m_MaxValue = _cameraSettings[currentCameraState].maxAimRangeY;
+        ActiveCameraAim.m_VerticalAxis.m_MinValue = _cameraSettings[currentCameraState].minAimRangeY;
+        ActiveCameraAim.m_HorizontalAxis.m_MaxSpeed = _cameraSettings[currentCameraState].sensitivityX;
+        ActiveCameraAim.m_VerticalAxis.m_MaxSpeed = _cameraSettings[currentCameraState].sensitivityY;
+        ActiveCameraAim.m_HorizontalAxis.m_AccelTime = _cameraSettings[currentCameraState].accelTimeX;
+        ActiveCameraAim.m_HorizontalAxis.m_DecelTime = _cameraSettings[currentCameraState].decelTimeX;
+        ActiveCameraAim.m_VerticalAxis.m_AccelTime = _cameraSettings[currentCameraState].accelTimeY;
+        ActiveCameraAim.m_VerticalAxis.m_DecelTime = _cameraSettings[currentCameraState].decelTimeY;
 
         _cameraBody.m_TrackedObjectOffset = _cameraSettings[currentCameraState].trackedOffset;
         _cameraBody.m_LookaheadTime = _cameraSettings[currentCameraState].lookaheadTime;
@@ -452,8 +503,8 @@ public class FollowCameraController : MonoBehaviour
     {
         if (_currentRecoilX != 0 || _currentRecoilY > 0)
         {
-            _cameraAim.m_HorizontalAxis.Value += _currentRecoilX * Time.deltaTime;
-            _cameraAim.m_VerticalAxis.Value -= _currentRecoilY * Time.deltaTime;
+            ActiveCameraAim.m_HorizontalAxis.Value += _currentRecoilX * Time.deltaTime;
+            ActiveCameraAim.m_VerticalAxis.Value -= _currentRecoilY * Time.deltaTime;
 
             float recoveryStep = recoilRecoverySpeed * Time.deltaTime;
             _currentRecoilX = Mathf.MoveTowards(_currentRecoilX, 0, recoveryStep);
@@ -465,32 +516,32 @@ public class FollowCameraController : MonoBehaviour
     {
         _isQuickTurning = true;
 
-        // 회전 시작 시 현재의 입력 잠금 상태를 저장하거나 강제로 잠금
-        bool wasLocked = _isLock;
+        // 회전 시작 시 현재의 입력 잠금 상태를 저장하거나 강제로 잠금
+        bool wasLocked = _isLock;
         _isLock = true;
 
         float elapsedTime = 0f;
-        float startX = _cameraAim.m_HorizontalAxis.Value;
+        float startX = ActiveCameraAim.m_HorizontalAxis.Value;
         float targetX = startX + 180.0f; // 180도 뒤로 목표 설정
 
-        while (elapsedTime < quickTurnDuration)
+        while (elapsedTime < quickTurnDuration)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / quickTurnDuration;
 
-            // SmoothStep을 사용하여 부드러운 가속/감속 효과 적용
-            float smoothT = Mathf.SmoothStep(0, 1, t);
-            _cameraAim.m_HorizontalAxis.Value = Mathf.Lerp(startX, targetX, smoothT);
+            // SmoothStep을 사용하여 부드러운 가속/감속 효과 적용
+            float smoothT = Mathf.SmoothStep(0, 1, t);
+            ActiveCameraAim.m_HorizontalAxis.Value = Mathf.Lerp(startX, targetX, smoothT);
 
             yield return null;
         }
 
-        // 최종 각도 보정 및 상태 복구
-        _cameraAim.m_HorizontalAxis.Value = targetX;
+        // 최종 각도 보정 및 상태 복구
+        ActiveCameraAim.m_HorizontalAxis.Value = targetX;
         _isLock = wasLocked; // 원래 잠금 상태로 복구
 
-        // Player State도 복구
-        PlayerController player = _owner.GetComponent<PlayerController>();
+        // Player State도 복구
+        PlayerController player = _owner.GetComponent<PlayerController>();
         if (player)
         {
             player.SetPlayerState(EPlayerState.QuickTurning, false);
@@ -516,36 +567,36 @@ public class FollowCameraController : MonoBehaviour
 
     private void HandleGamepadLook()
     {
-        // UI 오픈 상태이거나 카메라 잠금 상태면 입력 무시
-        if (_isLockedByUI || _isLock || _isQuickTurning) return;
+        // UI 오픈 상태이거나 카메라 잠금 상태면 입력 무시
+        if (_isLockedByUI || _isLock || _isQuickTurning) return;
 
         var gamepad = Gamepad.current;
         if (gamepad == null)
         {
-            // 패드가 연결 해제되었을 때를 대비해 입력값 초기화
-            _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
-            _cameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
+            // 패드가 연결 해제되었을 때를 대비해 입력값 초기화
+            ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
+            ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
             return;
         }
 
-        // 오른쪽 스틱(Right Stick) 입력 받기
-        Vector2 stickInput = gamepad.rightStick.ReadValue();
+        // 오른쪽 스틱(Right Stick) 입력 받기
+        Vector2 stickInput = gamepad.rightStick.ReadValue();
 
-        // 입력이 데드존(Deadzone) 이상일 때만 처리
-        if (stickInput.magnitude > 0.05f)
+        // 입력이 데드존(Deadzone) 이상일 때만 처리
+        if (stickInput.magnitude > 0.05f)
         {
-            // 시네머신 POV 축에 직접 입력값 전달
-            float padSensitivityX = dragSensitivityX * 0.1f;
+            // 시네머신 POV 축에 직접 입력값 전달
+            float padSensitivityX = dragSensitivityX * 0.1f;
             float padSensitivityY = dragSensitivityY * 0.1f;
 
-            _cameraAim.m_HorizontalAxis.m_InputAxisValue = stickInput.x * padSensitivityX;
-            _cameraAim.m_VerticalAxis.m_InputAxisValue = stickInput.y * padSensitivityY;
+            ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = stickInput.x * padSensitivityX;
+            ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = stickInput.y * padSensitivityY;
         }
         else
         {
-            // 스틱을 놓았을 때(데드존 이내) 반드시 0으로 초기화하여 회전을 멈춤
-            _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
-            _cameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
+            // 스틱을 놓았을 때(데드존 이내) 반드시 0으로 초기화하여 회전을 멈춤
+            ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
+            ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
         }
     }
 
@@ -555,164 +606,153 @@ public class FollowCameraController : MonoBehaviour
         if (EventSystem.current == null) return;
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        // PC 환경: 마우스 드래그 처리
-        var mouse = Mouse.current;
+        // PC 환경: 마우스 드래그 처리
+        var mouse = Mouse.current;
         if (mouse == null) return;
 
-        // 마우스 왼쪽 버튼을 누르고 있는 상태 추적
-        if (_dragFingerId == 99) // 마우스 조작용 가상 ID로 99 지정
+        // 마우스 왼쪽 버튼을 누르고 있는 상태 추적
+        if (_dragFingerId == 99)
         {
             if (mouse.leftButton.isPressed)
             {
                 Vector2 currentMousePos = mouse.position.ReadValue();
 
-                // 해상도 대응을 위한 델타 계산
                 float deltaX = (currentMousePos.x - _lastMousePosition.x) / Screen.width;
                 float deltaY = (currentMousePos.y - _lastMousePosition.y) / Screen.height;
 
-                _cameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX * 10.0f;
-                _cameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY * 10.0f;
+                ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX * 10.0f;
+                ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY * 10.0f;
 
                 _lastMousePosition = currentMousePos;
             }
 
-            // 마우스 왼쪽 버튼을 뗐다면 추적 종료
             if (mouse.leftButton.wasReleasedThisFrame)
             {
                 _dragFingerId = -1;
-                _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
-                _cameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
+                ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
+                ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
             }
         }
-        // 현재 조작 중이 아닐 때, 첫 클릭 시점 감지
+        // 현재 조작 중이 아닐 때
         else if (_dragFingerId == -1)
         {
-            _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
-            _cameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
-
             if (mouse.leftButton.wasPressedThisFrame)
             {
                 Vector2 currentMousePos = mouse.position.ReadValue();
 
-                // UI 위를 클릭한 것이라면 카메라 회전 시작 안 함
-                // 마우스 테스트를 위해 fingerId 자리에 임시로 -1(마우스 기본값) 주입
                 if (IsPointerOverUI(-1, currentMousePos)) return;
 
-                _dragFingerId = 99; // 마우스 독점 상태 설정
+                _dragFingerId = 99;
                 _lastMousePosition = currentMousePos;
             }
         }
 
 #else
-        // 모바일 환경: 터치스크린 하드웨어 체크
-        var touchscreen = Touchscreen.current;
-        if (touchscreen == null) return;
+        // 모바일 환경: 터치스크린 하드웨어 체크
+        var touchscreen = Touchscreen.current;
+        if (touchscreen == null) return;
 
-        // 매 프레임 입력값 초기화
-        //_cameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
-        //_cameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
+        // 매 프레임 입력값 초기화
+        //ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
+        //ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
 
-        var allTouches = touchscreen.touches;
-        // 이미 카메라를 조작 중인 손가락이 있다면, 그 손가락의 상태를 먼저 추적합니다.
-        if (_dragFingerId != -1)
-        {
-            bool fingerFound = false;
-            foreach (var touch in allTouches)
-            {
-                if (!touch.isInProgress) continue;
-                int fingerId = touch.touchId.ReadValue();
+        var allTouches = touchscreen.touches;
+        // 이미 카메라를 조작 중인 손가락이 있다면, 그 손가락의 상태를 먼저 추적합니다.
+        if (_dragFingerId != -1)
+        {
+            bool fingerFound = false;
+            foreach (var touch in allTouches)
+            {
+                if (!touch.isInProgress) continue;
+                int fingerId = touch.touchId.ReadValue();
 
-                if (fingerId == _dragFingerId)
-                {
-                    fingerFound = true;
-                    Vector2 currentTouchPos = touch.position.ReadValue();
+                if (fingerId == _dragFingerId)
+                {
+                    fingerFound = true;
+                    Vector2 currentTouchPos = touch.position.ReadValue();
 
-                    // 드래그 값 계산 및 카메라 적용
-                    float deltaX = (currentTouchPos.x - _lastMousePosition.x) / Screen.width;
-                    float deltaY = (currentTouchPos.y - _lastMousePosition.y) / Screen.height;
+                    // 드래그 값 계산 및 카메라 적용
+                    float deltaX = (currentTouchPos.x - _lastMousePosition.x) / Screen.width;
+                    float deltaY = (currentTouchPos.y - _lastMousePosition.y) / Screen.height;
 
-                    _cameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX;
-                    _cameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY;
+                    ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX;
+                    ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY;
 
-                    _lastMousePosition = currentTouchPos;
+                    _lastMousePosition = currentTouchPos;
 
-                    // 손가락을 뗐다면 추적 종료
-                    if (touch.press.wasReleasedThisFrame)
-                    {
-                        _dragFingerId = -1;
-                        _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
-                        _cameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
-                    }
-                    break; // 카메라 조작 손가락을 처리했으니 루프 탈출
-                }
-            }
+                    // 손가락을 뗐다면 추적 종료
+                    if (touch.press.wasReleasedThisFrame)
+                    {
+                        _dragFingerId = -1;
+                        ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
+                        ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
+                    }
+                    break; // 카메라 조작 손가락을 처리했으니 루프 탈출
+                }
+            }
 
-            // 만약 추적하던 손가락이 어떤 이유로 사라졌다면 상태 리셋
-            if (!fingerFound) _dragFingerId = -1;
-        }
+            // 만약 추적하던 손가락이 어떤 이유로 사라졌다면 상태 리셋
+            if (!fingerFound) _dragFingerId = -1;
+        }
 
-        // 카메라를 조작 중인 손가락이 없다면, 새로운 '카메라 조작용' 터치를 탐색합니다.
-        if (_dragFingerId == -1)
-        {
-            // 매 프레임 입력값 초기화는 여기서 진행
-            _cameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
-            _cameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
+        // 카메라를 조작 중인 손가락이 없다면, 새로운 '카메라 조작용' 터치를 탐색합니다.
+        if (_dragFingerId == -1)
+        {
+            foreach (var touch in allTouches)
+            {
+                if (!touch.isInProgress) continue;
+                if (!touch.press.wasPressedThisFrame) continue; // 새로 눌린 터치만 검사
 
-            foreach (var touch in allTouches)
-            {
-                if (!touch.isInProgress) continue;
-                if (!touch.press.wasPressedThisFrame) continue; // 새로 눌린 터치만 검사
+                int fingerId = touch.touchId.ReadValue();
+                Vector2 currentTouchPos = touch.position.ReadValue();
 
-                int fingerId = touch.touchId.ReadValue();
-                Vector2 currentTouchPos = touch.position.ReadValue();
+                // 중요: UI(사격/이동 패드)를 누른 터치는 카메라도 조작 손가락 후보에서 '원천 배제'
+                if (IsPointerOverUI(fingerId, currentTouchPos)) continue;
 
-                // 중요: UI(사격/이동 패드)를 누른 터치는 카메라도 조작 손가락 후보에서 '원천 배제'
-                if (IsPointerOverUI(fingerId, currentTouchPos)) continue;
-
-                // UI가 아닌 화면 빈 곳을 잡았다면 이 손가락을 카메라 조작자로 임명!
-                _dragFingerId = fingerId;
-                _lastMousePosition = currentTouchPos;
-                break;
-            }
-        }
+                // UI가 아닌 화면 빈 곳을 잡았다면 이 손가락을 카메라 조작자로 임명!
+                _dragFingerId = fingerId;
+                _lastMousePosition = currentTouchPos;
+                break;
+            }
+        }
 #endif
-    }
+    }
 
-    // 매 프레임 업데이트되는 보정 로직 (UpdateFollowCamera에서 호출)
-    private void HandleContinuousAimAssist()
+    // 매 프레임 업데이트되는 보정 로직 (UpdateFollowCamera에서 호출)
+    private void HandleContinuousAimAssist()
     {
         if (!_isContinuousAssist || _currentAssistTarget == null) return;
 
-        // 화면 중앙 좌표 계산
-        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        // 화면 중앙 좌표 계산
+        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Vector3 screenPos = Camera.main.WorldToScreenPoint(_currentAssistTarget.position);
 
-        // 타겟이 화면 밖으로 나가거나 카메라 뒤로 가면 해제
-        float dist = Vector2.Distance(screenCenter, new Vector2(screenPos.x, screenPos.y));
+        // 타겟이 화면 밖으로 나가거나 카메라 뒤로 가면 해제
+        float dist = Vector2.Distance(screenCenter, new Vector2(screenPos.x, screenPos.y));
         if (screenPos.z < 0 || dist > assistRadius * 1.5f) // 약간의 여유 거리를 둠
-        {
+        {
             _currentAssistTarget = null;
             return;
         }
 
-        // 보정 로직 (코루틴의 내용을 프레임 단위로 실행)
-        Vector3 dirToTarget = (_currentAssistTarget.position - Camera.main.transform.position).normalized;
+        // 보정 로직 (코루틴의 내용을 프레임 단위로 실행)
+        Vector3 dirToTarget = (_currentAssistTarget.position - Camera.main.transform.position).normalized;
         Quaternion targetRot = Quaternion.LookRotation(dirToTarget);
 
         float targetX = targetRot.eulerAngles.y;
         float targetY = targetRot.eulerAngles.x;
         if (targetY > 180) targetY -= 360.0f;
 
-        float deltaX = Mathf.DeltaAngle(_cameraAim.m_HorizontalAxis.Value, targetX);
-        float deltaY = Mathf.DeltaAngle(_cameraAim.m_VerticalAxis.Value, targetY);
+        float deltaX = Mathf.DeltaAngle(ActiveCameraAim.m_HorizontalAxis.Value, targetX);
+        float deltaY = Mathf.DeltaAngle(ActiveCameraAim.m_VerticalAxis.Value, targetY);
 
-        // Time.deltaTime을 곱해 매 프레임 부드럽게 추적
-        _cameraAim.m_HorizontalAxis.Value += deltaX * assistStrength * Time.deltaTime * 10f;
-        _cameraAim.m_VerticalAxis.Value += deltaY * assistStrength * Time.deltaTime * 10f;
+        // Time.deltaTime을 곱해 매 프레임 부드럽게 추적
+        ActiveCameraAim.m_HorizontalAxis.Value += deltaX * assistStrength * Time.deltaTime * 10f;
+        ActiveCameraAim.m_VerticalAxis.Value += deltaY * assistStrength * Time.deltaTime * 10f;
     }
 
-    // 기존 ApplyAimAssist의 탐색 로직만 따로 뺀 헬퍼 함수
-    private Transform FindBestTarget()
+    // 기존 ApplyAimAssist의 탐색 로직만 따로 뺀 헬퍼 함수
+    private Transform FindBestTarget()
     {
         Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Collider[] targets = Physics.OverlapSphere(_cameraTarget.position, 30f, targetLayer);
@@ -744,8 +784,8 @@ public class FollowCameraController : MonoBehaviour
         float elapsed = 0.0f;
         float duration = 0.1f; // 보정 시간
 
-        float startX = _cameraAim.m_HorizontalAxis.Value;
-        float startY = _cameraAim.m_VerticalAxis.Value;
+        float startX = ActiveCameraAim.m_HorizontalAxis.Value;
+        float startY = ActiveCameraAim.m_VerticalAxis.Value;
 
         while (elapsed < duration)
         {
@@ -753,27 +793,27 @@ public class FollowCameraController : MonoBehaviour
             float t = elapsed / duration;
             float smoothT = Mathf.SmoothStep(0, 1, t);
 
-            // 현재 적을 바라보기 위한 목표 회전값 계산
-            Vector3 dirToTarget = (target.position - Camera.main.transform.position).normalized;
+            // 현재 적을 바라보기 위한 목표 회전값 계산
+            Vector3 dirToTarget = (target.position - Camera.main.transform.position).normalized;
             Quaternion targetRot = Quaternion.LookRotation(dirToTarget);
 
-            // 현재 카메라의 POV 축 값을 타겟 방향으로 살짝 보정
-            // POV의 각도는 오일러 각도를 따르므로 직접 값을 부드럽게 섞음 (POV Vertical 축 범위 대응)
-            float targetX = targetRot.eulerAngles.y;
+            // 현재 카메라의 POV 축 값을 타겟 방향으로 살짝 보정
+            // POV의 각도는 오일러 각도를 따르므로 직접 값을 부드럽게 섞음 (POV Vertical 축 범위 대응)
+            float targetX = targetRot.eulerAngles.y;
             float targetY = targetRot.eulerAngles.x;
             if (targetY > 180)
             {
                 targetY -= 360.0f;
             }
 
-            float deltaX = Mathf.DeltaAngle(_cameraAim.m_HorizontalAxis.Value, targetX);
-            float deltaY = Mathf.DeltaAngle(_cameraAim.m_VerticalAxis.Value, targetY);
+            float deltaX = Mathf.DeltaAngle(ActiveCameraAim.m_HorizontalAxis.Value, targetX);
+            float deltaY = Mathf.DeltaAngle(ActiveCameraAim.m_VerticalAxis.Value, targetY);
 
-            _cameraAim.m_HorizontalAxis.Value += deltaX * assistStrength * smoothT;
-            _cameraAim.m_VerticalAxis.Value += deltaY * assistStrength * smoothT;
+            ActiveCameraAim.m_HorizontalAxis.Value += deltaX * assistStrength * smoothT;
+            ActiveCameraAim.m_VerticalAxis.Value += deltaY * assistStrength * smoothT;
 
             yield return null;
         }
     }
-    #endregion
+    #endregion
 }

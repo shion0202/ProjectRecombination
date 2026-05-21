@@ -791,11 +791,33 @@
                 },
                 {
                     "name": "",
+                    "id": "5c6f793b-f245-4381-b65a-f16d3530db82",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC_Keyboard;Mobile",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2be26461-0867-4674-8cba-507aa7d482fe",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC_Keyboard",
+                    "action": "Apply",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "725ebba7-b899-486e-8e42-87a5d1b3f5aa",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC_Keyboard;Mobile",
                     "action": "Apply",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -813,11 +835,33 @@
                 },
                 {
                     "name": "",
+                    "id": "9f35c6bc-f1c6-482c-983a-55880407ebf4",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC_Keyboard;Mobile",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2465e8a0-4a9c-4157-8db8-b15ef180fb84",
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";PC_Keyboard",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4cc6d685-944c-4873-92fe-1323655d1891",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Mobile;PC_Keyboard",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false

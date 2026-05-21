@@ -253,6 +253,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     void PlayerActions.IPlayerActionMapActions.OnMove(InputAction.CallbackContext context)
     {
         _moveInput = context.ReadValue<Vector2>();
+
         if (context.canceled)
         {
             // 키를 뗐을 때 반드시 0으로
@@ -1175,6 +1176,19 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // UI 비활성화 시 커서 숨기고 고정
         SelectAndChangePart(Managers.GUIManager.Instance.GameUIController.SelectedIndex, Managers.GUIManager.Instance.GameUIController.SelectedPartIndex);
         Managers.GUIManager.Instance.GameUIController.ToggleRadialUI(false);
+    }
+
+    public void ResetGravityAndFalling()
+    {
+        _fallVelocity = Vector3.zero;
+        _groundCheckTimer = 0.0f;
+
+        // 낙하 상태 플래그 해제 및 애니메이션 초기화
+        _currentPlayerState &= ~EPlayerState.Falling;
+        if (animator != null)
+        {
+            animator.SetBool("isFalling", false);
+        }
     }
     #endregion
 

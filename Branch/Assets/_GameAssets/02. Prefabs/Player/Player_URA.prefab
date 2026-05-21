@@ -1576,7 +1576,7 @@ MonoBehaviour:
   volume: {fileID: 0}
   lowHp: {fileID: 0}
   navi: {fileID: 0}
-  movementBlockMask: 8968
+  movementBlockMask: 13064
   dashBlockMask: 27396
   skillBlockMask: 27396
   shootBlockMask: 27400
