@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8590510150724617080}
   - component: {fileID: 8590510150724039544}
   - component: {fileID: 8590510150717574272}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4850,7 +4850,7 @@ GameObject:
   - component: {fileID: 8590510150710460466}
   - component: {fileID: 8590510150724739828}
   - component: {fileID: 8590510150723964404}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9652,7 +9652,7 @@ GameObject:
   - component: {fileID: 7497136724398382319}
   - component: {fileID: 7495626161658764604}
   - component: {fileID: -559900127261131413}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Vfx_Bullet_LaserCircle
   m_TagString: Bullet
   m_Icon: {fileID: 0}

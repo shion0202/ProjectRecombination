@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UI;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -19,6 +20,8 @@ namespace Managers
         private GameObject CreditUI { get; set; }
 
         private bool _isInit;
+
+        [SerializeField] private AudioMixer audioMixer;
 
         public void Init(Dictionary<EUIType, GameObject> uiInstances)
         {
@@ -66,6 +69,7 @@ namespace Managers
             }
 
             AutoDetectHardwarePerformance();
+            SetVolumeOptions();
         }
         
         private static void CheckValidation(EUIType uiType, GameObject uiInstance)
@@ -187,6 +191,17 @@ namespace Managers
                 urpAsset.supportsHDR = enable;
             }
             PlayerPrefs.SetInt("HDREnabled", enable ? 1 : 0);
+        }
+
+        public void SetVolumeOptions()
+        {
+            float volume = PlayerPrefs.GetFloat("BGMParam", 0.8f);
+            volume = Mathf.Clamp(volume, 0.0001f, 1.0f);
+            audioMixer.SetFloat("BGMParam", Mathf.Log10(volume) * 20);
+
+            volume = PlayerPrefs.GetFloat("SEParam", 0.8f);
+            volume = Mathf.Clamp(volume, 0.0001f, 1.0f);
+            audioMixer.SetFloat("SEParam", Mathf.Log10(volume) * 20);
         }
 
         /// <summary>

@@ -39,4 +39,9 @@ public class FollowMinimap : MonoBehaviour
         target = player.GetComponent<Transform>();
         _isInit = true;
     }
+
+    public void SetMinimapOffset(Vector3 offset)
+    {
+        this.offset += offset;
+    }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 364168584226918903}
   - component: {fileID: 364168584208526897}
   - component: {fileID: 364168584207053987}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Shockwave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4814,7 +4814,7 @@ GameObject:
   - component: {fileID: 5034418649630953092}
   - component: {fileID: -5054252407497479840}
   - component: {fileID: 2928742226071571492}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Vfx_HeavyOrb_Boss
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -9959,7 +9959,7 @@ GameObject:
   - component: {fileID: 364168584226853599}
   - component: {fileID: 364168584208515347}
   - component: {fileID: 364168584208550141}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Lightning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14640,7 +14640,7 @@ GameObject:
   - component: {fileID: 364168584208580499}
   - component: {fileID: 364168584207060705}
   - component: {fileID: 4340884256977291528}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

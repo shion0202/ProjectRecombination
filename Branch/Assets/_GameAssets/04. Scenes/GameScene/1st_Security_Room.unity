@@ -67829,7 +67829,7 @@ GameObject:
   - component: {fileID: 791849211}
   - component: {fileID: 791849210}
   - component: {fileID: 791849209}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: NewTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86956,7 +86956,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1005329870}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Respon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109372,7 +109372,7 @@ GameObject:
   - component: {fileID: 1259843705}
   - component: {fileID: 1259843706}
   - component: {fileID: 1259843707}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Switch_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152196,8 +152196,8 @@ GameObject:
   - component: {fileID: 1692235794}
   - component: {fileID: 1692235793}
   - component: {fileID: 1692235792}
-  m_Layer: 0
-  m_Name: StageUpdateTrigger
+  m_Layer: 2
+  m_Name: StageUpdateTrigger_3rd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152236,8 +152236,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 5.0296073, y: 1, z: 0.8972125}
+  m_Center: {x: 2.0148053, y: 0, z: 0.12131395}
 --- !u!4 &1692235794
 Transform:
   m_ObjectHideFlags: 0
@@ -152247,7 +152247,7 @@ Transform:
   m_GameObject: {fileID: 1692235791}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -207.45, y: 32.1, z: -41.99996}
+  m_LocalPosition: {x: -218.42, y: 32.1, z: -43.02}
   m_LocalScale: {x: 1.6501362, y: 6.046652, z: 9.359131}
   m_ConstrainProportionsScale: 0
   m_Children: []

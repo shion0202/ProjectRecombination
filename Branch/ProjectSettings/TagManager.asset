@@ -16,6 +16,7 @@ TagManager:
   - PlatformIn
   - PlatformEnd
   - Event
+  - Camera
   layers:
   - Default
   - TransparentFX

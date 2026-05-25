@@ -107,6 +107,7 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
 
         if (_owner != null && _owner.FollowCamera != null && pov != null)
         {
+            _owner.FollowCamera.SyncCameraRotation(pov, true);
             _owner.FollowCamera.SetTargetPOV(pov);
         }
 
@@ -161,6 +162,7 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
         // 복귀하기 전에 제어 대상을 다시 원래 플레이어 POV로 원상복구
         if (_owner.FollowCamera != null)
         {
+            _owner.FollowCamera.SyncCameraRotation(pov, false);
             _owner.FollowCamera.SetTargetPOV(null);
             _owner.FollowCamera.WarpToTarget();
         }

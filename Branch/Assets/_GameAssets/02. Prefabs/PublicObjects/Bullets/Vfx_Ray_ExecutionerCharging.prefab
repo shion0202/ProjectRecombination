@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8131697334706586412}
   - component: {fileID: 11400000}
   - component: {fileID: 12000000}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Vfx_Ray_ExecutionerCharging
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea4308861e24ac4caa06d26e151d595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageOverTime: 30
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
   HitEffect: {fileID: 100010}
   HitOffset: 0.01
   useLaserRotation: 0
@@ -205,7 +207,7 @@ GameObject:
   - component: {fileID: 400002}
   - component: {fileID: 19800000}
   - component: {fileID: 19900000}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: plasma_beam_muzzle_red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4990,7 +4992,7 @@ GameObject:
   - component: {fileID: 400004}
   - component: {fileID: 19800002}
   - component: {fileID: 19900002}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: plasma_beam_spark_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9773,7 +9775,7 @@ GameObject:
   - component: {fileID: 400006}
   - component: {fileID: 19800004}
   - component: {fileID: 19900004}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: plasma_beam_spark_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14556,7 +14558,7 @@ GameObject:
   - component: {fileID: 400008}
   - component: {fileID: 19800006}
   - component: {fileID: 19900006}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: plasma_beam_spark_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19348,7 +19350,7 @@ GameObject:
   - component: {fileID: 400010}
   - component: {fileID: 19800008}
   - component: {fileID: 19900008}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: plasma_beam_flare_red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24133,7 +24135,7 @@ GameObject:
   - component: {fileID: 400012}
   - component: {fileID: 10800000}
   - component: {fileID: 9020709350588371567}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

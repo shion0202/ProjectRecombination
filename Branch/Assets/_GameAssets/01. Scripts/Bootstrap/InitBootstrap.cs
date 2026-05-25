@@ -10,7 +10,7 @@ public class InitBootstrap : MonoBehaviour
 {
     [SerializeField] private string persistentSceneAddress = "Scene_Persistent";
     // [SerializeField] private string loadingSceneAddress = "Scene_Loading";
-    
+
     private async void Start()
     {
         try

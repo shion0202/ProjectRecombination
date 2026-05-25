@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Managers
@@ -119,6 +120,8 @@ namespace Managers
         [Header("Menu UI")]
         [SerializeField] private GameObject tutorial;
         [SerializeField] private GameObject option;
+
+        private static Coroutine _hapticCoroutine;
 
         public GameObject HUD
         {
@@ -691,6 +694,9 @@ namespace Managers
             }
 
             crosshairRoutine = StartCoroutine(CoOnHitCrosshair());
+
+            // 햅틱용 함수
+            //PlayVibration(0.02f, 0.3f, 0.06f);
         }
 
         public void ActivateRadialMessage(bool isActivate)
@@ -1074,5 +1080,85 @@ namespace Managers
         }
 
         #endregion
+
+        /// <summary>
+        /// 현재 연결된 게임패드에 원하는 세기와 시간만큼 진동을 발생시킵니다.
+        /// </summary>
+        /// <param name="lowFrequency">왼쪽 모터의 묵직한 저주파 진동 세기 (0.0 ~ 1.0)</param>
+        /// <param name="highFrequency">오른쪽 모터의 날카로운 고주파 진동 세기 (0.0 ~ 1.0)</param>
+        /// <param name="duration">진동이 지속될 시간 (초 단위)</param>
+        public void PlayVibration(float lowFrequency, float highFrequency, float duration)
+        {
+            // 1. 패드가 연결되어 있지 않다면 연산을 무시합니다.
+            if (Gamepad.current == null) return;
+
+            // 2. 새로운 진동이 들어오면 이전의 타이머 코루틴을 안전하게 멈춰서 진동이 무한히 지속되는 버그를 방지합니다.
+            if (_hapticCoroutine != null)
+            {
+                StopCoroutine(_hapticCoroutine);
+            }
+
+            // 3. 인풋 시스템 내부 클램핑 값 안정성을 위해 범위를 보정합니다.
+            lowFrequency = Mathf.Clamp01(lowFrequency);
+            highFrequency = Mathf.Clamp01(highFrequency);
+
+            // 4. 새로운 진동 타이머를 구동합니다.
+            _hapticCoroutine = StartCoroutine(CoVibrationRoutine(lowFrequency, highFrequency, duration));
+        }
+
+        /// <summary>
+        /// 게임패드의 진동을 즉시 정지시킵니다. 일시정지 메뉴 진입 시 필수적으로 호출해야 합니다.
+        /// </summary>
+        public void StopVibration()
+        {
+            if (_hapticCoroutine != null)
+            {
+                StopCoroutine(_hapticCoroutine);
+                _hapticCoroutine = null;
+            }
+
+            if (Gamepad.current == null) return;
+            Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+        }
+
+        /// <summary>
+        /// 지정된 세기로 모터를 가동하고, 타임스케일에 영향받지 않는 리얼타임 기준으로 대기 후 모터를 끄는 코루틴입니다.
+        /// </summary>
+        private IEnumerator CoVibrationRoutine(float lowFreq, float highFreq, float duration)
+        {
+            if (Gamepad.current == null) yield break;
+
+            // 양쪽 모터 구동 시작
+            Gamepad.current.SetMotorSpeeds(lowFreq, highFreq);
+
+            // 일시정지 UI 호출 시 Time.timeScale이 0이 되더라도, 
+            // 미사일 발사 직후 컷씬 등에서 정상적으로 시간이 흘러 진동이 꺼지도록 Realtime 처리를 합니다.
+            yield return new WaitForSecondsRealtime(duration);
+
+            // 대기 시간이 끝나면 모터 출력 초기화 및 코루틴 참조 제거
+            if (Gamepad.current != null)
+            {
+                Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+            }
+            _hapticCoroutine = null;
+        }
+
+        private void OnDisable()
+        {
+            // 씬 전환, 애플리케이션 종료, 컴포넌트 비활성화 시 패드가 계속 우는 현상을 원천 방지합니다.
+            if (Gamepad.current != null)
+            {
+                Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+            }
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            // 게임 창이 포커스를 잃어 전체화면에서 내려가거나 알트탭을 했을 때 진동을 차단합니다.
+            if (!hasFocus)
+            {
+                StopVibration();
+            }
+        }
     }
 }

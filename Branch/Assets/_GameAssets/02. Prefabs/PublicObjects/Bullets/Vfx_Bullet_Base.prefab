@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 428946}
   - component: {fileID: 19827028}
   - component: {fileID: 19965348}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: LaserBolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4777,7 +4777,7 @@ GameObject:
   - component: {fileID: -8809755242339043254}
   - component: {fileID: 7022424023409057718}
   - component: {fileID: -4830170890156966244}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Vfx_Bullet_Base
   m_TagString: Bullet
   m_Icon: {fileID: 0}

@@ -2163,7 +2163,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4485202681575293092}
+  - {fileID: 6925254885942206541}
   m_Father: {fileID: 2078838933849667625}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1140535075734445082
@@ -13374,7 +13374,7 @@ Transform:
   - {fileID: 618548493953974788}
   - {fileID: 538267106909584146}
   - {fileID: 2119226323268229332}
-  m_Father: {fileID: 4485202681575293092}
+  m_Father: {fileID: 7629403391189679563}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2480424917450773565
 GameObject:
@@ -19321,38 +19321,6 @@ MonoBehaviour:
   maxYawAngle: 20
   maxPitchAngle: 10
   targetRadius: 3
---- !u!1 &6160521896271892126
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4485202681575293092}
-  m_Layer: 0
-  m_Name: HeavyLegPivot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4485202681575293092
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6160521896271892126}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6925254885942206541}
-  m_Father: {fileID: 7629403391189679563}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6165807771643856812
 GameObject:
   m_ObjectHideFlags: 0
@@ -23867,12 +23835,12 @@ MonoBehaviour:
   caterpillarMaterial: {fileID: 2100000, guid: 1dca80f331c7cc244b0e6e8833945693, type: 2}
   bulletPrefab: {fileID: 914363595772914150, guid: 54c0c4d3bf9e54547a040ca32ebbe207,
     type: 3}
-  turnMoveSpeed: 60
+  turnMoveSpeed: 180
   backwardThreshold: -0.6
   animSpeed: {x: 0, y: -1}
   shootOffset: {x: 2, y: 0.7}
-  caterpillarPivot: {fileID: 0}
-  pivotTurnSpeed: 8
+  caterpillarPivot: {fileID: 6925254885942206541}
+  pivotTurnSpeed: 15
   maxPivotYaw: 180
 --- !u!114 &8261462207663945465
 MonoBehaviour:

@@ -456,6 +456,32 @@ public class FollowCameraController : MonoBehaviour
         //    이 코드가 수행되면 지하 9999m의 잔상이 완전히 세탁됩니다.
         vcam.InternalUpdateCameraState(Vector3.up, Time.deltaTime);
     }
+
+    public void SyncCameraRotation(CinemachinePOV targetPOV, bool isActive)
+    {
+        if (targetPOV == null) return;
+
+        var sourcePOV = vcam.GetCinemachineComponent<CinemachinePOV>();
+        if (sourcePOV == null || targetPOV == null) return;
+
+        if (isActive)
+        {
+            // [스킬 시전 시]
+            // 1. 먼저 target 가상 카메라 오브젝트 자체의 트랜스폼 회전 값을 현재 메인 카메라의 실제 월드 회전 값과 일치시킵니다.
+            //    이렇게 하면 부모 오브젝트의 회전 오차를 물리적으로 상쇄할 수 있습니다.
+            targetPOV.VirtualCamera.transform.rotation = vcam.transform.rotation;
+
+            // 2. 가상 카메라의 트랜스폼이 정렬된 상태에서, POV 컴포넌트 내부 축 값을 현재 바라보는 방향에 맞춰 강제로 갱신합니다.
+            //    이 처리를 해주어야 다음 프레임에 POV 마우스 조작 입력이 튀지 않고 부드럽게 이어집니다.
+            targetPOV.m_HorizontalAxis.Value = vcam.transform.eulerAngles.y - targetPOV.VirtualCamera.transform.parent.eulerAngles.y;
+            targetPOV.m_VerticalAxis.Value = sourcePOV.m_VerticalAxis.Value;
+        }
+        else
+        {
+            sourcePOV.m_HorizontalAxis.Value = targetPOV.m_HorizontalAxis.Value;
+            sourcePOV.m_VerticalAxis.Value = targetPOV.m_VerticalAxis.Value;
+        }
+    }
     #endregion
 
     #region Private Methods

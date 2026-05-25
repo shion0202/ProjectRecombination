@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 436896}
   - component: {fileID: 19846474}
   - component: {fileID: 19972576}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SmokeTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4763,7 +4763,7 @@ GameObject:
   - component: {fileID: 429540}
   - component: {fileID: 19864116}
   - component: {fileID: 19935378}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: EmberTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9458,7 +9458,7 @@ GameObject:
   - component: {fileID: -2578477123058602235}
   - component: {fileID: -3627786488238690130}
   - component: {fileID: 2611989290370090703}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Vfx_HeavyMissile
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -14538,7 +14538,7 @@ GameObject:
   - component: {fileID: 473274}
   - component: {fileID: 19879402}
   - component: {fileID: 19915160}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: FireTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19299,7 +19299,7 @@ GameObject:
   - component: {fileID: 3368613644877361945}
   - component: {fileID: 3709946123897421833}
   - component: {fileID: 2418577848186259117}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: RocketMDL
   m_TagString: Untagged
   m_Icon: {fileID: 0}

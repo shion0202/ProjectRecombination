@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9097554784895806887}
   - component: {fileID: 5934986363051998013}
   - component: {fileID: 772414942606302249}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4736,7 +4736,7 @@ GameObject:
   - component: {fileID: 5611413135010022082}
   - component: {fileID: 8611462027903808212}
   - component: {fileID: 8170409271739608781}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SmokeTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9528,7 +9528,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b3520d2fdd51d98479996609d5982f73,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b3520d2fdd51d98479996609d5982f73,
         type: 3}

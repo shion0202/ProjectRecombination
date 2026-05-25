@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 19891852}
   - component: {fileID: 19912518}
   - component: {fileID: 9666628}
-  m_Layer: 2
+  m_Layer: 15
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4841,7 +4841,7 @@ GameObject:
   - component: {fileID: 473894}
   - component: {fileID: 19871224}
   - component: {fileID: 19939586}
-  m_Layer: 2
+  m_Layer: 15
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9643,7 +9643,7 @@ GameObject:
   - component: {fileID: 1852447745159782610}
   - component: {fileID: -72059657509982153}
   - component: {fileID: 7610566166020614749}
-  m_Layer: 2
+  m_Layer: 15
   m_Name: Vfx_Bullet_RapidBounce
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -14625,7 +14625,7 @@ GameObject:
   - component: {fileID: 419408}
   - component: {fileID: 19892910}
   - component: {fileID: 19931502}
-  m_Layer: 2
+  m_Layer: 15
   m_Name: TrailLinger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

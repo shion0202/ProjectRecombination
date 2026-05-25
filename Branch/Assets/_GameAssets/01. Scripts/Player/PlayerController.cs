@@ -587,76 +587,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         if (context.started)
         {
-            if (Managers.GUIManager.Instance.GameUIController.HelpUI.activeSelf)
-            {
-                Managers.GUIManager.Instance.GameUIController.HelpUI.SetActive(false);
-                Managers.GUIManager.Instance.GameUIController.HUD.SetActive(true);
-
-                if (!Managers.GUIManager.Instance.GameUIController.PauseUI.activeSelf)
-                {
-                    _followCamera.OnUIClose();
-
-                    //Cursor.lockState = CursorLockMode.Locked;
-                    //Cursor.visible = false;
-                    Managers.GUIManager.Instance.GameUIController.HUD.SetActive(true);
-                    Time.timeScale = 1.0f;
-                }
-
-                return;
-            }
-
-            if (Managers.GUIManager.Instance.GameUIController.WorldMap.activeSelf)
-            {
-                Managers.GUIManager.Instance.GameUIController.WorldMap.SetActive(false);
-                Managers.GUIManager.Instance.GameUIController.HUD.SetActive(true);
-
-                if (!Managers.GUIManager.Instance.GameUIController.PauseUI.activeSelf)
-                {
-                    _followCamera.OnUIClose();
-
-                    //Cursor.lockState = CursorLockMode.Locked;
-                    //Cursor.visible = false;
-                    Managers.GUIManager.Instance.GameUIController.HUD.SetActive(true);
-                    Time.timeScale = 1.0f;
-                }
-
-                return;
-            }
-
-            if (Managers.GUIManager.Instance.GameUIController.Tutorial.activeSelf)
-            {
-                Managers.GUIManager.Instance.GameUIController.Tutorial.SetActive(false);
-                return;
-            }
-
-            if (Managers.GUIManager.Instance.GameUIController.Option.activeSelf)
-            {
-                Managers.GUIManager.Instance.GameUIController.Option.SetActive(false);
-                return;
-            }
-
-            if (!Managers.GUIManager.Instance.GameUIController.PauseUI.activeSelf)
-            {
-                _followCamera.OnUIOpen();
-
-                //Cursor.lockState = CursorLockMode.None;
-                //Cursor.visible = true;
-
-                Managers.GUIManager.Instance.GameUIController.PauseUI.SetActive(true);
-                Managers.GUIManager.Instance.GameUIController.HUD.SetActive(false);
-                Time.timeScale = 0.0f;
-            }
-            else
-            {
-                _followCamera.OnUIClose();
-
-                //Cursor.lockState = CursorLockMode.Locked;
-                //Cursor.visible = false;
-
-                Managers.GUIManager.Instance.GameUIController.PauseUI.SetActive(false);
-                Managers.GUIManager.Instance.GameUIController.HUD.SetActive(true);
-                Time.timeScale = 1.0f;
-            }
+            // 모든 UI 전환(활성화/비활성화) 및 Time.timeScale 연산을 
+            // 온스크린 버튼의 가상 입력 처리가 완료된 후 안전하게 처리하기 위해 코루틴으로 일괄 위임합니다.
+            StartCoroutine(CoProcessPauseInput());
         }
     }
 
@@ -1564,6 +1497,75 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             lowHp.SetActive(false);
         }
         _hitRoutine = null;
+    }
+
+    /// 온스크린 버튼의 입력 버퍼 예외를 방지하기 위해 한 프레임 지연 후 UI 상태를 제어하는 통합 코루틴입니다.
+    private System.Collections.IEnumerator CoProcessPauseInput()
+    {
+        // 닫기/열기 버튼을 누른 순간의 가상 패드 입력 연산이 안전하게 끝날 때까지 한 프레임 대기합니다.
+        yield return null;
+
+        var uiController = Managers.GUIManager.Instance.GameUIController;
+
+        // 1. 도움말(조작법) UI가 켜져 있는 경우
+        if (uiController.HelpUI.activeSelf)
+        {
+            uiController.HelpUI.SetActive(false);
+            uiController.HUD.SetActive(true);
+
+            if (!uiController.PauseUI.activeSelf)
+            {
+                _followCamera.OnUIClose();
+                uiController.HUD.SetActive(true);
+                Time.timeScale = 1.0f;
+            }
+            yield break;
+        }
+
+        // 2. 월드맵 UI가 켜져 있는 경우
+        if (uiController.WorldMap.activeSelf)
+        {
+            uiController.WorldMap.SetActive(false);
+            uiController.HUD.SetActive(true);
+
+            if (!uiController.PauseUI.activeSelf)
+            {
+                _followCamera.OnUIClose();
+                uiController.HUD.SetActive(true);
+                Time.timeScale = 1.0f;
+            }
+            yield break;
+        }
+        
+        // 3. 튜토리얼 UI가 켜져 있는 경우
+        if (uiController.Tutorial.activeSelf)
+        {
+            uiController.Tutorial.SetActive(false);
+            yield break;
+        }
+
+        // 4. 옵션 UI가 켜져 있는 경우
+        if (uiController.Option.activeSelf)
+        {
+            uiController.Option.SetActive(false);
+            yield break;
+        }
+
+        // 5. 그 외 기본 일시정지 UI 토글 처리
+        if (!uiController.PauseUI.activeSelf)
+        {
+            _followCamera.OnUIOpen();
+            uiController.PauseUI.SetActive(true);
+            uiController.HUD.SetActive(false);
+            Time.timeScale = 0.0f;
+        }
+        else
+        {
+            _followCamera.OnUIClose();
+            uiController.PauseUI.SetActive(false);
+            uiController.HUD.SetActive(true);
+            Time.timeScale = 1.0f;
+        }
     }
     #endregion
 

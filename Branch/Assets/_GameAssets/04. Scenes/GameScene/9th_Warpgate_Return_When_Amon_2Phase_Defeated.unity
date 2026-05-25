@@ -123399,7 +123399,7 @@ GameObject:
   - component: {fileID: 1960671460}
   - component: {fileID: 1960671459}
   - component: {fileID: 1960671458}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BossTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

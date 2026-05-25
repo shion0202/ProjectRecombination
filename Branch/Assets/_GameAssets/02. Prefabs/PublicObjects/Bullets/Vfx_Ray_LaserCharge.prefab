@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4748503497235184}
   - component: {fileID: 198249503971621558}
   - component: {fileID: 199992987927968202}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4855,7 +4855,7 @@ GameObject:
   - component: {fileID: 4826557516560280}
   - component: {fileID: 198903958792265276}
   - component: {fileID: 199987341659831508}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Hit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9720,7 +9720,7 @@ GameObject:
   - component: {fileID: 4919057184033992}
   - component: {fileID: 198716823911926006}
   - component: {fileID: 199860600851224244}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14562,7 +14562,7 @@ GameObject:
   - component: {fileID: 4328316125517786}
   - component: {fileID: 198835557614861600}
   - component: {fileID: 199412881604096778}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: DistanceEmiters
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19424,7 +19424,7 @@ GameObject:
   - component: {fileID: 4883080457244016}
   - component: {fileID: 198733472672368582}
   - component: {fileID: 199233516782749982}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24266,7 +24266,7 @@ GameObject:
   - component: {fileID: 4369984547811826}
   - component: {fileID: 198598341468609730}
   - component: {fileID: 199527868063303780}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Shockwave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29108,7 +29108,7 @@ GameObject:
   - component: {fileID: 4347178513019604}
   - component: {fileID: 198160625506365646}
   - component: {fileID: 199037264131246778}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33950,7 +33950,7 @@ GameObject:
   - component: {fileID: 4441703751262866}
   - component: {fileID: 198372031438650130}
   - component: {fileID: 199892849220920752}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SubGlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38801,7 +38801,7 @@ GameObject:
   - component: {fileID: 4679905740004884}
   - component: {fileID: 198599565836802516}
   - component: {fileID: 199745014149404722}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SparksExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43643,7 +43643,7 @@ GameObject:
   - component: {fileID: 4052863428556766}
   - component: {fileID: 198462062241707866}
   - component: {fileID: 199421709707007352}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SubGlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48494,7 +48494,7 @@ GameObject:
   - component: {fileID: 4814368668172128}
   - component: {fileID: 114466775549768808}
   - component: {fileID: 120065101442726732}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Vfx_Ray_LaserCharge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48663,7 +48663,7 @@ GameObject:
   - component: {fileID: 4623380024006946}
   - component: {fileID: 198993704213839504}
   - component: {fileID: 199326614077092624}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
