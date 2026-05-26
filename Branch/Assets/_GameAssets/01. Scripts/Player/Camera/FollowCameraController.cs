@@ -637,9 +637,9 @@ public class FollowCameraController : MonoBehaviour
 
         // 시네머신 POV 축의 MaxSpeed가 sensitivity(기본 150 등)로 잡혀있으므로, 
         // 픽셀 델타 변위와 결합할 최종 보정 계수 (이 값을 조절하여 기본 베이스 감도를 튜닝할 수 있습니다)
-        float sensitivityMultiplier = 0.5f;
+        float sensitivityMultiplier = 3f;
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_STANDALONE
         // PC 환경: 마우스 드래그 처리
         var mouse = Mouse.current;
         if (mouse == null) return;
@@ -686,7 +686,7 @@ public class FollowCameraController : MonoBehaviour
         if (touchscreen == null) return;
 
         var allTouches = touchscreen.touches;
-        
+
         if (_dragFingerId != -1)
         {
             bool fingerFound = false;
@@ -698,22 +698,32 @@ public class FollowCameraController : MonoBehaviour
                 if (fingerId == _dragFingerId)
                 {
                     fingerFound = true;
-                    Vector2 currentTouchPos = touch.position.ReadValue();
 
-                    // [교정] 순수 픽셀 이동량 기반 연산 및 DPI 스케일 적용으로 모바일 감도 10배 저하 문제 완전 해결
-                    float deltaX = (currentTouchPos.x - _lastMousePosition.x) / deviceDPI;
-                    float deltaY = (currentTouchPos.y - _lastMousePosition.y) / deviceDPI;
+                    // 수동 위치 차이 계산을 버리고, 하드웨어에서 보장하는 순수 터치 델타(이동량) 값을 사용합니다.
+                    // touch.delta는 프레임 유실 없이 터치 하드웨어의 모든 이동 픽셀을 정밀하게 반환합니다.
+                    Vector2 touchDelta = touch.delta.ReadValue();
 
-                    ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX * sensitivityMultiplier;
-                    ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY * sensitivityMultiplier;
+                    // 디바이스 DPI로 나누어 해상도별 편차를 방지합니다. 
+                    // touch.delta 자체가 이미 픽셀 단위이므로 DPI 분할 후 감도 멀티플라이어를 곱해줍니다.
+                    float deltaX = touchDelta.x / deviceDPI;
+                    float deltaY = touchDelta.y / deviceDPI;
 
-                    _lastMousePosition = currentTouchPos;
+                    // 기획 변경 사항인 감도 옵션 수치들을 반영합니다.
+                    // 시네머신 인풋 축에 속도로 주입하면 무겁게 밀리므로, 축 자체의 실제 값(Value)에 즉시 더해 줍니다.
+                    float finalSensitivityX = dragSensitivityX * sensitivityMultiplier;
+                    float finalSensitivityY = dragSensitivityY * sensitivityMultiplier;
+
+                    // 가속도가 아닌 값(Value)에 직접 더해줌으로써 굼뜸 현상을 해결하고 감도 옵션 체감을 확실하게 만듭니다.
+                    ActiveCameraAim.m_HorizontalAxis.Value += deltaX * finalSensitivityX;
+                    ActiveCameraAim.m_VerticalAxis.Value -= deltaY * finalSensitivityY;
+
+                    // 시네머신 값에 직접 더해주므로 InputAxisValue는 안전하게 0으로 리셋해 둡니다.
+                    ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
+                    ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
 
                     if (touch.press.wasReleasedThisFrame)
                     {
                         _dragFingerId = -1;
-                        ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
-                        ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
                     }
                     break;
                 }
@@ -735,7 +745,6 @@ public class FollowCameraController : MonoBehaviour
                 if (IsPointerOverUI(fingerId, currentTouchPos)) continue;
 
                 _dragFingerId = fingerId;
-                _lastMousePosition = currentTouchPos;
                 break;
             }
         }

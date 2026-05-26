@@ -1690,6 +1690,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public void PlayIntroSequence(float duration, Action onComplete)
     {
+        lowHp.SetActive(false);
         StartCoroutine(IntroCameraRoutine(duration, onComplete));
     }
 

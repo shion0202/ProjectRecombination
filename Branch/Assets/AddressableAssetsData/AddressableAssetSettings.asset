@@ -61,11 +61,11 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 1280b183be1fa41f1808c2fd0d8778b7
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+        m_Value: '{UnityEngine.Application.streamingAssetsPath}/aa'
       - m_Id: 881d8f05d065341e6a69cf9c0ff46e90
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: 8891770e9a1024adc9bf975208b1bc06
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+        m_Value: '[UnityEngine.Application.streamingAssetsPath]/aa'
       - m_Id: b7db67003322b4c0eaeaa5e2e2435978
         m_Value: http://[PrivateIpAddress]:[HostingServicePort]
       - m_Id: d1cbfe050acbe45f99dcc5cf0d592eaa

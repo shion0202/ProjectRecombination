@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 6242182105219022332}
   - component: {fileID: 5931499100721367433}
   m_Layer: 0
-  m_Name: GameUIController
+  m_Name: GameUIController_Old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
