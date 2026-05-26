@@ -966,6 +966,15 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skip"",
+                    ""type"": ""Button"",
+                    ""id"": ""276b3ef2-6a9f-457b-8b3a-a5678d5411aa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1021,6 +1030,17 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";PC_Keyboard;Mobile"",
                     ""action"": ""NextDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22990b99-d7cc-476f-abfc-b16fd58f1424"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1090,6 +1110,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         // UIActionMap
         m_UIActionMap = asset.FindActionMap("UIActionMap", throwIfNotFound: true);
         m_UIActionMap_NextDialogue = m_UIActionMap.FindAction("NextDialogue", throwIfNotFound: true);
+        m_UIActionMap_Skip = m_UIActionMap.FindAction("Skip", throwIfNotFound: true);
     }
 
     ~@PlayerActions()
@@ -1629,6 +1650,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UIActionMap;
     private List<IUIActionMapActions> m_UIActionMapActionsCallbackInterfaces = new List<IUIActionMapActions>();
     private readonly InputAction m_UIActionMap_NextDialogue;
+    private readonly InputAction m_UIActionMap_Skip;
     /// <summary>
     /// Provides access to input actions defined in input action map "UIActionMap".
     /// </summary>
@@ -1644,6 +1666,10 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UIActionMap/NextDialogue".
         /// </summary>
         public InputAction @NextDialogue => m_Wrapper.m_UIActionMap_NextDialogue;
+        /// <summary>
+        /// Provides access to the underlying input action "UIActionMap/Skip".
+        /// </summary>
+        public InputAction @Skip => m_Wrapper.m_UIActionMap_Skip;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1673,6 +1699,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @NextDialogue.started += instance.OnNextDialogue;
             @NextDialogue.performed += instance.OnNextDialogue;
             @NextDialogue.canceled += instance.OnNextDialogue;
+            @Skip.started += instance.OnSkip;
+            @Skip.performed += instance.OnSkip;
+            @Skip.canceled += instance.OnSkip;
         }
 
         /// <summary>
@@ -1687,6 +1716,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @NextDialogue.started -= instance.OnNextDialogue;
             @NextDialogue.performed -= instance.OnNextDialogue;
             @NextDialogue.canceled -= instance.OnNextDialogue;
+            @Skip.started -= instance.OnSkip;
+            @Skip.performed -= instance.OnSkip;
+            @Skip.canceled -= instance.OnSkip;
         }
 
         /// <summary>
@@ -1958,5 +1990,12 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNextDialogue(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Skip" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSkip(InputAction.CallbackContext context);
     }
 }

@@ -38,11 +38,7 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
     private int _currentDialogIndex = -1;
     private bool _isTypingEffect;
     private bool _isTransitioning; // 암전 패널이 움직이거나 강제 대기 중일 때 입력 방지 플래그
-    private bool _isFadeOut;
-    private bool _isFadeIn;
     private bool _isEnd;
-    private Coroutine _nextRoutine;
-    private Coroutine _fadeRoutine;
     private Coroutine _typingRoutine;
 
     private PlayerActions _uiActions;
@@ -54,6 +50,8 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
     private RawImage _currentRawImage;
     private RawImage _nextRawImage;
 
+    private bool _isFirstVideoReady = false; // 첫 영상 준비 완료 플래그
+
     private void Awake()
     {
         Init();
@@ -63,7 +61,9 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
     {
         if (isAutoStart)
         {
-            SetNextDialog();
+            // 무조건 첫 영상이 렌더링을 시작할 때까지 대기하지만, 
+            // 0.5초 대기 방어선을 두어 게임이 멈추거나 RawImage가 안 켜지는 현상을 원천 차단합니다.
+            StartCoroutine(SafeLoadFirstVideoRoutine());
         }
     }
 
@@ -85,8 +85,16 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
         }
     }
 
-    private void OnEnable() => _uiActions?.UIActionMap.Enable();
+    private void OnEnable()
+    {
+        if (_uiActions != null)
+        {
+            _uiActions.UIActionMap.Enable();
+        }
+    }
+
     private void OnDisable() => _uiActions?.UIActionMap.Disable();
+
     private void OnDestroy()
     {
         _uiActions?.UIActionMap.Disable();
@@ -107,26 +115,62 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
         speaker.textDialog.text = "";
         speaker.objectArrow.SetActive(false);
 
-        // 플레이어 초기 핑퐁 셋업 포인터 연결
         _currentVideoPlayer = videoPlayerA;
         _nextVideoPlayer = videoPlayerB;
         _currentRawImage = speaker.imageSceneA;
         _nextRawImage = speaker.imageSceneB;
 
+        // 에디터 잔재 세탁
+        videoPlayerA.Stop();
+        videoPlayerB.Stop();
         ConfigureVideoPlayer(videoPlayerA);
         ConfigureVideoPlayer(videoPlayerB);
 
-        // 두 영상 캔버스를 모두 켜두되, 처음에는 암전 패널이 덮고 있도록 설정
+        // 투명도(Alpha) 조작을 완전히 제거하고, 기존처럼 확실하게 활성화 상태와 컬러를 강제 고정합니다.
         _currentRawImage.gameObject.SetActive(true);
-        _nextRawImage.gameObject.SetActive(true);
+        _nextRawImage.gameObject.SetActive(false); // 다음 대사 영상은 우선 꺼둠
+
         _currentRawImage.color = Color.white;
         _nextRawImage.color = Color.white;
 
         if (speaker.fadePanel != null)
         {
             speaker.fadePanel.gameObject.SetActive(true);
-            speaker.fadePanel.color = new Color(0, 0, 0, 1f); // 시작은 까맣게
+            speaker.fadePanel.color = new Color(0, 0, 0, 1f); // 페이드 패널만 까맣게 덮어서 로딩 감춤
         }
+
+        if (dialogs != null && dialogs.Length > 0 && !string.IsNullOrEmpty(dialogs[0].videoName))
+        {
+            _currentVideoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, dialogs[0].videoName);
+            _currentVideoPlayer.Prepare();
+        }
+    }
+
+    private IEnumerator SafeLoadFirstVideoRoutine()
+    {
+        _isTransitioning = true; // 입력 잠금
+
+        // 영상 재생 명령 선제 가동
+        _currentVideoPlayer.Play();
+
+        // 비디오 플레이어가 첫 프레임을 디코딩할 때까지 최대 0.5초만 대기
+        // 에디터가 꼬여서 이 신호가 안 오더라도 0.5초 뒤에는 무조건 탈출하므로 프리징이 없습니다.
+        float safetyTimeout = 0.5f;
+        while (_currentVideoPlayer.frame < 0 && safetyTimeout > 0f)
+        {
+            safetyTimeout -= Time.deltaTime;
+            yield return null;
+        }
+
+        // 혹시 모를 에디터 오동작 대비 RawImage 상태 재확인 강제 주입
+        _currentRawImage.gameObject.SetActive(true);
+
+        // 첫 영상이 돌기 시작했으므로 어두운 화면을 걷어냅니다.
+        yield return StartCoroutine(FadePanel(speaker.fadePanel, 1f, 0f, fadeDuration));
+
+        // 본격적인 다이얼로그 루프 시동 (0번 인덱스 처리를 위해 -1 셋팅)
+        _currentDialogIndex = -1;
+        StartCoroutine(DialogTransitionSequence());
     }
 
     private void ConfigureVideoPlayer(VideoPlayer vp)
@@ -155,69 +199,61 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
         speaker.textDialog.text = "";
 
         _currentDialogIndex++;
+
+        if (_currentDialogIndex >= dialogs.Length)
+        {
+            _isTransitioning = false;
+            yield break;
+        }
+
         string currentVideoName = dialogs[_currentDialogIndex].videoName;
 
-        // 첫 대사가 아니고, '이전 영상과 현재 영상의 이름이 다를 때'만 암전 및 플레이어 전환을 수행
-        bool isVideoChanged = _currentDialogIndex > 0 &&
-                              !string.IsNullOrEmpty(currentVideoName) &&
-                              (dialogs[_currentDialogIndex - 1].videoName != currentVideoName);
-
-        if (isVideoChanged)
+        // 0번 인덱스는 SafeLoadFirstVideoRoutine에서 이미 RawImage를 켜고 영상을 틀었으므로 스킵
+        if (_currentDialogIndex > 0)
         {
-            // 영상이 바뀔 때만 화면을 까맣게 암전 (Fade Out)
-            yield return StartCoroutine(FadePanel(speaker.fadePanel, 0f, 1f, fadeDuration));
+            bool isVideoChanged = !string.IsNullOrEmpty(currentVideoName) &&
+                                  (dialogs[_currentDialogIndex - 1].videoName != currentVideoName);
 
-            // 백그라운드에서 미리 로딩(Prepare) 중이던 nextVideoPlayer가 완료될 때까지 암전 상태로 대기
-            while (!_nextVideoPlayer.isPrepared && !string.IsNullOrEmpty(currentVideoName))
+            if (isVideoChanged)
             {
-                yield return null;
+                // 암전 처리
+                yield return StartCoroutine(FadePanel(speaker.fadePanel, 0f, 1f, fadeDuration));
+
+                if (!string.IsNullOrEmpty(currentVideoName))
+                {
+                    // 기존 벨님의 안정적인 핑퐁 로직 유지
+                    _nextRawImage.gameObject.SetActive(true);
+                    _nextVideoPlayer.Play();
+
+                    // 다음 영상이 첫 프레임을 안전하게 그릴 때까지 살짝 대기 (최대 0.5초 방어)
+                    float nextVideoTimeout = 0.5f;
+                    while (_nextVideoPlayer.frame < 0 && nextVideoTimeout > 0f)
+                    {
+                        nextVideoTimeout -= Time.deltaTime;
+                        yield return null;
+                    }
+                }
+
+                _currentVideoPlayer.Stop();
+                _currentRawImage.gameObject.SetActive(false); // 사용이 끝난 이전 이미지는 비활성화
+
+                // 포인터 체인지
+                var tempPlayer = _currentVideoPlayer;
+                _currentVideoPlayer = _nextVideoPlayer;
+                _nextVideoPlayer = tempPlayer;
+
+                var tempImage = _currentRawImage;
+                _currentRawImage = _nextRawImage;
+                _nextRawImage = tempImage;
+
+                // 암전 해제
+                yield return StartCoroutine(FadePanel(speaker.fadePanel, 1f, 0f, fadeDuration));
             }
-
-            // 암전된 블랙아웃 순간에 플레이어 및 UI 스왑
-            _currentVideoPlayer.Stop();
-            _currentRawImage.gameObject.SetActive(false);
-
-            if (!string.IsNullOrEmpty(currentVideoName))
-            {
-                _nextRawImage.gameObject.SetActive(true);
-                _nextVideoPlayer.Play();
-                yield return new WaitForEndOfFrame(); // 첫 프레임 안착 대기
-            }
-
-            // 핑퐁 포인터 교체
-            var tempPlayer = _currentVideoPlayer;
-            _currentVideoPlayer = _nextVideoPlayer;
-            _nextVideoPlayer = tempPlayer;
-
-            var tempImage = _currentRawImage;
-            _currentRawImage = _nextRawImage;
-            _nextRawImage = tempImage;
-
-            // 새로운 비디오 위로 암전 해제 (Fade In)
-            yield return StartCoroutine(FadePanel(speaker.fadePanel, 1f, 0f, fadeDuration));
         }
-        else if (_currentDialogIndex == 0)
-        {
-            // 완전 첫 대사 시작 시의 초기화 로직 (시작할 때만 Fade In)
-            if (!string.IsNullOrEmpty(currentVideoName))
-            {
-                _currentVideoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, currentVideoName);
-                _currentVideoPlayer.Prepare();
-                while (!_currentVideoPlayer.isPrepared) yield return null;
 
-                _currentRawImage.gameObject.SetActive(true);
-                _currentVideoPlayer.Play();
-                yield return new WaitForEndOfFrame();
-            }
-            yield return StartCoroutine(FadePanel(speaker.fadePanel, 1f, 0f, fadeDuration));
-        }
-        // 비디오가 같거나 없는 경우, 위의 if/else if를 모두 건너뛰므로 페이드와 플레이어 전환 없이 프리패스합니다.
-
-        // 화면이 완전히 밝아지면 텍스트 타이핑 시작
         _isTransitioning = false;
         _typingRoutine = StartCoroutine(CoTypeText());
 
-        // 유저가 이 자막을 읽기 시작한 순간부터, 다음 대사(Index + 1)의 영상을 백그라운드에서 미리 로드 시킴
         PrepareNextVideoNextFrame();
     }
 
@@ -293,6 +329,8 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
 
         videoPlayerA.Stop();
         videoPlayerB.Stop();
+
+        _uiActions.UIActionMap.Disable();
         GameManager.Instance.StartGame();
     }
 
@@ -311,6 +349,11 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
         }
 
         SetNextDialog();
+    }
+
+    void PlayerActions.IUIActionMapActions.OnSkip(InputAction.CallbackContext context)
+    {
+
     }
 
     //private IEnumerator FadeImage(RawImage image, float fromAlpha, float toAlpha, float duration)

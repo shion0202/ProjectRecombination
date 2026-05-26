@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private RigAimController rigAimController;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private GameObject followCameraPrefab;
+    [SerializeField] private CinemachineVirtualCamera startCam;
     [SerializeField] private Volume volume;
     [SerializeField] private GameObject lowHp;
     [SerializeField] private ParticleFollower navi;
@@ -905,29 +906,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             seSource.clip = hitClips[randIndex];
             seSource.Play();
 
-            //if (stats.CurrentPartHealth > 0)        // 파츠 HP가 남아있으면 파츠를 우선 데미지 계산
-            //{
-            //    stats.CurrentPartHealth -= damage;  
-
-            //    // 계산 후 파츠 HP가 음수가 된 경우
-            //    if (stats.CurrentPartHealth < 0)
-            //    {
-            //        damage += stats.CurrentPartHealth;  // 바디에 적용할 데미지를 감소
-            //        stats.CurrentPartHealth = 0;        // 파츠 HP를 0으로 초기화
-            //    }
-            //    else
-            //    {
-            //        damage = 0;
-            //    }
-            //}
-
-            //if (stats.CurrentBodyHealth > 0)
-            //{
-            //    stats.CurrentBodyHealth -= damage;
-            //    if (stats.CurrentBodyHealth < 0)
-            //        stats.CurrentBodyHealth = 0;
-            //}
-
             stats.CurrentHealth -= damage;
 
             float damageRatio = damage / stats.MaxHealth;
@@ -938,14 +916,27 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             // TODO: 데미지가 음수일때 어떻게 처리할 것인지 논의 필요 (힐을 시킬 것인지 무시할 것인지)
         }
 
-        if ((stats.CurrentHealth / stats.MaxHealth) <= 0.25f && lowHp.gameObject.activeSelf)
+        if (!_isLowHp && (stats.CurrentHealth / stats.MaxHealth) <= 0.25f)
         {
             _isLowHp = true;
-            lowHp.gameObject.SetActive(true);
+
+            // 피격 코루틴이 켜져 있었다면 상시 점등을 위해 코루틴을 끊어줍니다.
+            if (_hitRoutine != null)
+            {
+                StopCoroutine(_hitRoutine);
+                _hitRoutine = null;
+            }
+
+            // 항상 켜짐 상태 유지
+            if (lowHp != null && !lowHp.gameObject.activeSelf)
+            {
+                lowHp.gameObject.SetActive(true);
+            }
         }
 
         if (stats.CurrentHealth <= 0)
         {
+            if (lowHp != null) lowHp.gameObject.SetActive(false);
             Die();
         }
     }
@@ -1672,10 +1663,189 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         SetOvrrideAnimator(EAnimationType.Base);
 
         Spawn();
-        
-        // OnEnable
-        _playerActions.PlayerActionMap.Enable();
-        
+
+        // 씬 로딩 시점에는 인게임 조작 인풋을 기본적으로 비활성화해 둡니다.
+        // 프롤로그 상영 중이나 로딩 중에 플레이어가 임의로 움직이거나 입력을 받는 것을 방지합니다.
+        _playerActions.PlayerActionMap.Disable();
+
         _isInit = true;
+    }
+
+    // GameManager 등 외부 핵심 매니저 계층에서 플레이어의 조작 권한을 직접 제어할 수 있도록 인터페이스를 노출합니다.
+    public void TogglePlayerInput(bool enable)
+    {
+        if (_playerActions == null) return;
+
+        if (enable)
+        {
+            _playerActions.PlayerActionMap.Enable();
+            Debug.Log("<color=green>[PlayerInput]</color> 인게임 플레이어 조작이 활성화되었습니다.");
+        }
+        else
+        {
+            _playerActions.PlayerActionMap.Disable();
+            Debug.Log("<color=red>[PlayerInput]</color> 인게임 플레이어 조작이 차단되었습니다.");
+        }
+    }
+
+    public void PlayIntroSequence(float duration, Action onComplete)
+    {
+        StartCoroutine(IntroCameraRoutine(duration, onComplete));
+    }
+
+    private IEnumerator IntroCameraRoutine(float duration, Action onComplete)
+    {
+        yield return null;
+
+        if (_followCamera != null)
+        {
+            _followCamera.SetCameraRotatable(false);
+        }
+
+        if (animator != null)
+        {
+            animator.SetBool("isIntro", true);
+        }
+
+        var brain = Camera.main?.GetComponent<CinemachineBrain>();
+        CinemachineBlendDefinition originalBlend = default;
+        if (brain != null)
+        {
+            originalBlend = brain.m_DefaultBlend;
+
+            // defaultCam에서 startCam으로 넘어갈 때는 화면이 튀지 않고 즉시 고정되도록 블렌딩 스타일을 Cut으로 강제 변경합니다.
+            brain.m_DefaultBlend = new CinemachineBlendDefinition(
+                CinemachineBlendDefinition.Style.Cut, 0f);
+        }
+
+        startCam.Priority = 20;
+        GUIManager.Instance.GameUIController.HUD.SetActive(false);
+        yield return new WaitForSeconds(1.0f);
+
+        float customBlendTime = 0.5f;
+        if (brain != null)
+        {
+            brain.m_DefaultBlend = new CinemachineBlendDefinition(
+                originalBlend.m_Style, customBlendTime);
+        }
+
+        GUIManager.Instance.GameUIController.FadeIn(4.0f);
+
+        // 연출 부분
+        if (startCam != null)
+        {
+            float elapsed = 0f;
+
+            // 기획 변수 설정
+            float radius = 0.4f;           // 플레이어와 카메라 사이의 수평 유지 거리
+            float startAngle = -60f;       // 초기 위치: 우측 대각선 뒤 (플레이어 기준 대략 -45도 혹은 원하는 각도로 조율)
+            float endAngle = 25f;         // 목표 위치: 좌측 대각선 앞까지 (총 180도 시계 방향 회전)
+
+            float startHeightY = 0.1f;     // 초기 높이: 발목/바닥 부근
+            float endHeightY = 1.7f;       // 목표 높이: 머리/눈높이 부근
+
+            float startLookHeightY = 0.2f;
+            float endLookHeightY = 1.6f;
+
+            // 앙상블 회전을 위해 플레이어의 중심(피벗) 위치를 참조합니다.
+            // 만약 캐릭터 발바닥이 피벗이라면 Vector3.zero를, 필요 시 오프셋을 더해 기준점을 잡습니다.
+            Vector3 centerTargetPos = transform.position;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / duration);
+
+                // 시간에 따른 각도 및 높이 선형 보간 (Lerp)
+                float currentAngle = Mathf.Lerp(startAngle, endAngle, t);
+                float currentHeightY = Mathf.Lerp(startHeightY, endHeightY, t);
+
+                // 시선 타겟의 높이도 시간에 따라 별도로 보간합니다.
+                float currentLookHeightY = Mathf.Lerp(startLookHeightY, endLookHeightY, t);
+
+                // 삼각함수를 이용한 플레이어 기준 수평 원형 좌표(X, Z) 계산
+                // 유니티의 각도 계산(라디안)에 맞춰 세팅 (시계 방향 회전을 유도)
+                float rad = currentAngle * Mathf.Deg2Rad;
+                float offsetX = Mathf.Sin(rad) * radius;
+                float offsetZ = Mathf.Cos(rad) * radius;
+
+                // 최종 월드 좌표를 조립하여 startCam 위치에 강제 주입
+                Vector3 newCameraPos = new Vector3(
+                    centerTargetPos.x + offsetX,
+                    centerTargetPos.y + currentHeightY,
+                    centerTargetPos.z + offsetZ
+                );
+                startCam.transform.position = newCameraPos;
+
+                // 분리된 시선 높이 좌표를 적용하여 카메라 회전값을 정렬합니다.
+                Vector3 lookTarget = centerTargetPos + Vector3.up * currentLookHeightY;
+                startCam.transform.LookAt(lookTarget);
+
+                yield return null;
+            }
+
+            // 상승 종료 후 높이를 유지한 채 부드럽게 추가 회전하는 시퀀스
+            float lingerElapsed = 0f;
+            float lingerDuration = 1.5f;    // 여운을 즐길 총 대기 시간 (원하시는 만큼 늘리셔도 됩니다)
+            float lingerEndAngle = 45f;     // 여운 회전의 최종 도달 각도
+
+            float startRadius = radius;     // 0.4f에서 시작
+            float endRadius = 0.35f;         // 2초 동안 서서히 0.8f까지 멀어짐 (원하는 거리로 조율 가능)
+
+            while (lingerElapsed < lingerDuration)
+            {
+                lingerElapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(lingerElapsed / lingerDuration);
+
+                // 높이는 상승 단계의 최종 목적지(endHeightY)로 완전히 고정하고, 각도만 endAngle(30도)에서 lingerEndAngle(55도)까지 느긋하게 이어 돌립니다.
+                float currentAngle = Mathf.Lerp(endAngle, lingerEndAngle, t);
+
+                // ✨ [거리 연출 추가] 시간에 따라 카메라와 플레이어 사이의 거리를 서서히 벌려줍니다.
+                float currentRadius = Mathf.Lerp(startRadius, endRadius, t);
+
+                // 고정된 radius 대신 매 프레임 멀어지는 currentRadius를 적용하여 삼각함수 좌표를 계산합니다.
+                float rad = currentAngle * Mathf.Deg2Rad;
+                float offsetX = Mathf.Sin(rad) * currentRadius;
+                float offsetZ = Mathf.Cos(rad) * currentRadius;
+
+                // Y축 높이 값들은 최종 상태로 고정하여 수평 패닝만 유도합니다.
+                Vector3 newCameraPos = new Vector3(
+                    centerTargetPos.x + offsetX,
+                    centerTargetPos.y + endHeightY,
+                    centerTargetPos.z + offsetZ
+                );
+                startCam.transform.position = newCameraPos;
+
+                // 시선 역시 머리 높이(endLookHeightY)에 고정된 상태로 캐릭터를 유지합니다.
+                Vector3 lookTarget = centerTargetPos + Vector3.up * endLookHeightY;
+                startCam.transform.LookAt(lookTarget);
+
+                yield return null;
+            }
+        }
+
+        // 시네머신 브레인이 화면을 전환하는 최소한의 컷 블렌딩 시간을 확보합니다.
+        startCam.Priority = 10;
+        yield return new WaitForSeconds(customBlendTime + 0.2f);
+
+        if (brain != null)
+        {
+            brain.m_DefaultBlend = originalBlend;
+        }
+
+        if (animator != null)
+        {
+            animator.SetBool("isIntro", false);
+        }
+        GUIManager.Instance.GameUIController.HUD.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+
+        // 카메라 전환이 완전히 끝난 시점에 인게임 조작 인풋을 최종 활성화합니다.
+        if (_followCamera != null)
+        {
+            _followCamera.SetCameraRotatable(true);
+        }
+        _playerActions.PlayerActionMap.Enable();
+        onComplete?.Invoke();
     }
 }

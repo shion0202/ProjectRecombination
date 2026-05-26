@@ -178,7 +178,14 @@ namespace Managers
             CurrentState = GameState.Playing;
             
             // 플레이어 오브젝트 참조 설정
-            Player = FindObjectOfType<PlayerController>();
+            Player = Instance.Player;
+            if (Player)
+            {
+                Player.PlayIntroSequence(4.0f, () =>
+                {
+                    Debug.Log("[GameManager] 시퀀스 최종 종료 검증 완료. 이제 완벽한 플레이 상태입니다.");
+                });
+            }
         }
 
         public async void ExitGame()

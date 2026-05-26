@@ -631,23 +631,32 @@ public class FollowCameraController : MonoBehaviour
         if (_isQuickTurning || _isLockedByUI || _isLock || _quickTurnCoroutine != null) return;
         if (EventSystem.current == null) return;
 
+        // 기기별 하드웨어 DPI를 반영하여 고해상도 폰에서도 일정한 물리 감도를 유지하도록 헬퍼 계수 계산
+        // DPI 정보가 없는 환경(PC 등)을 위해 기본값 96f로 방어 처리
+        float deviceDPI = Screen.dpi > 0 ? Screen.dpi : 96f;
+
+        // 시네머신 POV 축의 MaxSpeed가 sensitivity(기본 150 등)로 잡혀있으므로, 
+        // 픽셀 델타 변위와 결합할 최종 보정 계수 (이 값을 조절하여 기본 베이스 감도를 튜닝할 수 있습니다)
+        float sensitivityMultiplier = 0.5f;
+
 #if UNITY_EDITOR || UNITY_STANDALONE
-        // PC 환경: 마우스 드래그 처리
-        var mouse = Mouse.current;
+        // PC 환경: 마우스 드래그 처리
+        var mouse = Mouse.current;
         if (mouse == null) return;
 
-        // 마우스 왼쪽 버튼을 누르고 있는 상태 추적
         if (_dragFingerId == 99)
         {
             if (mouse.leftButton.isPressed)
             {
                 Vector2 currentMousePos = mouse.position.ReadValue();
 
-                float deltaX = (currentMousePos.x - _lastMousePosition.x) / Screen.width;
-                float deltaY = (currentMousePos.y - _lastMousePosition.y) / Screen.height;
+                // 해상도로 나누지 않고, 순수 픽셀 이동량(Delta)을 구한 뒤 DPI 비율로 정규화
+                float deltaX = (currentMousePos.x - _lastMousePosition.x) / deviceDPI;
+                float deltaY = (currentMousePos.y - _lastMousePosition.y) / deviceDPI;
 
-                ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX * 10.0f;
-                ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY * 10.0f;
+                // PC와 모바일의 연산 공식을 완전히 일치시킴
+                ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX * sensitivityMultiplier;
+                ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY * sensitivityMultiplier;
 
                 _lastMousePosition = currentMousePos;
             }
@@ -659,13 +668,11 @@ public class FollowCameraController : MonoBehaviour
                 ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
             }
         }
-        // 현재 조작 중이 아닐 때
         else if (_dragFingerId == -1)
         {
             if (mouse.leftButton.wasPressedThisFrame)
             {
                 Vector2 currentMousePos = mouse.position.ReadValue();
-
                 if (IsPointerOverUI(-1, currentMousePos)) return;
 
                 _dragFingerId = 99;
@@ -674,73 +681,64 @@ public class FollowCameraController : MonoBehaviour
         }
 
 #else
-        // 모바일 환경: 터치스크린 하드웨어 체크
-        var touchscreen = Touchscreen.current;
-        if (touchscreen == null) return;
+        // 모바일 환경: 터치스크린 하드웨어 처리
+        var touchscreen = Touchscreen.current;
+        if (touchscreen == null) return;
 
-        // 매 프레임 입력값 초기화
-        //ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
-        //ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
+        var allTouches = touchscreen.touches;
+        
+        if (_dragFingerId != -1)
+        {
+            bool fingerFound = false;
+            foreach (var touch in allTouches)
+            {
+                if (!touch.isInProgress) continue;
+                int fingerId = touch.touchId.ReadValue();
 
-        var allTouches = touchscreen.touches;
-        // 이미 카메라를 조작 중인 손가락이 있다면, 그 손가락의 상태를 먼저 추적합니다.
-        if (_dragFingerId != -1)
-        {
-            bool fingerFound = false;
-            foreach (var touch in allTouches)
-            {
-                if (!touch.isInProgress) continue;
-                int fingerId = touch.touchId.ReadValue();
+                if (fingerId == _dragFingerId)
+                {
+                    fingerFound = true;
+                    Vector2 currentTouchPos = touch.position.ReadValue();
 
-                if (fingerId == _dragFingerId)
-                {
-                    fingerFound = true;
-                    Vector2 currentTouchPos = touch.position.ReadValue();
+                    // [교정] 순수 픽셀 이동량 기반 연산 및 DPI 스케일 적용으로 모바일 감도 10배 저하 문제 완전 해결
+                    float deltaX = (currentTouchPos.x - _lastMousePosition.x) / deviceDPI;
+                    float deltaY = (currentTouchPos.y - _lastMousePosition.y) / deviceDPI;
 
-                    // 드래그 값 계산 및 카메라 적용
-                    float deltaX = (currentTouchPos.x - _lastMousePosition.x) / Screen.width;
-                    float deltaY = (currentTouchPos.y - _lastMousePosition.y) / Screen.height;
+                    ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX * sensitivityMultiplier;
+                    ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY * sensitivityMultiplier;
 
-                    ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX;
-                    ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY;
+                    _lastMousePosition = currentTouchPos;
 
-                    _lastMousePosition = currentTouchPos;
+                    if (touch.press.wasReleasedThisFrame)
+                    {
+                        _dragFingerId = -1;
+                        ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
+                        ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
+                    }
+                    break;
+                }
+            }
 
-                    // 손가락을 뗐다면 추적 종료
-                    if (touch.press.wasReleasedThisFrame)
-                    {
-                        _dragFingerId = -1;
-                        ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
-                        ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
-                    }
-                    break; // 카메라 조작 손가락을 처리했으니 루프 탈출
-                }
-            }
+            if (!fingerFound) _dragFingerId = -1;
+        }
 
-            // 만약 추적하던 손가락이 어떤 이유로 사라졌다면 상태 리셋
-            if (!fingerFound) _dragFingerId = -1;
-        }
+        if (_dragFingerId == -1)
+        {
+            foreach (var touch in allTouches)
+            {
+                if (!touch.isInProgress) continue;
+                if (!touch.press.wasPressedThisFrame) continue;
 
-        // 카메라를 조작 중인 손가락이 없다면, 새로운 '카메라 조작용' 터치를 탐색합니다.
-        if (_dragFingerId == -1)
-        {
-            foreach (var touch in allTouches)
-            {
-                if (!touch.isInProgress) continue;
-                if (!touch.press.wasPressedThisFrame) continue; // 새로 눌린 터치만 검사
+                int fingerId = touch.touchId.ReadValue();
+                Vector2 currentTouchPos = touch.position.ReadValue();
 
-                int fingerId = touch.touchId.ReadValue();
-                Vector2 currentTouchPos = touch.position.ReadValue();
+                if (IsPointerOverUI(fingerId, currentTouchPos)) continue;
 
-                // 중요: UI(사격/이동 패드)를 누른 터치는 카메라도 조작 손가락 후보에서 '원천 배제'
-                if (IsPointerOverUI(fingerId, currentTouchPos)) continue;
-
-                // UI가 아닌 화면 빈 곳을 잡았다면 이 손가락을 카메라 조작자로 임명!
-                _dragFingerId = fingerId;
-                _lastMousePosition = currentTouchPos;
-                break;
-            }
-        }
+                _dragFingerId = fingerId;
+                _lastMousePosition = currentTouchPos;
+                break;
+            }
+        }
 #endif
     }
 

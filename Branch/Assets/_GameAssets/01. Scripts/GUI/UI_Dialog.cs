@@ -258,4 +258,9 @@ public class UI_Dialog : MonoBehaviour, PlayerActions.IUIActionMapActions
             }
         }
     }
+
+    void PlayerActions.IUIActionMapActions.OnSkip(InputAction.CallbackContext context)
+    {
+
+    }
 }
