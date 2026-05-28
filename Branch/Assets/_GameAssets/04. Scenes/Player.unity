@@ -228,7 +228,7 @@ MonoBehaviour:
   - prefab: {fileID: 3579945791948366795, guid: 14534da9fa6854aecb57c58aab8d08dc,
       type: 3}
     prefabType: 7
-    isActive: 0
+    isActive: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -148,14 +148,14 @@ public class UI_Option : MonoBehaviour
         if (isKorean)
         {
             txtLanguageStatus.text = "한국어";
-            languageLeftArrow.interactable = false;
-            languageRightArrow.interactable = true;
+            //languageLeftArrow.interactable = false;
+            //languageRightArrow.interactable = true;
         }
         else
         {
             txtLanguageStatus.text = "English";
-            languageLeftArrow.interactable = true;
-            languageRightArrow.interactable = false;
+            //languageLeftArrow.interactable = true;
+            //languageRightArrow.interactable = false;
         }
 
         EventManager.Instance.PostNotification(EEventType.LanguageChange, this, null);
