@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Dummy Weapon
 public class ArmLaserChase : PartBaseArm
 {
     [Header("곡선 레이저 설정")]

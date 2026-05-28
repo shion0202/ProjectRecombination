@@ -14071,6 +14071,7 @@ MonoBehaviour:
   target: {fileID: 1153979204}
   objectDescription: "\uBCF4\uC548 \uCF58\uC194\uC744 \uC870\uC791\uD558\uC5EC \uACBD\uBCF4
     \uD574\uC81C\uD558\uAE30"
+  enObjectDescription: Interact with the Security Console to Deactivate the Alarm
 --- !u!4 &164926932
 Transform:
   m_ObjectHideFlags: 0
@@ -17213,6 +17214,7 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 1562683355}
   objectDescription: "\uB2E4\uC74C \uAD6C\uC5ED\uC73C\uB85C \uC774\uB3D9\uD558\uAE30"
+  enObjectDescription: Move to the Next Area
 --- !u!1 &196328848
 GameObject:
   m_ObjectHideFlags: 0
@@ -53564,6 +53566,7 @@ MonoBehaviour:
   isOn: 0
   noticeMessage: "\uACBD\uBCF4 \uBC1C\uC0DD. \uC804\uB825\uC744 \uBCF5\uAD6C\uD558\uC5EC
     \uACBD\uBCF4\uB97C \uD574\uC81C\uD558\uC138\uC694."
+  enNoticeMessage: Alarm triggered. Restore power to deactivate the alarm.
 --- !u!1 &641609022
 GameObject:
   m_ObjectHideFlags: 0
@@ -74812,8 +74815,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   target: {fileID: 911372224}
-  objectDescription: "\uCC28\uB2E8\uAE30\uB97C \uD0C0\uACA9\uD558\uC5EC \uB0B4\uBD80\uB85C
+  objectDescription: "\uCC28\uB2E8\uAE30\uB97C \uD30C\uAD34\uD558\uC5EC \uB0B4\uBD80\uB85C
     \uC9C4\uC785\uD558\uAE30"
+  enObjectDescription: Destroy the Breaker to Enter the Interior
 --- !u!1 &861293171
 GameObject:
   m_ObjectHideFlags: 0
@@ -78269,6 +78273,7 @@ MonoBehaviour:
   target: {fileID: 227666815}
   objectDescription: "\uCF58\uC194\uC744 \uC870\uC791\uD558\uC5EC \uC2DC\uC124 \uB0B4\uBD80\uB85C
     \uC9C4\uC785\uD558\uAE30"
+  enObjectDescription: Interact with the Console to Enter the Facility
 --- !u!4 &895470937
 Transform:
   m_ObjectHideFlags: 0
@@ -78750,8 +78755,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOn: 0
-  noticeMessage: "\uCC28\uB2E8\uAE30\uB97C \uD0C0\uACA9\uD558\uC5EC \uB0B4\uBD80\uB85C
+  noticeMessage: "\uCC28\uB2E8\uAE30\uB97C \uD30C\uAD34\uD558\uC5EC \uB0B4\uBD80\uB85C
     \uC774\uB3D9\uD558\uC138\uC694."
+  enNoticeMessage: Destroy the breaker and move inside.
 --- !u!1 &901139786
 GameObject:
   m_ObjectHideFlags: 0
@@ -92288,8 +92294,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   target: {fileID: 447165145}
-  objectDescription: "\uCC28\uB2E8\uAE30\uB97C \uD0C0\uACA9\uD558\uC5EC \uB0B4\uBD80\uB85C
+  objectDescription: "\uCC28\uB2E8\uAE30\uB97C \uD30C\uAD34\uD558\uC5EC \uB0B4\uBD80\uB85C
     \uC9C4\uC785\uD558\uAE30"
+  enObjectDescription: Destroy the Breaker to Enter the Interior
 --- !u!1 &1068669203
 GameObject:
   m_ObjectHideFlags: 0
@@ -107542,7 +107549,8 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 104437343}
   objectDescription: "\uB0B4\uBD80\uB85C \uC774\uB3D9\uD558\uC5EC \uBCF4\uC548 \uCF58\uC194
-    \uD68C\uB85C \uC0C1\uD638\uC791\uC6A9\uD558\uAE30\n"
+    \uD65C\uC131\uD558\uAE30"
+  enObjectDescription: Move Inside and Activate the Security Console
 --- !u!4 &1238251251
 Transform:
   m_ObjectHideFlags: 0
@@ -109849,6 +109857,7 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 2089280377}
   objectDescription: "\uB0B4\uBD80\uB85C \uC9C4\uC785\uD558\uAE30"
+  enObjectDescription: Enter the Interior
 --- !u!1 &1264420590
 GameObject:
   m_ObjectHideFlags: 0
@@ -116059,7 +116068,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   isActivate: 1
-  interactionName: "\uBB38 \uC5F4\uAE30"
+  interactionName: "\uBB38 \uAC1C\uBC29"
 --- !u!1 &1321533143
 GameObject:
   m_ObjectHideFlags: 0
@@ -148359,6 +148368,7 @@ MonoBehaviour:
   isOn: 0
   noticeMessage: "\uACBD\uBCF4 \uD574\uC81C. \uB2E4\uC74C \uAD6C\uC5ED\uC73C\uB85C
     \uC774\uB3D9\uD558\uC138\uC694."
+  enNoticeMessage: Alarm deactivated. Move to the next area.
 --- !u!1 &1650096889
 GameObject:
   m_ObjectHideFlags: 0
@@ -148961,6 +148971,7 @@ MonoBehaviour:
   target: {fileID: 677755976}
   objectDescription: "\uB808\uBC84\uB97C \uC870\uC791\uD558\uC5EC \uBCF4\uC548 \uCF58\uC194
     \uD65C\uC131\uD654\uD558\uAE30"
+  enObjectDescription: Interact with the Lever to Activate the Security Console
 --- !u!1 &1656773622
 GameObject:
   m_ObjectHideFlags: 0
@@ -155645,6 +155656,7 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 0}
   objectDescription: "\uB2E4\uC74C \uAD6C\uC5ED\uC73C\uB85C \uC774\uB3D9\uD558\uAE30"
+  enObjectDescription: Move to the Next Area
 --- !u!1 &1733339509
 GameObject:
   m_ObjectHideFlags: 0

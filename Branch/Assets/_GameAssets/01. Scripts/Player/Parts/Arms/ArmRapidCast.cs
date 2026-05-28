@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Dummy Weapon
 public class ArmRapidCast : PartBaseArm
 {
     [Header("속사 설정")]

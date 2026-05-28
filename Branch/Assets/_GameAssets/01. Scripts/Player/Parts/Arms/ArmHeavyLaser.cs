@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Monster;
 
+// Dummy Weapon
 public class ArmHeavyLaser : PartBaseArm
 {
     [Header("화력형 레이저 설정")]

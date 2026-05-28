@@ -1,3 +1,4 @@
+using Managers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace _Project.Scripts.VisualScripting
             Managers.GUIManager.Instance.GameUIController.InteractionUI.SetActive(isActivate);
             if (isActivate)
             {
-                Managers.GUIManager.Instance.GameUIController.InteractionText.text = interactionName;
+                Managers.GUIManager.Instance.GameUIController.InteractionText.text = LocalizationManager.GetLocalizedString(interactionName);
             }
         }
     }

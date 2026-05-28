@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Monster;
 
+// Dummy Weapon
 public class ArmRapidAttack : PartBaseArm
 {
     [Header("속사 설정")]

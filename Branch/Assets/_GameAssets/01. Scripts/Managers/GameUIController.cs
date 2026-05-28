@@ -953,14 +953,19 @@ namespace Managers
             }
         }
 
+        public void UpdateBossHpBar(float currentHp, float maxHp)
+        {
+            bossHpBar.value = currentHp / maxHp;
+
+            if (bossHpBar.value <= 0.0f)
+            {
+                bossNameText.gameObject.SetActive(false);
+            }
+        }
+
         public void SetBossName(string name)
         {
             bossNameText.text = name;
-        }
-
-        public void UpdateBossHp(float currentHp, float maxHp)
-        {
-            bossHpBar.value = currentHp / maxHp;
         }
 
         public void ToggleBossHp(bool isOn)

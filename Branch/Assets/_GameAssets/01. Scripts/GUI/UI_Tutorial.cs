@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Managers;
 
 public class UI_Tutorial : MonoBehaviour
 {
@@ -21,6 +21,10 @@ public class UI_Tutorial : MonoBehaviour
     private TutorialDataSO currentData;
     private int currentPageIndex = 0;
 
+    // 현재 언어 상태에 맞춰 캐싱할 변수들
+    private string currentTitle;
+    private string[] currentDescriptions;
+
     private void Awake()
     {
         LoadTutorialData();
@@ -28,6 +32,17 @@ public class UI_Tutorial : MonoBehaviour
         // 버튼 이벤트 바인딩
         if (prevButton != null) prevButton.onClick.AddListener(OnClickPrev);
         if (nextButton != null) nextButton.onClick.AddListener(OnClickNext);
+    }
+
+    // 설정 창에서 언어가 바뀐 후, 튜토리얼 창이 새로 열릴 때(SetActive(true))마다 실행됩니다.
+    private void OnEnable()
+    {
+        if (currentData == null) return;
+
+        // 변경된 최신 언어 상태를 반영하여 타이틀과 설명 배열을 다시 세팅합니다.
+        currentPageIndex = 0;
+        SetupCurrentLanguageData();
+        UpdateUI();
     }
 
     public void ShowTutorialByKey(string key)
@@ -39,8 +54,17 @@ public class UI_Tutorial : MonoBehaviour
         }
 
         currentData = data;
-        currentPageIndex = 0; // 새 튜토리얼을 열 때는 항상 1페이지부터
+        currentPageIndex = 0; // 튜토리얼을 열 때는 항상 1페이지부터
+        SetupCurrentLanguageData(); // 열리는 순간의 최신 언어 데이터 캐싱
         UpdateUI();
+    }
+
+    private void SetupCurrentLanguageData()
+    {
+        if (currentData == null) return;
+
+        currentTitle = LocalizationManager.IsKorean ? currentData.title : currentData.enTitle;
+        currentDescriptions = LocalizationManager.IsKorean ? currentData.descriptions : currentData.enDescriptions;
     }
 
     public void OnClickNext()
@@ -67,18 +91,20 @@ public class UI_Tutorial : MonoBehaviour
     {
         if (currentData == null) return;
 
-        // 데이터가 리스트/배열이라고 가정 (SO에서 string[] descriptions로 수정 필요)
-        titleText.text = currentData.title;
+        titleText.text = currentTitle;
         exampleImage.sprite = currentData.exampleImage;
 
-        // 현재 인덱스에 맞는 설명글 표시
-        if (currentData.descriptions != null && currentData.descriptions.Length > 0)
+        if (currentDescriptions.Length > 0)
         {
-            descriptionText.text = currentData.descriptions[currentPageIndex];
+            descriptionText.text = currentDescriptions[currentPageIndex];
 
-            // 페이지 번호 업데이트 (ex: 1 / 3)
             if (pageIndicatorText != null)
-                pageIndicatorText.text = $"{currentPageIndex + 1} / {currentData.descriptions.Length}";
+                pageIndicatorText.text = $"{currentPageIndex + 1} / {currentDescriptions.Length}";
+        }
+        else
+        {
+            descriptionText.text = string.Empty;
+            if (pageIndicatorText != null) pageIndicatorText.text = "0 / 0";
         }
 
         // 버튼 활성화/비활성화 제어 (첫 페이지면 '이전' 비활성화 등)

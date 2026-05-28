@@ -36,10 +36,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private GameObject followCameraPrefab;
     [SerializeField] private CinemachineVirtualCamera startCam;
     [SerializeField] private Volume volume;
-    [SerializeField] private GameObject lowHp;
     [SerializeField] private ParticleFollower navi;
     private FollowCameraController _followCamera;
     private MotionBlur _motionBlur;
+    private MaterialPropertyController lowHpController;
 
     [Header("State")]
     [SerializeField] private EPlayerState movementBlockMask = EPlayerState.Dashing;
@@ -239,9 +239,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             _hitRoutine = null;
         }
 
-        if (_isLowHp && lowHp != null)
+        if (_isLowHp && lowHpController != null)
         {
-            lowHp.SetActive(false);
+            lowHpController.SetEffectActive(false);
         }
 
         _playerActions.PlayerActionMap.Disable();
@@ -601,14 +601,14 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnQuickTurn(InputAction.CallbackContext context)
     {
-        if (context.started)
-        {
-            // 특정 상태일 때 뒤돌기 불가능
-            if ((_currentPlayerState & quickTurnBlockMask) != 0) return;
+        //if (context.started)
+        //{
+        //    // 특정 상태일 때 뒤돌기 불가능
+        //    if ((_currentPlayerState & quickTurnBlockMask) != 0) return;
 
-            SetPlayerState(EPlayerState.QuickTurning, true);
-            _followCamera.StartQuickTurn();
-        }
+        //    SetPlayerState(EPlayerState.QuickTurning, true);
+        //    _followCamera.StartQuickTurn();
+        //}
     }
 
     // 우클릭을 통해 사격을 위한 줌을 준비하는 기능
@@ -686,7 +686,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     public void Spawn()
     {
         _isLowHp = false;
-        lowHp?.gameObject.SetActive(false);
+        if (lowHpController != null)
+        {
+            lowHpController.SetEffectActive(false);
+        }
 
         // Spawn은 게임 시작 또는 리스폰 시에만 호출
         _currentPlayerState &= ~(EPlayerState.Dead);
@@ -735,7 +738,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
 
         _isLowHp = false;
-        lowHp.gameObject.SetActive(false);
+        if (lowHpController != null)
+        {
+            lowHpController.SetEffectActive(false);
+        }
     }
 
     // To-do: 추후 애니메이션 이벤트로 변경할 것
@@ -928,15 +934,18 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             }
 
             // 항상 켜짐 상태 유지
-            if (lowHp != null && !lowHp.gameObject.activeSelf)
+            if (lowHpController != null)
             {
-                lowHp.gameObject.SetActive(true);
+                lowHpController.SetEffectActive(true);
             }
         }
 
         if (stats.CurrentHealth <= 0)
         {
-            if (lowHp != null) lowHp.gameObject.SetActive(false);
+            if (lowHpController != null)
+            {
+                lowHpController.SetEffectActive(false);
+            }
             Die();
         }
     }
@@ -959,10 +968,13 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         stats.CurrentHealth = Mathf.Clamp(stats.CurrentHealth + amount, 0.0f, stats.MaxHealth);
 
-        if ((stats.CurrentHealth / stats.MaxHealth) >= 0.25f && lowHp.gameObject.activeSelf)
+        if ((stats.CurrentHealth / stats.MaxHealth) >= 0.25f)
         {
             _isLowHp = false;
-            lowHp.gameObject.SetActive(false);
+            if (lowHpController != null)
+            {
+                lowHpController.SetEffectActive(false);
+            }
         }
     }
 
@@ -1479,13 +1491,16 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private IEnumerator CoStartHitEffect(float duration)
     {
-        lowHp.SetActive(true);
+        if (lowHpController != null)
+        {
+            lowHpController.SetEffectActive(true);
+        }
 
         yield return new WaitForSeconds(duration);
 
-        if (!_isLowHp)
+        if (!_isLowHp && lowHpController != null)
         {
-            lowHp.SetActive(false);
+            lowHpController.SetEffectActive(false);
         }
         _hitRoutine = null;
     }
@@ -1575,12 +1590,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             GameObject naviObj = createdObj[EPlayerPrefabType.Navi];
             navi = naviObj.GetComponent<ParticleFollower>();
         }
-        
-        lowHp = null;
-        if (lowHp is null)
+
+        lowHpController = null;
+        if (lowHpController is null)
         {
             GameObject lowHpObj = createdObj[EPlayerPrefabType.LowHp];
-            lowHp = lowHpObj;
+            lowHpController = lowHpObj.GetComponent<MaterialPropertyController>();
         }
         
         // 이전 Awake 내용
@@ -1690,7 +1705,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     public void PlayIntroSequence(float duration, Action onComplete)
     {
-        lowHp.SetActive(false);
+        if (lowHpController != null)
+        {
+            lowHpController.SetEffectActive(false);
+        }
+
         StartCoroutine(IntroCameraRoutine(duration, onComplete));
     }
 
@@ -1801,7 +1820,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 // 높이는 상승 단계의 최종 목적지(endHeightY)로 완전히 고정하고, 각도만 endAngle(30도)에서 lingerEndAngle(55도)까지 느긋하게 이어 돌립니다.
                 float currentAngle = Mathf.Lerp(endAngle, lingerEndAngle, t);
 
-                // ✨ [거리 연출 추가] 시간에 따라 카메라와 플레이어 사이의 거리를 서서히 벌려줍니다.
+                // 시간에 따라 카메라와 플레이어 사이의 거리를 서서히 벌려줍니다.
                 float currentRadius = Mathf.Lerp(startRadius, endRadius, t);
 
                 // 고정된 radius 대신 매 프레임 멀어지는 currentRadius를 적용하여 삼각함수 좌표를 계산합니다.

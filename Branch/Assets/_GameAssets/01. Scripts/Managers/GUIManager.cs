@@ -70,6 +70,7 @@ namespace Managers
 
             AutoDetectHardwarePerformance();
             SetVolumeOptions();
+            LoadLanguageSettings();
         }
         
         private static void CheckValidation(EUIType uiType, GameObject uiInstance)
@@ -202,6 +203,23 @@ namespace Managers
             volume = PlayerPrefs.GetFloat("SEParam", 0.8f);
             volume = Mathf.Clamp(volume, 0.0001f, 1.0f);
             audioMixer.SetFloat("SEParam", Mathf.Log10(volume) * 20);
+        }
+
+        private void LoadLanguageSettings()
+        {
+#if UNITY_EDITOR || UNITY_STANDALONE
+            // 저장된 값이 없다면 시스템 기본 언어를 판별하거나 한국어(1)를 디폴트로 설정합니다.
+            if (!PlayerPrefs.HasKey("IsKorean"))
+            {
+                // 시스템 언어가 한국어가 아니라면 영어(0)로 기본값 자동 지정하는 센스 코드
+                bool isSystemKorean = Application.systemLanguage == SystemLanguage.Korean;
+                PlayerPrefs.SetInt("IsKorean", isSystemKorean ? 1 : 0);
+            }
+#endif
+
+            // 복구된 값을 전역 로컬라이제이션 매니저에 주입
+            bool isKorean = PlayerPrefs.GetInt("Language", 1) == 1;
+            LocalizationManager.IsKorean = isKorean;
         }
 
         /// <summary>

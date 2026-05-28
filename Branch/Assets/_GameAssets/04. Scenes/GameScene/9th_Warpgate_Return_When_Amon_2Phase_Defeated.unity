@@ -2993,6 +2993,7 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 1872020689}
   objectDescription: "\uCC28\uC6D0\uBB38\uC5D0 \uC811\uADFC\uD558\uAE30"
+  enObjectDescription: Approach the portal
 --- !u!1 &51930276
 GameObject:
   m_ObjectHideFlags: 0
@@ -74873,6 +74874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   noticeMessage: "\uCC28\uC6D0\uBB38\uC5D0 \uC811\uADFC\uD558\uC138\uC694."
+  enNoticeMessage: Approach the Portal
 --- !u!1 &1258439052
 GameObject:
   m_ObjectHideFlags: 0

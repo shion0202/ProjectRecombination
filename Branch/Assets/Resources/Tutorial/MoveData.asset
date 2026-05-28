@@ -25,9 +25,31 @@ MonoBehaviour:
     \uCCB4\uAC10\uC774 \uBCC0\uD654\uD569\uB2C8\uB2E4. \uD30C\uCE20\uC758 \uD2B9\uC131\uC5D0
     \uB9DE\uCDB0 \uBCF8\uC778\uC5D0\uAC8C \uC798 \uB9DE\uB294 \uAE30\uB3D9 \uC804\uB7B5\uC744
     \uAC16\uCDB0 \uBD05\uC2DC\uB2E4."
-  - "[ \uC870\uC791 \uBC29\uBC95 ]\r\n- PC\r\n\uC804\uD6C4\uC88C\uC6B0 \uC774\uB3D9:
-    WASD\r\n\r\uC2DC\uC810 \uC870\uC791 (\uCE74\uBA54\uB77C \uD68C\uC804): \uB9C8\uC6B0\uC2A4
-    \uC774\uB3D9\n\r\n- \uBAA8\uBC14\uC77C\r\n\uC804\uD6C4\uC88C\uC6B0 \uC774\uB3D9:
-    \uD654\uBA74 \uC88C\uCE21 \uC870\uC774\uC2A4\uD2F1\n\uC2DC\uC810 \uC870\uC791
-    (\uCE74\uBA54\uB77C \uD68C\uC804): \uD654\uBA74 \uBE48 \uACF5\uAC04 \uB4DC\uB798\uADF8"
+  - "[ PC ]\n\uC804\uD6C4\uC88C\uC6B0 \uC774\uB3D9: WASD\r\n\uC2DC\uC810 \uC870\uC791
+    (\uCE74\uBA54\uB77C \uD68C\uC804): \uB9C8\uC6B0\uC2A4 \uC774\uB3D9\n\r\n[ \uBAA8\uBC14\uC77C
+    ]\n\uC804\uD6C4\uC88C\uC6B0 \uC774\uB3D9: \uD654\uBA74 \uC88C\uCE21 \uC870\uC774\uC2A4\uD2F1\n\uC2DC\uC810
+    \uC870\uC791 (\uCE74\uBA54\uB77C \uD68C\uC804): \uD654\uBA74 \uBE48 \uACF5\uAC04
+    \uB4DC\uB798\uADF8"
+  enTitle: Movement
+  enDescriptions:
+  - 'Movement is the most fundamental action for exploring the map and evading enemy
+    attacks by controlling your character.
+
+
+    By combining movement controls with
+    camera rotation, you can freely navigate through indoor terrain and structures.'
+  - '[ PC ]
+
+    Move (Forward/Backward/Left/Right): WASD
+
+    Look Around (Camera
+    Rotation): Move Mouse
+
+
+    [ Mobile ]
+
+    Move (Forward/Backward/Left/Right):
+    Left Joystick
+
+    Look Around (Camera Rotation): Drag Empty Screen Space'
   exampleImage: {fileID: 21300000, guid: 9539f58595b8c9648a9b2233870f6573, type: 3}

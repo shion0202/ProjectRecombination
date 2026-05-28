@@ -10295,8 +10295,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   target: {fileID: 0}
-  objectDescription: "\uC2B9\uAC15\uAE30 \uCF58\uC194 \uC870\uC791\uD558\uC5EC \uC9C0\uD558\uB85C
-    \uB0B4\uB824\uAC00\uAE30"
+  objectDescription: "\uC2B9\uAC15\uAE30 \uCF58\uC194\uC744 \uC870\uC791\uD558\uC5EC
+    \uC9C0\uD558\uB85C \uB0B4\uB824\uAC00\uAE30"
+  enObjectDescription: Interact with the Elevator Console to Descend
 --- !u!4 &255686053
 Transform:
   m_ObjectHideFlags: 0
@@ -45191,6 +45192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   noticeMessage: "\uB2E4\uB978 \uC2B9\uAC15\uAE30\uB97C \uCC3E\uC544 \uC774\uB3D9\uD558\uC138\uC694."
+  enNoticeMessage: Locate another elevator and move.
 --- !u!1 &775022291
 GameObject:
   m_ObjectHideFlags: 0
@@ -57575,6 +57577,7 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 0}
   objectDescription: "\uB2E4\uC74C \uAD6C\uC5ED\uC73C\uB85C \uC774\uB3D9\uD558\uAE30"
+  enObjectDescription: Move to the Next Area
 --- !u!1 &1120659186
 GameObject:
   m_ObjectHideFlags: 0
@@ -99632,8 +99635,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   target: {fileID: 845089640}
-  objectDescription: "\uC2B9\uAC15\uAE30\uC5D0 \uD0D1\uC2B9\uD558\uC5EC \uC9C0\uD558\uB85C
+  objectDescription: "\uC2B9\uAC15\uAE30\uC5D0 \uD0D1\uC2B9\uD55C \uD6C4 \uC9C0\uD558\uB85C
     \uC774\uB3D9\uD558\uAE30"
+  enObjectDescription: Board the Elevator and Proceed Underground
 --- !u!1 &1627101662
 GameObject:
   m_ObjectHideFlags: 0
@@ -100365,6 +100369,7 @@ MonoBehaviour:
   isOn: 0
   noticeMessage: "\uC2B9\uAC15\uAE30\uB97C \uD655\uBCF4\uD558\uC5EC \uC9C0\uD558\uB85C
     \uC774\uB3D9\uD558\uC138\uC694."
+  enNoticeMessage: Secure the elevator and proceed underground.
 --- !u!1 &1643647786
 GameObject:
   m_ObjectHideFlags: 0
@@ -104044,6 +104049,7 @@ MonoBehaviour:
   target: {fileID: 917360730}
   objectDescription: "\uC2B9\uAC15\uAE30 \uD68C\uB85C\uB97C \uC870\uC791\uD558\uC5EC
     \uC2B9\uAC15\uAE30 \uAC1C\uBC29\uD558\uAE30"
+  enObjectDescription: Interact with the Elevator Circuit to Open It
 --- !u!1 &1724880177
 GameObject:
   m_ObjectHideFlags: 0
@@ -139270,8 +139276,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   target: {fileID: 702409407}
-  objectDescription: "\uB2E4\uB978 \uC2B9\uAC15\uAE30\uB97C \uCC3E\uC544 \uC9C0\uD558\uB85C
-    \uC774\uB3D9\uD558\uAE30"
+  objectDescription: "\uB2E4\uB978 \uC2B9\uAC15\uAE30\uB97C \uCC3E\uAE30"
+  enObjectDescription: Find Another Elevator and Proceed Underground
 --- !u!1 &2124376893
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,6 +21,7 @@ public struct DialogVideoData
 {
     public string videoName;
     [TextArea(3, 5)] public string dialog;  // 텍스트 스크립트
+    [TextArea(3, 5)] public string enDialog;
 }
 
 public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
@@ -50,7 +51,10 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
     private RawImage _currentRawImage;
     private RawImage _nextRawImage;
 
-    private bool _isFirstVideoReady = false; // 첫 영상 준비 완료 플래그
+    [Header("Input Defense Settings")]
+    [Tooltip("연타 시 프레임 중복 입력을 방지하기 위한 최소 대기 시간 (초)")]
+    [SerializeField] private float inputDebounceTime = 0.1f;
+    private float _lastInputTime = 0f; // 마지막으로 정상 입력이 접수된 시간
 
     private void Awake()
     {
@@ -298,7 +302,7 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
     {
         int index = 0;
         _isTypingEffect = true;
-        string targetDialog = dialogs[_currentDialogIndex].dialog;
+        string targetDialog = LocalizationManager.IsKorean ? dialogs[_currentDialogIndex].dialog : dialogs[_currentDialogIndex].enDialog;
 
         while (index <= targetDialog.Length)
         {
@@ -336,14 +340,24 @@ public class UI_Prologue : MonoBehaviour, PlayerActions.IUIActionMapActions
 
     void PlayerActions.IUIActionMapActions.OnNextDialogue(InputAction.CallbackContext context)
     {
+        // 기본적인 상태 방어
         if (!context.started || _isEnd) return;
         if (_isTransitioning) return;
 
+        // 동일 프레임 및 초고속 연타 중복 진입 차단 (디바운스 시스템)
+        // 유니티 시간(Time.time) 기준으로 설정한 쿨타임보다 빠르게 들어온 입력은 물리적으로 파기합니다.
+        if (Time.time - _lastInputTime < inputDebounceTime) return;
+
+        // 현재 시간을 마지막 입력 시간으로 즉시 갱신 (다음 프레임의 중복 콜백 방어선)
+        _lastInputTime = Time.time;
+
+
+        // 기존 타이핑 이펙트 스킵 및 다음 다이얼로그 연출 실행
         if (_isTypingEffect)
         {
             _isTypingEffect = false;
             if (_typingRoutine != null) StopCoroutine(_typingRoutine);
-            speaker.textDialog.text = dialogs[_currentDialogIndex].dialog;
+            speaker.textDialog.text = LocalizationManager.IsKorean ? dialogs[_currentDialogIndex].dialog : dialogs[_currentDialogIndex].enDialog;
             speaker.objectArrow.SetActive(true);
             return;
         }

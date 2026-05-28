@@ -14613,7 +14613,7 @@ MonoBehaviour:
   muzzleParticlePrefab: {fileID: 109230, guid: efb243b6dc28eaf4f899b2840294222b, type: 3}
   impactParticle: {fileID: 106912, guid: 8827a814494c0bf4f8a182bf2b7f1a43, type: 3}
   explosionEffectPrefab: {fileID: 0}
-  maxBounces: 5
+  maxBounces: 3
 --- !u!1 &188910
 GameObject:
   m_ObjectHideFlags: 0

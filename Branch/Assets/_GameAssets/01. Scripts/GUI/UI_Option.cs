@@ -1,4 +1,5 @@
 using Managers;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -25,10 +26,22 @@ public class UI_Option : MonoBehaviour
     [SerializeField] private Button HDRLeftArrow;
     [SerializeField] private Button HDRRightArrow;
 
+    [Header("Language")]
+    [SerializeField] private TextMeshProUGUI txtLanguageStatus;
+    [SerializeField] private Button languageLeftArrow;
+    [SerializeField] private Button languageRightArrow;
+    [SerializeField] private List<TextMeshProUGUI> localizedTexts = new();
+
     private void Start()
     {
         if (HDRLeftArrow != null) HDRLeftArrow.onClick.AddListener(OnClickHDRLeft);
         if (HDRRightArrow != null) HDRRightArrow.onClick.AddListener(OnClickHDRRight);
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (languageLeftArrow != null) languageLeftArrow.onClick.AddListener(OnClickLanguageLeft);
+        if (languageRightArrow != null) languageRightArrow.onClick.AddListener(OnClickLanguageRight);
+#endif
+        EventManager.Instance.AddListener(EEventType.LanguageChange, OnLanguageChange);
 
         float bgmVolume = PlayerPrefs.GetFloat("BGMParam", 0.8f);
         float seVolume = PlayerPrefs.GetFloat("SEParam", 0.8f);
@@ -43,7 +56,8 @@ public class UI_Option : MonoBehaviour
         if (sensitivityYSlider != null) sensitivityYSlider.value = sensitivityY;
         SetSensitivityX(sensitivityX);
 
-        UpdateHDRUI(PlayerPrefs.GetInt("HDREnabled", 0) == 1);        // UI 화살표 및 텍스트 갱신
+        UpdateHDRUI(PlayerPrefs.GetInt("HDREnabled", 0) == 1);
+        UpdateLanguageUI(LocalizationManager.IsKorean);
     }
 
     public void SetBGMVolume(float value)
@@ -100,15 +114,77 @@ public class UI_Option : MonoBehaviour
     {
         if (enable)
         {
-            TxtStatus.text = "활성화";
+            TxtStatus.text = LocalizationManager.IsKorean ? "활성화" : "Enabled";
             HDRLeftArrow.interactable = true;
             HDRRightArrow.interactable = false;
         }
         else
         {
-            TxtStatus.text = "비활성화";
+            TxtStatus.text = LocalizationManager.IsKorean ? "비활성화" : "Disabled";
             HDRLeftArrow.interactable = false;
             HDRRightArrow.interactable = true;
         }
+    }
+
+    public void OnClickLanguageLeft()
+    {
+        ApplyLanguageChange(true);
+    }
+
+    public void OnClickLanguageRight()
+    {
+        ApplyLanguageChange(false);
+    }
+
+    private void ApplyLanguageChange(bool isKorean)
+    {
+        LocalizationManager.IsKorean = isKorean;
+        PlayerPrefs.SetInt("Language", isKorean ? 1 : 0);
+        UpdateLanguageUI(isKorean);
+    }
+
+    private void UpdateLanguageUI(bool isKorean)
+    {
+        if (isKorean)
+        {
+            txtLanguageStatus.text = "한국어";
+            languageLeftArrow.interactable = false;
+            languageRightArrow.interactable = true;
+        }
+        else
+        {
+            txtLanguageStatus.text = "English";
+            languageLeftArrow.interactable = true;
+            languageRightArrow.interactable = false;
+        }
+
+        EventManager.Instance.PostNotification(EEventType.LanguageChange, this, null);
+    }
+
+    private void UpdateAllLanguages()
+    {
+        if (localizedTexts.Count <= 0) return;
+
+        foreach (TextMeshProUGUI text in localizedTexts)
+        {
+            if (text == null) return;
+
+            LocalizedUI localizedUI = text.GetComponent<LocalizedUI>();
+            if (localizedUI != null) localizedUI.ApplyLanguage();
+        }
+        
+        if (PlayerPrefs.GetInt("HDREnabled") == 1) TxtStatus.text = LocalizationManager.IsKorean ? "활성화" : "Enabled";
+        else TxtStatus.text = LocalizationManager.IsKorean ? "비활성화" : "Disabled";
+
+        if (LocalizationManager.CurrentObjective.Length > 0)
+        {
+            Managers.GUIManager.Instance.GameUIController.ObjectText.text =
+                LocalizationManager.IsKorean ? LocalizationManager.CurrentObjective[0] : LocalizationManager.CurrentObjective[1];
+        }
+    }
+
+    private void OnLanguageChange(EEventType eventType, Component sender, object param = null)
+    {
+        UpdateAllLanguages();
     }
 }

@@ -53,6 +53,10 @@ public class FollowCameraController : MonoBehaviour
     [Header("Gizmos")]
     private Color deadZoneColor = Color.red;
     private Color softZoneColor = Color.blue;
+
+    [Header("Mobile UI Exception Settings")]
+    [Tooltip("UI 레이캐스트를 무시하고 카메라 회전을 허용할 UI 오브젝트의 이름 목록 (예: 사격 버튼 3종)")]
+    [SerializeField] private List<string> cameraPermittedUIList = new List<string>() { "Btn_LeftAttack", "Btn_RightAttack", "Btn_BothAttack" };
     #endregion
 
     #region Properties
@@ -581,14 +585,37 @@ public class FollowCameraController : MonoBehaviour
     {
         if (EventSystem.current == null) return false;
 
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.pointerId = fingerId;
-        eventData.position = position;
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            pointerId = fingerId,
+            position = position
+        };
 
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
 
-        return results.Count > 0;
+        if (results.Count > 0)
+        {
+            // 터치한 UI 중 가장 최상단에 있는 UI 요소를 검사합니다.
+            GameObject clickedUI = results[0].gameObject;
+
+            // 허용된 UI 리스트에 포함된 버튼 이름(혹은 부모 오브젝트 이름)이 있는지 확인합니다.
+            if (cameraPermittedUIList != null)
+            {
+                foreach (string uiName in cameraPermittedUIList)
+                {
+                    // 정확한 이름 매칭 혹은 사격 버튼 자식 프리팹 구조 대응을 위해 Contains 활용
+                    if (clickedUI.name.Contains(uiName))
+                    {
+                        // UI 위에 있지만, 사격 버튼이므로 카메라 조작을 할 수 있도록 'UI 아님' 처리(false)를 반환합니다.
+                        return false;
+                    }
+                }
+            }
+            return true; // 사격 버튼 외의 일반 UI(이동 패드, 옵션창 등)는 카메라 조작을 차단합니다.
+        }
+
+        return false;
     }
 
     private void HandleGamepadLook()
@@ -637,7 +664,7 @@ public class FollowCameraController : MonoBehaviour
 
         // 시네머신 POV 축의 MaxSpeed가 sensitivity(기본 150 등)로 잡혀있으므로, 
         // 픽셀 델타 변위와 결합할 최종 보정 계수 (이 값을 조절하여 기본 베이스 감도를 튜닝할 수 있습니다)
-        float sensitivityMultiplier = 3f;
+        float sensitivityMultiplier = 2f;
 
 #if UNITY_STANDALONE
         // PC 환경: 마우스 드래그 처리

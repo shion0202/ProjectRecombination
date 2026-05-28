@@ -5259,8 +5259,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   target: {fileID: 929348643}
-  objectDescription: "\uCF58\uC194\uC744 \uCC3E\uC544 \uC870\uC791\uD558\uC5EC \uB0B4\uBD80\uB85C
+  objectDescription: "\uCF58\uC194\uC744 \uCC3E\uC544 \uC870\uC791\uD55C \uD6C4 \uB0B4\uBD80\uB85C
     \uC9C4\uC785\uD558\uAE30"
+  enObjectDescription: Find and Interact with the Console to Enter the Interior
 --- !u!1 &85948721
 GameObject:
   m_ObjectHideFlags: 0
@@ -12196,8 +12197,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOn: 0
-  noticeMessage: "\uAD6C\uC5ED\uC5D0 \uBC30\uCE58\uB41C \uB450 \uAC1C\uC758 \uC911\uC559
+  noticeMessage: "\uAD6C\uC5ED\uC5D0 \uBC30\uCE58\uB41C 2\uAC1C\uC758 \uC911\uC559
     \uD328\uB110 \uC7A5\uCE58\uB97C \uC870\uC791\uD558\uC138\uC694."
+  enNoticeMessage: Interact with the 2 central panel devices in the area.
 --- !u!1 &201022686
 GameObject:
   m_ObjectHideFlags: 0
@@ -14860,7 +14862,8 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 34981589}
   objectDescription: "\uBCF4\uC548 \uC7A5\uCE58 \uD68C\uB85C\uB97C \uC870\uC791\uD558\uC5EC
-    \uCD9C\uAD6C \uAC1C\uBC29\uD558\uAE30(2/2)"
+    \uCD9C\uAD6C \uAC1C\uBC29\uD558\uAE30 (2/2)"
+  enObjectDescription: Interact with Security Device Circuits to Open the Exit (2/2)
 --- !u!4 &239878798
 Transform:
   m_ObjectHideFlags: 0
@@ -27786,7 +27789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   isActivate: 1
-  interactionName: "\uC804\uB958 \uBCC0\uACBD(F)"
+  interactionName: "\uC804\uB958 \uBCC0\uACBD"
 --- !u!1 &513190395
 GameObject:
   m_ObjectHideFlags: 0
@@ -30122,8 +30125,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   target: {fileID: 1224189676}
-  objectDescription: "\uCF58\uC194\uC744 \uCC3E\uC544 \uC870\uC791\uD558\uC5EC \uB0B4\uBD80\uB85C
+  objectDescription: "\uCF58\uC194\uC744 \uCC3E\uC544 \uC870\uC791\uD55C \uD6C4 \uB0B4\uBD80\uB85C
     \uC9C4\uC785\uD558\uAE30"
+  enObjectDescription: Find and Interact with the Console to Enter the Interior
 --- !u!1 &548888804
 GameObject:
   m_ObjectHideFlags: 0
@@ -42934,6 +42938,7 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 769418239}
   objectDescription: "\uB0B4\uBD80\uB85C \uC9C4\uC785\uD558\uAE30"
+  enObjectDescription: Enter the Interior
 --- !u!1 &774164205
 GameObject:
   m_ObjectHideFlags: 0
@@ -53333,6 +53338,7 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 681798382}
   objectDescription: "\uB2E4\uC74C \uAD6C\uC5ED\uC73C\uB85C \uC774\uB3D9\uD558\uAE30"
+  enObjectDescription: Move to the Next Area
 --- !u!1 &944480871
 GameObject:
   m_ObjectHideFlags: 0
@@ -55488,6 +55494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   noticeMessage: "\uD568\uC815\uC744 \uD53C\uD574 \uB0B4\uBD80\uB85C \uC9C4\uC785\uD558\uC138\uC694."
+  enNoticeMessage: Evade traps and enter the interior.
 --- !u!1 &988497934
 GameObject:
   m_ObjectHideFlags: 0
@@ -85555,7 +85562,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOn: 0
   isActivate: 1
-  interactionName: "\uBB38 \uC5F4\uAE30(F)"
+  interactionName: "\uBB38 \uAC1C\uBC29"
 --- !u!1 &1428598443
 GameObject:
   m_ObjectHideFlags: 0
@@ -87103,8 +87110,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOn: 0
-  noticeMessage: "\uB0A8\uC740 \uD558\uB098\uC758 \uC911\uC559 \uD328\uB110 \uC7A5\uCE58\uB97C
-    \uCC3E\uC544 \uC870\uC791\uD558\uC138\uC694."
+  noticeMessage: "\uB0A8\uC740 \uC911\uC559 \uD328\uB110 \uC7A5\uCE58\uB97C \uCC3E\uC544
+    \uC870\uC791\uD558\uC138\uC694."
+  enNoticeMessage: Locate and interact with the remaining central panel device.
 --- !u!1 &1463770962
 GameObject:
   m_ObjectHideFlags: 0
@@ -93523,7 +93531,8 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 626653647}
   objectDescription: "\uBCF4\uC548 \uC7A5\uCE58 \uD68C\uB85C\uB97C \uC870\uC791\uD558\uC5EC
-    \uCD9C\uAD6C \uAC1C\uBC29\uD558\uAE30(1/2)"
+    \uCD9C\uAD6C \uAC1C\uBC29\uD558\uAE30 (1/2)"
+  enObjectDescription: Interact with Security Device Circuits to Open the Exit (1/2)
 --- !u!1 &1560967736
 GameObject:
   m_ObjectHideFlags: 0
@@ -96446,6 +96455,7 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 0}
   objectDescription: "\uBAA8\uB4E0 \uBAAC\uC2A4\uD130 \uCC98\uCE58\uD558\uAE30"
+  enObjectDescription: Defeat All Enemies
 --- !u!1 &1610926951
 GameObject:
   m_ObjectHideFlags: 0
@@ -120501,7 +120511,8 @@ MonoBehaviour:
   isOn: 0
   target: {fileID: 379628988}
   objectDescription: "\uBCF4\uC548 \uC7A5\uCE58 \uD68C\uB85C\uB97C \uC870\uC791\uD558\uC5EC
-    \uCD9C\uAD6C \uAC1C\uBC29\uD558\uAE30(0/2)"
+    \uCD9C\uAD6C \uAC1C\uBC29\uD558\uAE30 (0/2)"
+  enObjectDescription: Interact with Security Device Circuits to Open the Exit (0/2)
 --- !u!1 &2038651213
 GameObject:
   m_ObjectHideFlags: 0
