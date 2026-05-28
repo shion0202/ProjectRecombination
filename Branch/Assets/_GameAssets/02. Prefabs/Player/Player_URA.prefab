@@ -18188,13 +18188,13 @@ MonoBehaviour:
   ignoreMask:
     serializedVersion: 2
     m_Bits: 0
-  skillCooldown: 55
+  skillCooldown: 20
   missilePrefab: {fileID: 1234507268503195618, guid: 5c13b7f0b5cd7e04990c03edc858d81a,
     type: 3}
   targetingPrefab: {fileID: 139102, guid: 4194ceaacbae66d4c82403180d035ff7, type: 3}
   maxTargetCount: 12
   particleStopDelay: 0.9
-  skillDamage: 35
+  skillDamage: 55
   maxYawAngle: 80
   maxPitchAngle: 80
   launchOffset: {x: 0, y: 1.7, z: 0}
