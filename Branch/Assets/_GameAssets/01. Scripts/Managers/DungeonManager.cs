@@ -82,7 +82,7 @@ namespace Managers
                 GameManager.Instance.Player.transform.position = startPosition.transform.position;
                 
                 // Dynamic 씬을 Active 씬으로 설정
-                SceneController.Instance.SetActiveScene(LoadedStages[CurrentPlayerStageIndex]);
+                //SceneController.Instance.SetActiveScene(LoadedStages[CurrentPlayerStageIndex]);
             }
             catch (Exception e)
             {
@@ -145,7 +145,7 @@ namespace Managers
                 CurrentPlayerStageIndex = newStageIndex;
                 
                 // 현재 플레이어가 있는 스테이지의 Dynamic 씬을 Active 씬으로 설정
-                SceneController.Instance.SetActiveScene(LoadedStages[CurrentPlayerStageIndex]);
+                //SceneController.Instance.SetActiveScene(LoadedStages[CurrentPlayerStageIndex]);
             }
             catch (Exception e)
             {
@@ -315,7 +315,7 @@ namespace Managers
                 }
 
                 currentPlayerStageIndex--;
-                SceneController.Instance.SetActiveScene(LoadedStages[CurrentPlayerStageIndex]);
+                //SceneController.Instance.SetActiveScene(LoadedStages[CurrentPlayerStageIndex]);
                 
                 Debug.Log("[DungeonManager] 현재 스테이지 리셋 완료!");
             }

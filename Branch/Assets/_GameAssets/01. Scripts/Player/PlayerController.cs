@@ -1,5 +1,4 @@
 using Cinemachine;
-using DG.Tweening;
 using FIMSpace.FProceduralAnimation;
 using Managers;
 using System;
@@ -184,10 +183,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         if (!_isInit) return;
         
         AnimCheckShoot();
-
-        // Debug.Log("Player HP: " + stats.CurrentHealth);
-        // GUI HP 바 갱신
-        // TODO: Null Reference
         GUIManager.Instance.GameUIController.SetHpSlider(stats.CurrentHealth, stats.MaxHealth);
     }
 
@@ -302,10 +297,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnLeftAttack(InputAction.CallbackContext context)
     {
-        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
-
         if (context.started)
         {
+            if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
             PartBaseArm weapon = inventory.EquippedItems[EPartType.ArmL][0].GetComponent<PartBaseArm>();
             if (weapon && (weapon.IsOverheat || !weapon.IsAnimating)) return;
 
@@ -321,10 +316,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnRightAttack(InputAction.CallbackContext context)
     {
-        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
-
         if (context.started)
         {
+            if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
             PartBaseArm weapon = inventory.EquippedItems[EPartType.ArmR][0].GetComponent<PartBaseArm>();
             if (weapon && (weapon.IsOverheat || !weapon.IsAnimating)) return;
 
@@ -340,10 +335,10 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnBothAttack(InputAction.CallbackContext context)
     {
-        if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
-        
         if (context.started)
         {
+            if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
+
             PartBaseArm left = inventory.EquippedItems[EPartType.ArmL][0].GetComponent<PartBaseArm>();
             if (!left.IsOverheat && left.IsAnimating)
             {
@@ -378,35 +373,38 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     void PlayerActions.IPlayerActionMapActions.OnRadialMenu(InputAction.CallbackContext context)
     {
-        // 특정 상황에서 키 입력이 불가능하도록 설정
-        if ((_currentPlayerState & partChangeBlockMask) != 0) return;
         if (Managers.GUIManager.Instance.GameUIController.HelpUI.activeSelf) return;
         if (Managers.GUIManager.Instance.GameUIController.WorldMap.activeSelf) return;
         if (Managers.GUIManager.Instance.GameUIController.PauseUI.activeSelf) return;
 
+#if UNITY_STANDALONE
         // PC 버전 기준, 추후 빌드 플랫폼에 따라 다르게 적용되도록 수정 필요
-        //if (context.started)
-        //{
-        //    // UI 활성화 시 커서 보이기, 자유롭게
-        //    Managers.GUIManager.Instance.GameUIController.ToggleRadialUI(true);
-        //    Managers.GUIManager.Instance.GameUIController.ActivateRedDot(false);
-        //    Cursor.lockState = CursorLockMode.None;
-        //    Cursor.visible = true;
+        if (context.started)
+        {
+            if ((_currentPlayerState & partChangeBlockMask) != 0) return;
 
-        //    // To-do: 공격 등 다른 조작도 불가능하도록 설정
-        //    // 컨트롤러를 바꿔버리는 것도 방법인 듯
-        //    SetMovable(false);
-        //    _followCamera.SetCameraRotatable(false);
+            _currentPlayerState |= EPlayerState.Toggle;
 
-        //    Time.timeScale = 0.1f;
-        //}
+            // UI 활성화 시 커서 보이기, 자유롭게
+            Managers.GUIManager.Instance.GameUIController.ToggleRadialUI(true);
+            Managers.GUIManager.Instance.GameUIController.ActivateRedDot(false);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
-        //if (context.canceled)
-        //{
-        //    if (!Managers.GUIManager.Instance.GameUIController.RadialUI.activeSelf) return;
-        //    CloseRadialUI();
-        //}
+            // To-do: 공격 등 다른 조작도 불가능하도록 설정
+            SetMovable(false);
+            _followCamera.SetCameraRotatable(false);
 
+            Time.timeScale = 0.1f;
+        }
+
+        if (context.canceled)
+        {
+            if (!Managers.GUIManager.Instance.GameUIController.RadialUI.activeSelf) return;
+            CloseRadialUI();
+        }
+#else
+// 모바일 버전 기준, 버튼을 누를 때마다 On/Off
         if (context.started)
         {
             // Radial UI가 꺼져있을 경우
@@ -431,6 +429,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
                 CloseRadialUI();
             }
         }
+#endif
     }
 
     void PlayerActions.IPlayerActionMapActions.OnBaseSet(InputAction.CallbackContext context)
@@ -615,7 +614,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     // 양팔 파츠로 변경되면서 줌 기능이 삭제되어 현재는 사용 X
     void PlayerActions.IPlayerActionMapActions.OnZoom(InputAction.CallbackContext context)
     {
-        if ((_currentPlayerState & zoomBlockMask) != 0) return;
+        //if ((_currentPlayerState & zoomBlockMask) != 0) return;
 
         //if (context.started)
         //{
@@ -658,7 +657,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     }
 
     // 마우스 휠을 통한 줌 기능 (임시)
-    // To-do: 파츠 별 카메라를 고려하지 않은 상태이므로 사용한다면 추후 수정 필요
+    // 파츠 별 카메라를 고려하지 않은 상태이므로 사용한다면 추후 수정 필요
     void PlayerActions.IPlayerActionMapActions.OnMouseScroll(InputAction.CallbackContext context)
     {
         if ((_currentPlayerState & EPlayerState.UnmanipulableState) != 0) return;
@@ -675,12 +674,12 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     // 추후 적용한다면 입력 뿐만이 아니라 캐릭터가 대기 상태가 아닐 때에도 적용되도록 변경할 것
     void PlayerActions.IPlayerActionMapActions.OnResetCamera(InputAction.CallbackContext context)
     {
-        if (context.started)
-        {
-            //_followCamera.ResetCamera();
-        }
+        //if (context.started)
+        //{
+        //    _followCamera.ResetCamera();
+        //}
     }
-    #endregion
+#endregion
 
     #region Public Methods
     public void Spawn()
@@ -1030,7 +1029,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
             rigAimController.SmoothChangeBaseWeight(true);
         }
 
-        SwitchStateToIdle();
+        //SwitchStateToIdle();
+        _currentPlayerState &= ~EPlayerState.Moving;
+        _currentPlayerState |= EPlayerState.Idle;
 
         return true;
     }
@@ -1193,7 +1194,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     private void HandleGravity()
     {
         // 대시 중이라면 중력 무시
-        if ((_currentPlayerState & EPlayerState.Dashing) != 0)
+        if (((_currentPlayerState & EPlayerState.Dashing)) != 0)
         {
             // 대시 중에는 중력 벡터를 초기화하거나 그대로 유지(중력 영향 없음)
             _fallVelocity = Vector3.zero;
@@ -1415,7 +1416,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         Managers.GUIManager.Instance.GameUIController.SetCurrentPartIcon(partType, attackType);
 
-        if (IsFullSet(inventory.EquippedItems[EPartType.Shoulder][0].AttackType,
+        if (IsFullSet((EAttackType)(1 << attackType), inventory.EquippedItems[EPartType.Shoulder][0].AttackType,
             inventory.EquippedItems[EPartType.ArmL][0].AttackType,
             inventory.EquippedItems[EPartType.ArmR][0].AttackType,
             inventory.EquippedItems[EPartType.Legs][0].AttackType)
@@ -1467,9 +1468,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
-    private bool IsFullSet(EAttackType back, EAttackType leftArm, EAttackType rightArm, EAttackType leg)
+    private bool IsFullSet(EAttackType main, EAttackType back, EAttackType leftArm, EAttackType rightArm, EAttackType leg)
     {
-        return (back == leftArm) && (leftArm == rightArm) && (rightArm == leg);
+        return (main == back) && ((back == leftArm) && (leftArm == rightArm) && (rightArm == leg));
     }
 
     private IEnumerator CoStartInvincibility(float duration)
@@ -1560,6 +1561,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // 5. 그 외 기본 일시정지 UI 토글 처리
         if (!uiController.PauseUI.activeSelf)
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
             _followCamera.OnUIOpen();
             uiController.PauseUI.SetActive(true);
             uiController.HUD.SetActive(false);
@@ -1567,6 +1571,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
         else
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
             _followCamera.OnUIClose();
             uiController.PauseUI.SetActive(false);
             uiController.HUD.SetActive(true);
@@ -1662,9 +1669,6 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         // VolumeProfile 가져오기
         VolumeProfile profile = volume.profile;     // 공유 프로필을 쓸 경우 sharedProfile을 사용                      
         profile.TryGet<MotionBlur>(out _motionBlur);   // MotionBlur 오버라이드 얻기
-
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
         
         _followCamera = FindFirstObjectByType<FollowCameraController>();
         if (_followCamera == null)
@@ -1678,6 +1682,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         SetOvrrideAnimator(EAnimationType.Base);
 
         Spawn();
+        _followCamera.SetCameraRotatable(false);
 
         // 씬 로딩 시점에는 인게임 조작 인풋을 기본적으로 비활성화해 둡니다.
         // 프롤로그 상영 중이나 로딩 중에 플레이어가 임의로 움직이거나 입력을 받는 것을 방지합니다.
@@ -1709,6 +1714,9 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         {
             lowHpController.SetEffectActive(false);
         }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         StartCoroutine(IntroCameraRoutine(duration, onComplete));
     }

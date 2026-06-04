@@ -26,6 +26,6 @@ public class UI_RadialButtonFirst : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        //Managers.GUIManager.Instance.UnselectPartPosition(partPosIndex);
+        //Managers.GUIManager.Instance.GameUIController.UnselectPartPosition(partPosIndex);
     }
 }

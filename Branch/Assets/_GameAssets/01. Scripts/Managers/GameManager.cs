@@ -226,7 +226,10 @@ namespace Managers
                 Debug.Log("[GameManager] 에필로그 씬 로드 중...");
                 
                 CurrentState = GameState.Epilogue;
-                
+
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
                 // 게임 리소스 씬 언로드
                 await DungeonManager.Instance.UnloadAllStage();
                 await UnloadPlayerScene();

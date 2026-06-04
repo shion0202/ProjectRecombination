@@ -22,6 +22,7 @@ namespace Managers
             { "취소", "Cancel" },
             { "터치하여 닫기", "Tap to close" },
             { "클릭하여 닫기", "Click to close" },
+            { "Esc로 닫기", "Press Esc to close" },
 
             { "기획\n김진윤\n조윤재",
 @"Game Design

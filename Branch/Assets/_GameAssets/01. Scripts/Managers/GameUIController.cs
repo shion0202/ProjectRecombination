@@ -265,9 +265,6 @@ namespace Managers
                 HelpUI.SetActive(true);
                 HUD.SetActive(false);
 
-                //Cursor.lockState = CursorLockMode.Locked;
-                //Cursor.visible = false;
-
                 Time.timeScale = 0.0f;
 
                 var player = MonsterManager.Instance.GetComponent<PlayerController>();
@@ -444,11 +441,16 @@ namespace Managers
                 _selectedPartIndex = -1;
 
                 Time.timeScale = 1.0f;
-                //Cursor.lockState = CursorLockMode.Locked;
-                //Cursor.visible = false;
+                
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
 
-                Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>().SetMovable(true);
-                Managers.MonsterManager.Instance.Player.GetComponent<PlayerController>().FollowCamera.SetCameraRotatable(true);
+                if (player)
+                {
+                    player.SetPlayerState(EPlayerState.Toggle, false);
+                    player.SetMovable(true);
+                    player.FollowCamera.SetCameraRotatable(true);
+                }
 
                 radialUI.gameObject.SetActive(false);
             }
@@ -707,7 +709,6 @@ namespace Managers
         public void SetCurrentPartIcon(int posIndex, int attackIndex)
         {
             //if (posIndex < 0 || attackIndex < 0  || posIndex + 1 >= legsParts.Count || attackIndex + 1 >= legsParts.Count) return;
-            Debug.Log($"파트, 어택: {posIndex}, {attackIndex}");
 
             // 기본 파츠일 경우
             if (attackIndex <= 0)
@@ -824,8 +825,8 @@ namespace Managers
                 player.FollowCamera.OnUIClose();
             }
 
-            //Cursor.lockState = CursorLockMode.Locked;
-            //Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
 
             GUI.SetActive(true);
             pauseUI.SetActive(false);
@@ -1148,22 +1149,22 @@ namespace Managers
             _hapticCoroutine = null;
         }
 
-        private void OnDisable()
-        {
-            // 씬 전환, 애플리케이션 종료, 컴포넌트 비활성화 시 패드가 계속 우는 현상을 원천 방지합니다.
-            if (Gamepad.current != null)
-            {
-                Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
-            }
-        }
+        //private void OnDisable()
+        //{
+        //    // 씬 전환, 애플리케이션 종료, 컴포넌트 비활성화 시 패드가 계속 우는 현상을 원천 방지합니다.
+        //    if (Gamepad.current != null)
+        //    {
+        //        Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+        //    }
+        //}
 
-        private void OnApplicationFocus(bool hasFocus)
-        {
-            // 게임 창이 포커스를 잃어 전체화면에서 내려가거나 알트탭을 했을 때 진동을 차단합니다.
-            if (!hasFocus)
-            {
-                StopVibration();
-            }
-        }
+        //private void OnApplicationFocus(bool hasFocus)
+        //{
+        //    // 게임 창이 포커스를 잃어 전체화면에서 내려가거나 알트탭을 했을 때 진동을 차단합니다.
+        //    if (!hasFocus)
+        //    {
+        //        StopVibration();
+        //    }
+        //}
     }
 }

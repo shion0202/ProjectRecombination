@@ -343,49 +343,6 @@ public class CharacterStat : MonoBehaviour
 
             stat.SetValue(baseValue);
         }
-
-        // Modifiers 적용 (Flat → PercentAdd → PercentMul 순)
-        //foreach (var stat in _totalStats.GetAllStats())
-        //{
-        //    float finalValue = stat.value;
-
-        //    foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.Flat))
-        //    {
-        //        finalValue += mod.value;
-        //    }
-        //    foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentAdd))
-        //    {
-        //        finalValue += stat.value * mod.value;
-        //    }
-        //    foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
-        //    {
-        //        finalValue *= (1 + mod.value);
-        //    }
-
-        //    stat.SetValue(finalValue);
-        //}
-        //foreach (var stats in _combinedPartStats.Values)
-        //{
-        //    foreach (var stat in stats.GetAllStats())
-        //    {
-        //        float finalValue = stat.value;
-
-        //        foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.Flat))
-        //        {
-        //            finalValue += mod.value;
-        //        }
-        //        foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentAdd))
-        //        {
-        //            finalValue += stat.value * mod.value;
-        //        }
-        //        foreach (var mod in _modifiers.Where(m => m.statType == stat.statType && m.modifierType == EStackType.PercentMul))
-        //        {
-        //            finalValue *= (1 + mod.value);
-        //        }
-
-        //        stat.SetValue(finalValue);
-        //    }
-        //}
     }
     #endregion
 }

@@ -89,11 +89,12 @@ public enum EPlayerState
     Nuking = 1 << 12,
     Cutscene = 1 << 13,
     QuickTurning = 1 << 14,
+    Toggle = 1 << 15,
 
     RotateState = Moving | LeftShooting | RightShooting | Zooming | Skilling | Nuking,
     ActionState = Idle | Moving | Dashing | LeftShooting | RightShooting | Zooming,
     ShootState = LeftShooting | RightShooting,
-    UnmanipulableState = Spawning | Dead,
+    UnmanipulableState = Spawning | Dead | Cutscene | Toggle,
 }
 
 // 파츠 부위
