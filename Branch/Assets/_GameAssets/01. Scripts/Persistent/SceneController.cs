@@ -35,7 +35,7 @@ public class SceneController : Singleton<SceneController>
                 
                 if (!key.Contains("UI")) 
                 {
-                    SceneManager.SetActiveScene(sceneInstance.Scene);
+                    //SceneManager.SetActiveScene(sceneInstance.Scene);
                 }
             
                 Debug.Log($"[SceneController] {key} 로드 완료!");

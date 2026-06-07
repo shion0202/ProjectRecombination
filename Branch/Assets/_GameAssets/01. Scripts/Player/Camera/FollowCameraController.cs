@@ -235,7 +235,13 @@ public class FollowCameraController : MonoBehaviour
     public void UpdateFollowCamera()
     {
         HandleGamepadLook();
-        HandleMobileCameraDrag();
+
+#if UNITY_STANDALONE
+        HandlePCCameraLook();       // PC: 마우스 커서 고정 기반 회전
+#else
+        HandleMobileCameraDrag();   // 모바일: 터치 스크린 드래그 회전
+#endif
+
         SmoothChangeCamera();
         ZoomCamera();
         HandleRecoil();
@@ -651,6 +657,34 @@ public class FollowCameraController : MonoBehaviour
             ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0.0f;
             ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0.0f;
         }
+    }
+
+    // PC 환경: 마우스 커서 고정 상태에서의 카메라 회전 처리
+    private void HandlePCCameraLook()
+    {
+        // UI가 열려있거나, 퀵턴 중이거나, 카메라 조작이 잠긴 상태라면 회전 처리 생략
+        if (_isQuickTurning || _isLockedByUI || _isLock || _quickTurnCoroutine != null) return;
+
+        var mouse = Mouse.current;
+        if (mouse == null) return;
+
+        // 마우스의 순수 프레임별 이동량(Delta)을 가져옴 (Input System 기준)
+        Vector2 mouseDelta = mouse.delta.ReadValue();
+
+        // 체감 감도를 맞추기 위한 멀티플라이어
+        float sensitivityMultiplier = 0.005f;
+
+        float finalSensitivityX = dragSensitivityX * sensitivityMultiplier;
+        float finalSensitivityY = dragSensitivityY * sensitivityMultiplier;
+
+        // 시네머신 POV 축 값(Value)에 델타 변위값을 즉시 더해 굼뜸 현상 해결
+        // 마우스 Delta Y는 위로 올릴 때 양수(+)이므로, 카메라를 위로 올리려면 축 값에서 빼주거나 더해주는 등 프로젝트 기준에 맞춰 조정
+        ActiveCameraAim.m_HorizontalAxis.Value += mouseDelta.x * finalSensitivityX;
+        ActiveCameraAim.m_VerticalAxis.Value -= mouseDelta.y * finalSensitivityY;
+
+        // InputAxisValue는 안전하게 0으로 리셋
+        ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = 0f;
+        ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = 0f;
     }
 
     private void HandleMobileCameraDrag()
