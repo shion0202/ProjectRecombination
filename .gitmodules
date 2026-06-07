@@ -1,3 +1,9 @@
 [submodule "Branch/Assets/ExternalAssets"]
 	path = Branch/Assets/ExternalAssets
 	url = https://github.com/JJH0204/Machina-ExAssets.git
+[submodule "Branch/Assets/Assets/_ExAssets"]
+	path = Branch/Assets/Assets/_ExAssets
+	url = https://github.com/shion0202/2025_Project_Recombination_Private.git
+[submodule "Branch/Assets/_ExAssets"]
+	path = Branch/Assets/_ExAssets
+	url = https://github.com/shion0202/2025_Project_Recombination_Private.git
