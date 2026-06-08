@@ -879,7 +879,7 @@ PlayerSettings:
     PS5: DOTWEEN;KAMGAM_POWER_PIVOT
     QNX: DOTWEEN;KAMGAM_POWER_PIVOT
     Stadia: DOTWEEN;KAMGAM_POWER_PIVOT
-    Standalone: MAGICACLOTH2;DOTWEEN;KAMGAM_POWER_PIVOT
+    Standalone: MAGICACLOTH2;DOTWEEN;KAMGAM_POWER_PIVOT;STEAMWORKS_NET
     VisionOS: DOTWEEN;KAMGAM_POWER_PIVOT
     WebGL: DOTWEEN;KAMGAM_POWER_PIVOT
     Windows Store Apps: DOTWEEN;KAMGAM_POWER_PIVOT
@@ -890,7 +890,7 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
-    Standalone: 1
+    Standalone: 0
   il2cppCompilerConfiguration:
     Android: 2
   il2cppCodeGeneration: {}

@@ -8,6 +8,42 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_GameAssets/04. Scenes/Bootstrap.unity
     guid: c63c343439ffd4ffaa7cb12fdfab3469
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/Persistent.unity
+    guid: becdb8f3f369644cdbc31109603799cb
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/Player.unity
+    guid: ab3dc90457c8b44ad8f11c08c392efef
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/UI_Global.unity
+    guid: 08fb32db51a684d49abe9a85beba18f9
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/1st_Security_Room.unity
+    guid: 9a4023f476fa44fd9a5670c3f5b11d38
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/2nd_Control_Room.unity
+    guid: 9b9f61cbd7b284cc4a6d51cd4042c921
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/3rd_Elevator_Room.unity
+    guid: 050393c24749d4b8fb6069e9cbe52926
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/4th_Big_Elevator.unity
+    guid: 86d1204d3002143ccbcd3e42cd199966
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/5th_Morgue.unity
+    guid: 1aeffad852227482fa7b0680a8d23fdc
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/6th_Soul_Care.unity
+    guid: 2f036839de4514784b4727e8eed6fab6
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/7th_Warpgate.unity
+    guid: ed77747f51e7e4352b5c0e1474cab4e7
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/8th_Another_Space.unity
+    guid: 7d71fe2eb69504fa7a9725c7b36d31e1
+  - enabled: 1
+    path: Assets/_GameAssets/04. Scenes/GameScene/9th_Warpgate_Return_When_Amon_2Phase_Defeated.unity
+    guid: bdee5bd9b7ea149f6bffce2629b7db2a
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: d6c6cfcf801b645eb907ae6137968c53,
       type: 2}
