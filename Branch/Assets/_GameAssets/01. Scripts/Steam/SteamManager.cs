@@ -7,6 +7,11 @@ public class SteamManager : MonoBehaviour
 
     private static SteamManager instance;
 
+    // Callback for Steam overlay activation
+    private Callback<GameOverlayActivated_t> gameOverlayActivated;
+
+    public static bool IsOverlayActive { get; private set; }
+    
     [SerializeField]
     private uint appId = 480;
 
@@ -48,6 +53,11 @@ public class SteamManager : MonoBehaviour
 
         Debug.Log("[Steam] Initialized.");
         Debug.Log("[Steam] User: " + SteamFriends.GetPersonaName());
+
+        // Set up callback for Steam overlay activation
+        gameOverlayActivated = Callback<GameOverlayActivated_t>.Create(OnGameOverlayActivated);
+
+        Debug.Log("[Steam] Overlay callback registered.");
     }
 
     private void Update()
@@ -65,5 +75,20 @@ public class SteamManager : MonoBehaviour
 
         SteamAPI.Shutdown();
         Initialized = false;
+    }
+
+    // Callback method for Steam overlay activation
+    private void OnGameOverlayActivated(GameOverlayActivated_t callback)
+    {
+        IsOverlayActive = callback.m_bActive != 0;
+
+        if (IsOverlayActive)
+        {
+            Debug.Log("[Steam] GameOverlayActivated_t received. Steam Overlay opened.");
+        }
+        else
+        {
+            Debug.Log("[Steam] GameOverlayActivated_t received. Steam Overlay closed.");
+        }
     }
 }
