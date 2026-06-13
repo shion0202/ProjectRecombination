@@ -24,5 +24,13 @@ MonoBehaviour:
   laserOffset: {x: 0, y: 7.7, z: 5}
   attackDuration: 4
   rotateSpeed: 2
+  maxLength: 50
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 512
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 262144
+  damageInterval: 0.1
   chargingLaserAudioClip: {fileID: 8300000, guid: b14b51b9211c04e95bda0b206c5a509a,
     type: 3}

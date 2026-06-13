@@ -24,6 +24,17 @@ namespace _Test.Skills
         [SerializeField] private float attackDuration;
         [SerializeField] private float rotateSpeed = 2.0f;
         private Transform _shootPoint;
+
+        [Header("히트 판정 (DoT)")]
+        [Tooltip("레이저 빔의 최대 사거리(Raycast 길이)")]
+        [SerializeField] private float maxLength = 50.0f;
+        [Tooltip("대미지를 입힐 대상 레이어 (예: Player)")]
+        [SerializeField] private LayerMask targetMask;
+        [Tooltip("빔을 막는 장애물 레이어 (이 레이어에 먼저 맞으면 대상에게 닿지 않음)")]
+        [SerializeField] private LayerMask obstacleMask;
+        [Tooltip("DoT 틱 간격(초). damage 값은 초당 대미지로 취급된다.")]
+        [SerializeField] private float damageInterval = 0.1f;
+        private float _damageTimer;
         
         [Header("Audio Clips")]
         [SerializeField] private AudioClip chargingLaserAudioClip;
@@ -54,6 +65,7 @@ namespace _Test.Skills
             data.AnimatorParameterSetter.Animator.SetBool("isLaser", true);
 
             float elapsed = 0f;
+            _damageTimer = 0f;
             while (elapsed < attackDuration)
             {
                 laser.transform.rotation = Quaternion.LookRotation(data.Target.transform.position - _shootPoint.position);
@@ -67,6 +79,14 @@ namespace _Test.Skills
                     data.Agent.transform.rotation = Quaternion.Slerp(now, target, Time.deltaTime * rotateSpeed);
                 }
 
+                // DoT 히트 판정: 틱 간격마다 빔 방향으로 Raycast하여 대상에 지속 대미지
+                _damageTimer += Time.deltaTime;
+                if (_damageTimer >= damageInterval)
+                {
+                    ApplyBeamDamage(laser.transform);
+                    _damageTimer = 0f;
+                }
+
                 elapsed += Time.deltaTime;
                 yield return null;
             }
@@ -77,6 +97,37 @@ namespace _Test.Skills
             _shootPoint = null;
 
             Debug.Log("[Executioner] Charging Laser 종료");
+        }
+
+        /// <summary>
+        /// 빔 시작점(beam)에서 forward 방향으로 Raycast하여, 가장 먼저 맞은 것이 대상이면 DoT 대미지를 적용한다.
+        /// 장애물(obstacleMask)에 먼저 맞으면 빔이 막힌 것으로 보고 대미지를 주지 않는다.
+        /// </summary>
+        private void ApplyBeamDamage(Transform beam)
+        {
+            // 대상 + 장애물을 함께 검사하여, 둘 중 더 가까운 쪽이 먼저 맞도록 한다.
+            int hitMask = targetMask | obstacleMask;
+            if (!Physics.Raycast(beam.position, beam.forward, out RaycastHit hit, maxLength, hitMask))
+            {
+                return;
+            }
+
+            // 먼저 맞은 것이 대상 레이어가 아니면(=장애물) 빔이 막힌 것이므로 무시
+            if ((targetMask.value & (1 << hit.collider.gameObject.layer)) == 0)
+            {
+                return;
+            }
+
+            IDamagable target = hit.collider.GetComponent<IDamagable>()
+                                ?? hit.collider.GetComponentInParent<IDamagable>();
+            if (target == null)
+            {
+                return;
+            }
+
+            // damage = 초당 대미지. _damageTimer(실제 경과 시간)를 unitOfTime으로 넘겨
+            // 방어력이 시간 구간에 비례 적용되도록 한다. (ShoulderLaser와 동일한 규약)
+            target.ApplyDamage(damage * _damageTimer, targetMask, _damageTimer, 0.0f);
         }
 
         public override IEnumerator Casting(Blackboard data)
