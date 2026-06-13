@@ -659,6 +659,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmName: 06_The Sealed_Reaper
+--- !u!1 &190335499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 190335500}
+  m_Layer: 0
+  m_Name: Amon_TP_Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &190335500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190335499}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1719191205}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &193984973
 GameObject:
   m_ObjectHideFlags: 0
@@ -5230,6 +5261,7 @@ Transform:
   - {fileID: 998560223}
   - {fileID: 1755014606}
   - {fileID: 938434559}
+  - {fileID: 190335500}
   m_Father: {fileID: 3396309565721652597}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1755014604
@@ -5260,6 +5292,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Amon_Phase_2
       objectReference: {fileID: 0}
+    - target: {fileID: 5589947934752730126, guid: 9e1341dab2ab244298704013c9319f95,
+        type: 3}
+      propertyPath: arenaAnchor
+      value: 
+      objectReference: {fileID: 190335500}
     - target: {fileID: 8603632694229441094, guid: 9e1341dab2ab244298704013c9319f95,
         type: 3}
       propertyPath: m_LocalScale.x
