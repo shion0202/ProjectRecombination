@@ -21,7 +21,8 @@ public class SafeZoneObject : MonoBehaviour
         if (other.transform.CompareTag("Player"))
         {
             PlayerController player = other.GetComponent<PlayerController>();
-            if (player)
+            // 테스트 매니저가 부여한 무적(SceneTestInvincibility)은 유지하고, 안전지대 무적만 해제한다.
+            if (player && !TestManager.PlayerInvincible)
             {
                 player.SetPlayerState(EPlayerState.Invincibility, false);
             }

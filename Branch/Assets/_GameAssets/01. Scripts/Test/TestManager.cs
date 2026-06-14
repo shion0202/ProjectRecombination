@@ -11,4 +11,11 @@ public static class TestManager
     /// FSM.OnHit / DamagableObject.ApplyDamage 의 데미지 계산에 곱해진다.
     /// </summary>
     public static float EnemyDamageMultiplier = 1f;
+
+    /// <summary>
+    /// 테스트 무적 모드(SceneTestInvincibility)가 부여한 플레이어 무적이 활성 상태인지 여부. 기본 false.
+    /// 게임 로직(예: AmonLockdown, SafeZoneObject)이 플레이어 무적을 해제할 때 이 값이 true 이면
+    /// 해제를 건너뛰어, 테스트 매니저가 부여한 무적이 유지되도록 한다.
+    /// </summary>
+    public static bool PlayerInvincible = false;
 }

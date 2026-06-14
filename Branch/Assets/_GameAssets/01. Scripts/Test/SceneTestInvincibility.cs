@@ -17,6 +17,17 @@ public class SceneTestInvincibility : MonoBehaviour
         _player = GetComponent<PlayerController>();
     }
 
+    private void OnEnable()
+    {
+        // 게임 로직이 플레이어 무적을 해제할 때 테스트 무적은 유지되도록 표시한다.
+        TestManager.PlayerInvincible = true;
+    }
+
+    private void OnDisable()
+    {
+        TestManager.PlayerInvincible = false;
+    }
+
     private void LateUpdate()
     {
         if (_player == null) return;
