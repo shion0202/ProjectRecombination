@@ -1,5 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
+using Managers;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
@@ -12,35 +13,60 @@ namespace _Project._01._Scripts.Editor
     /// 사용자가 지정한 씬을 빠르게 테스트(플레이)하기 위한 에디터 윈도우.
     /// 기본 동작은 게임 런타임과 동일하게, 부트스트랩에서 시작한 뒤 SceneController 를 통해
     /// 대상 씬을 Addressables 키 기반으로 Additive 로드한다. (SceneController.LoadSceneAdditive 참고)
-    /// Addressables 에 등록되지 않은 씬을 위한 '직접 로드(OpenScene)' 폴백도 제공한다.
+    ///
+    /// 로드 방식은 3가지를 제공한다.
+    ///  - Direct        : Addressables 미등록 씬을 위한 직접 로드(OpenScene) 폴백.
+    ///  - BootstrapAdditive : 부트스트랩 경유 후 대상 씬만 Additive 로드 (UI/자체 완결형 씬 테스트용).
+    ///  - BootstrapInGame   : 부트스트랩 경유 후 GameManager.EnterPrologue() 의 인게임 셋업
+    ///                        (Pool/Player/시작위치)을 재현하고 대상 씬을 로드 → 실제 플레이 가능한 상태.
     /// </summary>
     public class SceneTestLauncher : EditorWindow
     {
+        // 씬 테스트 로드 방식.
+        private enum SceneLoadMode
+        {
+            // 대상 씬을 에디터에서 직접 열고 플레이 (Addressables 미등록 씬 폴백).
+            Direct = 0,
+            // 부트스트랩 경유 후 대상 씬만 Additive 로드 (게임 로드 파이프라인 일부).
+            BootstrapAdditive = 1,
+            // 부트스트랩 경유 후 인게임 셋업(Pool/Player/시작위치)까지 재현하고 대상 씬 로드.
+            BootstrapInGame = 2,
+        }
+
         // StartBootstrap 과 동일한 부트스트랩 씬 경로. Addressables 로드 시 이 씬부터 시작한다.
         private const string BootstrapScenePath = "Assets/_GameAssets/04. Scenes/Bootstrap.unity";
 
+        // 인게임 셋업 시 로드할 플레이어 씬 키 (GameManager.LoadPlayerScene 과 동일).
+        private const string PlayerSceneKey = "Scene_Player";
+
+        // 테스트 시작 지점으로 사용할 씬 내 게임오브젝트 이름.
+        // 대상 씬에 이 이름의 오브젝트를 두면 플레이어가 해당 위치에서 테스트를 시작한다.
+        private const string TestPlayerStartName = "TestPlayerStart";
+
         // 선택 내용을 프로젝트 단위로 보존하기 위한 EditorPrefs 키 (프로젝트명으로 스코프 분리).
         private static string TargetSceneKey => $"{PlayerSettings.productName}.SceneTestLauncher.TargetSceneGUID";
-        private static string LoadModeKey => $"{PlayerSettings.productName}.SceneTestLauncher.UseAddressableLoad";
+        private static string LoadModeKey => $"{PlayerSettings.productName}.SceneTestLauncher.LoadMode";
 
-        // 플레이 진입(도메인 리로드)을 넘어 로드할 키를 전달하기 위한 SessionState 키.
+        // 플레이 진입(도메인 리로드)을 넘어 로드할 키/모드를 전달하기 위한 SessionState 키.
         private const string PendingKeyState = "SceneTestLauncher.PendingAddressableKey";
+        private const string PendingModeState = "SceneTestLauncher.PendingLoadMode";
 
         // 부트스트랩 초기화 대기 최대 프레임 수 (이 안에 SceneController 가 생성되지 않으면 강제로 진행).
         private const int MaxWaitFrames = 300;
 
         // EditorWindow 필드는 [SerializeField] 시 도메인 리로드(스크립트 컴파일) 후에도 유지된다.
         [SerializeField] private SceneAsset _targetScene;
-        [SerializeField] private bool _useAddressableLoad = true;
+        [SerializeField] private SceneLoadMode _loadMode = SceneLoadMode.BootstrapInGame;
 
         private static string _pendingKey;
+        private static SceneLoadMode _pendingMode;
         private static int _waitFrames;
 
         [MenuItem("Tools/Scene Test Launcher")]
         public static void Open()
         {
             SceneTestLauncher window = GetWindow<SceneTestLauncher>("Scene Test");
-            window.minSize = new Vector2(340f, 170f);
+            window.minSize = new Vector2(360f, 220f);
             window.Show();
         }
 
@@ -66,7 +92,7 @@ namespace _Project._01._Scripts.Editor
                 return;
             }
 
-            PlayScene(scene, EditorPrefs.GetBool(LoadModeKey, true));
+            PlayScene(scene, LoadSavedMode());
         }
 
         private void OnEnable()
@@ -80,7 +106,7 @@ namespace _Project._01._Scripts.Editor
                     _targetScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
                 }
             }
-            _useAddressableLoad = EditorPrefs.GetBool(LoadModeKey, true);
+            _loadMode = LoadSavedMode();
         }
 
         private void OnGUI()
@@ -98,18 +124,21 @@ namespace _Project._01._Scripts.Editor
 
             // 2. 로드 방식 선택.
             EditorGUI.BeginChangeCheck();
-            _useAddressableLoad = EditorGUILayout.ToggleLeft(
-                "Addressables 방식으로 로드 (부트스트랩 경유, 게임과 동일)", _useAddressableLoad);
+            _loadMode = (SceneLoadMode)EditorGUILayout.EnumPopup("로드 방식", _loadMode);
             if (EditorGUI.EndChangeCheck())
             {
-                EditorPrefs.SetBool(LoadModeKey, _useAddressableLoad);
+                EditorPrefs.SetInt(LoadModeKey, (int)_loadMode);
             }
 
-            // 선택한 씬의 Addressables 등록 여부를 안내.
-            if (_useAddressableLoad && _targetScene != null && string.IsNullOrEmpty(GetAddressableKey(_targetScene)))
+            // 선택한 모드 설명.
+            EditorGUILayout.HelpBox(DescribeMode(_loadMode), MessageType.None);
+
+            // 선택한 씬의 Addressables 등록 여부를 안내 (부트스트랩 경유 모드에서만).
+            bool needsAddressable = _loadMode != SceneLoadMode.Direct;
+            if (needsAddressable && _targetScene != null && string.IsNullOrEmpty(GetAddressableKey(_targetScene)))
             {
                 EditorGUILayout.HelpBox(
-                    "선택한 씬이 Addressables 에 등록되어 있지 않습니다. Addressable 로 표시하거나 토글을 끄고 직접 로드하세요.",
+                    "선택한 씬이 Addressables 에 등록되어 있지 않습니다. Addressable 로 표시하거나 'Direct' 모드로 직접 로드하세요.",
                     MessageType.Warning);
             }
 
@@ -129,7 +158,7 @@ namespace _Project._01._Scripts.Editor
                 {
                     if (GUILayout.Button("테스트 실행 (Play)", GUILayout.Height(32f)))
                     {
-                        PlayScene(_targetScene, _useAddressableLoad);
+                        PlayScene(_targetScene, _loadMode);
                     }
                 }
 
@@ -143,12 +172,29 @@ namespace _Project._01._Scripts.Editor
             EditorGUILayout.LabelField("단축키: F6 (지정한 씬 실행/정지)", EditorStyles.miniLabel);
         }
 
+        // 모드별 설명 문구.
+        private static string DescribeMode(SceneLoadMode mode)
+        {
+            switch (mode)
+            {
+                case SceneLoadMode.Direct:
+                    return "Direct: 대상 씬을 에디터에서 직접 열고 플레이합니다. (Addressables 미등록 씬용)";
+                case SceneLoadMode.BootstrapAdditive:
+                    return "BootstrapAdditive: 부트스트랩부터 시작해 대상 씬만 Additive 로드합니다. (UI/자체 완결형 씬)";
+                case SceneLoadMode.BootstrapInGame:
+                    return "BootstrapInGame: 부트스트랩 경유 후 Pool/Player 인게임 셋업을 재현하고 대상 씬을 로드합니다. " +
+                           "플레이어는 씬 내 'TestPlayerStart' 오브젝트 위치에서 시작합니다. (던전/스테이지 씬을 실제 플레이 상태로 테스트)";
+                default:
+                    return string.Empty;
+            }
+        }
+
         /// <summary>
         /// 지정한 씬을 저장 절차를 거쳐 실행한다.
-        /// Addressables 방식이면 부트스트랩부터 시작한 뒤 플레이 진입 후 SceneController 로 Additive 로드한다.
+        /// 부트스트랩 경유 모드면 부트스트랩부터 시작한 뒤 플레이 진입 후 SceneController 로 로드한다.
         /// 직접 방식이면 대상 씬을 바로 열고 플레이한다.
         /// </summary>
-        private static void PlayScene(SceneAsset scene, bool useAddressableLoad)
+        private static void PlayScene(SceneAsset scene, SceneLoadMode mode)
         {
             string scenePath = AssetDatabase.GetAssetPath(scene);
 
@@ -165,14 +211,22 @@ namespace _Project._01._Scripts.Editor
                 return;
             }
 
-            if (useAddressableLoad)
+            if (mode == SceneLoadMode.Direct)
             {
-                // 3-A. Addressables 키 확인 (게임이 사용하는 로드 키).
+                // 3-A. 직접 로드: 시작 씬 오버라이드 해제 후 대상 씬을 직접 연다.
+                EditorSceneManager.playModeStartScene = null;
+                SessionState.EraseString(PendingKeyState);
+                SessionState.EraseInt(PendingModeState);
+                EditorSceneManager.OpenScene(scenePath);
+            }
+            else
+            {
+                // 3-B. 부트스트랩 경유: Addressables 키 확인 (게임이 사용하는 로드 키).
                 string key = GetAddressableKey(scene);
                 if (string.IsNullOrEmpty(key))
                 {
                     Debug.LogError($"[SceneTools] '{scenePath}' 가 Addressables 에 등록되어 있지 않습니다. " +
-                                   "Addressable 로 표시하거나 직접 로드 방식을 사용하세요.");
+                                   "Addressable 로 표시하거나 'Direct' 모드를 사용하세요.");
                     return;
                 }
 
@@ -185,15 +239,9 @@ namespace _Project._01._Scripts.Editor
                 }
                 EditorSceneManager.playModeStartScene = bootstrap;
 
-                // 플레이 진입 시 도메인 리로드를 넘어 로드할 키를 전달.
+                // 플레이 진입 시 도메인 리로드를 넘어 로드할 키/모드를 전달.
                 SessionState.SetString(PendingKeyState, key);
-            }
-            else
-            {
-                // 3-B. 직접 로드: 시작 씬 오버라이드 해제 후 대상 씬을 직접 연다.
-                EditorSceneManager.playModeStartScene = null;
-                SessionState.EraseString(PendingKeyState);
-                EditorSceneManager.OpenScene(scenePath);
+                SessionState.SetInt(PendingModeState, (int)mode);
             }
 
             // 4. 플레이 모드 진입.
@@ -215,19 +263,22 @@ namespace _Project._01._Scripts.Editor
                 return;
             }
 
-            // 도메인 리로드 이후 시점이므로 SessionState 에서 대기 중인 키를 읽는다.
+            // 도메인 리로드 이후 시점이므로 SessionState 에서 대기 중인 키/모드를 읽는다.
             _pendingKey = SessionState.GetString(PendingKeyState, string.Empty);
             if (string.IsNullOrEmpty(_pendingKey))
             {
                 return;
             }
 
+            _pendingMode = (SceneLoadMode)SessionState.GetInt(PendingModeState, (int)SceneLoadMode.BootstrapAdditive);
+
             SessionState.EraseString(PendingKeyState);
+            SessionState.EraseInt(PendingModeState);
             _waitFrames = 0;
             EditorApplication.update += LoadPendingSceneWhenReady;
         }
 
-        // 부트스트랩 초기화로 SceneController 가 준비될 때까지 기다렸다가 Additive 로드한다.
+        // 부트스트랩 초기화로 SceneController 가 준비될 때까지 기다렸다가 로드한다.
         private static void LoadPendingSceneWhenReady()
         {
             // 플레이 모드를 벗어났으면 취소.
@@ -249,16 +300,100 @@ namespace _Project._01._Scripts.Editor
             EditorApplication.update -= LoadPendingSceneWhenReady;
 
             string key = _pendingKey;
+            SceneLoadMode mode = _pendingMode;
             _pendingKey = null;
-            _ = LoadAndActivate(key);
+
+            if (mode == SceneLoadMode.BootstrapInGame)
+            {
+                _ = LoadInGame(key);
+            }
+            else
+            {
+                _ = LoadAndActivate(key);
+            }
         }
 
-        // 게임 런타임과 동일하게 Addressables Additive 로드 후 액티브 씬으로 전환.
+        // BootstrapAdditive: 게임 런타임과 동일하게 Addressables Additive 로드 후 액티브 씬으로 전환.
         private static async Task LoadAndActivate(string key)
         {
-            Debug.Log($"[SceneTools] Addressables 방식으로 테스트 씬 로드: {key}");
+            Debug.Log($"[SceneTools] BootstrapAdditive 로 테스트 씬 로드: {key}");
             await SceneController.Instance.LoadSceneAdditive(key);
             SceneController.Instance.SetActiveScene(key);
+        }
+
+        // BootstrapInGame: GameManager.EnterPrologue() 의 인게임 셋업(Pool/Player/시작위치)을 재현하되
+        // 기본 스테이지 대신 대상 씬을 로드하여, 던전/스테이지 씬을 실제 플레이 가능한 상태로 만든다.
+        private static async Task LoadInGame(string key)
+        {
+            Debug.Log($"[SceneTools] BootstrapInGame 셋업 시작: {key}");
+
+            // 1. 몬스터 풀 초기화 (대상 씬의 몬스터가 풀을 참조하므로 가장 먼저).
+            await PoolManager.Instance.Init();
+
+            // 2. 플레이어 씬 로드 (InitPlayer 가 GameManager.Player / 카메라 등을 등록).
+            await SceneController.Instance.LoadSceneAdditive(PlayerSceneKey);
+
+            // 3. 대상 스테이지 씬 로드.
+            await SceneController.Instance.LoadSceneAdditive(key);
+
+            // 4. 대상 씬을 액티브 씬으로 전환.
+            SceneController.Instance.SetActiveScene(key);
+
+            // 5. 플레이어를 씬 내 'TestPlayerStart' 지점으로 이동.
+            MovePlayerToTestStart();
+
+            // 6. 프롤로그를 건너뛰고 바로 플레이 상태로 진입.
+            GameManager.Instance.StartGame();
+
+            // 7. 씬에 배치된 테스트 훅 실행 (예: 아몬 2페이즈 FSM 직접 활성화).
+            //    실제 게임에서 선행 조건으로만 켜지는 로직을 선행 조건 없이 바로 동작시킨다.
+            InvokeSceneTestHooks();
+
+            Debug.Log($"[SceneTools] BootstrapInGame 셋업 완료: {key}");
+        }
+
+        // 현재 로드된 씬들에서 ISceneTestHook 구현 컴포넌트를 찾아 OnTestStart 를 호출한다.
+        // (비활성 오브젝트 포함. 보통 대상 테스트 씬에만 존재한다.)
+        private static void InvokeSceneTestHooks()
+        {
+            MonoBehaviour[] behaviours = Object.FindObjectsOfType<MonoBehaviour>(true);
+            foreach (MonoBehaviour behaviour in behaviours)
+            {
+                if (behaviour is ISceneTestHook hook)
+                {
+                    hook.OnTestStart();
+                }
+            }
+        }
+
+        // 대상 씬에 배치된 'TestPlayerStart' 오브젝트 위치로 플레이어를 이동시킨다.
+        // CharacterController 가 직접 위치 설정을 무시하므로 잠시 비활성화 후 적용한다.
+        // (DungeonManager.ResetCurrentStage / AmonSecondPhase 의 위치 강제 이동 방식과 동일.)
+        private static void MovePlayerToTestStart()
+        {
+            PlayerController player = GameManager.Instance.Player;
+            if (player == null)
+            {
+                Debug.LogWarning("[SceneTools] 플레이어가 없어 시작 위치 이동을 건너뜁니다.");
+                return;
+            }
+
+            GameObject startObj = GameObject.Find(TestPlayerStartName);
+            if (startObj == null)
+            {
+                Debug.LogWarning($"[SceneTools] 씬에서 '{TestPlayerStartName}' 오브젝트를 찾지 못했습니다. " +
+                                 "플레이어가 기본 위치에서 시작합니다.");
+                return;
+            }
+
+            Transform playerTransform = player.transform;
+            CharacterController controller = player.GetComponent<CharacterController>();
+
+            if (controller != null) controller.enabled = false;
+            playerTransform.SetPositionAndRotation(startObj.transform.position, startObj.transform.rotation);
+            if (controller != null) controller.enabled = true;
+
+            Debug.Log($"[SceneTools] 플레이어를 '{TestPlayerStartName}' 위치로 이동: {startObj.transform.position}");
         }
 
         // SceneAsset 의 Addressables 주소(키)를 조회. 등록돼 있지 않으면 빈 문자열.
@@ -301,6 +436,12 @@ namespace _Project._01._Scripts.Editor
                 return string.Empty;
             }
             return AssetDatabase.GUIDToAssetPath(guid);
+        }
+
+        // 저장된 로드 방식을 복원. 없으면 인게임 셋업 모드.
+        private static SceneLoadMode LoadSavedMode()
+        {
+            return (SceneLoadMode)EditorPrefs.GetInt(LoadModeKey, (int)SceneLoadMode.BootstrapInGame);
         }
     }
 }
