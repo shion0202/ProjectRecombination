@@ -46,10 +46,18 @@ namespace _Project._01._Scripts.Editor
         // 선택 내용을 프로젝트 단위로 보존하기 위한 EditorPrefs 키 (프로젝트명으로 스코프 분리).
         private static string TargetSceneKey => $"{PlayerSettings.productName}.SceneTestLauncher.TargetSceneGUID";
         private static string LoadModeKey => $"{PlayerSettings.productName}.SceneTestLauncher.LoadMode";
+        private static string InvincibleKey => $"{PlayerSettings.productName}.SceneTestLauncher.Invincible";
+        private static string DamageMultKey => $"{PlayerSettings.productName}.SceneTestLauncher.EnemyDamageMultiplier";
 
-        // 플레이 진입(도메인 리로드)을 넘어 로드할 키/모드를 전달하기 위한 SessionState 키.
+        // 플레이 진입(도메인 리로드)을 넘어 로드할 키/모드/옵션을 전달하기 위한 SessionState 키.
         private const string PendingKeyState = "SceneTestLauncher.PendingAddressableKey";
         private const string PendingModeState = "SceneTestLauncher.PendingLoadMode";
+        private const string PendingInvincibleState = "SceneTestLauncher.PendingInvincible";
+        private const string PendingMultiplierState = "SceneTestLauncher.PendingEnemyDamageMultiplier";
+
+        // 적 데미지 배수 허용 범위 (1 = 기본, 영향 없음).
+        private const float MinDamageMultiplier = 1f;
+        private const float MaxDamageMultiplier = 1000f;
 
         // 부트스트랩 초기화 대기 최대 프레임 수 (이 안에 SceneController 가 생성되지 않으면 강제로 진행).
         private const int MaxWaitFrames = 300;
@@ -57,9 +65,13 @@ namespace _Project._01._Scripts.Editor
         // EditorWindow 필드는 [SerializeField] 시 도메인 리로드(스크립트 컴파일) 후에도 유지된다.
         [SerializeField] private SceneAsset _targetScene;
         [SerializeField] private SceneLoadMode _loadMode = SceneLoadMode.BootstrapInGame;
+        [SerializeField] private bool _invincible;
+        [SerializeField] private float _enemyDamageMultiplier = 1f;
 
         private static string _pendingKey;
         private static SceneLoadMode _pendingMode;
+        private static bool _pendingInvincible;
+        private static float _pendingMultiplier = 1f;
         private static int _waitFrames;
 
         [MenuItem("Tools/Scene Test Launcher")]
@@ -92,7 +104,7 @@ namespace _Project._01._Scripts.Editor
                 return;
             }
 
-            PlayScene(scene, LoadSavedMode());
+            PlayScene(scene, LoadSavedMode(), LoadSavedInvincible(), LoadSavedMultiplier());
         }
 
         private void OnEnable()
@@ -107,6 +119,8 @@ namespace _Project._01._Scripts.Editor
                 }
             }
             _loadMode = LoadSavedMode();
+            _invincible = LoadSavedInvincible();
+            _enemyDamageMultiplier = LoadSavedMultiplier();
         }
 
         private void OnGUI()
@@ -133,6 +147,28 @@ namespace _Project._01._Scripts.Editor
             // 선택한 모드 설명.
             EditorGUILayout.HelpBox(DescribeMode(_loadMode), MessageType.None);
 
+            // 2-1. 무적 모드 토글 (인게임 셋업 모드에서만 의미 있음 — 플레이어가 있어야 함).
+            using (new EditorGUI.DisabledScope(_loadMode != SceneLoadMode.BootstrapInGame))
+            {
+                EditorGUI.BeginChangeCheck();
+                _invincible = EditorGUILayout.ToggleLeft(
+                    "무적 모드로 테스트 (플레이어 Invincibility 유지)", _invincible);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    EditorPrefs.SetBool(InvincibleKey, _invincible);
+                }
+
+                // 2-2. 적 데미지 배수 (플레이어 → 몬스터/오브젝트 데미지 증가, 1 = 기본).
+                EditorGUI.BeginChangeCheck();
+                _enemyDamageMultiplier = EditorGUILayout.FloatField(
+                    "적 데미지 배수 (x)", _enemyDamageMultiplier);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    _enemyDamageMultiplier = Mathf.Clamp(_enemyDamageMultiplier, MinDamageMultiplier, MaxDamageMultiplier);
+                    EditorPrefs.SetFloat(DamageMultKey, _enemyDamageMultiplier);
+                }
+            }
+
             // 선택한 씬의 Addressables 등록 여부를 안내 (부트스트랩 경유 모드에서만).
             bool needsAddressable = _loadMode != SceneLoadMode.Direct;
             if (needsAddressable && _targetScene != null && string.IsNullOrEmpty(GetAddressableKey(_targetScene)))
@@ -158,7 +194,7 @@ namespace _Project._01._Scripts.Editor
                 {
                     if (GUILayout.Button("테스트 실행 (Play)", GUILayout.Height(32f)))
                     {
-                        PlayScene(_targetScene, _loadMode);
+                        PlayScene(_targetScene, _loadMode, _invincible, _enemyDamageMultiplier);
                     }
                 }
 
@@ -194,7 +230,7 @@ namespace _Project._01._Scripts.Editor
         /// 부트스트랩 경유 모드면 부트스트랩부터 시작한 뒤 플레이 진입 후 SceneController 로 로드한다.
         /// 직접 방식이면 대상 씬을 바로 열고 플레이한다.
         /// </summary>
-        private static void PlayScene(SceneAsset scene, SceneLoadMode mode)
+        private static void PlayScene(SceneAsset scene, SceneLoadMode mode, bool invincible, float enemyDamageMultiplier)
         {
             string scenePath = AssetDatabase.GetAssetPath(scene);
 
@@ -217,6 +253,8 @@ namespace _Project._01._Scripts.Editor
                 EditorSceneManager.playModeStartScene = null;
                 SessionState.EraseString(PendingKeyState);
                 SessionState.EraseInt(PendingModeState);
+                SessionState.EraseInt(PendingInvincibleState);
+                SessionState.EraseFloat(PendingMultiplierState);
                 EditorSceneManager.OpenScene(scenePath);
             }
             else
@@ -239,9 +277,11 @@ namespace _Project._01._Scripts.Editor
                 }
                 EditorSceneManager.playModeStartScene = bootstrap;
 
-                // 플레이 진입 시 도메인 리로드를 넘어 로드할 키/모드를 전달.
+                // 플레이 진입 시 도메인 리로드를 넘어 로드할 키/모드/옵션을 전달.
                 SessionState.SetString(PendingKeyState, key);
                 SessionState.SetInt(PendingModeState, (int)mode);
+                SessionState.SetInt(PendingInvincibleState, invincible ? 1 : 0);
+                SessionState.SetFloat(PendingMultiplierState, enemyDamageMultiplier);
             }
 
             // 4. 플레이 모드 진입.
@@ -258,12 +298,19 @@ namespace _Project._01._Scripts.Editor
 
         private static void OnPlayModeStateChanged(PlayModeStateChange change)
         {
+            // 플레이 종료 시 테스트용 적 데미지 배수를 기본값으로 되돌려 다음 실행에 누수되지 않게 한다.
+            if (change == PlayModeStateChange.ExitingPlayMode)
+            {
+                TestManager.EnemyDamageMultiplier = 1f;
+                return;
+            }
+
             if (change != PlayModeStateChange.EnteredPlayMode)
             {
                 return;
             }
 
-            // 도메인 리로드 이후 시점이므로 SessionState 에서 대기 중인 키/모드를 읽는다.
+            // 도메인 리로드 이후 시점이므로 SessionState 에서 대기 중인 키/모드/옵션을 읽는다.
             _pendingKey = SessionState.GetString(PendingKeyState, string.Empty);
             if (string.IsNullOrEmpty(_pendingKey))
             {
@@ -271,9 +318,13 @@ namespace _Project._01._Scripts.Editor
             }
 
             _pendingMode = (SceneLoadMode)SessionState.GetInt(PendingModeState, (int)SceneLoadMode.BootstrapAdditive);
+            _pendingInvincible = SessionState.GetInt(PendingInvincibleState, 0) == 1;
+            _pendingMultiplier = SessionState.GetFloat(PendingMultiplierState, 1f);
 
             SessionState.EraseString(PendingKeyState);
             SessionState.EraseInt(PendingModeState);
+            SessionState.EraseInt(PendingInvincibleState);
+            SessionState.EraseFloat(PendingMultiplierState);
             _waitFrames = 0;
             EditorApplication.update += LoadPendingSceneWhenReady;
         }
@@ -327,6 +378,13 @@ namespace _Project._01._Scripts.Editor
         {
             Debug.Log($"[SceneTools] BootstrapInGame 셋업 시작: {key}");
 
+            // 0. 테스트용 적 데미지 배수 적용 (FSM.OnHit / DamagableObject.ApplyDamage 가 참조).
+            TestManager.EnemyDamageMultiplier = _pendingMultiplier;
+            if (!Mathf.Approximately(_pendingMultiplier, 1f))
+            {
+                Debug.Log($"[SceneTools] 적 데미지 배수 적용: x{_pendingMultiplier}");
+            }
+
             // 1. 몬스터 풀 초기화 (대상 씬의 몬스터가 풀을 참조하므로 가장 먼저).
             await PoolManager.Instance.Init();
 
@@ -349,7 +407,31 @@ namespace _Project._01._Scripts.Editor
             //    실제 게임에서 선행 조건으로만 켜지는 로직을 선행 조건 없이 바로 동작시킨다.
             InvokeSceneTestHooks();
 
+            // 8. 무적 모드 토글이 켜져 있으면 플레이어에 무적 유지 컴포넌트를 부착.
+            if (_pendingInvincible)
+            {
+                EnableInvincibility();
+            }
+
             Debug.Log($"[SceneTools] BootstrapInGame 셋업 완료: {key}");
+        }
+
+        // 플레이어에 SceneTestInvincibility 를 부착해 테스트 내내 무적 상태를 유지한다.
+        private static void EnableInvincibility()
+        {
+            PlayerController player = GameManager.Instance.Player;
+            if (player == null)
+            {
+                Debug.LogWarning("[SceneTools] 플레이어가 없어 무적 모드를 적용하지 못했습니다.");
+                return;
+            }
+
+            if (player.GetComponent<SceneTestInvincibility>() == null)
+            {
+                player.gameObject.AddComponent<SceneTestInvincibility>();
+            }
+
+            Debug.Log("[SceneTools] 무적 모드 활성화 (플레이어 Invincibility 유지).");
         }
 
         // 현재 로드된 씬들에서 ISceneTestHook 구현 컴포넌트를 찾아 OnTestStart 를 호출한다.
@@ -442,6 +524,18 @@ namespace _Project._01._Scripts.Editor
         private static SceneLoadMode LoadSavedMode()
         {
             return (SceneLoadMode)EditorPrefs.GetInt(LoadModeKey, (int)SceneLoadMode.BootstrapInGame);
+        }
+
+        // 저장된 무적 모드 토글을 복원. 없으면 끔.
+        private static bool LoadSavedInvincible()
+        {
+            return EditorPrefs.GetBool(InvincibleKey, false);
+        }
+
+        // 저장된 적 데미지 배수를 복원. 없으면 1 (영향 없음).
+        private static float LoadSavedMultiplier()
+        {
+            return Mathf.Clamp(EditorPrefs.GetFloat(DamageMultKey, 1f), MinDamageMultiplier, MaxDamageMultiplier);
         }
     }
 }

@@ -108,7 +108,7 @@ namespace _Test.Skills
 
             // 모든 워프/스폰 좌표는 아레나 앵커 로컬 기준으로 해석한다 (앵커 미할당 시 월드 폴백)
             Transform anchor = data.ArenaAnchor;
-            if (anchor == null)
+            if (!anchor)
             {
                 Debug.LogWarning("[Amon Phase 2] ArenaAnchor가 지정되지 않아 좌표를 월드 기준으로 처리한다. Blackboard에 앵커를 할당하라.");
             }
@@ -122,8 +122,8 @@ namespace _Test.Skills
             // 3. 기 모으기 이펙트 생성 (본체 위)
             _chargeEffect = Utils.Instantiate(chargeEffectPrefab, data.Agent.transform.position + effectSpawnOffset, Quaternion.Euler(chargeEffectRotation), data.Agent.transform);
 
-            float x = UnityEngine.Random.Range(spawnTargetPositionX.x, spawnTargetPositionX.y);
-            float z = UnityEngine.Random.Range(spawnTargetPositionZ.x, spawnTargetPositionZ.y);
+            float x = Random.Range(spawnTargetPositionX.x, spawnTargetPositionX.y);
+            float z = Random.Range(spawnTargetPositionZ.x, spawnTargetPositionZ.y);
             Vector3 spawnPos = AnchorToWorld(anchor, new Vector3(x, spawnTargetPositionY + SafeZoneSpawnHeightOffset, z));
             _safeZone = Utils.Instantiate(safeZonePrefab, spawnPos, Quaternion.identity);
 
