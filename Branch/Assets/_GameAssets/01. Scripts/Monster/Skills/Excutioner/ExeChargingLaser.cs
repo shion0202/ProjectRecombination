@@ -19,6 +19,7 @@ namespace _Test.Skills
     public class ExeChargingLaser : SkillData
     {
         private static readonly int IsLaser = Animator.StringToHash("isLaser");
+        private const string AimPointName = "TargetPos";
 
         [Header("그 외 스킬 정보")]
         [SerializeField] private GameObject laserPrefab;
@@ -48,8 +49,8 @@ namespace _Test.Skills
         {
             Debug.Log("[Executioner] Charging Laser 시작");
 
-            // 빔은 몸체가 바라보는 방향으로 고정 발사되며, 몸체는 fireRotateSpeed(도/초)의 최대 각속도로만
-            // 대상을 추적한다. 따라서 플레이어가 충분히 빠르게 움직이면 빔을 회피할 수 있다. (즉발 조준 아님)
+            // 빔은 플레이어 자식 TargetPos(가슴 높이)를 3D로 추적하되, 회전 각속도를 fireRotateSpeed로 제한한다.
+            // 따라서 정확히 가슴을 겨냥하면서도 플레이어가 충분히 빠르게 움직이면 회피할 수 있다. (즉발 조준 아님)
 
             // SkillData는 공유 ScriptableObject 인스턴스이므로, 시전마다 만드는 런타임 오브젝트는
             // 필드가 아니라 지역 변수로만 관리한다 (다중 몬스터 간 상태 오염 방지).
@@ -70,6 +71,10 @@ namespace _Test.Skills
                 data.AudioSource.PlayOneShot(chargingLaserAudioClip);
                 data.AnimatorParameterSetter.Animator.SetBool(IsLaser, true);
 
+                // 조준점(플레이어 자식 TargetPos)과 빔 회전을 몸체와 분리해 독립적으로 각속도를 제한한다.
+                Transform aimPoint = ResolveAimPoint(data.Target);
+                Quaternion beamRotation = laser.transform.rotation; // 시작 시 몸체 정면
+                
                 float elapsed = 0f;
                 float damageTimer = 0f;
                 while (elapsed < attackDuration)
@@ -77,17 +82,33 @@ namespace _Test.Skills
                     // 시전 도중 타깃이 사라지면 즉시 종료 (NRE 방지)
                     if (data.Target == null) break;
 
-                    // 몸체를 대상 방향으로 '최대 각속도(fireRotateSpeed)만큼만' 회전시킨다.
-                    Vector3 lookDir = data.Target.transform.position - data.Agent.transform.position;
-                    lookDir.y = 0;
-                    if (lookDir.sqrMagnitude > 0.001f)
+                    // 타깃이 바뀌었거나(리스폰) 조준점을 잃으면 다시 탐색
+                    if (aimPoint == null || !aimPoint.IsChildOf(data.Target.transform))
                     {
-                        Quaternion target = Quaternion.LookRotation(lookDir);
-                        data.Agent.transform.rotation = Quaternion.RotateTowards(
-                            data.Agent.transform.rotation, target, fireRotateSpeed * Time.deltaTime);
+                        aimPoint = ResolveAimPoint(data.Target);
                     }
 
-                    // DoT 히트 판정: 틱 간격마다 빔 방향(몸체 forward)으로 Raycast
+                    // 몸체는 조준점 방향으로 '수평(yaw)'만 제한 회전 (연출용, 몸체가 기울지 않도록)
+                    Vector3 bodyDir = aimPoint.position - data.Agent.transform.position;
+                    bodyDir.y = 0;
+                    if (bodyDir.sqrMagnitude > 0.001f)
+                    {
+                        Quaternion bodyTarget = Quaternion.LookRotation(bodyDir);
+                        data.Agent.transform.rotation = Quaternion.RotateTowards(
+                            data.Agent.transform.rotation, bodyTarget, fireRotateSpeed * Time.deltaTime);
+                    }
+
+                    // 빔(=실제 조준/판정)은 TargetPos를 3D로 추적하되 fireRotateSpeed로 회전 제한한다.
+                    // 몸체 회전 이후 마지막에 월드 회전을 강제해 부모(몸체) 회전에 끌려가지 않게 한다.
+                    Vector3 beamDir = aimPoint.position - shootPoint.position;
+                    if (beamDir.sqrMagnitude > 0.001f)
+                    {
+                        Quaternion beamTarget = Quaternion.LookRotation(beamDir);
+                        beamRotation = Quaternion.RotateTowards(beamRotation, beamTarget, fireRotateSpeed * Time.deltaTime);
+                        laser.transform.rotation = beamRotation;
+                    }
+
+                    // DoT 히트 판정: 틱 간격마다 빔 방향으로 SphereCast
                     damageTimer += Time.deltaTime;
                     if (damageTimer >= damageInterval)
                     {
@@ -146,6 +167,26 @@ namespace _Test.Skills
             // 레이캐스트로 이미 대상을 검증했으므로, IDamagable '본체'의 레이어로 마스크를 구성해
             // ApplyDamage 내부 레이어 재검사(콜라이더 레이어 ≠ 본체 레이어)로 데미지가 누락되는 것을 막는다.
             target.ApplyDamage(damage * tickTime, 1 << targetComponent.gameObject.layer, tickTime, 0.0f);
+        }
+
+        // 플레이어(타깃)의 자식 "TargetPos"를 조준점으로 사용한다. 없으면 타깃 루트로 폴백한다.
+        private static Transform ResolveAimPoint(GameObject target)
+        {
+            if (target == null) return null;
+            Transform found = FindDeepChild(target.transform, AimPointName);
+            return found != null ? found : target.transform;
+        }
+
+        // 이름이 일치하는 자손 Transform을 재귀로 탐색(할당 없음). 없으면 null.
+        private static Transform FindDeepChild(Transform parent, string childName)
+        {
+            if (parent.name == childName) return parent;
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                Transform found = FindDeepChild(parent.GetChild(i), childName);
+                if (found != null) return found;
+            }
+            return null;
         }
 
         public override IEnumerator Casting(Blackboard data)
