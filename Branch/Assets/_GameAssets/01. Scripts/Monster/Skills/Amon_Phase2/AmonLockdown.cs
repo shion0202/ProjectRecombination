@@ -73,23 +73,20 @@ namespace _Test.Skills
             // 6. 플레이어 및 스폰된 몬스터 전체에게 데미지 처리 (임의 함수 호출 예시)
             data.AnimatorParameterSetter.Animator.SetBool(IsCharging, false);
 
-            // 플레이어 오브젝트는 한 번만 조회해 IDamageable / PlayerController를 재사용
+            // 플레이어가 폭발 순간 안전지대 안에 있으면 피해를 면제한다.
+            // 무적 플래그/안전지대 해제 타이밍에 의존하지 않도록, 점유 여부를 직접 질의한다.
             GameObject playerObject = Managers.MonsterManager.Instance.Player;
-            if (playerObject != null)
+            if (playerObject != null && playerObject.TryGetComponent(out IDamagable target))
             {
-                // 폭발 데미지 적용 후 무적 해제 (안전지대 무적으로 데미지를 무효화하는 구조이므로 순서 유지)
-                // 데미지는 에셋의 damage 필드(SkillData) 값을 사용.
-                // PlayerController.ApplyDamage 는 마스크에 플레이어 레이어가 있어야만 데미지가 들어가므로,
-                // 플레이어 본인 레이어로 마스크를 구성해 폭발이 항상 도달하게 한다.
-                // (실제 피격 차단은 안전지대에서 얻은 무적(Invincibility)만 담당)
-                if (playerObject.TryGetComponent(out IDamagable target))
+                bool sheltered = _safeZone != null
+                    && _safeZone.TryGetComponent(out SafeZoneObject zone)
+                    && playerObject.TryGetComponent(out PlayerController pc)
+                    && zone.IsProtecting(pc);
+
+                // 데미지는 에셋의 damage 필드(SkillData) 값을 사용. 플레이어 본인 레이어로 마스크를 구성한다.
+                if (!sheltered)
                 {
                     target.ApplyDamage(damage, 1 << playerObject.layer);
-                }
-                // 테스트 매니저가 부여한 무적(SceneTestInvincibility)은 유지하고, 안전지대 무적만 해제한다.
-                if (!TestManager.PlayerInvincible && playerObject.TryGetComponent(out PlayerController player))
-                {
-                    player.SetPlayerState(EPlayerState.Invincibility, false);
                 }
             }
 
@@ -138,7 +135,7 @@ namespace _Test.Skills
             _chargeEffect = Utils.Instantiate(chargeEffectPrefab, data.Agent.transform.position + effectSpawnOffset, Quaternion.Euler(chargeEffectRotation), data.Agent.transform);
 
             _safeZone = Utils.Instantiate(safeZonePrefab, GetRandomSpawnPosition(anchor), Quaternion.identity);
-
+            
             float elapsed = 0f;
             float spawnTimer = 0f;
             // 4. 캐스팅 시간 동안 몬스터 지속 생성 및 대기
@@ -174,15 +171,6 @@ namespace _Test.Skills
 
             Utils.Destroy(_chargeEffect);
             Utils.Destroy(_safeZone);
-
-            // 안전지대에서 얻은 무적이 남지 않도록 플레이어 무적을 해제한다.
-            // (안전지대 파괴 시 OnTriggerExit 발생이 보장되지 않아, 중단되면 무적이 영구화될 수 있음)
-            // 단, 테스트 매니저가 부여한 무적(SceneTestInvincibility)은 유지한다.
-            GameObject playerObject = Managers.MonsterManager.Instance.Player;
-            if (!TestManager.PlayerInvincible && playerObject != null && playerObject.TryGetComponent(out PlayerController player))
-            {
-                player.SetPlayerState(EPlayerState.Invincibility, false);
-            }
 
             // 스폰된 몬스터도 함께 제거 (정상 종료 시 Activate와 동일한 처리)
             foreach (IDamagable t in _targets)

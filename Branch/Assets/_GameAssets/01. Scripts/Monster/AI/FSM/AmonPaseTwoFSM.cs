@@ -28,6 +28,26 @@ public class AmonPaseTwoFSM : FSM
     [SerializeField] private float deathWaitTime = 5f;
 
     private bool _isSpawned;
+
+    private void OnDisable()
+    {
+        // 시전/실행 중인 스킬이 있는 상태에서 보스가 파괴/비활성화되면
+        // Activate가 실행되지 못해 이펙트/스폰물/플레이어 무적이 잔존할 수 있다.
+        // StopCoroutine 전에 OnInterrupt로 잔여 상태를 정리한다. (MonsterFSM.ActHit과 동일한 패턴)
+        if (blackboard?.Skills == null) return;
+        foreach (var skill in blackboard.Skills)
+        {
+            try
+            {
+                if (skill.CurrentState is Skill.SkillState.isCasting or Skill.SkillState.isRunning)
+                {
+                    skill.skillData.OnInterrupt(blackboard);
+                }
+                if (skill.CUseSkill != null) StopCoroutine(skill.CUseSkill);
+            }
+            catch { }
+        }
+    }
     
     protected override void Think()
     {
