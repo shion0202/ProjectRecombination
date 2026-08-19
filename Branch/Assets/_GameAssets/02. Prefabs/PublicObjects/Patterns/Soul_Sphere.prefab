@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2163519256573054314}
   - component: {fileID: 1780172405589123880}
   - component: {fileID: 3339271869515012335}
-  m_Layer: 18
+  m_Layer: 21
   m_Name: Soul_Sphere
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -71,6 +71,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 8350594408837622864, guid: a0fb4e952475f764d9bbf3720032cf91,
     type: 3}
   lifeTime: 5
+  explosionRadius: 30
 --- !u!114 &3339271869515012335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,7 +91,7 @@ MonoBehaviour:
   - StatName: Name
     StatValue: 0
   - StatName: MaxHp
-    StatValue: 10
+    StatValue: 1
   - StatName: Damage
     StatValue: 0
   - StatName: WalkSpeed

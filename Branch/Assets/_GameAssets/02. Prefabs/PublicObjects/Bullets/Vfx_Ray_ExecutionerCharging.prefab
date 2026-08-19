@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 73729
   HitEffect: {fileID: 100010}
   HitOffset: 0.01
   useLaserRotation: 0

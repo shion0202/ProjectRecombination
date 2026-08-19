@@ -14458,6 +14458,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 5282322848156710984, guid: d056eae4ce4c1b54ca791b98ee7d69a7,
     type: 3}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 512
+  explosionRadius: 1
+  _damage: 90
 --- !u!1 &185690
 GameObject:
   m_ObjectHideFlags: 0

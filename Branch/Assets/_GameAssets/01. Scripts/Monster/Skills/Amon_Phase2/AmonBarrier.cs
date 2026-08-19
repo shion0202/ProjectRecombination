@@ -18,8 +18,8 @@ public class AmonBarrier : MonoBehaviour, IDamagable
     {
         if (!_isActive) return;    // 비활성(파괴 예약) 상태에서는 더 이상 대미지를 받지 않음
 
-        float currentDamage = inDamage * 0.5f;    // 보호막이 활성화 된 상태에서 받는 모든 대미지 50% 감소
-        _currentBarrierHealth -= Mathf.CeilToInt(currentDamage);
+        _currentBarrierHealth -= Mathf.CeilToInt(inDamage);
+        Debug.Log($"보스 HP: {_currentBarrierHealth}");
 
         if (_currentBarrierHealth <= 0)
         {

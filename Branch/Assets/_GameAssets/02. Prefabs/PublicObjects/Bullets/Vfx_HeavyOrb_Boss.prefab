@@ -9930,11 +9930,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
   bulletSpeed: 5
-  explosionRadius: 10
+  explosionRadius: 5
   lifeTime: 5
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   collisionTags: []
   muzzleParticlePrefab: {fileID: 0}
   impactParticle: {fileID: 0}
@@ -9946,8 +9946,8 @@ MonoBehaviour:
     type: 3}
   explosionDamage: 300
   bladeDamage: 50
-  bladeInterval: 0.075
-  bladesOnDeath: 10
+  bladeInterval: 0.15
+  bladesOnDeath: 5
 --- !u!1 &364168584227113207
 GameObject:
   m_ObjectHideFlags: 0

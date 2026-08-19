@@ -9935,7 +9935,7 @@ MonoBehaviour:
   lifeTime: 5
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   collisionTags: []
   muzzleParticlePrefab: {fileID: 0}
   impactParticle: {fileID: 0}
