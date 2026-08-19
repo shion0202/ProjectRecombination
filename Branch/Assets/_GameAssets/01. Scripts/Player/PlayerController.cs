@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     [SerializeField] private EPlayerState partChangeBlockMask;
     [SerializeField] private EPlayerState quickTurnBlockMask;
     private EPlayerState _currentPlayerState = EPlayerState.Idle;
+    private int _invincibilityRefCount = 0;
     private EPlayerState _previousState = 0;
     private bool _isLeftAttackReady = false;
     private bool _isRightAttackReady = false;
@@ -685,6 +686,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
     public void Spawn()
     {
         _isLowHp = false;
+        _invincibilityRefCount = 0;
         if (lowHpController != null)
         {
             lowHpController.SetEffectActive(false);
@@ -709,6 +711,7 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
         // 사망 로직
         _currentPlayerState = 0;
+        _invincibilityRefCount = 0;
         _currentPlayerState |= EPlayerState.Dead;
 
         animator.SetTrigger("deadTrigger");
@@ -1108,6 +1111,24 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         }
     }
 
+    // 무적을 부여한 출처별로 누적 카운트한다. 서로 다른 출처(스폰 i-frame, 안전지대 등)가
+    // 같은 Invincibility 플래그를 통째로 끄지 않도록 한다.
+    public void AddInvincibility()
+    {
+        _invincibilityRefCount++;
+        _currentPlayerState |= EPlayerState.Invincibility;
+    }
+
+    public void RemoveInvincibility()
+    {
+        _invincibilityRefCount = Mathf.Max(0, _invincibilityRefCount - 1);
+        // 남은 출처가 없고 테스트 무적도 아닐 때만 실제로 해제한다.
+        if (_invincibilityRefCount == 0 && !TestManager.PlayerInvincible)
+        {
+            _currentPlayerState &= ~EPlayerState.Invincibility;
+        }
+    }
+
     public void CloseRadialUI()
     {
         // UI 비활성화 시 커서 숨기고 고정
@@ -1475,11 +1496,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
 
     private IEnumerator CoStartInvincibility(float duration)
     {
-        _currentPlayerState |= EPlayerState.Invincibility;
+        AddInvincibility();
 
         yield return new WaitForSeconds(duration);
 
-        _currentPlayerState &= ~(EPlayerState.Invincibility);
+        RemoveInvincibility();
     }
 
     private IEnumerator CoStartIndicatorTimer(float duration)

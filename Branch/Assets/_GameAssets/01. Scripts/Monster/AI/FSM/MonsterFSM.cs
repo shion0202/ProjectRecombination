@@ -396,6 +396,12 @@ namespace Monster.AI.FSM
                     // 사용 중인 스킬 코루틴 정지
                     foreach(var skill in blackboard.Skills)
                     {
+                        // StopCoroutine은 코루틴의 finally를 실행하지 않으므로,
+                        // 시전 중인 스킬은 먼저 OnInterrupt로 잔여 상태(이펙트/스폰물 등)를 정리한다.
+                        if (skill.CurrentState is Skill.SkillState.isCasting or Skill.SkillState.isRunning)
+                        {
+                            skill.skillData.OnInterrupt(blackboard);
+                        }
                         StopCoroutine(skill.CUseSkill);
                     }
                 } catch { }

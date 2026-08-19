@@ -1,34 +1,26 @@
 using Monster.AI.Blackboard;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace _Test.Skills
 {
-    /// <summary>
-    /// 스킬 이름: 돌진 (2페이즈)
-    /// - 캐스팅: 1.5초
-    /// - 효과: 대상을 향해 돌진, 적중 시 넉백 및 대미지
-    /// - 예외처리1: 캐스팅 중 스턴, 넉백, 이동 불가 상태가 되면 스킬 취소
-    /// - 예외처리2: 대상과 거리가 너무 멀 경우 스킬 취소
-    /// - 예외처리3: 돌진 중 장애물에 부딪히면 돌진 취소
-    /// </summary>
-
     [CreateAssetMenu(fileName = "SoulOrb", menuName = "MonsterSkills/Amon_Phase2/SoulOrb")]
     public class AmonSoulOrb : SkillData
     {
+        private static readonly int IsCharging = Animator.StringToHash("isCharging");
         [Header("그 외 스킬 정보")] [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private List<Vector3> bulletSpawnOffset = new();
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public override IEnumerator Activate(Blackboard data)
         {
             Debug.Log("[Amon Phase 2] 영혼 보주 시작");
 
             // 2. 총알 생성 및 발사
-            for (int i = 0; i < bulletSpawnOffset.Count; ++i)
+            foreach (Vector3 t in bulletSpawnOffset)
             {
-                Vector3 startPosition = data.Agent.transform.position + bulletSpawnOffset[i];
+                Vector3 startPosition = data.Agent.transform.position + t;
                 Vector3 direction = data.Agent.transform.forward;
                 direction.y = 0.0f;
                 direction.Normalize();
@@ -40,24 +32,24 @@ namespace _Test.Skills
                 }
             }
 
-            data.AnimatorParameterSetter.Animator.SetBool("isCharging", false);
+            data.AnimatorParameterSetter.Animator.SetBool(IsCharging, false);
 
             Debug.Log("[Amon Phase 2] 영혼 보주 종료");
             yield break;
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public override IEnumerator Casting(Blackboard data)
         {
             Debug.Log("[Amon Phase 2] 영혼 보주 준비");
 
             // 1. 캐스팅 애니메이션 재생
-            data.AnimatorParameterSetter.Animator.SetBool("isCharging", true);
+            data.AnimatorParameterSetter.Animator.SetBool(IsCharging, true);
 
-            Vector3 direction = Vector3.zero;
             float elapsed = 0f;
             while (elapsed < castTime)
             {
-                direction = data.Target.transform.position - data.Agent.transform.position;
+                Vector3 direction = data.Target.transform.position - data.Agent.transform.position;
                 direction.y = 0; // y축 회전만 적용
 
                 if (direction != Vector3.zero)

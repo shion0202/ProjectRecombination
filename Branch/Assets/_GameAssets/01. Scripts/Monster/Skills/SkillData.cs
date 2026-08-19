@@ -29,6 +29,14 @@ namespace _Test.Skills
         }
         
         public abstract IEnumerator Activate(Blackboard data);
+
+        /// <summary>
+        /// 시전 중(Casting/Activate) 스킬이 외부에서 강제 중단될 때 호출된다.
+        /// (예: 몬스터 피격으로 MonsterFSM이 StopCoroutine 하는 경우)
+        /// StopCoroutine은 코루틴의 finally를 실행하지 않으므로, 생성한 이펙트/오브젝트 등
+        /// 잔여 상태가 있는 스킬은 이 메서드를 override 하여 직접 정리해야 한다. 기본은 no-op.
+        /// </summary>
+        public virtual void OnInterrupt(Blackboard data) { }
         
         private bool _isChasting = false;
         private float _chastingTime;

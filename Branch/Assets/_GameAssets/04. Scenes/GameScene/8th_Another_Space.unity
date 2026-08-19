@@ -659,6 +659,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmName: 06_The Sealed_Reaper
+--- !u!1 &190335499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 190335500}
+  m_Layer: 0
+  m_Name: Amon_TP_Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &190335500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190335499}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1719191205}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &193984973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,6 +1535,52 @@ MonoBehaviour:
   audioSources:
   - {fileID: 263972806}
   audioClip: {fileID: 0}
+--- !u!1 &349034018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 349034020}
+  - component: {fileID: 349034019}
+  m_Layer: 0
+  m_Name: SceneTestFSMActivator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &349034019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349034018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8c72bbb97b15ad4a844d61bc8c33ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsmToEnable:
+  - {fileID: 1755014605}
+--- !u!4 &349034020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349034018}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1867.3466, y: -696.7877, z: 2696.0579}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &371077431
 GameObject:
   m_ObjectHideFlags: 0
@@ -5028,6 +5105,37 @@ MonoBehaviour:
     isNot: 0
   - process: {fileID: 427655076}
     isNot: 0
+--- !u!1 &1635462462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1635462463}
+  m_Layer: 0
+  m_Name: TestPlayerStart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1635462463
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635462462}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1525.98, y: -175.21, z: 1015.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1641549096
 GameObject:
   m_ObjectHideFlags: 0
@@ -5230,6 +5338,7 @@ Transform:
   - {fileID: 998560223}
   - {fileID: 1755014606}
   - {fileID: 938434559}
+  - {fileID: 190335500}
   m_Father: {fileID: 3396309565721652597}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1755014604
@@ -5260,6 +5369,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Amon_Phase_2
       objectReference: {fileID: 0}
+    - target: {fileID: 5589947934752730126, guid: 9e1341dab2ab244298704013c9319f95,
+        type: 3}
+      propertyPath: arenaAnchor
+      value: 
+      objectReference: {fileID: 190335500}
     - target: {fileID: 8603632694229441094, guid: 9e1341dab2ab244298704013c9319f95,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -9064,8 +9178,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.7462238, y: 1, z: 1.7738211}
+  m_Center: {x: -0.008709779, y: 1.696172e-11, z: -0.003292237}
 --- !u!1 &5124641893602125433
 GameObject:
   m_ObjectHideFlags: 0
@@ -11324,3 +11438,5 @@ SceneRoots:
   - {fileID: 829528748}
   - {fileID: 1948383115}
   - {fileID: 86403792}
+  - {fileID: 1635462463}
+  - {fileID: 349034020}

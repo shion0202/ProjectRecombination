@@ -48,6 +48,8 @@ namespace Monster.AI.Blackboard
         [SerializeField] private GameObject amonShield;
         [SerializeField] private GameObject amonEnergyBall;
         [SerializeField] private GameObject amonDeathModel;
+        [Tooltip("아레나 기준 앵커. 스킬의 워프/스폰 좌표를 이 Transform 로컬 기준으로 해석한다. 미할당 시 월드 좌표로 폴백.")]
+        [SerializeField] private Transform arenaAnchor;
         
         #endregion
         
@@ -145,6 +147,7 @@ namespace Monster.AI.Blackboard
         public Dictionary<string, object> Map => _map;
         
         public GameObject AmonDeathModel => amonDeathModel;
+        public Transform ArenaAnchor => arenaAnchor;
         public bool HasUsedSoulAbsorptionAt50Percent { get; set; }
         public bool HasUsedSoulAbsorptionAt20Percent { get; set; }
         public RagdollController RagdollController { get => ragdollController; set => ragdollController = value; }

@@ -1,10 +1,4 @@
-using _Test.Skills;
-using Monster.AI.Blackboard;
-using Monster.AI.FSM;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class AmonBarrier : MonoBehaviour, IDamagable
@@ -18,34 +12,40 @@ public class AmonBarrier : MonoBehaviour, IDamagable
     private int _currentBarrierHealth;
     private bool _isActive;
     
-    private event Action _onBarrierDestroy;
+    private event Action OnBarrierDestroy;
     
     public void ApplyDamage(float inDamage, LayerMask targetMask = default, float unitOfTime = 1, float defenceIgnoreRate = 0)
     {
+        if (!_isActive) return;    // 비활성(파괴 예약) 상태에서는 더 이상 대미지를 받지 않음
+
         float currentDamage = inDamage * 0.5f;    // 보호막이 활성화 된 상태에서 받는 모든 대미지 50% 감소
         _currentBarrierHealth -= Mathf.CeilToInt(currentDamage);
-    }
 
-    public void Update()
-    {
-        if (!_isActive) return;
-        
         if (_currentBarrierHealth <= 0)
         {
-            Destroy(gameObject);
+            Deactivate();
         }
+    }
+
+    // 
+    private void Deactivate()
+    {
+        if (!_isActive) return;
+
+        _isActive = false;    // 추가 피격/중복 파괴를 즉시 차단
+        Destroy(gameObject);
     }
 
     public void Initialize(float maxHealth, Action onDestroy = null)
     {
         _maxHealth = maxHealth * 0.1f; // 보호막이 흡수할 수 있는 대미지의 양은 몬스터의 최대 체력의 10%
-        _onBarrierDestroy = onDestroy;
-        _currentBarrierHealth = Mathf.CeilToInt(maxHealth); // 보호막이 흡수할 수 있는 대미지의 양은 몬스터의 최대 체력의 10%
+        OnBarrierDestroy = onDestroy;
+        _currentBarrierHealth = Mathf.CeilToInt(_maxHealth); // 보호막이 흡수할 수 있는 대미지의 양은 몬스터의 최대 체력의 10%
         _isActive = true;
     }
     
     private void OnDestroy()
     {
-        _onBarrierDestroy?.Invoke();
+        OnBarrierDestroy?.Invoke();
     }
 }

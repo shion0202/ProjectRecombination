@@ -15,7 +15,8 @@ namespace Monster.AI.FSM
         public void OnHit(float damage)
         {
             if (blackboard is null) return;
-            blackboard.CurrentHealth -= damage;
+            // 테스트용 적 데미지 배수 적용 (TestManager.EnemyDamageMultiplier, 일반 플레이에서는 1).
+            blackboard.CurrentHealth -= damage * TestManager.EnemyDamageMultiplier;
             // 피격 시 추적 상태로 즉시 전환하는 로직 추가 가능
         }
         

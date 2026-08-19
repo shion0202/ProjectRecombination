@@ -49,7 +49,8 @@ public class DamagableObject : MonoBehaviour, IDamagable
         if (IsDead) return;
         if ((targetMask & (LayerMask)(1 << gameObject.layer)) == 0) return;
 
-        float damage = Utils.GetDamage(inDamage, defenceIgnoreRate, unitOfTime, _stats);
+        // 테스트용 적 데미지 배수 적용 (TestManager.EnemyDamageMultiplier, 일반 플레이에서는 1).
+        float damage = Utils.GetDamage(inDamage, defenceIgnoreRate, unitOfTime, _stats) * TestManager.EnemyDamageMultiplier;
 
         _currentHp -= damage;
         if (_currentHp <= 0)
