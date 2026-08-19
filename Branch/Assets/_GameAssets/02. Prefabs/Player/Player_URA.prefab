@@ -1583,7 +1583,6 @@ MonoBehaviour:
   zoomBlockMask: 58112
   partChangeBlockMask: 15164
   quickTurnBlockMask: 64312
-  toggleBlockMask: 22650
   jumpVelocity: 30
   rotationSpeed: 20
   boxSize: {x: 0.2, y: 0.1, z: 0.2}
