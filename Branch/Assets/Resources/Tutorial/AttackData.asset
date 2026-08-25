@@ -58,14 +58,13 @@ MonoBehaviour:
     Right Arm Fire: Right Mouse
     Click
 
-    
 
     [ Mobile ]
 
     Left Arm Fire: Left Fire Button
 
-    Right
-    Arm Fire: Right Fire Button
+    Right Arm Fire:
+    Right Fire Button
 
     Dual Arm Fire: Center Fire Button'
   exampleImage: {fileID: 21300000, guid: c0a4dcd2f89304c4f99287e309719947, type: 3}

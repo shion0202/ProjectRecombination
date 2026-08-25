@@ -151,11 +151,19 @@ public class Inventory : MonoBehaviour
         _isInit = true;
     }
 
+    /// <summary>파츠를 새로 획득했을 때 발생. 체험 플레이 튜토리얼의 진행 판정에 쓰인다.</summary>
+    public static event System.Action<PartBase> OnItemAcquired;
+
+    /// <summary>장착 파츠가 실제로 바뀌었을 때 발생. 같은 파츠를 다시 고른 경우에는 발생하지 않는다.</summary>
+    public static event System.Action<PartBase> OnItemEquipped;
+
     public void GetItem(PartBase newItem)
     {
         if (!_items[newItem.PartType][newItem.AttackType].Contains(newItem))
         {
             _items[newItem.PartType][newItem.AttackType].Add(newItem);
+
+            OnItemAcquired?.Invoke(newItem);
         }
     }
 
@@ -225,6 +233,10 @@ public class Inventory : MonoBehaviour
             owner.SetOvrrideAnimator(legs.LegsAnimType);
             owner.FollowCamera.CurrentCameraState = (ECameraState)(legs.LegsAnimType);
         }
+
+        // 이 지점에 도달했다는 것은 위쪽 가드(이미 같은 파츠면 return)를 통과했다는 뜻이므로
+        // 실제로 장착이 바뀐 경우에만 발생한다.
+        OnItemEquipped?.Invoke(equipItem);
     }
 
     public override string ToString()
