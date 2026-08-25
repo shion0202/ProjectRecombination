@@ -36,6 +36,19 @@ namespace Managers
             monsters.Clear();
         }
 
+        /// <summary>
+        /// 한 판이 끝났을 때 몬스터 참조를 정리한다.
+        /// 씬 언로드 "전에" 호출해야 한다. 대여 중인 풀 오브젝트가 씬과 함께 파괴되면
+        /// 풀은 여전히 대여 중으로 알고 있는데 실체가 사라져 다음 판에서 null이 튄다.
+        /// </summary>
+        public void ResetSession()
+        {
+            ReleaseAllMonsters();
+            Player = null;
+
+            Debug.Log("[MonsterManager] 세션 리셋 완료");
+        }
+
         public GameObject[] GetBattleMonsters()
         {
             List<GameObject> battleMonsters = new();

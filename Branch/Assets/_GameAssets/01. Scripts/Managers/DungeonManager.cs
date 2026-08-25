@@ -20,7 +20,15 @@ namespace Managers
         
         // 스테이지 데이터
         [SerializeField] private StageData[] stageDatas;
-        
+
+        // 체험 플레이(Demo) 전용 스테이지 데이터. 원소 1개(튜토리얼 씬)만 사용한다.
+        [SerializeField] private StageData[] demoStageDatas;
+
+        // 현재 플레이 모드에 해당하는 스테이지 세트.
+        // Init / UnloadAllStage / ResetCurrentStage / UpdatePlayerStageIndex 는 모두 이 프로퍼티를 참조한다.
+        private StageData[] CurrentStageSet =>
+            GameManager.Instance.PlayMode == EPlayMode.Demo ? demoStageDatas : stageDatas;
+
         // 현재 플레이어가 있는 스테이지 인덱스
         [SerializeField] private int currentPlayerStageIndex;
         public int CurrentPlayerStageIndex { get => currentPlayerStageIndex; private set => currentPlayerStageIndex = value; }
@@ -32,6 +40,9 @@ namespace Managers
 
         // 스테이지 갱신 중 여부
         private bool _isUpdatingStage = false;
+
+        // LoadMiniMap()이 생성한 미니맵 인스턴스. Persistent 씬에 남으므로 세션 종료 시 직접 파괴한다.
+        private GameObject _miniMapInstance;
 
         #region Initialization
 
@@ -48,7 +59,7 @@ namespace Managers
                 LoadedStages.Clear();
 
                 // 스테이지 데이터 로드 (플레이어의 현재 위치 + 주변 스테이지 로딩
-                foreach (StageData stageData in stageDatas)
+                foreach (StageData stageData in CurrentStageSet)
                 {
                     if (stageData.stageIndex != CurrentPlayerStageIndex + 1 &&
                         stageData.stageIndex != CurrentPlayerStageIndex) continue;
@@ -65,6 +76,37 @@ namespace Managers
             {
                 Debug.LogWarning($"[DungeonManager] 초기화 중 예외 발생: {e}");
             }
+        }
+
+        /// <summary>
+        /// 한 판이 끝났을 때 스테이지 로드 상태를 초기 상태로 되돌린다.
+        ///
+        /// _isInit이 복구되지 않으면 2회차 Init()이 맨 앞에서 return하여 스테이지가 아예 로드되지 않고,
+        /// LoadedStages가 비워지지 않으면 LoadStage()가 "이미 로드됨"으로 판단해 스킵한다.
+        /// </summary>
+        public void ResetSession()
+        {
+            _isInit = false;
+            LoadedStages.Clear();
+            CurrentPlayerStageIndex = 0;
+
+            // 미니맵은 Persistent 씬에 생성되어 씬 언로드로 정리되지 않는다.
+            // 여기서 파괴하지 않으면 _isInit 복구와 맞물려 판마다 하나씩 쌓인다.
+            if (_miniMapInstance != null)
+            {
+                Destroy(_miniMapInstance);
+                _miniMapInstance = null;
+            }
+
+            // 아래 참조들은 BossTrigger(본편) 또는 TutorialDirector(데모)가 "씬에서" 주입한다.
+            // 씬이 언로드되면 파괴된 오브젝트를 가리키게 되므로 반드시 해제한다.
+            amonFirstPhase = null;
+            amonSecondPhasePrefab = null;
+            playerTeleportPoint = null;
+            playerRespawnPoint = null;
+            startPosition = null;
+
+            Debug.Log("[DungeonManager] 세션 리셋 완료");
         }
 
         public void SetStartPosition(GameObject obj)
@@ -128,17 +170,17 @@ namespace Managers
                     if (newStageIndex < CurrentPlayerStageIndex)
                     {
                         if (LoadedStages.ContainsKey(CurrentPlayerStageIndex + 1))
-                            await UnloadStage(stageDatas[CurrentPlayerStageIndex + 1]);
-                        
-                        await LoadStage(stageDatas[newStageIndex - 1 < 0 ? 0 : newStageIndex - 1]);
+                            await UnloadStage(CurrentStageSet[CurrentPlayerStageIndex + 1]);
+
+                        await LoadStage(CurrentStageSet[newStageIndex - 1 < 0 ? 0 : newStageIndex - 1]);
                     }
                     // newStageIndex 값이 현재 플레이어 스테이지 인덱스보다 커지는 경우 (앞으로 이동)
                     else if (newStageIndex > CurrentPlayerStageIndex)
                     {
                         if (LoadedStages.ContainsKey(CurrentPlayerStageIndex - 1))
-                            await UnloadStage(stageDatas[CurrentPlayerStageIndex - 1]);
+                            await UnloadStage(CurrentStageSet[CurrentPlayerStageIndex - 1]);
 
-                        await LoadStage(stageDatas[newStageIndex + 1]);
+                        await LoadStage(CurrentStageSet[newStageIndex + 1]);
                     }
                 }
                 
@@ -197,8 +239,8 @@ namespace Managers
             try
             {
                 Debug.Log("[DungeonManager] 모든 스테이지 언로드 시작...");
-                
-                foreach (StageData stageData in stageDatas)
+
+                foreach (StageData stageData in CurrentStageSet)
                 {
                     await SceneController.Instance.UnloadScene(stageData.stageName);
                 }
@@ -218,7 +260,10 @@ namespace Managers
         {
             if (miniMapPrefab != null)
             {
-                Instantiate(miniMapPrefab);
+                // 이 Instantiate는 씬 로드 중이 아니라 Init() 흐름에서 실행되므로
+                // Active Scene(Scene_Persistent)에 생성된다. 즉 스테이지/플레이어 씬을 언로드해도
+                // 살아남아 판마다 누적되므로, 인스턴스를 들고 있다가 ResetSession()에서 직접 파괴한다.
+                _miniMapInstance = Instantiate(miniMapPrefab);
             }
             else
             {
@@ -298,7 +343,7 @@ namespace Managers
                     return;
                 }
                 
-                StageData currentStageData = stageDatas[CurrentPlayerStageIndex];
+                StageData currentStageData = CurrentStageSet[CurrentPlayerStageIndex];
                 
                 // 1. 현재 스테이지 언로드
                 await SceneController.Instance.UnloadScene(currentStageData.stageName);

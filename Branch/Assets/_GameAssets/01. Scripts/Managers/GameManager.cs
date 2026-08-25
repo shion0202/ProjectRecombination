@@ -21,6 +21,11 @@ namespace Managers
 
         [SerializeField] private bool isHardMode;
         public bool IsHardMode { get => isHardMode; set => isHardMode = value; }
+
+        // 현재 플레이 모드. 행사 출품용 체험 플로우(Demo)와 본편(Normal)을 구분한다.
+        // DungeonManager가 어느 스테이지 세트를 쓸지, AmonEndPhase가 어디로 분기할지를 이 값으로 판단한다.
+        public EPlayMode PlayMode { get; private set; } = EPlayMode.Normal;
+
         public PlayerController Player { get; set; }
         // public GameObject MainCamera { get; set; }
         public GameObject FollowCamera { get; set; }
@@ -133,7 +138,13 @@ namespace Managers
             try
             {
                 Debug.Log("[GameManager] 타이틀 씬 로드 중...");
-                
+
+                // 타이틀은 마우스로 조작하는 메뉴이므로 커서가 항상 자유로워야 한다.
+                // 인게임에서 PlayerController가 Locked로 잠근 상태 그대로 복귀하면
+                // 메뉴 버튼을 클릭할 수 없으므로, 진입 시점에 무조건 해제한다.
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
                 await GUIManager.LoadGUI();
                 await SoundManager.Instance.Init();
                 
@@ -147,13 +158,20 @@ namespace Managers
             }
         }
         
-        public async void EnterPrologue()
+        public async void EnterPrologue(EPlayMode mode)
         {
             try
             {
-                Debug.Log("[GameManager] 게임 실행 준비 중...");
+                Debug.Log($"[GameManager] 게임 실행 준비 중... (mode: {mode})");
                 CurrentState = GameState.Loading;
-                
+
+                PlayMode = mode;
+
+                // 데모 모드는 하드 모드를 강제로 끈다.
+                // 하드 모드 사망 시 RebirthGame()이 ResetCurrentStage()로 현재 스테이지를 리로드하는데,
+                // 튜토리얼은 스테이지가 1개뿐이라 그것이 곧 보스전 전체 초기화를 의미한다.
+                if (mode == EPlayMode.Demo) IsHardMode = false;
+
                 // 프롤로그 재생하는 동안 플레이어 씬과 게임 씬 로드
                 await DungeonManager.Instance.Init();
                 await PoolManager.Instance.Init();
@@ -219,6 +237,70 @@ namespace Managers
             }
         }
         
+        /// <summary>
+        /// 체험 플레이 1판을 종료하고 타이틀로 복귀한다.
+        /// 행사에서는 게임을 끄지 않고 종일 반복 실행하므로, 이 경로가 세션 상태를 완전히 되돌려야 한다.
+        ///
+        /// 호출 순서에 의존성이 있다.
+        ///  1) 풀 오브젝트 회수는 씬 언로드 "전에" (씬과 함께 파괴되면 풀 밖에서 사라진다)
+        ///  2) 매니저 상태 리셋은 씬 언로드 "후에" (언로드가 참조를 사용한다)
+        /// </summary>
+        public async void ReturnToTitleFromDemo()
+        {
+            try
+            {
+                Debug.Log("[GameManager] 체험 플레이 종료, 타이틀 복귀 시작...");
+
+                // 1. 가장 먼저 상태를 Loading으로 내린다.
+                //    언로드를 await 하는 동안에도 Update()는 계속 돌기 때문에, Playing 상태로 두면
+                //    PlayingProcess()가 이미 파괴된 Player를 참조해 예외가 나거나
+                //    체력을 0으로 읽어 GameOver로 잘못 전이된다.
+                CurrentState = GameState.Loading;
+
+                // 2. 씬 언로드 "전에" 풀 오브젝트 회수
+                MonsterManager.Instance.ResetSession();
+
+                // 3. 진행 중인 부활 코루틴 중단.
+                //    부활 대기(5초) 도중에 판이 끝나면 코루틴이 살아남아
+                //    다음 판 시작 직후 Player.Spawn()과 상태 전이를 실행해버린다.
+                if (_rebirthRoutine != null)
+                {
+                    StopCoroutine(_rebirthRoutine);
+                    _rebirthRoutine = null;
+                }
+
+                // 4. 씬 언로드
+                await DungeonManager.Instance.UnloadAllStage();
+                await UnloadPlayerScene();
+
+                // 5. UI 씬도 언로드한다.
+                //    Scene_UI의 UI 오브젝트들은 InitUI가 한 번만 생성하고 이후에는 SetActive로 토글될 뿐이라,
+                //    초기화가 Awake/Start에 있는 스크립트(UI_Prologue, TitleLogoDT 등)는 2회차에 다시 돌지 않는다.
+                //    개별 스크립트에 리셋을 넣는 대신 씬을 통째로 다시 만들어 UI 상태를 확실히 초기화한다.
+                //    (UnloadGUI가 DOTween.KillAll()로 잔여 트윈까지 정리한다.)
+                await GUIManager.Instance.UnloadGUI();
+
+                // 6. 매니저 상태 리셋
+                DungeonManager.Instance.ResetSession();
+                DungeonStateManager.Instance.ClearStates();
+
+                // 7. 참조 및 모드 복구
+                Player = null;
+                FollowCamera = null;
+                MinimapObject = null;
+                PlayMode = EPlayMode.Normal;
+
+                Debug.Log("[GameManager] 타이틀 복귀 완료!");
+
+                // 8. 타이틀 진입 (EnterTitle이 Scene_UI를 다시 로드한다)
+                EnterTitle();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[GameManager] 타이틀 복귀 중 예외 발생: {e}");
+            }
+        }
+
         public async void EnterEpilogue()
         {
             try
@@ -261,8 +343,12 @@ namespace Managers
             try
             {
                 // FollowCamera, MinimapObject의 FollowAudioListener 언로드 (별도의 MonoBehaviour이므로 Update 등에서 참조가 남아 있음)
-                SoundManager.Instance.AudioListener.GetComponent<FollowAudioListener>()?.Unload();
-                MinimapObject.GetComponent<FollowAudioListener>()?.Unload();
+                // 반복 플레이 시 이미 정리된 상태로 재진입할 수 있어 null 가드를 둔다.
+                if (SoundManager.Instance.AudioListener != null)
+                    SoundManager.Instance.AudioListener.GetComponent<FollowAudioListener>()?.Unload();
+
+                if (MinimapObject != null)
+                    MinimapObject.GetComponent<FollowAudioListener>()?.Unload();
                 
                 // 플레이어 씬 언로드
                 await SceneController.Instance.UnloadScene("Scene_Player");

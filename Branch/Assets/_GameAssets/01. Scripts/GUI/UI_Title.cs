@@ -53,7 +53,15 @@ public class UI_Title : MonoBehaviour, PlayerActions.IUIActionMapActions
 
     public void OnClickStart()
     {
-        GameManager.Instance.EnterPrologue();
+        GameManager.Instance.EnterPrologue(EPlayMode.Normal);
+    }
+
+    /// <summary>
+    /// 행사 출품용 체험 플레이 진입. 프롤로그는 본편과 공유하고, 이후 튜토리얼 씬으로 향한다.
+    /// </summary>
+    public void OnClickDemoStart()
+    {
+        GameManager.Instance.EnterPrologue(EPlayMode.Demo);
     }
 
     public void OnClickExit()

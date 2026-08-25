@@ -66,6 +66,9 @@ MonoBehaviour:
     stageName: 8th_Another_Space
   - stageIndex: 8
     stageName: 9th_Warpgate_Return_When_Amon_2Phase_Defeated
+  demoStageDatas:
+  - stageIndex: 0
+    stageName: 0th_Demo_Room
   currentPlayerStageIndex: 0
   amonFirstPhase: {fileID: 0}
   amonSecondPhasePrefab: {fileID: 0}
