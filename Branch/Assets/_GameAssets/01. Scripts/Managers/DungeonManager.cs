@@ -119,10 +119,30 @@ namespace Managers
             try
             {
                 if (GameManager.Instance.Player is null) return;
-                if (startPosition is null) return;
-                
-                GameManager.Instance.Player.transform.position = startPosition.transform.position;
-                
+
+                PlayerController player = GameManager.Instance.Player;
+                CharacterController controller = player.GetComponent<CharacterController>();
+
+                if (startPosition != null)
+                {
+                    // CharacterController가 켜져 있으면 transform 직접 대입이 되돌려질 수 있으므로
+                    // 껐다 옮긴다. (AmonSecondPhase / AmonEndPhase 와 동일한 패턴)
+                    if (controller != null) controller.enabled = false;
+                    player.transform.position = startPosition.transform.position;
+                }
+                else
+                {
+                    Debug.LogWarning("[DungeonManager] 시작 위치가 지정되지 않아 플레이어를 옮기지 않습니다.");
+                }
+
+                // LoadPlayerScene이 낙하 방지를 위해 꺼둔 컨트롤러를 여기서 반드시 다시 켠다.
+                // 시작 위치가 없더라도 켜지 않으면 플레이어가 영구히 움직이지 못하므로
+                // 위 분기와 무관하게 실행한다.
+                if (controller != null) controller.enabled = true;
+
+                // 지형이 없는 동안 누적됐을 낙하 속도를 지운다. 남아 있으면 배치 직후 바닥을 뚫는다.
+                player.ResetGravityAndFalling();
+
                 // Dynamic 씬을 Active 씬으로 설정
                 //SceneController.Instance.SetActiveScene(LoadedStages[CurrentPlayerStageIndex]);
             }
@@ -320,9 +340,21 @@ namespace Managers
         // 아몬 2페이즈 종료
         public void AmonEndPhase()
         {
-            amonSecondPhasePrefab.isEnabled = false;
+            if (amonSecondPhasePrefab != null)
+                amonSecondPhasePrefab.isEnabled = false;
 
+            // 체험 플레이에서는 리스폰이 아니라 체험 종료로 이어진다.
+            if (GameManager.Instance.PlayMode == EPlayMode.Demo)
+            {
+                // TODO(Task 6): 결과 화면 EnterDemoResult() 로 교체
+                GameManager.Instance.ReturnToTitleFromDemo();
+                return;
+            }
+
+            // 씬에서 주입되는 참조들이라 세션 리셋 후에는 비어 있을 수 있다.
             GameObject playerObj = MonsterManager.Instance.Player;
+            if (playerObj == null || playerRespawnPoint == null) return;
+
             CharacterController controller = playerObj.GetComponent<CharacterController>();
             if (controller != null) controller.enabled = false;
             playerObj.transform.position = playerRespawnPoint.position;

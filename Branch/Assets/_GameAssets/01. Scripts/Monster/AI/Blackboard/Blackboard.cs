@@ -208,6 +208,17 @@ namespace Monster.AI.Blackboard
                 _map["minDetectionRange"] = defaultStats.GetStat(EStatType.MinDetectiveRange);          // 타겟 인식 범위 (최소)
                 _map["maxDetectionRange"] = defaultStats.GetStat(EStatType.MaxDetectiveRange);           // 타겟 인식 범위
             }
+
+            // 체험 플레이(Demo) 전용 스탯 배수.
+            // 시트에서 원본 값을 채운 "직후"에 적용하므로, Init()이 여러 번 호출되어도 중첩되지 않는다.
+            // (매번 시트에서 원본을 새로 읽기 때문. 이 블록을 Init 밖으로 옮기면 값이 계속 줄어든다.)
+            if (DemoModeContext.IsActive)
+            {
+                float scaledMaxHp = (float)_map["maxHealth"] * DemoModeContext.BossHealthMultiplier;
+                _map["maxHealth"] = scaledMaxHp;
+                _map["health"] = scaledMaxHp;
+                _map["damage"] = (float)_map["damage"] * DemoModeContext.BossDamageMultiplier;
+            }
             
             // 몬스터 스킬 초기화
             {

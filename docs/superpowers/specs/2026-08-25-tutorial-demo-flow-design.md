@@ -245,20 +245,25 @@ amonPhaseTwo.isEnabled = true;
 
 ### 4.4 보스 저스펙 (런타임 배수)
 
+> **네이밍 경계 (실행 중 확정)**
+> 기존 `Tutorial*`은 **도움말/설명서 시스템**이다(`TutorialDataSO`, `UI_Tutorial`,
+> `Resources/Tutorial/`). 이번 체험 플레이는 성격이 다르므로 **`Demo*`** 접두사로 분리한다.
+> `EPlayMode.Demo`, `DemoModeContext`, `DemoBossProfile`, `DemoDebugReturn`, `Resources/Demo/`.
+> **기존 튜토리얼 폴더와 타입은 변경하지 않는다.**
+
 ```csharp
 /// TestManager와 동일한 정적 홀더 패턴. 데모 모드에서만 값이 설정된다.
-public static class TutorialModeContext
+public static class DemoModeContext
 {
+    private const string ProfileResourcePath = "Demo/DemoBossProfile";
+
     public static bool  IsActive;
     public static float BossHealthMultiplier = 1f;
     public static float BossDamageMultiplier = 1f;
 
-    public static void Reset()
-    {
-        IsActive = false;
-        BossHealthMultiplier = 1f;
-        BossDamageMultiplier = 1f;
-    }
+    public static void LoadAndApply();                  // Resources.Load 후 Apply
+    public static void Apply(DemoBossProfile profile);
+    public static void Reset();
 }
 ```
 
@@ -277,8 +282,10 @@ if (TutorialModeContext.IsActive)
 읽어오므로 배수가 중첩 적용되지 않는다. `Init()` 외부에서 스탯을 곱하는 방식은
 재초기화 시 값이 계속 줄어드는 버그가 된다.
 
-배수 값은 `TutorialBossProfile` ScriptableObject에 두고 인스펙터에서 조절한다.
-`TutorialDirector`가 시작 시 프로필을 `TutorialModeContext`에 주입한다.
+배수 값은 `DemoBossProfile` ScriptableObject에 두고 인스펙터에서 조절한다.
+에셋 경로는 `Assets/Resources/Demo/DemoBossProfile.asset`으로 고정하고
+`Resources.Load`로 읽으므로 인스펙터 배선이 필요 없다.
+(`UI_Tutorial`이 `Resources.LoadAll<TutorialDataSO>("Tutorial")`을 쓰는 것과 같은 관행이다.)
 
 **플레이어 공격력을 올리는 대신 보스 HP를 낮추는 방향으로 통일한다.**
 `TestManager.EnemyDamageMultiplier`(에디터 테스트 전용)와 밸런싱 출처가 섞이면
@@ -288,18 +295,30 @@ if (TutorialModeContext.IsActive)
 > 튜토리얼 더미도 함께 약해지는데 일반적으로는 바람직하므로 그대로 둔다.
 > 보스에만 적용하려면 `id` 범위로 게이트할 수 있다.
 
-#### 적용 시점의 순서 근거
+#### 적용 시점 (실행 중 변경)
 
-`TutorialModeContext`의 값은 `TutorialDirector.Awake()`가 주입한다. 이때
-같은 씬에 있는 아몬 오브젝트의 `Awake` / `OnEnable`이 `TutorialDirector.Awake()`보다
-**먼저 실행될 수 있다.** Unity는 동일 씬 내 컴포넌트의 `Awake` 순서를 보장하지 않는다.
+**주입은 `GameManager.EnterPrologue()`에서 한다.** 원안은 `TutorialDirector.Awake()`가
+단일 소유자로 주입하고 "`FSM.Start()`가 `Init()`을 다시 호출하므로 안전하다"는 근거를
+달았으나, 이 프로젝트에서 씬 내 `Awake` 순서에 기대는 설계는 이미 한 번 실제로 물렸다
+(§5 의존성 #1의 씬 로드 순서 문제). 더 이른 지점으로 올려 순서 문제 자체를 제거한다.
 
-그럼에도 안전한 이유는 `FSM.Start()`가 `Init()`을 **무조건 다시 호출**하기 때문이다.
-`Start()`는 해당 씬의 모든 `Awake`가 끝난 뒤 실행되므로, `TutorialDirector.Awake()`의
-주입은 반드시 `FSM.Start()` → `Blackboard.Init()` → `InitMonsterStatsByID()`보다 앞선다.
-`InitMonsterStatsByID()`가 매번 시트에서 원본을 새로 읽으므로 최종 값은 항상 올바르다.
+```csharp
+// EnterPrologue(EPlayMode mode) 안
+if (mode == EPlayMode.Demo)
+{
+    IsHardMode = false;
+    DemoModeContext.LoadAndApply();
+}
+else
+{
+    DemoModeContext.Reset();
+}
+```
 
-이 성질이 깨지지 않도록, `FSM.Start()`의 무조건 `Init()` 호출을 조건부로 바꾸지 않는다.
+`EnterPrologue()`는 `DungeonManager.Init()`이 스테이지 씬을 로드하기 **전**에 실행되므로,
+씬에 배치된 어떤 몬스터의 `Awake` / `Start`보다도 확실히 앞선다.
+`else` 분기의 `Reset()`은 데모 → 타이틀 → 본편 순으로 진입할 때 배수가 새는 것을 막는다.
+(타이틀 복귀 경로에서도 `Reset()`을 한 번 더 호출한다 — §7.2)
 
 ### 4.5 종료 및 결과 화면
 

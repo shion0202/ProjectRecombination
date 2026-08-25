@@ -427,7 +427,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.75, y: 1.75, z: 1.75}
+  m_LocalScale: {x: 1.7499993, y: 1.7499995, z: 1.7499995}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6961243041253458213}
@@ -506,8 +506,8 @@ MonoBehaviour:
   spawnModel: {fileID: 6602428307278293158}
   deathModel: {fileID: 5827349158532364918}
   amonBody: {fileID: 7768882004021664671}
-  spawnWaitTime: 6
-  deathWaitTime: 6
+  spawnWaitTime: 5.5
+  deathWaitTime: 5.5
 --- !u!114 &1987053423265468178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -808,6 +808,7 @@ MonoBehaviour:
   amonShield: {fileID: 0}
   amonEnergyBall: {fileID: 5695001238483267493}
   amonDeathModel: {fileID: 0}
+  arenaAnchor: {fileID: 0}
   skillDatas:
   - {fileID: 11400000, guid: 9b42c6edaf57a834190f07ed0c8c518f, type: 2}
   - {fileID: 11400000, guid: e33bdc02cd184a1488cab003700cfd6f, type: 2}

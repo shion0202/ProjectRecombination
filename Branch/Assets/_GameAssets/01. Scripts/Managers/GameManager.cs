@@ -167,16 +167,33 @@ namespace Managers
 
                 PlayMode = mode;
 
-                // 데모 모드는 하드 모드를 강제로 끈다.
-                // 하드 모드 사망 시 RebirthGame()이 ResetCurrentStage()로 현재 스테이지를 리로드하는데,
-                // 튜토리얼은 스테이지가 1개뿐이라 그것이 곧 보스전 전체 초기화를 의미한다.
-                if (mode == EPlayMode.Demo) IsHardMode = false;
+                if (mode == EPlayMode.Demo)
+                {
+                    // 하드 모드를 강제로 끈다. 하드 모드 사망 시 RebirthGame()이 ResetCurrentStage()로
+                    // 현재 스테이지를 리로드하는데, 튜토리얼은 스테이지가 1개뿐이라
+                    // 그것이 곧 보스전 전체 초기화를 의미한다.
+                    IsHardMode = false;
+
+                    // 스탯 배수는 여기서 주입한다. 스테이지 씬이 로드되기 "전"이므로
+                    // 씬 내 컴포넌트의 Awake 순서와 무관하게 항상 몬스터 초기화보다 앞선다.
+                    DemoModeContext.LoadAndApply();
+                }
+                else
+                {
+                    DemoModeContext.Reset();
+                }
 
                 // 프롤로그 재생하는 동안 플레이어 씬과 게임 씬 로드
-                await DungeonManager.Instance.Init();
+                //
+                // 순서 주의: 스테이지 씬보다 플레이어 씬을 "먼저" 로드해야 한다.
+                // 씬에 배치된 몬스터는 Blackboard.Init()에서 Target = MonsterManager.Instance.Player를
+                // 한 번 읽고 굳는다. Player가 아직 없으면 Target이 null로 남아
+                // FSM의 Think()/Act()가 첫 줄에서 return해 그 몬스터가 통째로 정지한다.
+                // (SceneTestLauncher.LoadInGame()이 이미 이 순서를 쓰고 있다.)
                 await PoolManager.Instance.Init();
                 await LoadPlayerScene();
-                
+                await DungeonManager.Instance.Init();
+
                 DungeonManager.Instance.SetPlayerStartPosition();
                 
                 Debug.Log("[GameManager] 게임 실행 준비 완료!");
@@ -283,6 +300,7 @@ namespace Managers
                 // 6. 매니저 상태 리셋
                 DungeonManager.Instance.ResetSession();
                 DungeonStateManager.Instance.ClearStates();
+                DemoModeContext.Reset();
 
                 // 7. 참조 및 모드 복구
                 Player = null;
@@ -336,7 +354,20 @@ namespace Managers
             }
         }
 
-        private static Task LoadPlayerScene() => SceneController.Instance.LoadSceneAdditive("Scene_Player");
+        private static async Task LoadPlayerScene()
+        {
+            await SceneController.Instance.LoadSceneAdditive("Scene_Player");
+
+            // 플레이어 씬은 스테이지 씬보다 먼저 로드되므로 이 시점에는 발밑에 지형이 없다.
+            // 그대로 두면 스테이지 로드가 끝날 때까지 계속 낙하해 낙하 속도가 누적되고,
+            // 시작 위치로 옮겨도 그 속도 때문에 바닥을 뚫는다.
+            // 시작 위치가 확정될 때(DungeonManager.SetPlayerStartPosition)까지 컨트롤러를 꺼둔다.
+            PlayerController player = Instance.Player;
+            if (player == null) return;
+
+            CharacterController controller = player.GetComponent<CharacterController>();
+            if (controller != null) controller.enabled = false;
+        }
         
         private async Task UnloadPlayerScene()
         {

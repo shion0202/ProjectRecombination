@@ -20,6 +20,7 @@
 - **`SceneManager.MoveGameObjectToScene()` 사용 금지.** 위 제약과 같은 이유로 씬 소속을 옮기지 않는다. 세션 오브젝트 정리는 명시적 레지스트리(Task 2)로만 처리한다.
 - **구글 스프레드시트(`CharacterStats` 등)를 수정하지 않는다.** 보스 스펙 조정은 런타임 배수로만 한다.
 - **테스트 프레임워크를 새로 도입하지 않는다.** 이 프로젝트에는 게임 코드용 테스트 어셈블리가 없다(`.asmdef`는 `IDamagable` 하나, `manifest.json`에 `testables` 없음). 각 태스크의 검증은 **에디터 수동 확인 + Console 로그 단언**으로 수행한다. 각 태스크는 로그 문자열과 기대 출력을 명시한다.
+- **씬 로드 순서:** `EnterPrologue()`는 **플레이어 씬을 스테이지 씬보다 먼저** 로드해야 한다. 씬에 배치된 몬스터는 `Blackboard.Init()`에서 `Target = MonsterManager.Instance.Player`를 한 번 읽고 굳으며, 재초기화 계기가 없다. Player가 없으면 `Target`이 null로 남아 `FSM.Think()` / `Act()`가 첫 줄에서 return해 **그 몬스터가 통째로 정지한다.** (2026-08-26 실측 확인: 데모룸의 아몬이 체력 0에도 반응하지 않던 원인. 본편은 아몬이 8스테이지에 있어 드러나지 않았고, `SceneTestLauncher.LoadInGame()`은 처음부터 올바른 순서를 쓰고 있었다.)
 - **씬 주소 규약:** 스테이지 성격 씬은 Addressables `GameScene` 그룹, 시스템 씬(`Scene_Persistent` / `Scene_Player` / `Scene_UI`)은 `Default Local Group`에 등록되어 있다.
 - **튜토리얼 씬은 기존 `0th_Demo_Room.unity`를 사용한다** (실행 중 결정). 경로 `Branch/Assets/_GameAssets/04. Scenes/GameScene/0th_Demo_Room.unity`, 주소 **`0th_Demo_Room`**, 그룹 `GameScene`. 계획서 본문의 `Tutorial.unity` / `Scene_Tutorial` 표기는 전부 이것으로 읽는다.
   - 이 씬은 `1st_Security_Room` 파생이라 Exe254(익스큐셔너) 트리거와 몬스터 스폰 존 등 본편 잔재물이 있다. Task 7에서 튜토리얼 구성에 맞게 정리한다.
@@ -831,13 +832,40 @@ git commit -m "fix: 매니저 세션 리셋 추가로 반복 플레이 시 스�
 1. 빈 오브젝트 `PlayerTeleportPoint` 생성, Position `(0, 1, 5)`
 2. 빈 오브젝트 `PlayerRespawnPoint` 생성, Position `(0, 1, 0)`
 
-- [ ] **Step 5: NavMesh 베이크**
+- [ ] **Step 5: NavMesh 확인 (조사 결과에 따라 수정됨)**
 
-1. 바닥 `Plane`을 선택하고 Inspector에서 `Static` 드롭다운 → `Navigation Static` 체크
-2. `Window > AI > Navigation` → `Bake` 탭 → `Bake` 클릭
-3. Scene 뷰에 파란 NavMesh가 표시되는지 확인
+> **정정**: 원안의 "씬에 NavMesh를 베이크한다"는 이 프로젝트의 구조와 맞지 않는다.
+> 조사 결과 **게임 씬 10개 전부 `m_NavMeshData: {fileID: 0}`으로 베이크된 NavMesh가 없다.**
+> 대신 `02. Prefabs/Persistent/MapManager.prefab`이 `NavMeshSurface` 컴포넌트를 갖고 있고,
+> 그 `m_NavMeshData`가 `04. Scenes/GameScene/9th_Warpgate_.../NavMesh-MapManager.asset`을
+> 가리킨다. `InitPersistent`가 MapManager를 생성하면 이 NavMesh가 런타임에 월드에 추가된다.
+> `m_CollectObjects: 0`(All)이므로 베이크 당시 열려 있던 모든 씬 지오메트리가 한 덩어리다.
 
-> NavMesh가 없으면 `AmonPaseTwoFSM.ActChase()`의 `NavMeshAgent.SetDestination()`이 동작하지 않아 보스가 추적하지 않는다.
+먼저 **추가 작업이 필요한지부터 확인한다.** `0th_Demo_Room`은 `1st_Security_Room`의 복제본이므로,
+월드 좌표를 그대로 두었다면 기존 `NavMesh-MapManager.asset`이 이미 덮고 있을 수 있다.
+
+Step 8의 F6 테스트에서 **아몬이 걸어서 추격하는지** 확인한다.
+
+- 추격한다 → NavMesh 작업 불필요. 이 Step 종료.
+- 추격하지 않는다 → 아래 전용 Surface를 추가한다.
+
+**전용 NavMeshSurface 추가 (필요할 때만)**
+
+1. `0th_Demo_Room.unity`만 단독으로 연다 (다른 씬이 열려 있으면 함께 구워진다)
+2. 빈 오브젝트 `NavMeshSurface_DemoRoom` 생성
+3. `Add Component > Navigation > NavMeshSurface`
+4. `Collect Objects`를 `All`로 두고 `Bake` 클릭
+5. 씬 이름 폴더에 `NavMesh-NavMeshSurface_DemoRoom.asset`이 생성되는지 확인
+
+> **`NavMesh-MapManager.asset`을 다시 굽지 않는다.** 그것은 본편 전체가 공유하는 에셋이라,
+> 모든 스테이지 씬을 정확히 같은 조합으로 열지 않은 상태에서 재베이크하면 본편 NavMesh가
+> 축소되어 회귀가 발생한다. 데모룸 전용 Surface를 두면 씬과 함께 로드/언로드되어
+> 반복 플레이에도 깔끔하다.
+
+> **참고**: `01. Scripts/Editor/LoadAllGameScene.cs`의 경로 상수가
+> `Assets/_Test/Scene/GameScene`으로 되어 있는데 실제 씬은
+> `Assets/_GameAssets/04. Scenes/GameScene`으로 이동했다. 이 툴은 현재 동작하지 않는다.
+> 이번 범위 밖이지만 NavMesh 재베이크가 필요해지면 먼저 고쳐야 한다.
 
 - [ ] **Step 6: 임시 기동 컴포넌트 배치**
 
