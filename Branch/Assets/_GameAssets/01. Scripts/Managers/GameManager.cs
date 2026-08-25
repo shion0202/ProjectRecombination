@@ -255,12 +255,83 @@ namespace Managers
         }
         
         /// <summary>
-        /// 체험 플레이 1판을 종료하고 타이틀로 복귀한다.
-        /// 행사에서는 게임을 끄지 않고 종일 반복 실행하므로, 이 경로가 세션 상태를 완전히 되돌려야 한다.
+        /// 게임 월드(스테이지 + 플레이어)를 정리하고 관련 매니저 상태를 되돌린다.
+        /// UI 씬은 건드리지 않으므로, 크레딧처럼 UI가 계속 필요한 화면으로 넘어갈 때도 쓸 수 있다.
         ///
         /// 호출 순서에 의존성이 있다.
         ///  1) 풀 오브젝트 회수는 씬 언로드 "전에" (씬과 함께 파괴되면 풀 밖에서 사라진다)
         ///  2) 매니저 상태 리셋은 씬 언로드 "후에" (언로드가 참조를 사용한다)
+        /// </summary>
+        private async Task CleanupGameWorld()
+        {
+            // 1. 씬 언로드 "전에" 풀 오브젝트 회수
+            MonsterManager.Instance.ResetSession();
+
+            // 2. 진행 중인 부활 코루틴 중단.
+            //    부활 대기(5초) 도중에 판이 끝나면 코루틴이 살아남아
+            //    다음 판 시작 직후 Player.Spawn()과 상태 전이를 실행해버린다.
+            if (_rebirthRoutine != null)
+            {
+                StopCoroutine(_rebirthRoutine);
+                _rebirthRoutine = null;
+            }
+
+            // 3. 씬 언로드
+            await DungeonManager.Instance.UnloadAllStage();
+            await UnloadPlayerScene();
+
+            // 4. 매니저 상태 리셋
+            DungeonManager.Instance.ResetSession();
+            DungeonStateManager.Instance.ClearStates();
+            DemoModeContext.Reset();
+
+            // 5. 참조 해제
+            Player = null;
+            FollowCamera = null;
+            MinimapObject = null;
+        }
+
+        /// <summary>
+        /// 체험 플레이 클리어 → 크레딧으로 넘어간다.
+        /// 본편의 EnterEpilogue() 자리에 대응하며, 데모는 에필로그를 건너뛰고 바로 크레딧으로 간다.
+        /// (본편: 게임씬 → 에필로그 → 크레딧 → 타이틀 / 데모: 데모씬 → 크레딧 → 타이틀)
+        ///
+        /// PlayMode는 여기서 되돌리지 않는다. 크레딧이 끝났을 때 UI_Credits가
+        /// 본편/데모 중 어느 경로로 복귀할지 판단해야 하기 때문이다.
+        /// </summary>
+        public async void EnterDemoCredit()
+        {
+            try
+            {
+                Debug.Log("[GameManager] 체험 플레이 클리어, 크레딧 진입 중...");
+
+                // 언로드를 await 하는 동안에도 Update()는 계속 돌기 때문에, Playing 상태로 두면
+                // PlayingProcess()가 이미 파괴된 Player를 참조해 예외가 나거나
+                // 체력을 0으로 읽어 GameOver로 잘못 전이된다.
+                CurrentState = GameState.Loading;
+
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                await CleanupGameWorld();
+
+                CurrentState = GameState.Credit;
+
+                Debug.Log("[GameManager] 크레딧 진입 완료!");
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[GameManager] 크레딧 진입 중 예외 발생: {e}");
+            }
+        }
+
+        /// <summary>
+        /// 체험 플레이 1판을 종료하고 타이틀로 복귀한다. 크레딧이 끝나면 UI_Credits가 호출한다.
+        /// 행사에서는 게임을 끄지 않고 종일 반복 실행하므로, 이 경로가 세션 상태를 완전히 되돌려야 한다.
+        ///
+        /// EnterDemoCredit()이 이미 월드를 정리했더라도 CleanupGameWorld()를 다시 호출한다.
+        /// 언로드는 이미 언로드된 씬에 대해 no-op이고, 리셋도 멱등이므로 안전하다.
+        /// (크레딧을 거치지 않는 경로에서 호출되더라도 상태가 새지 않게 하기 위함이다.)
         /// </summary>
         public async void ReturnToTitleFromDemo()
         {
@@ -268,49 +339,22 @@ namespace Managers
             {
                 Debug.Log("[GameManager] 체험 플레이 종료, 타이틀 복귀 시작...");
 
-                // 1. 가장 먼저 상태를 Loading으로 내린다.
-                //    언로드를 await 하는 동안에도 Update()는 계속 돌기 때문에, Playing 상태로 두면
-                //    PlayingProcess()가 이미 파괴된 Player를 참조해 예외가 나거나
-                //    체력을 0으로 읽어 GameOver로 잘못 전이된다.
                 CurrentState = GameState.Loading;
 
-                // 2. 씬 언로드 "전에" 풀 오브젝트 회수
-                MonsterManager.Instance.ResetSession();
+                await CleanupGameWorld();
 
-                // 3. 진행 중인 부활 코루틴 중단.
-                //    부활 대기(5초) 도중에 판이 끝나면 코루틴이 살아남아
-                //    다음 판 시작 직후 Player.Spawn()과 상태 전이를 실행해버린다.
-                if (_rebirthRoutine != null)
-                {
-                    StopCoroutine(_rebirthRoutine);
-                    _rebirthRoutine = null;
-                }
-
-                // 4. 씬 언로드
-                await DungeonManager.Instance.UnloadAllStage();
-                await UnloadPlayerScene();
-
-                // 5. UI 씬도 언로드한다.
-                //    Scene_UI의 UI 오브젝트들은 InitUI가 한 번만 생성하고 이후에는 SetActive로 토글될 뿐이라,
-                //    초기화가 Awake/Start에 있는 스크립트(UI_Prologue, TitleLogoDT 등)는 2회차에 다시 돌지 않는다.
-                //    개별 스크립트에 리셋을 넣는 대신 씬을 통째로 다시 만들어 UI 상태를 확실히 초기화한다.
-                //    (UnloadGUI가 DOTween.KillAll()로 잔여 트윈까지 정리한다.)
+                // UI 씬도 언로드한다.
+                // Scene_UI의 UI 오브젝트들은 InitUI가 한 번만 생성하고 이후에는 SetActive로 토글될 뿐이라,
+                // 초기화가 Awake/Start에 있는 스크립트(UI_Prologue, TitleLogoDT, UI_Credits 등)는
+                // 2회차에 다시 돌지 않는다. 씬을 통째로 다시 만들어 UI 상태를 확실히 초기화한다.
+                // (UnloadGUI가 DOTween.KillAll()로 잔여 트윈까지 정리한다.)
                 await GUIManager.Instance.UnloadGUI();
 
-                // 6. 매니저 상태 리셋
-                DungeonManager.Instance.ResetSession();
-                DungeonStateManager.Instance.ClearStates();
-                DemoModeContext.Reset();
-
-                // 7. 참조 및 모드 복구
-                Player = null;
-                FollowCamera = null;
-                MinimapObject = null;
                 PlayMode = EPlayMode.Normal;
 
                 Debug.Log("[GameManager] 타이틀 복귀 완료!");
 
-                // 8. 타이틀 진입 (EnterTitle이 Scene_UI를 다시 로드한다)
+                // 타이틀 진입 (EnterTitle이 Scene_UI를 다시 로드한다)
                 EnterTitle();
             }
             catch (Exception e)

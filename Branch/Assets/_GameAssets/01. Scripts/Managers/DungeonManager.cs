@@ -343,11 +343,11 @@ namespace Managers
             if (amonSecondPhasePrefab != null)
                 amonSecondPhasePrefab.isEnabled = false;
 
-            // 체험 플레이에서는 리스폰이 아니라 체험 종료로 이어진다.
+            // 체험 플레이에서는 9번째 맵으로 리스폰하는 대신 바로 크레딧으로 넘어간다.
+            // (본편: 9th 맵 → 트리거 → 에필로그 → 크레딧 / 데모: 곧바로 크레딧)
             if (GameManager.Instance.PlayMode == EPlayMode.Demo)
             {
-                // TODO(Task 6): 결과 화면 EnterDemoResult() 로 교체
-                GameManager.Instance.ReturnToTitleFromDemo();
+                GameManager.Instance.EnterDemoCredit();
                 return;
             }
 

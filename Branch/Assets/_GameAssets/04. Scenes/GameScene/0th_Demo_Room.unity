@@ -160767,6 +160767,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Amon_Phase_2
       objectReference: {fileID: 0}
+    - target: {fileID: 4906482552251351476, guid: 9e1341dab2ab244298704013c9319f95,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5589947934752730126, guid: 9e1341dab2ab244298704013c9319f95,
         type: 3}
       propertyPath: arenaAnchor
