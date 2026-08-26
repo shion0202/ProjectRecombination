@@ -1136,6 +1136,45 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         Managers.GUIManager.Instance.GameUIController.ToggleRadialUI(false);
     }
 
+    /// <summary>
+    /// 지정 위치의 지면에 발을 맞춰 플레이어를 순간이동시킨다.
+    ///
+    /// 좌표를 그대로 대입하면 캡슐이 바닥에 파묻히거나 살짝 뜬 상태로 놓여,
+    /// CharacterController의 침투 해소와 접지 판정(groundCheck 박스 겹침)이 서로 밀고 당기며
+    /// 착지 순간 위아래로 튕기는 현상이 생긴다.
+    /// 아래로 레이를 쏴 실제 지면을 찾고, 발밑 기준점이 그 위에 오도록 보정한다.
+    /// 지면을 찾지 못하면 원래 좌표를 그대로 사용한다(공중 배치 등).
+    /// </summary>
+    public void TeleportGrounded(Vector3 targetPosition)
+    {
+        const float rayUpOffset = 3.0f;     // 목표 지점보다 이만큼 위에서 아래로 탐색
+        const float rayDistance = 20.0f;
+        const float groundSkin = 0.02f;     // 바닥에 정확히 붙이면 파묻히므로 살짝 띄운다
+
+        // 루트와 발밑 기준점의 간격. 캐릭터마다 원점이 발이 아닐 수 있으므로 실측값을 쓴다.
+        Vector3 footOffset = groundCheck != null
+            ? transform.position - groundCheck.position
+            : Vector3.zero;
+
+        if (Physics.Raycast(targetPosition + Vector3.up * rayUpOffset, Vector3.down,
+                out RaycastHit hit, rayDistance, groundLayerMask))
+        {
+            targetPosition = hit.point + footOffset + Vector3.up * groundSkin;
+        }
+
+        // 위치를 강제로 바꾸는 동안에는 컨트롤러를 꺼둔다. (코드베이스의 다른 순간이동과 동일한 패턴)
+        bool wasEnabled = characterController != null && characterController.enabled;
+        if (characterController != null) characterController.enabled = false;
+
+        transform.position = targetPosition;
+        Physics.SyncTransforms();
+
+        if (characterController != null) characterController.enabled = wasEnabled;
+
+        // 이동 중 누적된 낙하 속도를 지운다. 남아 있으면 배치 직후 바닥을 뚫거나 튄다.
+        ResetGravityAndFalling();
+    }
+
     public void ResetGravityAndFalling()
     {
         _fallVelocity = Vector3.zero;
@@ -1774,8 +1813,11 @@ public class PlayerController : MonoBehaviour, PlayerActions.IPlayerActionMapAct
         float customBlendTime = 0.5f;
         if (brain != null)
         {
+            // 스타일을 originalBlend에서 가져오면, 직전에 누군가 브레인을 Cut으로 바꿔둔 상태였을 때
+            // (Cut, 0.5초)가 되어 시간이 무시되고 화면이 즉시 전환된다.
+            // 인트로 종료 후에는 항상 부드럽게 넘어가야 하므로 스타일을 명시한다.
             brain.m_DefaultBlend = new CinemachineBlendDefinition(
-                originalBlend.m_Style, customBlendTime);
+                CinemachineBlendDefinition.Style.EaseInOut, customBlendTime);
         }
 
         GUIManager.Instance.GameUIController.FadeIn(4.0f);

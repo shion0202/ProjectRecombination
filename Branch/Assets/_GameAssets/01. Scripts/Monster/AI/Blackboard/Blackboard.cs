@@ -90,6 +90,17 @@ namespace Monster.AI.Blackboard
             get => target;
             private set => target = value;
         }
+
+        /// <summary>
+        /// 추적 대상을 임시로 바꾼다.
+        /// 플레이어가 스킬로 화면 밖에 숨겨지는 동안(LegsEnhanced의 착지점 조작 등)
+        /// 몬스터가 그 좌표를 쫓아 맵 밖으로 나가는 것을 막기 위해 사용한다.
+        /// Init()이 호출되면 다시 플레이어로 복구된다.
+        /// </summary>
+        public void SetTarget(GameObject newTarget)
+        {
+            Target = newTarget;
+        }
         
         public GameObject DeathEffect
         {

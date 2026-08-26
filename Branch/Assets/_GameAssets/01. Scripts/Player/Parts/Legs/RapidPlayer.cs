@@ -75,6 +75,16 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
         _playerActions.JumpAttackActionMap.Disable();
     }
 
+    private void OnDestroy()
+    {
+        // 브레인의 기본 블렌드는 씬을 넘어 유지되는 전역 설정이다.
+        // Awake에서 Cut으로 바꿔놓고 Apply/OnCancel에서만 되돌리면,
+        // 그 두 경로를 타지 않고 파괴될 때(씬 언로드 등) Cut이 그대로 남아
+        // 이후 모든 카메라 전환이 즉시 잘리는 상태가 된다.
+        // 어떤 경로로 사라지든 반드시 복구되도록 여기서 한 번 더 되돌린다.
+        if (brain != null) brain.m_DefaultBlend = defaultBlend;
+    }
+
     private void Update()
     {
         if (_isExiting) return;
@@ -111,16 +121,41 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
             _owner.FollowCamera.SetTargetPOV(pov);
         }
 
-        if (_owner != null)
-        {
-            _owner.Controller.enabled = false;
-            _owner.transform.position = Vector3.down * 9999f;
-            _owner.Controller.enabled = true;
-        }
+        // 몬스터가 지하로 내려간 플레이어를 쫓아 맵 밖으로 나가지 않도록,
+        // 스킬이 진행되는 동안에는 착지점(이 오브젝트)을 대신 추적하게 한다.
+        // 착지점이 곧 플레이어가 내려올 자리이므로 전투 흐름도 자연스럽다.
+        RetargetMonsters(gameObject);
 
-        // 시네머신 브레인이 이 카메라의 존재를 인지하고 화면을 완전히 장악할 수 있도록 
-        // 플레이어를 지하로 보내는 타이밍만 코루틴으로 '딱 1프레임' 뒤로 미룹니다.
-        //StartCoroutine(TeleportOwnerToUndergroundNextFrame());
+        // 시네머신 브레인이 이 카메라의 존재를 인지하고 화면을 장악한 뒤에 플레이어를 치운다.
+        // 같은 프레임에 치우면 브레인이 아직 이전 카메라를 물고 있어,
+        // 플레이어를 따라가던 카메라가 한순간 맵 밖(지하)을 비춘다.
+        StartCoroutine(TeleportOwnerToUndergroundNextFrame());
+    }
+
+    private IEnumerator TeleportOwnerToUndergroundNextFrame()
+    {
+        yield return null;
+
+        // 대기 중에 스킬이 끝났다면(즉시 취소 등) 플레이어를 치우면 안 된다.
+        if (_isExiting || _owner == null) yield break;
+
+        _owner.Controller.enabled = false;
+        _owner.transform.position = Vector3.down * 9999f;
+        _owner.Controller.enabled = true;
+    }
+
+    /// 씬에 있는 모든 몬스터의 추적 대상을 교체한다.
+    /// 보스(아몬 2페이즈)는 AIController가 없어 MonsterManager 목록에 등록되지 않으므로
+    /// 매니저를 경유하지 않고 Blackboard를 직접 찾는다.
+    /// 스킬 시작/종료 시 한 번씩만 호출되므로 탐색 비용은 문제되지 않는다.
+    private static void RetargetMonsters(GameObject newTarget)
+    {
+        if (newTarget == null) return;
+
+        foreach (Monster.AI.Blackboard.Blackboard blackboard in FindObjectsOfType<Monster.AI.Blackboard.Blackboard>())
+        {
+            blackboard.SetTarget(newTarget);
+        }
     }
 
     private void Move()
@@ -148,12 +183,13 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
         if (_isExiting) return;
         _isExiting = true;
 
-        // 지하에 있던 플레이어를 지상(현재 스킬 최종 위치)으로 먼저 소환
-        _owner.Controller.enabled = false;
-        _owner.transform.position = transform.position;
-        _owner.ResetGravityAndFalling();
-        Physics.SyncTransforms();
-        _owner.Controller.enabled = true;
+        // 지하에 있던 플레이어를 지상(현재 스킬 최종 위치)으로 먼저 소환.
+        // 좌표를 그대로 대입하면 캡슐이 바닥에 걸쳐 착지 순간 위아래로 튀므로,
+        // 지면에 발을 맞춰 배치하고 낙하 속도까지 정리하는 TeleportGrounded를 쓴다.
+        _owner.TeleportGrounded(transform.position);
+
+        // 몬스터의 추적 대상을 플레이어로 되돌린다.
+        RetargetMonsters(_owner.gameObject);
 
         _originalPart.IsAttack = true;
         RestoreCameraAngle();
@@ -192,11 +228,10 @@ public class RapidPlayer : MonoBehaviour, PlayerActions.IJumpAttackActionMapActi
             _isExiting = true;
 
             // 1) 취소 시 플레이어를 원래 시전했던 제자리로 먼저 소환
-            _owner.Controller.enabled = false;
-            _owner.transform.position = _originalPlayerPos;
-            _owner.ResetGravityAndFalling();
-            Physics.SyncTransforms();
-            _owner.Controller.enabled = true;
+            _owner.TeleportGrounded(_originalPlayerPos);
+
+            // 몬스터의 추적 대상을 플레이어로 되돌린다.
+            RetargetMonsters(_owner.gameObject);
 
             _originalPart.IsAttack = false;
             RestoreCameraAngle();
