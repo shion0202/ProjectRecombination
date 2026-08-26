@@ -173,3 +173,9 @@ MonoBehaviour:
       type: 3}
     defaultSize: 1
     maxSize: 2
+  - prefab: {fileID: 364168584227083269, guid: 47a3e8009f5c7844aa19ccb71ff7f656, type: 3}
+    defaultSize: 2
+    maxSize: 2
+  - prefab: {fileID: 364168584227083269, guid: 70b77c7cced3b43418580c7560152aa0, type: 3}
+    defaultSize: 10
+    maxSize: 30

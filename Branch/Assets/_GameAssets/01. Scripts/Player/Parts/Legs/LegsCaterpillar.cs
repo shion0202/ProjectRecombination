@@ -147,6 +147,8 @@ public class LegsCaterpillar : PartBaseLegs
 
             _audioSource.volume = 0.0f;
 
+            // CurrentMoveDirectionWorld는 일부러 비우지 않는다.
+            // 멈췄을 때 하체가 마지막 이동 방향을 유지하는 것이 의도된 동작이다.
             return Vector3.zero;
         }
 
@@ -271,6 +273,12 @@ public class LegsCaterpillar : PartBaseLegs
             _owner.transform.rotation = Quaternion.LookRotation(lookDirection);
 
         _currentMoveDirection = _owner.transform.forward;
+
+        // 시즈 모드는 SetMovable(false)로 들어가 GetMoveDirection이 더 이상 호출되지 않으므로,
+        // 여기서 직접 비워 하체가 상체 정면으로 복귀하도록 한다.
+        // 비우지 않으면 몸통만 카메라 방향으로 돌고 하체는 직전 이동 방향(월드 기준)에 남아
+        // 서로 다른 방향을 본 채로 스킬이 시전된다.
+        CurrentMoveDirectionWorld = Vector3.zero;
     }
 
     protected IEnumerator CoPlaySiegeMode(bool isActivate)

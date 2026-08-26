@@ -52,12 +52,14 @@ public class AmonPaseTwoFSM : FSM
     protected override void Think()
     {
         if (!isEnabled || !_isSpawned || blackboard?.Target is null) return; // FSM이 활성화되지 않은 경우 아무 작업도 수행하지 않음(매니저에 의해 활성화 됨)
-        
-        Debug.Log($"{blackboard.CurrentHealth} / {blackboard.MaxHealth}");
+
+        // 매 프레임 호출되는 위치라 로그 비용이 그대로 프레임에 실린다. 디버깅할 때만 켤 것.
+        // Debug.Log($"{blackboard.CurrentHealth} / {blackboard.MaxHealth}");
 
         if (blackboard.State.GetStates() == "Death")
         {
-            Debug.Log("State is Death");
+            // 사망 후 매 프레임 반복되는 위치. 디버깅할 때만 켤 것.
+            // Debug.Log("State is Death");
             return;
         }
 
@@ -67,12 +69,21 @@ public class AmonPaseTwoFSM : FSM
             return;
         }
 
-        if (blackboard.IsAnySkillRunning) 
+        if (blackboard.IsAnySkillRunning)
         {
-            Debug.Log(blackboard.IsAnySkillRunning);
+            // 매 프레임 경로. 디버깅할 때만 켤 것.
+            // Debug.Log(blackboard.IsAnySkillRunning);
             return; // 스킬이 실행 중이면 상태 전환을 하지 않음
         }
-        
+
+        // 패턴이 파훼되어 그로기 상태라면 그 시간 동안 아무 패턴도 고르지 않는다.
+        // (스킬 실행 중 검사 뒤에 두어, 진행 중인 스킬의 마무리는 방해하지 않는다)
+        if (blackboard.IsGroggy)
+        {
+            ChangeState("Idle");
+            return;
+        }
+
         if (blackboard.CurrentHealth <= blackboard.MaxHealth * 0.5f && !blackboard.HasUsedSoulAbsorptionAt50Percent)
         {
             blackboard.HasUsedSoulAbsorptionAt50Percent = true;
@@ -135,7 +146,8 @@ public class AmonPaseTwoFSM : FSM
         
         if (blackboard.IsAnySkillRunning) 
         {
-            Debug.Log(blackboard.IsAnySkillRunning);
+            // 매 프레임 경로. 디버깅할 때만 켤 것.
+            // Debug.Log(blackboard.IsAnySkillRunning);
             return; // 스킬이 실행 중이면 상태 전환을 하지 않음
         }
         

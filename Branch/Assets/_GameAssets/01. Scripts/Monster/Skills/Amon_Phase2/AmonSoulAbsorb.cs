@@ -16,6 +16,9 @@ namespace _Test.Skills
         [SerializeField] private Vector3 barrierOffset;
         [SerializeField] private float originalCooldown;                    // 쿨타임 절반 증가를 위한 본래 쿨타임 값
                                                                             // 원래 쿨타임이 변경될 때마다 직접 수정해야하므로 개선 필요
+
+        [Tooltip("플레이어가 보호막을 파괴해 패턴을 파훼했을 때 보스가 아무 행동도 하지 않는 시간(초).")]
+        [SerializeField] private float groggyDuration = 3.0f;
         private GameObject _barrierInstance;
 
         public bool IsShieldRemovedByPlayer { get; set; }
@@ -90,12 +93,20 @@ namespace _Test.Skills
 
                     // 보스 체력 회복 처리
                     data.CurrentHealth = Mathf.Clamp(data.CurrentHealth + absorbAmount, data.CurrentHealth, data.MaxHealth);
+
+                    // 보스 체력바는 AmonPaseTwoFSM.ApplyDamage(피격) 경로에서만 갱신되므로,
+                    // 회복처럼 피격 외의 경로로 체력이 변할 때는 여기서 직접 갱신해야 한다.
+                    Managers.GUIManager.Instance.GameUIController.UpdateBossHpBar(data.CurrentHealth, data.MaxHealth);
                 }
             }
             else
             {
-                // 아무 행동을 하지 않음
-                Debug.Log("[Amon Phase 2] 영혼 흡수가 플레이어에 의해 중단됨");
+                // 파훼 보상: 일정 시간 동안 보스를 행동 불능으로 만든다.
+                // 상태이상 시스템이 없어 AmonPaseTwoFSM.Think()가 패턴 선택을 건너뛰는 방식으로 대체한다.
+                // (쿨타임 증가는 이 스킬의 재등장 빈도만 낮출 뿐, 다음 패턴을 막지 못한다)
+                data.GroggyEndTime = Time.time + groggyDuration;
+
+                Debug.Log($"[Amon Phase 2] 영혼 흡수가 플레이어에 의해 중단됨 - {groggyDuration}초간 그로기");
             }
 
             Debug.Log("[Amon Phase 2] 영혼 흡수 종료");

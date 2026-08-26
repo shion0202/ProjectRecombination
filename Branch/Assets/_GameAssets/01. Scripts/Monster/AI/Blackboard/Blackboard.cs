@@ -150,6 +150,14 @@ namespace Monster.AI.Blackboard
         public Transform ArenaAnchor => arenaAnchor;
         public bool HasUsedSoulAbsorptionAt50Percent { get; set; }
         public bool HasUsedSoulAbsorptionAt20Percent { get; set; }
+
+        /// <summary>
+        /// 그로기(행동 불능) 상태가 끝나는 시각(Time.time 기준). 현재 시각이 이 값보다 작으면 행동하지 않는다.
+        /// 상태이상 시스템이 없어, 패턴 파훼 보상을 "일정 시간 정지"로 대체하기 위한 최소 장치다.
+        /// </summary>
+        public float GroggyEndTime { get; set; }
+
+        public bool IsGroggy => Time.time < GroggyEndTime;
         public RagdollController RagdollController { get => ragdollController; set => ragdollController = value; }
         public AudioSource AudioSource { get => audioSource; set => audioSource = value; }
         public LegsAnimator LegAnimator { get => legAnimator; set => legAnimator = value; }
@@ -262,6 +270,17 @@ namespace Monster.AI.Blackboard
             NavMeshAgent.isStopped = false;
             NavMeshAgent.ResetPath();
             CurrentHealth = MaxHealth;
+            GroggyEndTime = 0.0f;
+
+            // 체력 임계값(80/50/20%)으로 한 번씩만 발동하는 패턴의 사용 여부.
+            // 위에서 체력을 최대치로 되돌렸으므로 이 플래그들도 함께 초기화해야 한다.
+            // 초기화하지 않으면 재초기화된 보스가 임계값을 지나쳐도 해당 패턴을 영영 쓰지 않는다.
+            HasUsedSoulOrbAt80Percent = false;
+            HasUsedSoulOrbAt50Percent = false;
+            HasUsedSoulOrbAt20Percent = false;
+            HasUsedSoulAbsorptionAt50Percent = false;
+            HasUsedSoulAbsorptionAt20Percent = false;
+
             State.SetState("Spawn");
             foreach (var dissolve in Dissolve)
                 dissolve.Init();

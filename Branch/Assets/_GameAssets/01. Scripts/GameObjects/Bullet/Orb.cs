@@ -82,6 +82,8 @@ public class Orb : Bullet
             Vector3 direction = Random.onUnitSphere;
 
             GameObject blade = Utils.Instantiate(bladePrefab);
+            if (blade == null) continue;
+
             blade.transform.position = transform.position;
             blade.transform.rotation = Quaternion.LookRotation(direction);
             ProjectileBlade bladeComp = blade.GetComponent<ProjectileBlade>();

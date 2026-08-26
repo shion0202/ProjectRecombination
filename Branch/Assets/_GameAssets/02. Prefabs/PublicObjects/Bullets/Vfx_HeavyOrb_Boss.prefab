@@ -9948,6 +9948,7 @@ MonoBehaviour:
   bladeDamage: 50
   bladeInterval: 0.15
   bladesOnDeath: 5
+  logBladeDiagnostics: 1
 --- !u!1 &364168584227113207
 GameObject:
   m_ObjectHideFlags: 0

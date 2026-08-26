@@ -973,6 +973,11 @@ namespace Managers
         {
             if (isOn)
             {
+                // 체력바 채움량은 피격 시 UpdateBossHpBar에서만 갱신되므로,
+                // 여기서 초기화하지 않으면 첫 타격 전까지 프리팹에 저장된 값이 그대로 보인다.
+                // 보스전 진입 시점은 항상 최대 체력이므로 가득 채운 상태로 시작한다.
+                bossHpBar.value = 1.0f;
+
                 bossNameText.gameObject.SetActive(true);
             }
             else

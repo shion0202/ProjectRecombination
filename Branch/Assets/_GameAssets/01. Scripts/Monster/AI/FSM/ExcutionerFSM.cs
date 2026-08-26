@@ -50,15 +50,18 @@ public class ExcutionerFSM : FSM
         if (!isEnabled) return;
         if (blackboard?.Target is null)
         {
-            Debug.Log("Target is null");
+            // 타겟이 없는 동안 매 프레임 반복되는 위치. 디버깅할 때만 켤 것.
+            // Debug.Log("Target is null");
             return;
         }
         if (blackboard.State.GetStates() == "Death")
         {
-            Debug.Log("State is Death");
+            // 사망 후 매 프레임 반복되는 위치. 디버깅할 때만 켤 것.
+            // Debug.Log("State is Death");
             return;
         }
-        Debug.Log($"Current Health: {blackboard.CurrentHealth}");
+        // 매 프레임 무조건 호출되던 위치. 로그 비용이 그대로 프레임에 실린다. 디버깅할 때만 켤 것.
+        // Debug.Log($"Current Health: {blackboard.CurrentHealth}");
         if (blackboard.CurrentHealth <= 0)
         {
             ChangeState("Death");
@@ -67,7 +70,8 @@ public class ExcutionerFSM : FSM
         // ============================================
         if (blackboard.IsAnySkillRunning) 
         {
-            Debug.Log(blackboard.IsAnySkillRunning);
+            // 매 프레임 경로. 디버깅할 때만 켤 것.
+            // Debug.Log(blackboard.IsAnySkillRunning);
             return; // 스킬이 실행 중이면 상태 전환을 하지 않음
         }
         // ============================================
@@ -118,7 +122,8 @@ public class ExcutionerFSM : FSM
         
         if (blackboard.IsAnySkillRunning) 
         {
-            Debug.Log(blackboard.IsAnySkillRunning);
+            // 매 프레임 경로. 디버깅할 때만 켤 것.
+            // Debug.Log(blackboard.IsAnySkillRunning);
             return; // 스킬이 실행 중이면 상태 전환을 하지 않음
         }
         

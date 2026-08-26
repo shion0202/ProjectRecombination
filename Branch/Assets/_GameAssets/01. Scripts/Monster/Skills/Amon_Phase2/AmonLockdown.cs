@@ -92,7 +92,7 @@ namespace _Test.Skills
 
             // 안전지대는 플레이어 데미지/무적 처리가 끝난 뒤 파괴한다.
             // (먼저 파괴하면 OnTriggerExit로 무적이 풀려, 안전지대에 있던 플레이어도 폭발 데미지를 받을 수 있음)
-            Utils.Destroy(_safeZone, 1.0f);
+            Utils.Destroy(_safeZone, 0.5f);
 
             // 기믹 종료 후 스폰된 몬스터 일괄 제거 (파괴되어 null이 된 참조는 건너뜀)
             foreach (IDamagable t in _targets)
@@ -170,7 +170,7 @@ namespace _Test.Skills
             data.AnimatorParameterSetter?.Animator?.SetBool(IsCharging, false);
 
             Utils.Destroy(_chargeEffect);
-            Utils.Destroy(_safeZone, 1.0f);
+            Utils.Destroy(_safeZone, 0.5f);
 
             // 스폰된 몬스터도 함께 제거 (정상 종료 시 Activate와 동일한 처리)
             foreach (IDamagable t in _targets)

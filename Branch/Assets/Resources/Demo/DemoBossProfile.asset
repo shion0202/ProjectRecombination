@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2220f06a8979b944fa1653006b8f1979, type: 3}
   m_Name: DemoBossProfile
   m_EditorClassIdentifier: 
-  healthMultiplier: 0.01
+  healthMultiplier: 0.5
   damageMultiplier: 1

@@ -37,14 +37,21 @@ public class InitBootstrap : MonoBehaviour
         
         // 현재 기기의 화면 비율(Aspect Ratio) 계산
         float targetAspectRatio = (float)Screen.width / (float)Screen.height;
-    
-        // 세로 모드 기준 HD 가로폭인 720을 타겟으로 설정 (가로 모드라면 1280)
-        int targetWidth = 720; 
+
+        // 기준 가로폭. 화면 비율은 기기를 따라가고 가로폭만 이 값으로 맞춘다.
+        // 16:9 화면이라면 아래 값 그대로의 해상도가 나온다.
+#if UNITY_ANDROID || UNITY_IOS
+        // 모바일은 성능을 위해 의도적으로 낮춘다. (세로 모드 기준 HD 가로폭)
+        int targetWidth = 720;
+#else
+        // PC는 FHD 기준. 행사 부스 모니터에서 업스케일로 흐려지지 않도록 한다.
+        int targetWidth = 1920;
+#endif
         int targetHeight = Mathf.RoundToInt(targetWidth / targetAspectRatio);
 
         // 해상도 변경 (세 번째 인자는 전체화면 여부)
         Screen.SetResolution(targetWidth, targetHeight, true);
-    
+
         Debug.Log($"Resolution Set to: {targetWidth} x {targetHeight}");
     }
 

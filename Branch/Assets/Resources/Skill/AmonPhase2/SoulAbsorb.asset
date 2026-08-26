@@ -21,7 +21,7 @@ MonoBehaviour:
     \uCCB4\uB825 \uD761\uC218."
   damage: 200
   range: 4
-  cooldown: 1.5
+  cooldown: 30
   castTime: 10
   animSpeed: 1
   barrierPrefab: {fileID: 3292751394904765131, guid: 98b0d9632f236354b886205f3e1350bb,
@@ -30,3 +30,4 @@ MonoBehaviour:
     type: 3}
   barrierOffset: {x: 0, y: 2.9, z: -0.5}
   originalCooldown: 20
+  groggyDuration: 5

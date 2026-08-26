@@ -14,7 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillID: 4016
   skillName: LockDown
-  skillDescription: "아몬 2페이즈 스킬: 락다운 :: 보스가 공중으로 떠올라 기를 모으는 동안 필드에 안전지대와 잡몹이 생성되고, 시전이 끝나면 전역 폭발이 발생한다. 안전지대 안에서 얻는 무적으로만 폭발 피해를 회피할 수 있다."
+  skillDescription: "\uC544\uBAAC 2\uD398\uC774\uC988 \uC2A4\uD0AC: \uB77D\uB2E4\uC6B4
+    :: \uBCF4\uC2A4\uAC00 \uACF5\uC911\uC73C\uB85C \uB5A0\uC62C\uB77C \uAE30\uB97C
+    \uBAA8\uC73C\uB294 \uB3D9\uC548 \uD544\uB4DC\uC5D0 \uC548\uC804\uC9C0\uB300\uC640
+    \uC7A1\uBAB9\uC774 \uC0DD\uC131\uB418\uACE0, \uC2DC\uC804\uC774 \uB05D\uB098\uBA74
+    \uC804\uC5ED \uD3ED\uBC1C\uC774 \uBC1C\uC0DD\uD55C\uB2E4. \uC548\uC804\uC9C0\uB300
+    \uC548\uC5D0\uC11C \uC5BB\uB294 \uBB34\uC801\uC73C\uB85C\uB9CC \uD3ED\uBC1C \uD53C\uD574\uB97C
+    \uD68C\uD53C\uD560 \uC218 \uC788\uB2E4."
   damage: 400
   range: 100
   cooldown: 30
@@ -22,7 +28,7 @@ MonoBehaviour:
   animSpeed: 1
   defaultPosition: {x: 0, y: 0, z: 0}
   warpPosition: {x: 0, y: 0, z: 0}
-  warpHeight: 8
+  warpHeight: 10
   chargeEffectPrefab: {fileID: 2386159082878823987, guid: 2362f9aec9184e1408fb5a9ce224113d,
     type: 3}
   chargeEffectRotation: {x: 0, y: 0, z: 90}
