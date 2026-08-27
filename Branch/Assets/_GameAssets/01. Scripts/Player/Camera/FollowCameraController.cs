@@ -34,8 +34,34 @@ public class FollowCameraController : MonoBehaviour
     [SerializeField] private float quickTurnDuration = 0.1f;
     private bool _isQuickTurning = false;
     private Coroutine _quickTurnCoroutine = null;
-    private float dragSensitivityX = 150.0f;
-    private float dragSensitivityY = 150.0f;
+    // 감도 슬라이더 값(50~300). 저장/UI 표시는 이 범위를 그대로 쓴다.
+    private float dragSensitivityX = DefaultSensitivity;
+    private float dragSensitivityY = DefaultSensitivity;
+
+    #region 감도 스케일 환산
+
+    // 카메라 계산식들은 슬라이더 값을 그대로 쓰도록 작성되어 있는데,
+    // 그 기준이 모바일 드래그라 PC 마우스에는 전 구간이 과했다. (최소치로 내려도 빠르다는 피드백)
+    // 계산식을 일일이 고치는 대신, 슬라이더 값을 아래 스케일로 환산해 넘긴다.
+    //   슬라이더 50  -> 5
+    //   슬라이더 300 -> 200
+    // PC 마우스뿐 아니라 게임패드/모바일 경로도 같은 값을 쓰므로 환산을 한곳에 모은다.
+    public const float SensitivityMin = 50.0f;
+    public const float SensitivityMax = 300.0f;
+    public const float DefaultSensitivity = 150.0f;
+
+    private const float LegacyAtMin = 5.0f;
+    private const float LegacyAtMax = 200.0f;
+
+    private static float ToLegacyScale(float slider)
+    {
+        return Mathf.Lerp(LegacyAtMin, LegacyAtMax, Mathf.InverseLerp(SensitivityMin, SensitivityMax, slider));
+    }
+
+    private float LegacySensitivityX => ToLegacyScale(dragSensitivityX);
+    private float LegacySensitivityY => ToLegacyScale(dragSensitivityY);
+
+    #endregion
     private int _dragFingerId = -1;                             // 현재 카메라를 드래그 중인 손가락 ID
     private Vector2 _lastMousePosition;                         // 이전 프레임의 터치 위치
     [SerializeField] private float assistRadius = 150.0f;       // 화면 중심으로부터의 픽셀 반경
@@ -645,8 +671,8 @@ public class FollowCameraController : MonoBehaviour
         if (stickInput.magnitude > 0.05f)
         {
             // 시네머신 POV 축에 직접 입력값 전달
-            float padSensitivityX = dragSensitivityX * 0.1f;
-            float padSensitivityY = dragSensitivityY * 0.1f;
+            float padSensitivityX = LegacySensitivityX * 0.1f;
+            float padSensitivityY = LegacySensitivityY * 0.1f;
 
             ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = stickInput.x * padSensitivityX;
             ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = stickInput.y * padSensitivityY;
@@ -671,11 +697,11 @@ public class FollowCameraController : MonoBehaviour
         // 마우스의 순수 프레임별 이동량(Delta)을 가져옴 (Input System 기준)
         Vector2 mouseDelta = mouse.delta.ReadValue();
 
-        // 체감 감도를 맞추기 위한 멀티플라이어
-        float sensitivityMultiplier = 0.005f;
+        // 환산된 감도에 곱해 실제 회전량을 만드는 계수. (기존 값 유지)
+        const float sensitivityMultiplier = 0.005f;
 
-        float finalSensitivityX = dragSensitivityX * sensitivityMultiplier;
-        float finalSensitivityY = dragSensitivityY * sensitivityMultiplier;
+        float finalSensitivityX = LegacySensitivityX * sensitivityMultiplier;
+        float finalSensitivityY = LegacySensitivityY * sensitivityMultiplier;
 
         // 시네머신 POV 축 값(Value)에 델타 변위값을 즉시 더해 굼뜸 현상 해결
         // 마우스 Delta Y는 위로 올릴 때 양수(+)이므로, 카메라를 위로 올리려면 축 값에서 빼주거나 더해주는 등 프로젝트 기준에 맞춰 조정
@@ -716,8 +742,8 @@ public class FollowCameraController : MonoBehaviour
                 float deltaY = (currentMousePos.y - _lastMousePosition.y) / deviceDPI;
 
                 // PC와 모바일의 연산 공식을 완전히 일치시킴
-                ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * dragSensitivityX * sensitivityMultiplier;
-                ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * dragSensitivityY * sensitivityMultiplier;
+                ActiveCameraAim.m_HorizontalAxis.m_InputAxisValue = deltaX * LegacySensitivityX * sensitivityMultiplier;
+                ActiveCameraAim.m_VerticalAxis.m_InputAxisValue = deltaY * LegacySensitivityY * sensitivityMultiplier;
 
                 _lastMousePosition = currentMousePos;
             }
@@ -771,8 +797,8 @@ public class FollowCameraController : MonoBehaviour
 
                     // 기획 변경 사항인 감도 옵션 수치들을 반영합니다.
                     // 시네머신 인풋 축에 속도로 주입하면 무겁게 밀리므로, 축 자체의 실제 값(Value)에 즉시 더해 줍니다.
-                    float finalSensitivityX = dragSensitivityX * sensitivityMultiplier;
-                    float finalSensitivityY = dragSensitivityY * sensitivityMultiplier;
+                    float finalSensitivityX = LegacySensitivityX * sensitivityMultiplier;
+                    float finalSensitivityY = LegacySensitivityY * sensitivityMultiplier;
 
                     // 가속도가 아닌 값(Value)에 직접 더해줌으로써 굼뜸 현상을 해결하고 감도 옵션 체감을 확실하게 만듭니다.
                     ActiveCameraAim.m_HorizontalAxis.Value += deltaX * finalSensitivityX;

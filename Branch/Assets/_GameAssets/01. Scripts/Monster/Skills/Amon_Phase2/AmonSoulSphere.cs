@@ -59,6 +59,9 @@ namespace _Test.Skills
         {
             Debug.Log("영혼 구체 준비");
 
+            // 파훼 방법을 모르면 대처할 수 없는 패턴이므로 시전 시작과 함께 안내한다.
+            ShowCastNotice();
+
             TargetRenderer targetRenderer = data.Agent.GetComponentInChildren<TargetRenderer>();
             if (targetRenderer)
             {

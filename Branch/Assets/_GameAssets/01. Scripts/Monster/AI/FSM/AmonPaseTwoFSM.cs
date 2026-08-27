@@ -29,12 +29,28 @@ public class AmonPaseTwoFSM : FSM
 
     private bool _isSpawned;
 
+    // 사망 처리를 한 번만 실행하기 위한 플래그.
+    // Act()는 매 프레임 돌기 때문에 없으면 사망 연출 코루틴이 프레임마다 쌓인다.
+    private bool _isDying;
+
     private void OnDisable()
     {
-        // 시전/실행 중인 스킬이 있는 상태에서 보스가 파괴/비활성화되면
-        // Activate가 실행되지 못해 이펙트/스폰물/플레이어 무적이 잔존할 수 있다.
-        // StopCoroutine 전에 OnInterrupt로 잔여 상태를 정리한다. (MonsterFSM.ActHit과 동일한 패턴)
+        InterruptRunningSkills();
+    }
+
+    /// <summary>
+    /// 시전/실행 중인 스킬을 강제로 정리한다.
+    ///
+    /// 스킬이 진행 중인 상태에서 보스가 파괴/비활성화되거나 사망하면
+    /// Activate가 실행되지 못해 이펙트/스폰물/안전지대/플레이어 무적이 잔존한다.
+    /// StopCoroutine은 코루틴의 finally를 실행하지 않으므로,
+    /// 반드시 OnInterrupt를 먼저 호출해 각 스킬이 자기 잔여물을 치우게 한다.
+    /// (MonsterFSM.ActHit과 동일한 패턴)
+    /// </summary>
+    private void InterruptRunningSkills()
+    {
         if (blackboard?.Skills == null) return;
+
         foreach (var skill in blackboard.Skills)
         {
             try
@@ -143,14 +159,29 @@ public class AmonPaseTwoFSM : FSM
         
         string state = blackboard.State.GetStates();
         if (state is null) return;
-        
-        if (blackboard.IsAnySkillRunning) 
+
+        // 사망은 스킬 실행 여부와 무관하게 최우선으로 처리한다.
+        // 이 검사가 아래 IsAnySkillRunning 아래에 있으면, 패턴 시전 중 죽었을 때
+        // Think()가 상태를 Death로 바꿔놓아도 실행이 막혀 패턴이 끝날 때까지 사망 연출이 미뤄진다.
+        if (state == "Death")
+        {
+            if (_isDying) return;
+            _isDying = true;
+
+            // 진행 중이던 패턴의 이펙트/스폰물/안전지대를 먼저 치운다.
+            // 그냥 두면 보스가 죽은 뒤에도 남아 플레이어를 공격한다.
+            InterruptRunningSkills();
+            ActDeath();
+            return;
+        }
+
+        if (blackboard.IsAnySkillRunning)
         {
             // 매 프레임 경로. 디버깅할 때만 켤 것.
             // Debug.Log(blackboard.IsAnySkillRunning);
             return; // 스킬이 실행 중이면 상태 전환을 하지 않음
         }
-        
+
         switch (state)
         {
             case "Idle":
@@ -190,10 +221,7 @@ public class AmonPaseTwoFSM : FSM
             case "Spawn":
                 ActSpawn();
                 break;
-            case "Death":
-                // 사망 처리 로직
-                ActDeath();
-                break;
+            // "Death"는 위에서 IsAnySkillRunning보다 먼저 처리하므로 여기까지 오지 않는다.
         }
     }
 
@@ -300,6 +328,7 @@ public class AmonPaseTwoFSM : FSM
         ChangeState("Spawn");
 
         _isSpawned = false;
+        _isDying = false;
     }
     
     public override void ApplyDamage(float inDamage, LayerMask targetMask = default, float unitOfTime = 1, float defenceIgnoreRate = 0)

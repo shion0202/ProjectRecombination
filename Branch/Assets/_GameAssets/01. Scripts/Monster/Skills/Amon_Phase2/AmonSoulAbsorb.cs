@@ -27,6 +27,9 @@ namespace _Test.Skills
         {
             Debug.Log("[Amon Phase 2] 영혼 흡수 준비");
 
+            // 파훼 방법을 모르면 대처할 수 없는 패턴이므로 시전 시작과 함께 안내한다.
+            ShowCastNotice();
+
             // 1. 캐스팅 시작
             IsShieldRemovedByPlayer = false;
             data.AnimatorParameterSetter.Animator.SetBool("isBarrier", true);

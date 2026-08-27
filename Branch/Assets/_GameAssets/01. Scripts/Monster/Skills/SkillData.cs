@@ -14,12 +14,33 @@ namespace _Test.Skills
         public string skillName;
         [TextArea] public string skillDescription;
         
-        [Header("스킬 효과")] 
+        [Header("스킬 효과")]
         public float damage;
         public float range;
         public float cooldown;
         public float castTime;
         public float animSpeed;
+
+        [Header("시전 안내 메시지")]
+        [Tooltip("파훼가 필요한 패턴에서 시전 시작 시 플레이어에게 띄울 안내. 비워두면 아무것도 띄우지 않는다.")]
+        [TextArea] public string castNotice;
+        [TextArea] public string enCastNotice;
+
+        [Tooltip("메시지를 보여주는 시간(초). 앞뒤로 페이드 인/아웃이 각각 1초씩 더 붙는다.")]
+        public float castNoticeDuration = 5.0f;
+
+        /// <summary>
+        /// 시전 안내 메시지를 띄운다. 문구가 비어 있으면 아무 일도 하지 않는다.
+        /// 튜토리얼의 SetNoticeMessage 노드와 같은 UI 경로를 쓴다.
+        /// </summary>
+        protected void ShowCastNotice()
+        {
+            string message = LocalizationManager.IsKorean ? castNotice : enCastNotice;
+            if (string.IsNullOrWhiteSpace(message)) return;
+
+            float duration = castNoticeDuration > 0.0f ? castNoticeDuration : 5.0f;
+            GUIManager.Instance.GameUIController.ActivateMessage(message, duration);
+        }
 
         public virtual IEnumerator Casting(Blackboard data)
         {
